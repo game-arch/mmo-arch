@@ -2,34 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e56b9b86-df18-45ac-bc2d-950eb03d6c7e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/game-servers/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/account/account.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/account/account.gateway.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/account/account.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/account/account.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/account/main.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/constants.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/lib/redis-io.adapter.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/lobby/lobby.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/lobby/lobby.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/lobby/lobby.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/lobby/main.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/main.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/map/main.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/map/map.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/map/map.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/map/map.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/register/main.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/register/register.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/register/register.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/register/register.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/shard/main.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/shard/shard.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/shard/shard.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game-servers/src/shard/shard.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-clients/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/game-clients/angular.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-clients/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/game-clients/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-clients/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/game-clients/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,7 +12,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/game-servers" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1TOkXz6DVXOekPdbtTQcDRTMSO5" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -89,7 +63,7 @@
       <option name="presentableId" value="Default" />
       <updated>1573338572272</updated>
       <workItem from="1573338573501" duration="1326000" />
-      <workItem from="1573340780452" duration="13119000" />
+      <workItem from="1573340780452" duration="13376000" />
     </task>
     <servers />
   </component>
