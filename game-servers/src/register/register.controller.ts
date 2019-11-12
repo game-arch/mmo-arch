@@ -1,12 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
-import { RegisterService } from './register.service';
+import {Controller, Get, Req, Res} from '@nestjs/common';
+import {RegisterService}           from './register.service';
+import {Request, Response}         from "express";
 
 @Controller()
 export class RegisterController {
-  constructor(private readonly appService: RegisterService) {}
+    constructor(private readonly service: RegisterService) {
+    }
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+    @Get('servers')
+    getHello(@Req() req: Request, @Res() res: Response) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(this.service.getAll());
+    }
+
 }
