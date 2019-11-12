@@ -33,35 +33,11 @@ module.exports = {
             }
         },
         {
-            name: 'game-shard-1',
+            name: 'game-shard',
             script: 'nest start --watch',
             env: {
                 SERVER_TYPE: 'shard',
                 PORT: '3004'
-            }
-        },
-        {
-            name: 'game-shard-2',
-            script: 'nest start --watch',
-            env: {
-                SERVER_TYPE: 'shard',
-                PORT: '3005'
-            }
-        },
-        {
-            name: 'game-shard-3',
-            script: 'nest start --watch',
-            env: {
-                SERVER_TYPE: 'shard',
-                PORT: '3006'
-            }
-        },
-        {
-            name: 'game-shard-4',
-            script: 'nest start --watch',
-            env: {
-                SERVER_TYPE: 'shard',
-                PORT: '3007'
             }
         }
     ]

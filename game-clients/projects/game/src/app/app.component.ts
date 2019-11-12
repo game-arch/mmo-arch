@@ -2,14 +2,14 @@ import {Component} from '@angular/core';
 import {Socket}    from "ngx-socket-io";
 
 @Component({
-  selector   : 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls  : ['./app.component.scss']
+    selector   : 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls  : ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'game';
+    title = 'game';
 
-  constructor(socket: Socket) {
-    
-  }
+    constructor(socket: Socket) {
+
+    }
 }

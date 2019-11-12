@@ -10,6 +10,9 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="EditorConfigPreviewManager">
+    <editorConfig file="$PROJECT_DIR$/game-clients/.editorconfig" previewFile="$PROJECT_DIR$/game-clients/ecosystem.config.js" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -66,7 +69,8 @@
       <workItem from="1573421466337" duration="55000" />
       <workItem from="1573521462875" duration="2843000" />
       <workItem from="1573525698370" duration="183000" />
-      <workItem from="1573526272916" duration="1847000" />
+      <workItem from="1573526272916" duration="2072000" />
+      <workItem from="1573599881711" duration="883000" />
     </task>
     <servers />
   </component>

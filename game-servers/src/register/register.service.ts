@@ -4,7 +4,7 @@ import {RegisteredServer} from "./registered-server";
 @Injectable()
 export class RegisterService {
 
-    private servers:{[socketId:string]: RegisteredServer} = {};
+    private servers: { [socketId: string]: RegisteredServer } = {};
 
     getHello(): string {
         return 'Hello World!';
@@ -19,7 +19,8 @@ export class RegisterService {
         server.capacity = capacity;
         server.current  = current;
     }
-    has(socketId:string) {
+
+    has(socketId: string) {
         return this.servers.hasOwnProperty(socketId);
     }
 

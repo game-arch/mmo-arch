@@ -1,6 +1,3 @@
-redis:
-	sudo service redis-server restart
-
 start:
 	make delete || echo "no process found"
 	pm2 start
