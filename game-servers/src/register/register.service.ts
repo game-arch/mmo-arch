@@ -32,7 +32,7 @@ export class RegisterService {
         let condition = {where: {socketId}};
         let server    = (await this.repo.find(condition))[0];
         if (server) {
-            await this.repo.delete(server.id);
+            await this.repo.remove(server);
         }
     }
     async clear() {
