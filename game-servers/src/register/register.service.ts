@@ -1,34 +1,45 @@
 import {Injectable}       from '@nestjs/common';
-import {RegisteredServer} from "./registered-server";
+import {RegisteredServer} from "./entities/registered-server.entity";
+import {Repository}       from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
 
 @Injectable()
 export class RegisterService {
 
-    private servers: { [socketId: string]: RegisteredServer } = {};
+    constructor(@InjectRepository(RegisteredServer) private repo: Repository<RegisteredServer>) {
+
+    }
 
     getHello(): string {
         return 'Hello World!';
     }
 
-    register(socketId: string, ip: string) {
-        this.servers[socketId] = new RegisteredServer(ip, 10, 0);
+    async register(socketId: string, ip: string) {
+        await this.repo.save(this.repo.create(new RegisteredServer(ip, socketId, 10, 0)));
     }
 
-    set(socketId: string, capacity: number, current: number) {
-        let server      = this.servers[socketId];
-        server.capacity = capacity;
-        server.current  = current;
+    async set(socketId: string, capacity: number, current: number) {
+        let condition = {where: {socketId}};
+        let server    = (await this.repo.find(condition))[0];
+        if (server) {
+            server.capacity = capacity;
+            server.current  = current;
+            await this.repo.update(server.id, server);
+        }
     }
 
-    has(socketId: string) {
-        return this.servers.hasOwnProperty(socketId);
+    async unregister(socketId: string) {
+        let condition = {where: {socketId}};
+        let server    = (await this.repo.find(condition))[0];
+        if (server) {
+            await this.repo.delete(server.id);
+        }
+    }
+    async clear() {
+        await this.repo.clear();
     }
 
-    unregister(socketId: string) {
-        delete this.servers[socketId];
-    }
-
-    getAll() {
-        return [...Object.keys(this.servers).map(key => this.servers[key])];
+    async getAll() {
+        return await this.repo.find();
     }
 }

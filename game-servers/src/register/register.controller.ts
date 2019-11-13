@@ -8,9 +8,9 @@ export class RegisterController {
     }
 
     @Get('servers')
-    getHello(@Req() req: Request, @Res() res: Response) {
+    async getAll(@Req() req: Request, @Res() res: Response) {
         res.setHeader('Content-Type', 'application/json');
-        res.send(this.service.getAll());
+        res.send(await this.service.getAll());
     }
 
 }

@@ -7,6 +7,7 @@ import {
 }                       from "@nestjs/websockets";
 import {Server, Socket} from "socket.io";
 import * as io          from "socket.io-client";
+import {PORTS}          from "../constants";
 
 @WebSocketGateway()
 export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
@@ -17,8 +18,9 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     current  = 0;
 
     afterInit(server: Server): any {
-        this.socket = io('http://localhost:3002');
+        this.socket = io('http://localhost:' + PORTS.REGISTER);
         this.socket.on('connect', () => {
+            console.log('CONNECTED TO REGISTER SERVER');
             // connected to register server!
         })
     }

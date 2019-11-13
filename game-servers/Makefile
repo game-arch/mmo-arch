@@ -12,4 +12,5 @@ restart:
 	pm2 reload ecosystem.config.js
 
 delete:
+	make stop
 	pm2 delete ecosystem.config.js
