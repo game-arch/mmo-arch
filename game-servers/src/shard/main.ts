@@ -11,7 +11,7 @@ async function bootstrap() {
         credentials: true
     });
 
-    await app.listen(parseInt(process.env.PORT || ('' + PORTS.SHARD)));
+    await app.listen(PORTS.SHARD);
 }
 
 bootstrap();

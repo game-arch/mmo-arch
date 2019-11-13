@@ -1,43 +1,73 @@
 module.exports = {
     apps: [
         {
-            name: 'game-lobby',
-            script: 'nest start --watch',
-            env: {
-                SERVER_TYPE: 'lobby',
-                PORT: '3000'
-            }
+            name: 'builder',
+            script: 'npm run build -- --watch',
+            watch: false
         },
         {
             name: 'game-account',
-            script: 'nest start --watch',
+            script: 'npm run start:prod',
+            watch: ["dist"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
             env: {
-                SERVER_TYPE: 'account',
-                PORT: '3001'
+                SERVER_TYPE: 'account'
             }
         },
         {
             name: 'game-register',
-            script: 'nest start --watch',
+            script: 'npm run start:prod',
+            watch: ["dist"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
             env: {
-                SERVER_TYPE: 'register',
-                PORT: '3002'
+                SERVER_TYPE: 'register'
             }
         },
         {
             name: 'game-map',
-            script: 'nest start --watch',
+            script: 'npm run start:prod',
+            watch: ["dist"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
             env: {
-                SERVER_TYPE: 'map',
-                PORT: '3003'
+                SERVER_TYPE: 'map'
             }
         },
         {
             name: 'game-shard',
-            script: 'nest start --watch',
+            script: 'npm run start:prod',
+            watch: ["dist"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
             env: {
-                SERVER_TYPE: 'shard',
-                PORT: '3004'
+                SERVER_TYPE: 'shard'
+            }
+        },
+        {
+            name: 'game-lobby',
+            script: 'npm run start:prod',
+            watch: ["dist"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'lobby'
             }
         }
     ]

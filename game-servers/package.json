@@ -5,7 +5,6 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -25,13 +24,17 @@
     "@nestjs/platform-express": "^6.7.2",
     "@nestjs/platform-socket.io": "^6.9.0",
     "@nestjs/platform-ws": "^6.9.0",
+    "@nestjs/typeorm": "^6.2.0",
     "@nestjs/websockets": "^6.9.0",
+    "mongodb": "^3.3.4",
+    "mysql": "^2.17.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
-    "socket.io-redis": "^5.2.0"
+    "socket.io-redis": "^5.2.0",
+    "typeorm": "^0.2.20"
   },
   "devDependencies": {
     "@nestjs/cli": "^6.9.0",

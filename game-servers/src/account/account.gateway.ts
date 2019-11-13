@@ -1,7 +1,7 @@
 import {OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer} from "@nestjs/websockets";
 import {Server, Socket}                                                     from "socket.io";
 
-@WebSocketGateway(3000)
+@WebSocketGateway()
 export class AccountGateway implements OnGatewayInit {
     @WebSocketServer()
     server:Server;
