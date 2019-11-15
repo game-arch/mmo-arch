@@ -4,6 +4,7 @@ import {NgModule}      from '@angular/core';
 import {AppComponent}            from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SocketIoModule}          from "ngx-socket-io";
+import {PORTS}                   from "../../../lib/constants";
 
 @NgModule({
     declarations: [
@@ -13,7 +14,7 @@ import {SocketIoModule}          from "ngx-socket-io";
         BrowserModule,
         BrowserAnimationsModule,
         SocketIoModule.forRoot({
-            url: 'http://localhost:3004'
+            url: 'http://localhost:' + PORTS.LOBBY
         })
     ],
     providers   : [],

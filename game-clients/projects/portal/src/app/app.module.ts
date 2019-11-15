@@ -4,6 +4,7 @@ import {NgModule}      from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent}     from './app.component';
 import {SocketIoModule}   from "ngx-socket-io";
+import {PORTS}            from "../../../lib/constants";
 
 @NgModule({
     declarations: [
@@ -13,7 +14,7 @@ import {SocketIoModule}   from "ngx-socket-io";
         BrowserModule,
         AppRoutingModule,
         SocketIoModule.forRoot({
-            url: 'http://localhost:3004'
+            url: 'http://localhost:' +PORTS.ACCOUNT
         })
     ],
     providers   : [],
