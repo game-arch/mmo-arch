@@ -7,7 +7,7 @@ import {TypeOrmModule}   from "@nestjs/typeorm";
 @Module({
     imports    : [TypeOrmModule.forRoot({
         ...DATABASE_MODULE,
-        type    : 'mongodb',
+        type    : 'mysql',
         database: 'map',
         entities: [__dirname + '/**/*.entity{.js,.ts}']
     })],

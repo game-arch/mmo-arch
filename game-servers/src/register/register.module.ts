@@ -11,7 +11,7 @@ import {TypeOrmModule}      from "@nestjs/typeorm";
         TypeOrmModule.forFeature([RegisteredServer]),
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
-            type    : 'mongodb',
+            type    : 'mysql',
             database: 'register',
             entities: [__dirname + '/**/*.entity{.js,.ts}']
         })

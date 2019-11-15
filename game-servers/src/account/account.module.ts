@@ -8,7 +8,7 @@ import {DATABASE_MODULE}   from "../lib/database/database.module";
 @Module({
     imports    : [TypeOrmModule.forRoot({
         ...DATABASE_MODULE,
-        type    : 'mongodb',
+        type    : 'mysql',
         database: 'account',
         entities: [__dirname + '/**/*.entity{.js,.ts}']
     })],

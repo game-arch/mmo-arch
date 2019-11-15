@@ -1,15 +1,15 @@
 module.exports = {
     apps: [
         {
-            name: 'game-client-watch',
+            name: 'client-game',
             script: 'npm run build -- --base-href /game/ --watch'
         },
         {
-            name: 'account-client-watch',
-            script: 'npm run build -- --base-href /account/ --project account --watch'
+            name: 'client-portal',
+            script: 'npm run build -- --base-href /portal/ --project portal --watch'
         },
         {
-            name: 'game-client',
+            name: 'clients-server',
             script: 'http-server dist -p 8080'
         }
     ]

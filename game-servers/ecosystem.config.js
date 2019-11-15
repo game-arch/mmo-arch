@@ -1,12 +1,17 @@
 module.exports = {
     apps: [
         {
-            name: 'builder',
+            name: 'redis',
+            script: 'redis-server',
+            watch: false
+        },
+        {
+            name: 'server-builder',
             script: 'npm run build -- --watch',
             watch: false
         },
         {
-            name: 'game-account',
+            name: 'server-account',
             script: 'npm run start:prod',
             watch: ["dist"],
             // Delay between restart
@@ -19,7 +24,7 @@ module.exports = {
             }
         },
         {
-            name: 'game-register',
+            name: 'server-register',
             script: 'npm run start:prod',
             watch: ["dist"],
             // Delay between restart
@@ -32,7 +37,7 @@ module.exports = {
             }
         },
         {
-            name: 'game-map',
+            name: 'server-map',
             script: 'npm run start:prod',
             watch: ["dist"],
             // Delay between restart
@@ -45,7 +50,7 @@ module.exports = {
             }
         },
         {
-            name: 'game-shard',
+            name: 'server-shard',
             script: 'npm run start:prod',
             watch: ["dist"],
             // Delay between restart
@@ -58,7 +63,7 @@ module.exports = {
             }
         },
         {
-            name: 'game-lobby',
+            name: 'server-lobby',
             script: 'npm run start:prod',
             watch: ["dist"],
             // Delay between restart

@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e56b9b86-df18-45ac-bc2d-950eb03d6c7e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,12 +21,12 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/game-servers/src/account" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="ts.external.directory.path" value="C:\Users\jwhen\game\game-servers\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Users\jwhen\game-architecture\game-servers\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -71,6 +72,7 @@
       <workItem from="1573525698370" duration="183000" />
       <workItem from="1573526272916" duration="2072000" />
       <workItem from="1573599881711" duration="883000" />
+      <workItem from="1573775036656" duration="2034000" />
     </task>
     <servers />
   </component>

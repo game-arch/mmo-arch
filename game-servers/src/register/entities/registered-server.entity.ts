@@ -1,12 +1,11 @@
-import {Socket}                                                                   from "socket.io";
-import {Column, Entity, ObjectID, ObjectIdColumn, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 
 @Unique('socketId', ['socketId'])
 @Entity()
 export class RegisteredServer {
 
-    @ObjectIdColumn()
-    id: ObjectID;
+    @PrimaryGeneratedColumn()
+    id: number;
     @Column()
     socketId: string;
     @Column()

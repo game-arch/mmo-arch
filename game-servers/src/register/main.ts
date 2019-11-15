@@ -2,8 +2,10 @@ import {NestFactory}    from '@nestjs/core';
 import {RegisterModule} from './register.module';
 import {RedisIoAdapter} from "../lib/redis-io.adapter";
 import {PORTS}          from "../constants";
+import {createDatabase} from "../lib/database/database.module";
 
 async function bootstrap() {
+    await createDatabase('register');
     const app = await NestFactory.create(RegisterModule);
     app.enableShutdownHooks();
     app.useWebSocketAdapter(new RedisIoAdapter(app));

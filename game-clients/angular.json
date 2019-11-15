@@ -127,33 +127,33 @@
         }
       }
     },
-    "account": {
+    "portal": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "projects/account",
-      "sourceRoot": "projects/account/src",
+      "root": "projects/portal",
+      "sourceRoot": "projects/portal/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/account",
-            "index": "projects/account/src/index.html",
-            "main": "projects/account/src/main.ts",
-            "polyfills": "projects/account/src/polyfills.ts",
-            "tsConfig": "projects/account/tsconfig.app.json",
+            "outputPath": "dist/portal",
+            "index": "projects/portal/src/index.html",
+            "main": "projects/portal/src/main.ts",
+            "polyfills": "projects/portal/src/polyfills.ts",
+            "tsConfig": "projects/portal/tsconfig.app.json",
             "aot": false,
             "assets": [
-              "projects/account/src/favicon.ico",
-              "projects/account/src/assets"
+              "projects/portal/src/favicon.ico",
+              "projects/portal/src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
-              "projects/account/src/styles.scss"
+              "projects/portal/src/styles.scss"
             ],
             "scripts": []
           },
@@ -161,8 +161,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/account/src/environments/environment.ts",
-                  "with": "projects/account/src/environments/environment.prod.ts"
+                  "replace": "projects/portal/src/environments/environment.ts",
+                  "with": "projects/portal/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -192,34 +192,34 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "account:build"
+            "browserTarget": "portal:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "account:build:production"
+              "browserTarget": "portal:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "account:build"
+            "browserTarget": "portal:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/account/src/test.ts",
-            "polyfills": "projects/account/src/polyfills.ts",
-            "tsConfig": "projects/account/tsconfig.spec.json",
-            "karmaConfig": "projects/account/karma.conf.js",
+            "main": "projects/portal/src/test.ts",
+            "polyfills": "projects/portal/src/polyfills.ts",
+            "tsConfig": "projects/portal/tsconfig.spec.json",
+            "karmaConfig": "projects/portal/karma.conf.js",
             "assets": [
-              "projects/account/src/favicon.ico",
-              "projects/account/src/assets"
+              "projects/portal/src/favicon.ico",
+              "projects/portal/src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
-              "projects/account/src/styles.scss"
+              "projects/portal/src/styles.scss"
             ],
             "scripts": []
           }
@@ -228,9 +228,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/account/tsconfig.app.json",
-              "projects/account/tsconfig.spec.json",
-              "projects/account/e2e/tsconfig.json"
+              "projects/portal/tsconfig.app.json",
+              "projects/portal/tsconfig.spec.json",
+              "projects/portal/e2e/tsconfig.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -240,12 +240,12 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/account/e2e/protractor.conf.js",
-            "devServerTarget": "account:serve"
+            "protractorConfig": "projects/portal/e2e/protractor.conf.js",
+            "devServerTarget": "portal:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "account:serve:production"
+              "devServerTarget": "portal:serve:production"
             }
           }
         }
