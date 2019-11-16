@@ -3,8 +3,6 @@ import {NgModule}      from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent}     from './app.component';
-import {SocketIoModule}   from "ngx-socket-io";
-import {PORTS}            from "../../../lib/constants";
 
 @NgModule({
     declarations: [
@@ -12,10 +10,7 @@ import {PORTS}            from "../../../lib/constants";
     ],
     imports     : [
         BrowserModule,
-        AppRoutingModule,
-        SocketIoModule.forRoot({
-            url: 'http://localhost:' +PORTS.ACCOUNT
-        })
+        AppRoutingModule
     ],
     providers   : [],
     bootstrap   : [AppComponent]
