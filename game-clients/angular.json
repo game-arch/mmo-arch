@@ -250,6 +250,41 @@
           }
         }
       }
+    },
+    "server-list": {
+      "projectType": "library",
+      "root": "projects/server-list",
+      "sourceRoot": "projects/server-list/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/server-list/tsconfig.lib.json",
+            "project": "projects/server-list/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/server-list/src/test.ts",
+            "tsConfig": "projects/server-list/tsconfig.spec.json",
+            "karmaConfig": "projects/server-list/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/server-list/tsconfig.lib.json",
+              "projects/server-list/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "game"
