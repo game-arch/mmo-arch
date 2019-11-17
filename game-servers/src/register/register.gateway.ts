@@ -18,7 +18,8 @@ export class RegisterGateway implements OnGatewayConnection, OnGatewayDisconnect
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
-        await this.service.register(client.id, client.handshake.address);
+        let name = client.handshake.query.name || 'Server';
+        await this.service.register(client.id, client.handshake.address, name);
     }
 
     @SubscribeMessage('update')

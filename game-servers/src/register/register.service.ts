@@ -1,5 +1,5 @@
 import {Injectable}       from '@nestjs/common';
-import {RegisteredServer} from "./entities/registered-server.entity";
+import {RegisteredServer} from "./entities/registered-server";
 import {Repository}       from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 
@@ -14,8 +14,8 @@ export class RegisterService {
         return 'Hello World!';
     }
 
-    async register(socketId: string, ip: string) {
-        await this.repo.save(this.repo.create(new RegisteredServer(ip, socketId, 10, 0)));
+    async register(socketId: string, ip: string, name: string) {
+        await this.repo.save(this.repo.create(new RegisteredServer(ip, socketId, name, 10, 0)));
     }
 
     async set(socketId: string, capacity: number, current: number) {
@@ -35,6 +35,7 @@ export class RegisterService {
             await this.repo.remove(server);
         }
     }
+
     async clear() {
         await this.repo.clear();
     }

@@ -3,7 +3,7 @@ import {RegisterController} from './register.controller';
 import {RegisterService}    from './register.service';
 import {RegisterGateway}    from "./register.gateway";
 import {DATABASE_MODULE}    from "../lib/database/database.module";
-import {RegisteredServer}   from "./entities/registered-server.entity";
+import {RegisteredServer}   from "./entities/registered-server";
 import {TypeOrmModule}      from "@nestjs/typeorm";
 
 @Module({
@@ -13,7 +13,7 @@ import {TypeOrmModule}      from "@nestjs/typeorm";
             ...DATABASE_MODULE,
             type    : 'mysql',
             database: 'register',
-            entities: [__dirname + '/**/*.entity{.js,.ts}']
+            entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],
     providers  : [RegisterGateway, RegisterService],

@@ -18,7 +18,7 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     current  = 0;
 
     afterInit(server: Server): any {
-        this.socket = io('http://localhost:' + PORTS.REGISTER);
+        this.socket = io('http://localhost:' + PORTS.REGISTER + '?name=Maiden');
         this.socket.on('connect', () => {
             console.log('CONNECTED TO REGISTER SERVER');
             // connected to register server!
