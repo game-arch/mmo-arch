@@ -11,17 +11,20 @@ export class RegisteredServer {
     socketId: string;
     @Column()
     ip: string;
-    @Column({nullable:false})
+    @Column()
+    port: string;
+    @Column({nullable: false})
     name: string;
     @Column('int')
     capacity: number;
     @Column('int')
     current: number;
-    @Column({nullable:false})
-    status:'online'|'offline' = 'online';
+    @Column({nullable: false})
+    status: 'online' | 'offline' = 'online';
 
-    constructor(ip: string, socketId: string, name: string, capacity: number, current: number) {
+    constructor(ip: string, port: string, socketId: string, name: string, capacity: number, current: number) {
         this.ip       = ip;
+        this.port     = port;
         this.socketId = socketId;
         this.name     = name;
         this.capacity = capacity;

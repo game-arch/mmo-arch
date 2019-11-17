@@ -15,11 +15,11 @@ export class RegisterService implements OnApplicationBootstrap {
         return 'Hello World!';
     }
 
-    async online(socketId: string, ip: string, name: string) {
+    async online(socketId: string, ip: string, port:string, name: string) {
         if (name && name !== '') {
             let server = await this.findByIpAndName(ip, name);
             if (!server) {
-                await this.repo.save(this.repo.create(new RegisteredServer(ip, socketId, name, 10, 0)));
+                await this.repo.save(this.repo.create(new RegisteredServer(ip, port, socketId, name, 10, 0)));
                 this.servers = await this.repo.find();
                 return;
             }
@@ -75,6 +75,13 @@ export class RegisterService implements OnApplicationBootstrap {
                   .where('status = :status', {status: 'online'})
                   .execute();
         this.servers = await this.repo.find();
+    }
+
+    getIp(ip:string) {
+        if (ip.indexOf('127.0.0.1') !== -1) {
+            return 'localhost';
+        }
+        return ip;
     }
 
 }

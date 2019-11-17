@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ServerListService } from './server-list.service';
+import { ServerConnectionManager } from './server-connection-manager.service';
 
 describe('ServerListService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ServerListService = TestBed.get(ServerListService);
+    const service: ServerConnectionManager = TestBed.get(ServerConnectionManager);
     expect(service).toBeTruthy();
   });
 });

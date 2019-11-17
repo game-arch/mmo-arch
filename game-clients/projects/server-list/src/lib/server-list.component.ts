@@ -1,18 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {Socket}            from "ngx-socket-io";
-import {Observable}        from "rxjs";
-import {Server}            from "./server";
+import {Component, OnInit}       from '@angular/core';
+import {Socket}                  from "ngx-socket-io";
+import {Observable}              from "rxjs";
+import {Server}                  from "./server";
+import {Events}                  from "../../../../../game-servers/src/lib/events";
+import {ServerConnectionManager} from "./server-connection-manager.service";
 
 @Component({
     selector: 'server-list',
     template: `
-        <mat-list *ngIf="servers$ | async as servers">
-            <mat-list-item *ngFor="let server of servers">
-                <div matLine>{{server.name}}</div>
+        <mat-nav-list *ngIf="servers$ | async as servers">
+            <a mat-list-item *ngFor="let server of servers" (click)="manager.connect(server)">
+                <div matLine [style.font-weight]="manager.isConnected(server.name) ? 'bold' : 'inherited'">{{server.name}}</div>
                 <div matLine>{{server.current}} / {{server.capacity}} users</div>
                 <div>{{server.status}}</div>
-            </mat-list-item>
-        </mat-list>
+            </a>
+        </mat-nav-list>
     `,
     styles  : []
 })
@@ -20,8 +22,8 @@ export class ServerListComponent implements OnInit {
 
     servers$: Observable<Server[]>;
 
-    constructor(private socket: Socket) {
-        this.servers$ = this.socket.fromEvent('servers');
+    constructor(private socket: Socket, public manager: ServerConnectionManager) {
+        this.servers$ = this.socket.fromEvent(Events.SERVER_LIST);
     }
 
     ngOnInit() {

@@ -3,6 +3,7 @@ import {LobbyController} from './lobby.controller';
 import {LobbyService}    from './lobby.service';
 import {DATABASE_MODULE} from "../lib/database/database.module";
 import {TypeOrmModule}   from "@nestjs/typeorm";
+import {LobbyGateway}    from "./lobby.gateway";
 
 @Module({
     imports    : [TypeOrmModule.forRoot({
@@ -12,7 +13,7 @@ import {TypeOrmModule}   from "@nestjs/typeorm";
         entities: [__dirname + '/**/*.entity{.js,.ts}']
     })],
     controllers: [LobbyController],
-    providers  : [LobbyService],
+    providers  : [LobbyService, LobbyGateway],
 })
 export class LobbyModule {
 }
