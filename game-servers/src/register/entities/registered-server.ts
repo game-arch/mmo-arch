@@ -1,6 +1,7 @@
 import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 
 @Unique('socketId', ['socketId'])
+@Unique('name', ['name'])
 @Entity()
 export class RegisteredServer {
 
@@ -10,12 +11,14 @@ export class RegisteredServer {
     socketId: string;
     @Column()
     ip: string;
-    @Column()
+    @Column({nullable:false})
     name: string;
     @Column('int')
     capacity: number;
-    @Column()
+    @Column('int')
     current: number;
+    @Column({nullable:false})
+    status:'online'|'offline' = 'online';
 
     constructor(ip: string, socketId: string, name: string, capacity: number, current: number) {
         this.ip       = ip;
@@ -23,5 +26,6 @@ export class RegisteredServer {
         this.name     = name;
         this.capacity = capacity;
         this.current  = current;
+
     }
 }

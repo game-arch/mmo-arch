@@ -18,21 +18,30 @@ export class RegisterGateway implements OnGatewayConnection, OnGatewayDisconnect
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
-        let name = client.handshake.query.name || 'Server';
-        await this.service.register(client.id, client.handshake.address, name);
+        if (Boolean(client.handshake.query.name)) {
+            let name = client.handshake.query.name;
+            console.log('Track', name);
+            await this.service.online(client.id, client.handshake.address, name);
+            client.broadcast.emit('servers', this.service.getAll());
+            return;
+        }
+        client.emit('servers', this.service.getAll());
     }
 
     @SubscribeMessage('update')
     async onUpdate(client: Socket, {current, capacity}: { current: number, capacity: number }) {
         await this.service.set(client.id, capacity, current);
+        this.server.emit('servers', this.service.getAll());
     }
 
     async handleDisconnect(client: Socket) {
-        await this.service.unregister(client.id);
+        if (client.handshake.query.track !== 'false') {
+            await this.service.offline(client.id);
+            this.server.emit('servers', this.service.getAll());
+        }
     }
 
     async onApplicationBootstrap() {
-        await this.service.clear();
     }
 
 
