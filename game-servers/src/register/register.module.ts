@@ -3,12 +3,12 @@ import {RegisterController} from './register.controller';
 import {RegisterService}    from './register.service';
 import {RegisterGateway}    from "./register.gateway";
 import {DATABASE_MODULE}    from "../lib/database/database.module";
-import {RegisteredServer}   from "./entities/registered-server";
+import {RegisteredShard}    from "./entities/registered-shard";
 import {TypeOrmModule}      from "@nestjs/typeorm";
 
 @Module({
     imports    : [
-        TypeOrmModule.forFeature([RegisteredServer]),
+        TypeOrmModule.forFeature([RegisteredShard]),
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
             type    : 'mysql',

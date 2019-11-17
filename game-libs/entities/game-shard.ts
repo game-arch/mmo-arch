@@ -1,4 +1,4 @@
-export interface Server {
+export interface GameShard {
     id: number;
     socketId: string;
     ip: string;

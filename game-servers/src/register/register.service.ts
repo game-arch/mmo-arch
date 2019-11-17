@@ -1,14 +1,14 @@
 import {Injectable, OnApplicationBootstrap} from '@nestjs/common';
-import {RegisteredServer}                   from "./entities/registered-server";
+import {RegisteredShard}                    from "./entities/registered-shard";
 import {Repository}                         from "typeorm";
 import {InjectRepository}                   from "@nestjs/typeorm";
 
 @Injectable()
 export class RegisterService implements OnApplicationBootstrap {
 
-    private servers: RegisteredServer[] = [];
+    private servers: RegisteredShard[] = [];
 
-    constructor(@InjectRepository(RegisteredServer) private repo: Repository<RegisteredServer>) {
+    constructor(@InjectRepository(RegisteredShard) private repo: Repository<RegisteredShard>) {
     }
 
     getHello(): string {
@@ -19,7 +19,7 @@ export class RegisterService implements OnApplicationBootstrap {
         if (name && name !== '') {
             let server = await this.findByIpAndName(ip, name);
             if (!server) {
-                await this.repo.save(this.repo.create(new RegisteredServer(ip, port, socketId, name, 10, 0)));
+                await this.repo.save(this.repo.create(new RegisteredShard(ip, port, socketId, name, 10, 0)));
                 this.servers = await this.repo.find();
                 return;
             }
@@ -71,7 +71,7 @@ export class RegisterService implements OnApplicationBootstrap {
                   .where('name = ""')
                   .execute();
         await this.repo.createQueryBuilder('server')
-                  .update(RegisteredServer, {status: 'offline'})
+                  .update(RegisteredShard, {status: 'offline'})
                   .where('status = :status', {status: 'online'})
                   .execute();
         this.servers = await this.repo.find();

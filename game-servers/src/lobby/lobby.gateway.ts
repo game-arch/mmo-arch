@@ -2,7 +2,7 @@ import {OnGatewayConnection, WebSocketGateway, WebSocketServer} from "@nestjs/we
 import {Server, Socket}                                         from "socket.io";
 import {PORTS}                                                  from "../constants";
 import * as io                                                  from "socket.io-client";
-import {RegisteredServer}                                       from "../register/entities/registered-server";
+import {RegisteredShard}                                        from "../register/entities/registered-shard";
 import {Events}                                                 from "../lib/events";
 
 @WebSocketGateway()
@@ -11,7 +11,7 @@ export class LobbyGateway implements OnGatewayConnection {
     server: Server;
     socket: Socket;
 
-    servers: RegisteredServer[] = [];
+    servers: RegisteredShard[] = [];
 
     constructor() {
 

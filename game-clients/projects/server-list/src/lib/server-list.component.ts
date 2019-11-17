@@ -1,9 +1,9 @@
 import {Component, OnInit}       from '@angular/core';
 import {Socket}                  from "ngx-socket-io";
 import {Observable}              from "rxjs";
-import {Server}                  from "./server";
 import {Events}                  from "../../../../../game-servers/src/lib/events";
 import {ServerConnectionManager} from "./server-connection-manager.service";
+import {GameShard}               from "../../../../../game-libs/entities/game-shard";
 
 @Component({
     selector: 'server-list',
@@ -20,7 +20,7 @@ import {ServerConnectionManager} from "./server-connection-manager.service";
 })
 export class ServerListComponent implements OnInit {
 
-    servers$: Observable<Server[]>;
+    servers$: Observable<GameShard[]>;
 
     constructor(private socket: Socket, public manager: ServerConnectionManager) {
         this.servers$ = this.socket.fromEvent(Events.SERVER_LIST);

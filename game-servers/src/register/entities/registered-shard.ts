@@ -1,9 +1,10 @@
 import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {GameShard}                                      from "../../../../game-libs/entities/game-shard";
 
 @Unique('socketId', ['socketId'])
 @Unique('name', ['name'])
 @Entity()
-export class RegisteredServer {
+export class RegisteredShard implements GameShard {
 
     @PrimaryGeneratedColumn()
     id: number;
