@@ -3,7 +3,7 @@ import {Server, Socket}                                                        f
 import * as io                                                                 from "socket.io-client";
 import {RegisteredShard}                                                       from "../register/entities/registered-shard";
 import {Events}                                                                from "../../lib/constants/events";
-import {PORTS}                                                                 from "../../lib/constants/ports";
+import {config}                                                                from "../lib/config";
 
 @WebSocketGateway()
 export class LobbyGateway implements OnGatewayConnection, OnGatewayInit {
@@ -14,14 +14,12 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayInit {
     servers: RegisteredShard[] = [];
 
     handleConnection(client: Socket, ...args: any[]): any {
-        console.log('send servers', this.servers);
         client.emit(Events.SERVER_LIST, this.servers);
     }
 
     afterInit(server: Server): any {
-        this.socket = io('http://localhost:' + PORTS.REGISTER + '?track=false');
+        this.socket = io('http://' + config.servers.register.host + ':' + config.servers.register.port + '?track=false');
         this.socket.on(Events.SERVER_LIST, (data) => {
-            console.log('servers', data);
             this.servers = data;
             server.emit(Events.SERVER_LIST, data);
         });

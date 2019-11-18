@@ -1,14 +1,20 @@
 import {NestFactory}    from '@nestjs/core';
 import {MapModule}      from './map.module';
-import {RedisIoAdapter} from "../lib/redis-io.adapter";
-import {PORTS}          from "../../lib/constants/ports";
 import {createDatabase} from "../lib/database/database.module";
+import {config}         from "../lib/config";
+import {Logger}         from "@nestjs/common";
+
+
+const logger = new Logger('Map');
 
 async function bootstrap() {
-    await createDatabase('map');
-    const app = await NestFactory.create(MapModule);
-    app.useWebSocketAdapter(new RedisIoAdapter(app));
-    await app.listen(PORTS.MAP);
+    await createDatabase('account');
+    const app = await NestFactory.createMicroservice(MapModule, config.microservice);
+    app.useLogger(logger);
+    await app.listen(() => {
+        logger.log("Map Microservice is listening ...");
+    });
+
 }
 
 bootstrap();

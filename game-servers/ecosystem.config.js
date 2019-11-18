@@ -32,7 +32,7 @@ module.exports = {
             }
         },
         {
-            name: 'server-map',
+            name: 'micro-map',
             script: 'npm start',
             watch: ["src/map", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
             // Delay between restart
@@ -54,7 +54,8 @@ module.exports = {
                 "followSymlinks": false
             },
             env: {
-                SERVER_TYPE: 'shard'
+                SERVER_TYPE: 'shard',
+                SHARD_PORT: process.env.PORT || '3002'
             }
         },
         {

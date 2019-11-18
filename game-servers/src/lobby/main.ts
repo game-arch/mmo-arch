@@ -7,7 +7,6 @@ import {createDatabase} from "../lib/database/database.module";
 async function bootstrap() {
     await createDatabase('lobby');
     const app = await NestFactory.create(LobbyModule);
-    app.useWebSocketAdapter(new RedisIoAdapter(app));
     app.enableCors({
         origin     : true,
         credentials: true

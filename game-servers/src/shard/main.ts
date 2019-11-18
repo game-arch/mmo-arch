@@ -1,7 +1,7 @@
 import {NestFactory}    from '@nestjs/core';
 import {ShardModule}    from './shard.module';
 import {createDatabase} from "../lib/database/database.module";
-import {PORTS}          from "../../lib/constants/ports";
+import {config}         from "../lib/config";
 
 async function bootstrap() {
     await createDatabase('shard');
@@ -11,7 +11,7 @@ async function bootstrap() {
         credentials: true
     });
 
-    await app.listen(PORTS.SHARD);
+    await app.listen(config.servers.shard.port);
 }
 
 bootstrap();
