@@ -16,7 +16,6 @@ export class LobbyController {
         try {
             response.send(await this.account.register(request.body.email, request.body.password));
         } catch (e) {
-            console.log(e);
             this.handleError(e, response);
         }
     }
