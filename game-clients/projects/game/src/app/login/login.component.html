@@ -6,7 +6,6 @@
             <mat-card-title>
                 Login
             </mat-card-title>
-            <server-list></server-list>
             <div style="padding:16px" *ngIf="isLogin === true; else loginPrompt">
                 Don't have an account?
                 <button mat-button color="primary" (click)="isLogin = false">
