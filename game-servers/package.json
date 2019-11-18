@@ -22,7 +22,9 @@
   "dependencies": {
     "@nestjs/common": "^6.7.2",
     "@nestjs/core": "^6.7.2",
+    "@nestjs/jwt": "^6.1.1",
     "@nestjs/microservices": "^6.10.1",
+    "@nestjs/passport": "^6.1.0",
     "@nestjs/platform-express": "^6.7.2",
     "@nestjs/platform-socket.io": "^6.9.0",
     "@nestjs/platform-ws": "^6.9.0",
@@ -33,6 +35,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.4",
     "mysql": "^2.17.1",
+    "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",

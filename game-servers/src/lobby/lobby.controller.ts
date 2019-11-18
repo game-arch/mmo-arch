@@ -14,21 +14,29 @@ export class LobbyController {
     @Post('register')
     async register(@Req() request: Request, @Res() response: Response) {
         try {
-            await this.account.register(request.body.email, request.body.password);
+            response.send(await this.account.register(request.body.email, request.body.password));
         } catch (e) {
-            response.status(e.status)
-                    .send(e.message);
+            console.log(e);
+            this.handleError(e, response);
         }
     }
 
     @Post('login')
     async login(@Req() request: Request, @Res() response: Response) {
         try {
-            await this.account.login(request.body.email, request.body.password);
+            let token = await this.account.login(request.body.email, request.body.password);
+            response.status(200);
+            response.send(token);
         } catch (e) {
-            response.status(e.status)
-                    .send(e.message);
+            this.handleError(e, response);
         }
     }
 
+    private handleError(e, response: Response) {
+        if (e.status) {
+            response.status(e.status).send(e.message);
+            return;
+        }
+        response.status(500).send(e.message || 'Internal Server Error');
+    }
 }

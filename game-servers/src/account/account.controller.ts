@@ -1,7 +1,7 @@
-import {Controller, Get, Post, Req, Res} from '@nestjs/common';
-import {AccountService}                  from './account.service';
-import {MessagePattern}                  from "@nestjs/microservices";
-import {Patterns}                        from "../lib/microservice/patterns";
+import {Controller}     from '@nestjs/common';
+import {AccountService} from './account.service';
+import {MessagePattern} from "@nestjs/microservices";
+import {Patterns}       from "../lib/microservice/patterns";
 
 @Controller()
 export class AccountController {
@@ -10,14 +10,17 @@ export class AccountController {
 
     @MessagePattern(Patterns.REGISTER_ACCOUNT)
     async register(data: { email: string, password: string }) {
-        await this.service.register(data.email, data.password);
-        return 'Success!';
+        return await this.service.register(data.email, data.password);
     }
 
 
     @MessagePattern(Patterns.LOGIN)
     async login(data: { email: string, password: string }) {
-        await this.service.login(data.email, data.password);
-        return 'Success!';
+        return await this.service.login(data.email, data.password);
+    }
+
+    @MessagePattern(Patterns.VERIFY_ACCOUNT)
+    async verify(data: string) {
+        return await this.service.getAccountByToken(data);
     }
 }

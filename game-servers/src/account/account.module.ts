@@ -4,9 +4,17 @@ import {TypeOrmModule}     from "@nestjs/typeorm";
 import {DATABASE_MODULE}   from "../lib/database/database.module";
 import {Account}           from "./entities/account";
 import {AccountService}    from "./account.service";
+import {JwtModule}         from "@nestjs/jwt";
+import {config}            from "../lib/config";
 
 @Module({
     imports    : [
+        JwtModule.register({
+            secret     : config.jwt.secret,
+            signOptions: {
+                expiresIn: '60s'
+            }
+        }),
         TypeOrmModule.forFeature([Account]),
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
