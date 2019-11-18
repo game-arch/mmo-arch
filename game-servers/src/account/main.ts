@@ -1,8 +1,8 @@
 import {NestFactory}    from '@nestjs/core';
 import {AccountModule}  from './account.module';
 import {RedisIoAdapter} from "../lib/redis-io.adapter";
-import {PORTS}          from "../constants";
 import {createDatabase} from "../lib/database/database.module";
+import {PORTS}          from "../../../game-clients/lib/constants/ports";
 
 async function bootstrap() {
     await createDatabase('account');
@@ -12,7 +12,6 @@ async function bootstrap() {
         origin     : true,
         credentials: true
     });
-    console.log(PORTS.ACCOUNT);
     await app.listen(PORTS.ACCOUNT);
 
 }

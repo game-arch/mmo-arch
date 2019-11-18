@@ -3,17 +3,17 @@ import {NgModule}      from '@angular/core';
 
 import {AppComponent}            from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SocketIoModule}     from "ngx-socket-io";
-import {PORTS}               from "../../../lib/constants";
-import {ServerListModule}    from "../../../server-list/src/lib/server-list.module";
-import { LoginComponent }    from './login/login.component';
-import {MatCardModule}       from "@angular/material/card";
-import {MatFormFieldModule}  from "@angular/material/form-field";
-import {MatInputModule}      from "@angular/material/input";
-import {MatButtonModule}     from "@angular/material/button";
-import {MatIconModule}       from "@angular/material/icon";
-import {ReactiveFormsModule} from "@angular/forms";
-import { RegisterComponent } from './register/register.component';
+import {SocketIoModule}          from "ngx-socket-io";
+import {ServerListModule}        from "../../../server-list/src/lib/server-list.module";
+import {LoginComponent}          from './login/login.component';
+import {MatCardModule}           from "@angular/material/card";
+import {MatFormFieldModule}      from "@angular/material/form-field";
+import {MatInputModule}          from "@angular/material/input";
+import {MatButtonModule}         from "@angular/material/button";
+import {MatIconModule}           from "@angular/material/icon";
+import {ReactiveFormsModule}     from "@angular/forms";
+import {RegisterComponent}       from './register/register.component';
+import {PORTS}                   from "../../../../lib/constants/ports";
 
 @NgModule({
     declarations: [
@@ -21,7 +21,7 @@ import { RegisterComponent } from './register/register.component';
         LoginComponent,
         RegisterComponent
     ],
-    imports: [
+    imports     : [
         BrowserModule,
         BrowserAnimationsModule,
         SocketIoModule.forRoot({

@@ -3,17 +3,24 @@
         <mat-form-field style="width:100%" color="accent" appearance="outline">
             <mat-label>Email Address</mat-label>
             <input matInput type="email" formControlName="email"/>
+            <mat-error *ngIf="form.get('email').hasError('required')">Required</mat-error>
+            <mat-error *ngIf="form.get('email').hasError('email')">Not an Email</mat-error>
+            <mat-error *ngIf="form.get('email').hasError('taken')">Already Taken</mat-error>
         </mat-form-field>
         <br/>
         <mat-form-field style="width:100%" color="accent" appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput type="password" formControlName="password"/>
+            <mat-error *ngIf="form.get('password').hasError('required')">Required</mat-error>
         </mat-form-field>
         <mat-form-field style="width:100%" color="accent" appearance="outline">
             <mat-label>Confirm Password</mat-label>
             <input matInput type="password" formControlName="confirmPassword"/>
+            <mat-error *ngIf="form.get('confirmPassword').hasError('required')">Required</mat-error>
+            <mat-error *ngIf="form.get('confirmPassword').hasError('match')">Passwords Do Not Match</mat-error>
         </mat-form-field>
     </div>
+
     <div style="padding: 16px;" dir="rtl">
         <button mat-raised-button color="primary" dir="ltr" [disabled]="form.invalid">
             <mat-icon>account_circle</mat-icon>

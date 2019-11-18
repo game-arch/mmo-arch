@@ -3,7 +3,7 @@ import {Server, Socket}                                         from "socket.io"
 import {PORTS}                                                  from "../constants";
 import * as io                                                  from "socket.io-client";
 import {RegisteredShard}                                        from "../register/entities/registered-shard";
-import {Events}                                                 from "../lib/events";
+import {Events}                                                 from "../../../game-clients/lib/constants/events";
 
 @WebSocketGateway()
 export class LobbyGateway implements OnGatewayConnection {

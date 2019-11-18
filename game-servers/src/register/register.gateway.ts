@@ -8,7 +8,7 @@ import {
 import {Server, Socket}         from "socket.io";
 import {RegisterService}        from "./register.service";
 import {OnApplicationBootstrap} from "@nestjs/common";
-import {Events}                 from "../lib/events";
+import {Events}                 from "../../../game-clients/lib/constants/events";
 
 @WebSocketGateway()
 export class RegisterGateway implements OnGatewayConnection, OnGatewayDisconnect, OnApplicationBootstrap {

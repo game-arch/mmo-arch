@@ -1,9 +1,9 @@
 import {Component, OnInit}       from '@angular/core';
 import {Socket}                  from "ngx-socket-io";
 import {Observable}              from "rxjs";
-import {Events}                  from "../../../../../game-servers/src/lib/events";
 import {ServerConnectionManager} from "./server-connection-manager.service";
-import {GameShard}               from "../../../../../game-libs/entities/game-shard";
+import {GameShard}               from "../../../../lib/entities/game-shard";
+import {Events}                  from "../../../../lib/constants/events";
 
 @Component({
     selector: 'server-list',
