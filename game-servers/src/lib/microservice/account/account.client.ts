@@ -10,11 +10,11 @@ export class AccountClient implements OnApplicationBootstrap {
 
     }
 
-    async register(email: string, password: string) {
+    async register(email: string, password: string):Promise<string> {
         return await this.client.send(Patterns.REGISTER_ACCOUNT, {email, password}).pipe(first()).toPromise();
     }
 
-    async login(email: string, password: string) {
+    async login(email: string, password: string): Promise<string> {
         return await this.client.send(Patterns.LOGIN, {email, password}).pipe(first()).toPromise();
     }
 
