@@ -1,11 +1,12 @@
-import {Module}            from '@nestjs/common';
-import {AccountController} from './account.controller';
-import {TypeOrmModule}     from "@nestjs/typeorm";
-import {DATABASE_MODULE}   from "../lib/database/database.module";
-import {Account}           from "./entities/account";
-import {AccountService}    from "./account.service";
-import {JwtModule}         from "@nestjs/jwt";
-import {config}            from "../lib/config";
+import {Module}              from '@nestjs/common';
+import {AccountController}   from './account.controller';
+import {TypeOrmModule}       from "@nestjs/typeorm";
+import {DATABASE_MODULE}     from "../lib/database/database.module";
+import {Account}             from "./entities/account";
+import {AccountService}      from "./account.service";
+import {JwtModule}           from "@nestjs/jwt";
+import {config}              from "../lib/config";
+import {AccountClientModule} from "../lib/microservice/account/account-client.module";
 
 @Module({
     imports    : [
@@ -15,6 +16,7 @@ import {config}            from "../lib/config";
                 expiresIn: '60s'
             }
         }),
+        AccountClientModule,
         TypeOrmModule.forFeature([Account]),
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,

@@ -53,6 +53,7 @@ export class RegisterService implements OnApplicationBootstrap {
         let server = await this.findBySocketId(socketId);
         if (server) {
             server.status = 'offline';
+            server.current = 0;
             await this.repo.save(server);
             this.servers = await this.repo.find();
         }

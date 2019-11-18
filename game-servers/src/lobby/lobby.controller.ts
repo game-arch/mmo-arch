@@ -2,6 +2,8 @@ import {Controller, Get, Post, Req, Res} from '@nestjs/common';
 import {LobbyService}                    from './lobby.service';
 import {AccountClient}                   from "../lib/microservice/account/account.client";
 import {Request, Response}               from "express";
+import {EventPattern, MessagePattern}    from "@nestjs/microservices";
+import {Patterns}                        from "../lib/microservice/patterns";
 
 @Controller()
 export class LobbyController {
@@ -37,5 +39,10 @@ export class LobbyController {
             return;
         }
         response.status(500).send(e.message || 'Internal Server Error');
+    }
+
+    @EventPattern(Patterns.ACCOUNT_UPDATED)
+    onAccountChange(data: any) {
+        console.log('Account Updated', data);
     }
 }

@@ -19,8 +19,14 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     capacity = 100;
     current  = 0;
 
+    names = [
+        'Maiden',
+        'Voyage',
+        'Alcatraz'
+    ];
+
     afterInit(server: Server): any {
-        this.socket = io('http://' + config.servers.register.host + ':' + config.servers.register.port + '?name=Maiden&port=' + config.servers.shard.port);
+        this.socket = io('http://' + config.servers.register.host + ':' + config.servers.register.port + '?name=' + this.names[process.env.NODE_APP_INSTANCE] + '&port=' + config.servers.shard.port);
     }
 
     handleConnection(client: Socket, ...args: any[]): any {

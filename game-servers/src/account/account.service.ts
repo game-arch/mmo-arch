@@ -34,10 +34,7 @@ export class AccountService {
 
     async login(email: string, password: string) {
         let account = await this.repo.findOne({email});
-        if (!account) {
-            throw new RpcException(new UnauthorizedException("Invalid Email or Password"));
-        }
-        if (!account.checkIfUnencryptedPasswordIsValid(password)) {
+        if (!account || !account.verifyPassword(password)) {
             throw new RpcException(new UnauthorizedException("Invalid Email or Password"));
         }
         return this.jwt.sign({

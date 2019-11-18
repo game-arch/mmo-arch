@@ -30,7 +30,7 @@ export const config = {
         },
         shard   : {
             host: process.env.SHARD_HOST || 'localhost',
-            port: process.env.SHARD_PORT || PORTS.SHARD
+            port: (parseInt(process.env.SHARD_PORT || ('' + PORTS.SHARD)) + parseInt(process.env.NODE_APP_INSTANCE)) + ''
         },
         register: {
             host: process.env.REGISTER_HOST || 'localhost',
