@@ -6,7 +6,7 @@ module.exports = {
             watch: false
         },
         {
-            name: 'micro-account',
+            name: 'micro-account-1',
             script: 'npm start',
             watch: ["src/account", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
             // Delay between restart
@@ -16,6 +16,45 @@ module.exports = {
             },
             env: {
                 SERVER_TYPE: 'account'
+            }
+        },
+        {
+            name: 'micro-account-2',
+            script: 'npm start',
+            watch: ["src/account", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'account'
+            }
+        },
+        {
+            name: 'micro-map-1',
+            script: 'npm start',
+            watch: ["src/map", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'map'
+            }
+        },
+        {
+            name: 'micro-map-2',
+            script: 'npm start',
+            watch: ["src/map", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'map'
             }
         },
         {
@@ -29,19 +68,6 @@ module.exports = {
             },
             env: {
                 SERVER_TYPE: 'register'
-            }
-        },
-        {
-            name: 'micro-map',
-            script: 'npm start',
-            watch: ["src/map", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
-            // Delay between restart
-            watch_delay: 1000,
-            watch_options: {
-                "followSymlinks": false
-            },
-            env: {
-                SERVER_TYPE: 'map'
             }
         },
         {

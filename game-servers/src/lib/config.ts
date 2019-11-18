@@ -4,9 +4,10 @@ import {PORTS}                              from "../../lib/constants/ports";
 
 export const config = {
     microservice: <ClientOptions | MicroserviceOptions>{
-        transport: Transport.REDIS,
+        transport: Transport.NATS,
         options  : {
-            url: 'redis://' + (process.env.REDIS_HOST || 'localhost') + ':' + (process.env.REDIS_PORT || '6379')
+            url: 'nats://' + (process.env.NATS_HOST || 'localhost') + ':' + (process.env.NATS_PORT || '4222'),
+            queue: 'game'
         }
     },
     jwt         : {

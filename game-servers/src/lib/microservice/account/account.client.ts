@@ -15,7 +15,13 @@ export class AccountClient implements OnApplicationBootstrap {
     }
 
     async login(email: string, password: string): Promise<string> {
-        return await this.client.send(Patterns.LOGIN, {email, password}).pipe(first()).toPromise();
+        try {
+            let response = await this.client.send(Patterns.LOGIN, {email, password}).pipe(first()).toPromise();
+            console.log(response);
+            return response;
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async onApplicationBootstrap() {
