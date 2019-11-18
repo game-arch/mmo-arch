@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
     async register() {
         try {
             let data   = this.form.getRawValue();
-            let result = await this.http.post(Hosts.ACCOUNT + '/register', data).pipe(first()).toPromise();
+            let result = await this.http.post(Hosts.LOBBY + '/register', data).pipe(first()).toPromise();
         } catch (e) {
             if (e.status === 409) {
                 this.form.get('email').setErrors({taken:true});

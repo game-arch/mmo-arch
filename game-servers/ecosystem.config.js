@@ -6,7 +6,7 @@ module.exports = {
             watch: false
         },
         {
-            name: 'server-account',
+            name: 'micro-account',
             script: 'npm start',
             watch: ["src/account", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
             // Delay between restart

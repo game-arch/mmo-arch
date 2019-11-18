@@ -1,17 +1,23 @@
 import {TypeOrmModuleOptions} from "@nestjs/typeorm";
 import {createConnection}     from "typeorm";
+import {config}               from "../config";
 
-export const DATABASE_MODULE:TypeOrmModuleOptions = {
-    type       : 'mysql',
-    host       : 'localhost',
-    port       : 3306,
-    username   : 'root',
-    password   : 'root',
-    database   : 'database',
-    synchronize: true,
-    keepConnectionAlive: true
+export const DATABASE_MODULE: TypeOrmModuleOptions = {
+    type               : 'mysql',
+    host               : config.mysql.host,
+    port               : config.mysql.port,
+    username           : config.mysql.username,
+    password           : config.mysql.password,
+    database           : 'database',
+    synchronize        : true,
+    keepConnectionAlive: true,
+    insecureAuth       : true,
+    extra: {
+        insecureAuth: true
+    }
 };
-export async function createDatabase(name:string) {
+
+export async function createDatabase(name: string) {
     try {
         let connection = await createConnection({
             ...DATABASE_MODULE,

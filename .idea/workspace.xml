@@ -20,27 +20,30 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/game-libs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="ts.external.directory.path" value="C:\Users\jwhen\game-architecture\game-servers\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/game-servers/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice/account" />
+      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
+      <recent name="C:\Users\jwhen\game-architecture\game-servers" />
+      <recent name="C:\Users\jwhen\game-architecture\game-servers\dist\game-servers" />
+      <recent name="C:\Users\jwhen\game-architecture\game-clients" />
+    </key>
+    <key name="es6.move.members.recent.items">
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\jwhen\game-architecture\game-libs" />
       <recent name="C:\Users\jwhen\game-architecture\game-clients\projects\game\src\assets\backgrounds" />
       <recent name="C:\Users\jwhen\game\game-servers\src\account" />
       <recent name="C:\Users\jwhen\game\game-servers\src\lobby" />
       <recent name="C:\Users\jwhen\game\game-servers\src\map" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\jwhen\game-architecture\game-servers" />
-      <recent name="C:\Users\jwhen\game-architecture\game-servers\dist\game-servers" />
-      <recent name="C:\Users\jwhen\game-architecture\game-clients" />
-      <recent name="C:\Users\jwhen\game-architecture\game-libs\constants" />
-      <recent name="C:\Users\jwhen\game-architecture\game-libs\entities" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -81,6 +84,8 @@
       <workItem from="1574046007718" duration="586000" />
       <workItem from="1574046711176" duration="1710000" />
       <workItem from="1574048448944" duration="895000" />
+      <workItem from="1574088791614" duration="1354000" />
+      <workItem from="1574092432922" duration="2748000" />
     </task>
     <servers />
   </component>

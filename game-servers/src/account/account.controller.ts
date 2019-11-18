@@ -1,32 +1,23 @@
 import {Controller, Get, Post, Req, Res} from '@nestjs/common';
-import {AccountService}                  from './account-service';
-import {Request, Response}               from "express";
+import {AccountService}                  from './account.service';
+import {MessagePattern}                  from "@nestjs/microservices";
+import {Patterns}                        from "../lib/microservice/patterns";
 
 @Controller()
 export class AccountController {
     constructor(private readonly service: AccountService) {
     }
 
-    @Post('register')
-    async register(@Req() request: Request, @Res() response: Response) {
-        try {
-            await this.service.register(request.body.email, request.body.password);
-            response.send("Success!");
-        } catch (e) {
-            response.status(e.status)
-                    .send(e.message);
-        }
+    @MessagePattern(Patterns.REGISTER_ACCOUNT)
+    async register(data: { email: string, password: string }) {
+        await this.service.register(data.email, data.password);
+        return 'Success!';
     }
 
 
-    @Post('login')
-    async login(@Req() request: Request, @Res() response: Response) {
-        try {
-            await this.service.login(request.body.email, request.body.password);
-            response.send("Success!");
-        } catch (e) {
-            response.status(e.status)
-                    .send(e.message);
-        }
+    @MessagePattern(Patterns.LOGIN)
+    async login(data: { email: string, password: string }) {
+        await this.service.login(data.email, data.password);
+        return 'Success!';
     }
 }

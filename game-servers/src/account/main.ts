@@ -2,17 +2,19 @@ import {NestFactory}    from '@nestjs/core';
 import {AccountModule}  from './account.module';
 import {RedisIoAdapter} from "../lib/redis-io.adapter";
 import {createDatabase} from "../lib/database/database.module";
-import {PORTS}          from "../../lib/constants/ports";
+import {Logger}         from "@nestjs/common";
+import {config}         from "../lib/config";
+
+const logger = new Logger('Account');
 
 async function bootstrap() {
     await createDatabase('account');
-    const app = await NestFactory.create(AccountModule);
+    const app = await NestFactory.createMicroservice(AccountModule, config.microservice);
+    app.useLogger(logger);
     app.useWebSocketAdapter(new RedisIoAdapter(app));
-    app.enableCors({
-        origin     : true,
-        credentials: true
+    await app.listen(() => {
+        logger.log("Account Microservice is listening ...");
     });
-    await app.listen(PORTS.ACCOUNT);
 
 }
 
