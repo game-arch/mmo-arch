@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e56b9b86-df18-45ac-bc2d-950eb03d6c7e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game-libs/entities/game-shard.ts" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,11 +36,11 @@
       <recent name="C:\Users\jwhen\game\game-servers\src\map" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jwhen\game-architecture\game-servers" />
+      <recent name="C:\Users\jwhen\game-architecture\game-servers\dist\game-servers" />
       <recent name="C:\Users\jwhen\game-architecture\game-clients" />
       <recent name="C:\Users\jwhen\game-architecture\game-libs\constants" />
       <recent name="C:\Users\jwhen\game-architecture\game-libs\entities" />
-      <recent name="C:\Users\jwhen\game-architecture\lib" />
-      <recent name="C:\Users\jwhen\game\game-servers\src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -78,7 +77,10 @@
       <workItem from="1573860061796" duration="2407000" />
       <workItem from="1573952469070" duration="288000" />
       <workItem from="1574018181961" duration="5381000" />
-      <workItem from="1574044478429" duration="1287000" />
+      <workItem from="1574044478429" duration="1391000" />
+      <workItem from="1574046007718" duration="586000" />
+      <workItem from="1574046711176" duration="1710000" />
+      <workItem from="1574048448944" duration="895000" />
     </task>
     <servers />
   </component>

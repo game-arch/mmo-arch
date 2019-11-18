@@ -7,7 +7,7 @@ import {
 }                       from "@nestjs/websockets";
 import {Server, Socket} from "socket.io";
 import * as io          from "socket.io-client";
-import {PORTS}          from "../constants";
+import {PORTS}          from "../../lib/constants/ports";
 
 @WebSocketGateway()
 export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
@@ -19,7 +19,7 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     current  = 0;
 
     afterInit(server: Server): any {
-        this.socket = io('http://localhost:' + PORTS.REGISTER + '?name=Maiden');
+        this.socket = io('http://localhost:' + PORTS.REGISTER + '?name=Maiden&port=' + PORTS.SHARD);
     }
 
     handleConnection(client: Socket, ...args: any[]): any {

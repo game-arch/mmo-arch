@@ -6,14 +6,9 @@ module.exports = {
             watch: false
         },
         {
-            name: 'server-builder',
-            script: 'npm run build -- --watch',
-            watch: false
-        },
-        {
             name: 'server-account',
-            script: 'npm run start:prod',
-            watch: ["dist"],
+            script: 'npm start',
+            watch: ["src/account", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
@@ -25,8 +20,8 @@ module.exports = {
         },
         {
             name: 'server-register',
-            script: 'npm run start:prod',
-            watch: ["dist"],
+            script: 'npm start',
+            watch: ["src/register", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
@@ -38,8 +33,8 @@ module.exports = {
         },
         {
             name: 'server-map',
-            script: 'npm run start:prod',
-            watch: ["dist"],
+            script: 'npm start',
+            watch: ["src/map", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
@@ -51,8 +46,8 @@ module.exports = {
         },
         {
             name: 'server-shard',
-            script: 'npm run start:prod',
-            watch: ["dist"],
+            script: 'npm start',
+            watch: ["src/shard", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
@@ -64,8 +59,8 @@ module.exports = {
         },
         {
             name: 'server-lobby',
-            script: 'npm run start:prod',
-            watch: ["dist"],
+            script: 'npm start',
+            watch: ["src/lobby", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {

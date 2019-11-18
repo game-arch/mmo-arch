@@ -1,5 +1,5 @@
 import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {GameShard}                                      from "../../../../game-clients/lib/entities/game-shard";
+import {GameShard}                                      from "../../../lib/entities/game-shard";
 
 @Unique('socketId', ['socketId'])
 @Unique('name', ['name'])

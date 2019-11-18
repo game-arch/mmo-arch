@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (submit)="register().then()">
     <div style="padding: 0 16px;">
         <mat-form-field style="width:100%" color="accent" appearance="outline">
             <mat-label>Email Address</mat-label>
@@ -22,7 +22,7 @@
     </div>
 
     <div style="padding: 16px;" dir="rtl">
-        <button mat-raised-button color="primary" dir="ltr" [disabled]="form.invalid">
+        <button mat-raised-button color="primary" dir="ltr" [disabled]="form.invalid" type="submit">
             <mat-icon>account_circle</mat-icon>
             <span>
                 Register

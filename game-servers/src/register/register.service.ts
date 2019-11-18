@@ -25,6 +25,7 @@ export class RegisterService implements OnApplicationBootstrap {
             }
             server.socketId = socketId;
             server.status   = 'online';
+            server.port = port;
             await this.repo.save(server);
             this.servers = await this.repo.find();
         }

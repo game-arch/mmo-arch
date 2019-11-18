@@ -1,7 +1,7 @@
 import {NestFactory}    from '@nestjs/core';
 import {ShardModule}    from './shard.module';
 import {createDatabase} from "../lib/database/database.module";
-import {PORTS}          from "../../../game-clients/lib/constants/ports";
+import {PORTS}          from "../../lib/constants/ports";
 
 async function bootstrap() {
     await createDatabase('shard');

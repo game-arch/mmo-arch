@@ -1,9 +1,9 @@
 import {OnGatewayConnection, WebSocketGateway, WebSocketServer} from "@nestjs/websockets";
 import {Server, Socket}                                         from "socket.io";
-import {PORTS}                                                  from "../constants";
 import * as io                                                  from "socket.io-client";
 import {RegisteredShard}                                        from "../register/entities/registered-shard";
-import {Events}                                                 from "../../../game-clients/lib/constants/events";
+import {Events}                                                 from "../../lib/constants/events";
+import {PORTS}                                                  from "../../lib/constants/ports";
 
 @WebSocketGateway()
 export class LobbyGateway implements OnGatewayConnection {

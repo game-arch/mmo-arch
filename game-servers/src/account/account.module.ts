@@ -1,19 +1,23 @@
 import {Module}            from '@nestjs/common';
 import {AccountController} from './account.controller';
-import {AccountService}    from './account.service';
 import {AccountGateway}    from "./account.gateway";
 import {TypeOrmModule}     from "@nestjs/typeorm";
 import {DATABASE_MODULE}   from "../lib/database/database.module";
+import {Account}           from "./entities/account";
+import {AccountService}    from "./account-service";
 
 @Module({
-    imports    : [TypeOrmModule.forRoot({
-        ...DATABASE_MODULE,
-        type    : 'mysql',
-        database: 'account',
-        entities: [__dirname + '/**/*.entity{.js,.ts}']
-    })],
+    imports    : [
+        TypeOrmModule.forFeature([Account]),
+        TypeOrmModule.forRoot({
+            ...DATABASE_MODULE,
+            type    : 'mysql',
+            database: 'account',
+            entities: [__dirname + '/**/entities/*{.js,.ts}']
+        })
+    ],
     controllers: [AccountController],
-    providers  : [AccountService, AccountGateway],
+    providers  : [AccountGateway, AccountService],
     exports    : [AccountGateway]
 })
 export class AccountModule {
