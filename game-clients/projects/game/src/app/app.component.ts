@@ -1,10 +1,10 @@
 import {Component}         from '@angular/core';
-import {Socket}            from "ngx-socket-io";
 import {Observable}        from "rxjs";
 import {AuthModel}         from "../../../authentication/src/lib/state/auth.model";
-import {Select}            from "@ngxs/store";
+import {Select, Store}     from "@ngxs/store";
 import {AuthState}         from "../../../authentication/src/lib/state/auth.state";
 import {ConnectionManager} from "../../../connection/src/lib/connection-manager";
+import {SetToken}          from "../../../authentication/src/lib/state/auth.actions";
 
 @Component({
     selector   : 'app-root',
@@ -17,7 +17,14 @@ export class AppComponent {
 
     title = 'game';
 
-    constructor(public connection: ConnectionManager) {
+    constructor(
+        private store: Store,
+        public connection: ConnectionManager
+    ) {
 
+    }
+
+    logout() {
+        this.store.dispatch(new SetToken());
     }
 }

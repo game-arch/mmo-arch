@@ -10,12 +10,13 @@ import {NgxsStoragePluginModule}  from "@ngxs/storage-plugin";
 import {ServerSelectionModule}    from "../../../server-selection/src/lib/server-selection.module";
 import {CharacterSelectionModule} from "../../../character-selection/src/lib/character-selection.module";
 import {ConnectionModule}         from "../../../connection/src/lib/connection.module";
+import {MatButtonModule}          from "@angular/material/button";
 
 @NgModule({
     declarations: [
         AppComponent
     ],
-    imports     : [
+    imports: [
         BrowserModule,
         HttpClientModule,
         BrowserAnimationsModule,
@@ -28,7 +29,8 @@ import {ConnectionModule}         from "../../../connection/src/lib/connection.m
             key: [
                 'auth'
             ]
-        })
+        }),
+        MatButtonModule
     ],
     providers   : [],
     bootstrap   : [AppComponent]

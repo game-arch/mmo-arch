@@ -3,7 +3,10 @@
     <ng-container *ngIf="auth.token !== ''">
         <ng-container *ngIf="{shard:connection.shard$ | async} as conn">
             <server-selection *ngIf="!conn.shard"></server-selection>
-            <character-selection *ngIf="conn.shard"></character-selection>
+            <ng-container *ngIf="conn.shard">
+                <character-selection></character-selection>
+            </ng-container>
         </ng-container>
+        <button mat-raised-button style="position:fixed; bottom:16px;left:16px;" (click)="logout()">Logout</button>
     </ng-container>
 </ng-container>
