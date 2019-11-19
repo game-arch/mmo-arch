@@ -1,8 +1,8 @@
 export interface GameShard {
     id: number;
     socketId: string;
-    ip: string;
-    port:string;
+    host: string;
+    port: string;
     name: string;
     capacity: number;
     current: number;

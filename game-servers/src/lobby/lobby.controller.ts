@@ -16,7 +16,8 @@ export class LobbyController {
     @Post('register')
     async register(@Req() request: Request, @Res() response: Response) {
         try {
-            response.send(await this.account.register(request.body.email, request.body.password));
+            let token = await this.account.register(request.body.email, request.body.password);
+            response.send({token});
         } catch (e) {
             this.handleError(e, response);
         }
@@ -27,7 +28,7 @@ export class LobbyController {
         try {
             let token = await this.account.login(request.body.email, request.body.password);
             response.status(200);
-            response.send(token);
+            response.send({token});
         } catch (e) {
             this.handleError(e, response);
         }

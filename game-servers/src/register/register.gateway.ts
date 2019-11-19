@@ -23,7 +23,7 @@ export class RegisterGateway implements OnGatewayConnection, OnGatewayDisconnect
         if (Boolean(client.handshake.query.name)) {
             let name = client.handshake.query.name;
             let port = client.handshake.query.port || config.servers.shard.port;
-            await this.service.online(client.id, this.service.getIp(client.handshake.address), port, name);
+            await this.service.online(client.id, this.service.getHost(client.handshake.address), port, name);
             client.broadcast.emit(Events.SERVER_LIST, this.service.getAll());
             return;
         }

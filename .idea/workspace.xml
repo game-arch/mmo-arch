@@ -28,22 +28,22 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/game-servers/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice/account" />
-      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
-      <recent name="C:\Users\jwhen\game-architecture\game-servers" />
-      <recent name="C:\Users\jwhen\game-architecture\game-servers\dist\game-servers" />
-      <recent name="C:\Users\jwhen\game-architecture\game-clients" />
-    </key>
-    <key name="es6.move.members.recent.items">
-      <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\jwhen\game-architecture\game-libs" />
       <recent name="C:\Users\jwhen\game-architecture\game-clients\projects\game\src\assets\backgrounds" />
       <recent name="C:\Users\jwhen\game\game-servers\src\account" />
       <recent name="C:\Users\jwhen\game\game-servers\src\lobby" />
       <recent name="C:\Users\jwhen\game\game-servers\src\map" />
+    </key>
+    <key name="es6.move.members.recent.items">
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game-clients/projects/connection/src/lib" />
+      <recent name="$PROJECT_DIR$/game-clients/projects/authentication/src/lib" />
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice/account" />
+      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
+      <recent name="C:\Users\jwhen\game-architecture\game-servers" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -86,7 +86,7 @@
       <workItem from="1574048448944" duration="895000" />
       <workItem from="1574088791614" duration="1354000" />
       <workItem from="1574092432922" duration="14916000" />
-      <workItem from="1574121741480" duration="829000" />
+      <workItem from="1574121741480" duration="5842000" />
     </task>
     <servers />
   </component>

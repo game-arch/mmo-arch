@@ -15,11 +15,11 @@ export class RegisterService implements OnApplicationBootstrap {
         return 'Hello World!';
     }
 
-    async online(socketId: string, ip: string, port:string, name: string) {
+    async online(socketId: string, host: string, port:string, name: string) {
         if (name && name !== '') {
-            let server = await this.findByIpAndName(ip, name);
+            let server = await this.findByIpAndName(host, name);
             if (!server) {
-                await this.repo.save(this.repo.create(new RegisteredShard(ip, port, socketId, name, 10, 0)));
+                await this.repo.save(this.repo.create(new RegisteredShard(host, port, socketId, name, 10, 0)));
                 this.servers = await this.repo.find();
                 return;
             }
@@ -35,8 +35,8 @@ export class RegisterService implements OnApplicationBootstrap {
         return this.repo.findOne({where: {socketId}});
     }
 
-    private findByIpAndName(ip: string, name: string) {
-        return this.repo.findOne({where: {ip, name}});
+    private findByIpAndName(host: string, name: string) {
+        return this.repo.findOne({where: {host: host, name}});
     }
 
     async set(socketId: string, capacity: number, current: number) {
@@ -79,11 +79,11 @@ export class RegisterService implements OnApplicationBootstrap {
         this.servers = await this.repo.find();
     }
 
-    getIp(ip:string) {
-        if (ip.indexOf('127.0.0.1') !== -1) {
+    getHost(host:string) {
+        if (host.indexOf('127.0.0.1') !== -1) {
             return 'localhost';
         }
-        return ip;
+        return host;
     }
 
 }

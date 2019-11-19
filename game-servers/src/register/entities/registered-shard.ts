@@ -11,7 +11,7 @@ export class RegisteredShard implements GameShard {
     @Column()
     socketId: string;
     @Column()
-    ip: string;
+    host: string;
     @Column()
     port: string;
     @Column({nullable: false})
@@ -23,8 +23,8 @@ export class RegisteredShard implements GameShard {
     @Column({nullable: false})
     status: 'online' | 'offline' = 'online';
 
-    constructor(ip: string, port: string, socketId: string, name: string, capacity: number, current: number) {
-        this.ip       = ip;
+    constructor(host: string, port: string, socketId: string, name: string, capacity: number, current: number) {
+        this.host     = host;
         this.port     = port;
         this.socketId = socketId;
         this.name     = name;
