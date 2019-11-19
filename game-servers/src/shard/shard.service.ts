@@ -1,8 +1,9 @@
-import {Injectable}      from '@nestjs/common';
-import {AccountClient}   from "../lib/microservice/account/account.client";
-import {Socket}          from "socket.io";
-import {User}            from "./user";
-import {BehaviorSubject} from "rxjs";
+import {Injectable}            from '@nestjs/common';
+import {AccountClient}         from "../lib/microservice/account/account.client";
+import {Socket}                from "socket.io";
+import {User}                  from "./user";
+import {BehaviorSubject, from} from "rxjs";
+import {filter, toArray}       from "rxjs/operators";
 
 @Injectable()
 export class ShardService {
@@ -17,14 +18,23 @@ export class ShardService {
     constructor(private account: AccountClient) {
     }
 
-    async getUserFor(socket: Socket) {
-        let account: { id: number, email: string } = await this.account.getAccountByToken(socket.handshake.query.token);
-        let user                                   = new User(
-            account.id,
-            account.email,
-            socket
-        );
-        this._users$.next([...this._users$.getValue(), user]);
+    async userConnected(socket: Socket) {
+        try {
+            let account: { id: number, email: string } = await this.account.getAccountByToken(socket.handshake.query.token);
+            let user                                   = new User(
+                account.id,
+                account.email,
+                socket
+            );
+            this._users$.next([...this._users$.getValue(), user]);
+            return user;
+        } catch (e) {
+            throw new Error("Session Expired");
+        }
+    }
+
+    async userDisconnected(socket: Socket) {
+        this._users$.next(await from(this.users).pipe(filter(user => user.socket.id !== socket.id), toArray()).toPromise());
     }
 
 }

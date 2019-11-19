@@ -6,6 +6,8 @@ import {GameShard}                       from "../../../../../game-servers/lib/e
 import {Events}                          from "../../../../../game-servers/lib/constants/events";
 import {Hosts}                           from "../../../game/src/lib/hosts";
 import {map, takeUntil}                  from "rxjs/operators";
+import {Store}                           from "@ngxs/store";
+import {SetToken}                        from "../../../authentication/src/lib/state/auth.actions";
 
 @Component({
     selector   : 'server-list',
@@ -21,7 +23,7 @@ export class ServerListComponent implements OnInit {
 
     connected = new EventEmitter<string>();
 
-    constructor(public manager: ConnectionManager) {
+    constructor(private store: Store, public manager: ConnectionManager) {
     }
 
     ngOnInit() {
@@ -31,6 +33,11 @@ export class ServerListComponent implements OnInit {
 
     onConnect(shard: GameShard) {
         let connection = this.manager.connectToWorld(shard);
+        fromEvent(connection.socket, 'connection-error', {once: true})
+            .subscribe((err) => {
+                console.error(err);
+                this.store.dispatch(new SetToken());
+            });
         fromEvent(connection.socket, 'connect', {once: true})
             .pipe(takeUntil(this.destroy))
             .pipe(map(() => shard.name))

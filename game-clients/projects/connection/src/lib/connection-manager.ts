@@ -43,7 +43,9 @@ export class ConnectionManager {
 
     connectToWorld(server: GameShard) {
         if (this.world.socket) {
-            this.world.socket.disconnect();
+            if (this.world.socket.connected) {
+                this.world.socket.disconnect();
+            }
             delete this.connections[this.world.shard.name];
             this._world.next(null);
         }

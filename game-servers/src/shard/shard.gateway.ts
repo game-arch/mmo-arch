@@ -17,7 +17,6 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     socket: Socket;
 
     capacity = 100;
-    current  = 0;
 
     names = [
         'Maiden',
@@ -35,23 +34,23 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async handleConnection(client: Socket, ...args: any[]) {
         try {
-            await this.service.getUserFor(client);
-            this.current++;
+            if (this.service.users.length >= this.capacity) {
+                throw new Error("User Capacity Reached");
+            }
+            await this.service.userConnected(client);
             this.update();
         } catch (e) {
+            client.emit("connection-error", e.message);
             client.disconnect(true);
         }
     }
 
-    handleDisconnect(client: Socket): any {
-        this.current--;
-        if (this.current < 0) {
-            this.current = 0;
-        }
+    async handleDisconnect(client: Socket) {
+        await this.service.userDisconnected(client);
         this.update();
     }
 
     update() {
-        this.socket.emit('update', {current: this.current, capacity: this.capacity});
+        this.socket.emit('update', {current: this.service.users.length, capacity: this.capacity});
     }
 }

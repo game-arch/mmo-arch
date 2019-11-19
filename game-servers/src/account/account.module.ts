@@ -13,7 +13,7 @@ import {AccountClientModule} from "../lib/microservice/account/account-client.mo
         JwtModule.register({
             secret     : config.jwt.secret,
             signOptions: {
-                expiresIn: '60m'
+                expiresIn: '15m'
             }
         }),
         AccountClientModule,
