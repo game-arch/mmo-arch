@@ -1,41 +1,34 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule}      from '@angular/core';
 
-import {AppComponent}            from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SocketIoModule}          from "ngx-socket-io";
-import {ServerListModule}        from "../../../server-list/src/lib/server-list.module";
-import {LoginComponent}      from './login/login.component';
-import {MatCardModule}       from "@angular/material/card";
-import {MatFormFieldModule}  from "@angular/material/form-field";
-import {MatInputModule}      from "@angular/material/input";
-import {MatButtonModule}     from "@angular/material/button";
-import {MatIconModule}       from "@angular/material/icon";
-import {ReactiveFormsModule} from "@angular/forms";
-import {RegisterComponent}   from './register/register.component';
-import {PORTS}               from "../../../../../game-servers/lib/constants/ports";
-import {HttpClientModule}    from "@angular/common/http";
+import {AppComponent}             from './app.component';
+import {BrowserAnimationsModule}  from '@angular/platform-browser/animations';
+import {HttpClientModule}         from "@angular/common/http";
+import {AuthenticationModule}     from "../../../authentication/src/lib/authentication.module";
+import {NgxsModule}               from "@ngxs/store";
+import {NgxsStoragePluginModule}  from "@ngxs/storage-plugin";
+import {ServerSelectionModule}    from "../../../server-selection/src/lib/server-selection.module";
+import {CharacterSelectionModule} from "../../../character-selection/src/lib/character-selection.module";
+import {ConnectionModule}         from "../../../connection/src/lib/connection.module";
 
 @NgModule({
     declarations: [
-        AppComponent,
-        LoginComponent,
-        RegisterComponent
+        AppComponent
     ],
     imports     : [
         BrowserModule,
         HttpClientModule,
         BrowserAnimationsModule,
-        SocketIoModule.forRoot({
-            url: 'http://localhost:' + PORTS.LOBBY
-        }),
-        ServerListModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        ReactiveFormsModule
+        ConnectionModule,
+        AuthenticationModule,
+        ServerSelectionModule,
+        CharacterSelectionModule,
+        NgxsModule.forRoot([]),
+        NgxsStoragePluginModule.forRoot({
+            key: [
+                'auth'
+            ]
+        })
     ],
     providers   : [],
     bootstrap   : [AppComponent]

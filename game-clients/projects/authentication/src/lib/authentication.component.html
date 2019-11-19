@@ -1,0 +1,29 @@
+<div style="display:flex;height:100%;flex-direction:column;">
+    <div style="flex:1"></div>
+    <div style="display:flex">
+        <div style="flex:1"></div>
+        <mat-card>
+            <mat-card-title>
+                Login
+            </mat-card-title>
+            <div style="padding:16px" *ngIf="isLogin === true">
+                Don't have an account?
+                <button mat-button color="primary" (click)="isLogin = false">
+                    Register Now!
+                </button>
+            </div>
+            <div style="padding:16px" *ngIf="isLogin === false">
+                Already have an account?
+                <button mat-button color="primary" (click)="isLogin = true">
+                    Login Now!
+                </button>
+            </div>
+            <mat-card-content>
+                <register *ngIf="isLogin === false" (registered)="onLoggedIn($event)"></register>
+                <login *ngIf="isLogin === true" (loggedIn)="onLoggedIn($event)"></login>
+            </mat-card-content>
+        </mat-card>
+        <div style="flex:1"></div>
+    </div>
+    <div style="flex:1"></div>
+</div>

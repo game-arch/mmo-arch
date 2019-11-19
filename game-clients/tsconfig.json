@@ -24,6 +24,30 @@
       ],
       "server-list/*": [
         "dist/server-list/*"
+      ],
+      "authentication": [
+        "dist/authentication"
+      ],
+      "authentication/*": [
+        "dist/authentication/*"
+      ],
+      "server-selection": [
+        "dist/server-selection"
+      ],
+      "server-selection/*": [
+        "dist/server-selection/*"
+      ],
+      "connection": [
+        "dist/connection"
+      ],
+      "connection/*": [
+        "dist/connection/*"
+      ],
+      "character-selection": [
+        "dist/character-selection"
+      ],
+      "character-selection/*": [
+        "dist/character-selection/*"
       ]
     }
   },

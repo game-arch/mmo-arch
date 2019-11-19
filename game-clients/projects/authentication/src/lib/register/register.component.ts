@@ -1,17 +1,19 @@
-import {Component, OnInit}                  from '@angular/core';
+import {Component, EventEmitter, OnInit}    from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {HttpClient}                         from "@angular/common/http";
-import {Hosts}                              from "../../lib/hosts";
+import {Hosts}                              from "../../../../game/src/lib/hosts";
 import {first}                              from "rxjs/operators";
 
 @Component({
     selector   : 'register',
     templateUrl: './register.component.html',
-    styleUrls  : ['./register.component.scss']
+    styleUrls  : ['./register.component.scss'],
+    outputs    : ['registered']
 })
 export class RegisterComponent implements OnInit {
 
-    form = new FormGroup({
+    registered = new EventEmitter();
+    form       = new FormGroup({
         email          : new FormControl('', [Validators.email, Validators.required]),
         password       : new FormControl('', [Validators.required]),
         confirmPassword: new FormControl('', [Validators.required, control => this.form && control.value !== this.form.get('password').value ? {match: true} : {}])
@@ -20,6 +22,7 @@ export class RegisterComponent implements OnInit {
     constructor(public http: HttpClient) {
     }
 
+
     ngOnInit() {
     }
 
@@ -27,9 +30,10 @@ export class RegisterComponent implements OnInit {
         try {
             let data   = this.form.getRawValue();
             let result = await this.http.post(Hosts.LOBBY + '/register', data).pipe(first()).toPromise();
+            this.registered.emit(result);
         } catch (e) {
             if (e.status === 409) {
-                this.form.get('email').setErrors({taken:true});
+                this.form.get('email').setErrors({taken: true});
             }
         }
     }

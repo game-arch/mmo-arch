@@ -1,32 +1,44 @@
-import {Component, OnInit}       from '@angular/core';
-import {Socket}                  from "ngx-socket-io";
-import {Observable}              from "rxjs";
-import {ServerConnectionManager} from "./server-connection-manager.service";
-import {GameShard}               from "../../../../../game-servers/lib/entities/game-shard";
-import {Events}                  from "../../../../../game-servers/lib/constants/events";
+import {Component, EventEmitter, OnInit} from '@angular/core';
+import {Socket}                          from "ngx-socket-io";
+import {EMPTY, fromEvent, Observable}    from "rxjs";
+import {ConnectionManager}               from "../../../connection/src/lib/connection-manager";
+import {GameShard}                       from "../../../../../game-servers/lib/entities/game-shard";
+import {Events}                          from "../../../../../game-servers/lib/constants/events";
+import {Hosts}                           from "../../../game/src/lib/hosts";
+import {map, takeUntil}                  from "rxjs/operators";
 
 @Component({
-    selector: 'server-list',
-    template: `
-        <mat-nav-list *ngIf="servers$ | async as servers">
-            <a mat-list-item *ngFor="let server of servers" (click)="manager.connect(server)">
-                <div matLine [style.font-weight]="manager.isConnected(server.name) ? 'bold' : 'inherited'">{{server.name}}</div>
-                <div matLine>{{server.current}} / {{server.capacity}} users</div>
-                <div>{{server.status}}</div>
-            </a>
-        </mat-nav-list>
-    `,
-    styles  : []
+    selector   : 'server-list',
+    templateUrl: 'server-list.component.html',
+    styles     : [],
+    outputs    : ['connected']
 })
 export class ServerListComponent implements OnInit {
 
     servers$: Observable<GameShard[]>;
 
-    constructor(private socket: Socket, public manager: ServerConnectionManager) {
-        this.servers$ = this.socket.fromEvent(Events.SERVER_LIST);
+    destroy = new EventEmitter();
+
+    connected = new EventEmitter<string>();
+
+    constructor(public manager: ConnectionManager) {
     }
 
     ngOnInit() {
+        let socket    = this.manager.connectToUrl('lobby', Hosts.LOBBY);
+        this.servers$ = fromEvent(socket, Events.SERVER_LIST);
+    }
+
+    onConnect(shard: GameShard) {
+        let socket = this.manager.connectToShard(shard);
+        fromEvent(socket, 'connect', {once: true})
+            .pipe(takeUntil(this.destroy))
+            .pipe(map(() => shard.name))
+            .subscribe(name => this.connected.emit(name));
+    }
+
+    ngOnDestroy() {
+        this.destroy.emit();
     }
 
 }

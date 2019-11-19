@@ -284,6 +284,146 @@
           }
         }
       }
+    },
+    "authentication": {
+      "projectType": "library",
+      "root": "projects/authentication",
+      "sourceRoot": "projects/authentication/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/authentication/tsconfig.lib.json",
+            "project": "projects/authentication/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/authentication/src/test.ts",
+            "tsConfig": "projects/authentication/tsconfig.spec.json",
+            "karmaConfig": "projects/authentication/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/authentication/tsconfig.lib.json",
+              "projects/authentication/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "server-selection": {
+      "projectType": "library",
+      "root": "projects/server-selection",
+      "sourceRoot": "projects/server-selection/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/server-selection/tsconfig.lib.json",
+            "project": "projects/server-selection/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/server-selection/src/test.ts",
+            "tsConfig": "projects/server-selection/tsconfig.spec.json",
+            "karmaConfig": "projects/server-selection/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/server-selection/tsconfig.lib.json",
+              "projects/server-selection/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "connection": {
+      "projectType": "library",
+      "root": "projects/connection",
+      "sourceRoot": "projects/connection/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/connection/tsconfig.lib.json",
+            "project": "projects/connection/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/connection/src/test.ts",
+            "tsConfig": "projects/connection/tsconfig.spec.json",
+            "karmaConfig": "projects/connection/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/connection/tsconfig.lib.json",
+              "projects/connection/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "character-selection": {
+      "projectType": "library",
+      "root": "projects/character-selection",
+      "sourceRoot": "projects/character-selection/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/character-selection/tsconfig.lib.json",
+            "project": "projects/character-selection/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/character-selection/src/test.ts",
+            "tsConfig": "projects/character-selection/tsconfig.spec.json",
+            "karmaConfig": "projects/character-selection/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/character-selection/tsconfig.lib.json",
+              "projects/character-selection/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "game"

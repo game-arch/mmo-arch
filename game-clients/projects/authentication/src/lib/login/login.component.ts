@@ -1,16 +1,17 @@
-import {Component, OnInit}                  from '@angular/core';
+import {Component, EventEmitter, OnInit}    from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {HttpClient}                         from "@angular/common/http";
-import {Hosts}                              from "../../lib/hosts";
+import {Hosts}                              from "../../../../game/src/lib/hosts";
 import {first}                              from "rxjs/operators";
 
 @Component({
     selector   : 'login',
     templateUrl: './login.component.html',
-    styleUrls  : ['./login.component.scss']
+    styleUrls  : ['./login.component.scss'],
+    outputs    : ['loggedIn']
 })
 export class LoginComponent implements OnInit {
-    isLogin   = true;
+    loggedIn  = new EventEmitter();
     showError = false;
     form      = new FormGroup({
         email   : new FormControl('', [Validators.email, Validators.required]),
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
             this.showError = false;
             let data       = this.form.getRawValue();
             let result     = await this.http.post(Hosts.LOBBY + '/login', data).pipe(first()).toPromise();
+            this.loggedIn.emit(result);
         } catch (e) {
             if (e.status === 403) {
                 this.showError = true;
