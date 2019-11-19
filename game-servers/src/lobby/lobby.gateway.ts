@@ -17,6 +17,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayInit {
         client.emit(Events.SERVER_LIST, this.servers);
     }
 
+
     afterInit(server: Server): any {
         this.socket = io('http://' + config.servers.register.host + ':' + config.servers.register.port + '?track=false');
         this.socket.on(Events.SERVER_LIST, (data) => {

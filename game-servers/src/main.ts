@@ -1,4 +1,8 @@
 import {SERVER_TYPES} from "./lib/server-types";
+import * as path      from "path";
 
-let server:SERVER_TYPES = (process.env.SERVER_TYPE || 'lobby') as SERVER_TYPES;
+require('dotenv').config({
+    path: path.resolve(__dirname, '../../.env')
+});
+let server: SERVER_TYPES = (process.env.SERVER_TYPE || 'lobby') as SERVER_TYPES;
 require('./' + server + '/main');

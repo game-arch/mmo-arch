@@ -1,16 +1,21 @@
 module.exports = {
     apps: [
         {
-            name: 'redis',
+            name: '_redis',
             script: 'redis-server',
             watch: false
         },
         {
+            name: '_builder',
+            script: 'npm run build -- --watch',
+            watch: false
+        },
+        {
             name: 'micro-account',
-            script: 'index.js',
+            script: 'dist/src/main.js',
             instances: 2,
             exec_mode: 'cluster',
-            watch: ["src/account", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
+            watch: ["dist/src/account", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
@@ -22,10 +27,10 @@ module.exports = {
         },
         {
             name: 'micro-map',
-            script: 'index.js',
+            script: 'dist/src/main.js',
             instances: 2,
             exec_mode: 'cluster',
-            watch: ["src/map", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
+            watch: ["dist/src/map", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
@@ -37,8 +42,8 @@ module.exports = {
         },
         {
             name: 'server-register',
-            script: 'npm start',
-            watch: ["src/register", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
+            script: 'dist/src/main.js',
+            watch: ["dist/src/register", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
@@ -50,10 +55,10 @@ module.exports = {
         },
         {
             name: 'server-shard',
-            script: 'index.js',
+            script: 'dist/src/main.js',
             instances: 2,
             exec_mode: 'cluster',
-            watch: ["src/shard", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
+            watch: ["dist/src/shard", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
@@ -66,8 +71,8 @@ module.exports = {
         },
         {
             name: 'server-lobby',
-            script: 'npm start',
-            watch: ["src/lobby", "src/main.ts", "src/constants.ts", "src/lib", "lib"],
+            script: 'dist/src/main.js',
+            watch: ["dist/src/lobby", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
