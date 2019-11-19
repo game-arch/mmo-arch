@@ -1,16 +1,22 @@
 import {Column, Entity, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Inventory}                                        from "./inventory";
+import {GameCharacter}                                    from "../../../lib/entities/game-character";
 
 @Entity()
-export class Character {
+export class Character implements GameCharacter {
 
     @PrimaryGeneratedColumn()
-    id:number;
+    id: number;
+
     @Column()
-    accountId:number;
+    accountId: number;
+
     @Column()
-    name:string;
+    name: string;
+
+    @Column()
+    gender: 'male' | 'female' = 'male';
 
     @OneToOne(() => Inventory, i => i.character)
-    inventory:Inventory;
+    inventory: Inventory;
 }

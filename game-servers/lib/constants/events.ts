@@ -1,3 +1,4 @@
 export class Events {
-    static readonly SERVER_LIST = 'server-list';
+    static readonly SERVER_LIST = 'lobby.servers';
+    static readonly CHARACTER_LIST = 'shard.characters';
 }

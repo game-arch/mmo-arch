@@ -43,11 +43,7 @@ export class ConnectionManager {
 
     connectToWorld(server: GameShard) {
         if (this.world.socket) {
-            if (this.world.socket.connected) {
-                this.world.socket.disconnect();
-            }
-            delete this.connections[this.world.shard.name];
-            this._world.next(null);
+            this.disconnect(this.world.shard.name);
         }
         if (server.status === 'online') {
             let token = this.store.selectSnapshot(AuthState).token;
@@ -69,6 +65,17 @@ export class ConnectionManager {
             return this.connections[name];
         }
         return null;
+    }
+
+    disconnect(name: string) {
+        let server = this.get(name);
+        if (server.socket.connected) {
+            server.socket.disconnect();
+        }
+        delete this.connections[server.shard.name];
+        if (this.world.shard.name === server.shard.name) {
+            this._world.next(new Connection({name: ''}, null));
+        }
     }
 
 }

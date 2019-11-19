@@ -9,6 +9,7 @@ import {Server, Socket} from "socket.io";
 import * as io          from "socket.io-client";
 import {config}         from "../lib/config";
 import {ShardService}   from "./shard.service";
+import {Events}         from "../../lib/constants/events";
 
 @WebSocketGateway()
 export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
@@ -16,7 +17,7 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     server: Server;
     socket: Socket;
 
-    capacity = 100;
+    capacity = 1;
 
     names = [
         'Maiden',
@@ -39,6 +40,7 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             }
             await this.service.userConnected(client);
             this.update();
+            client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(client));
         } catch (e) {
             client.emit("connection-error", e.message);
             client.disconnect(true);
