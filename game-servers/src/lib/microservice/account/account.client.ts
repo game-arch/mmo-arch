@@ -21,4 +21,8 @@ export class AccountClient {
     updated(id: number, email: string) {
         this.client.emit(Patterns.ACCOUNT_UPDATED, {id, email});
     }
+
+    async getAccountByToken(token: string) {
+        return await this.client.send(Patterns.VERIFY_ACCOUNT, token).pipe(first()).toPromise();
+    }
 }

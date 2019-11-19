@@ -8,6 +8,7 @@ import {
 import {Server, Socket} from "socket.io";
 import * as io          from "socket.io-client";
 import {config}         from "../lib/config";
+import {ShardService}   from "./shard.service";
 
 @WebSocketGateway()
 export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
@@ -24,14 +25,22 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         'Alcatraz'
     ];
 
+    constructor(private service: ShardService) {
+
+    }
+
     afterInit(server: Server): any {
         this.socket = io('http://' + config.servers.register.host + ':' + config.servers.register.port + '?name=' + this.names[process.env.NODE_APP_INSTANCE] + '&port=' + config.servers.shard.port);
     }
 
-    handleConnection(client: Socket, ...args: any[]): any {
-        console.log(args);
-        this.current++;
-        this.update();
+    async handleConnection(client: Socket, ...args: any[]) {
+        try {
+            await this.service.getUserFor(client);
+            this.current++;
+            this.update();
+        } catch (e) {
+            client.disconnect(true);
+        }
     }
 
     handleDisconnect(client: Socket): any {
