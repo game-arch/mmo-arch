@@ -27,7 +27,7 @@ export class PresenceGateway implements OnGatewayConnection, OnGatewayDisconnect
             client.broadcast.emit(Events.SERVER_LIST, await this.service.getServers());
             return;
         }
-        
+
         client.emit(Events.SERVER_LIST, await this.service.getServers());
     }
 
