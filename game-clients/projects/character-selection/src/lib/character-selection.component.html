@@ -1,4 +1,4 @@
-<div style="display:flex;height:100%;flex-direction:column;" *ngIf="connection.shard$ | async as shard">
+<div style="display:flex;height:100%;flex-direction:column;" *ngIf="connection.world$ | async as conn">
     <div style="flex:1"></div>
     <div style="display:flex">
         <div style="flex:1"></div>
@@ -7,9 +7,14 @@
                 Character Selection
             </mat-card-title>
             <mat-card-subtitle>
-                World: {{shard.name}}
+                World: {{conn.shard.name}}
             </mat-card-subtitle>
             <mat-card-content>
+                <mat-nav-list>
+                    <a mat-list-item>
+
+                    </a>
+                </mat-nav-list>
             </mat-card-content>
         </mat-card>
         <div style="flex:1"></div>

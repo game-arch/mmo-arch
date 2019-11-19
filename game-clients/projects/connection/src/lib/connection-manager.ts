@@ -3,45 +3,46 @@ import * as io           from "socket.io-client";
 import Socket = SocketIOClient.Socket;
 import {GameShard}       from "../../../../../game-servers/lib/entities/game-shard";
 import {BehaviorSubject} from "rxjs";
+import {Connection}      from "./connection";
 
 @Injectable()
 export class ConnectionManager {
 
-    private connections: { [name: string]: Socket } = {};
+    private connections: { [name: string]: Connection } = {};
 
-    private _shard$ = new BehaviorSubject<GameShard>(null);
+    private _world = new BehaviorSubject<Connection>(new Connection({name: ''}, null));
 
-    shard$          = this._shard$.asObservable();
+    world$ = this._world.asObservable();
 
-    get shard() {
-        return this._shard$.getValue();
+    get world() {
+        return this._world.getValue();
     }
 
-    connectToUrl(name: string, url: string) {
-        if (!this.connections.hasOwnProperty(name)) {
-            this.connections[name] = io.connect(url);
+    connectToLobby(url: string) {
+        if (!this.connections.hasOwnProperty('lobby')) {
+            this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(url));
         }
-        return this.get(name);
+        return this.get('lobby');
     }
 
-    connectToShard(server: GameShard) {
-        if (this.shard) {
-            this.connections[this.shard.name].disconnect();
-            delete this.connections[this.shard.name];
-            this._shard$.next(null);
+    connectToWorld(server: GameShard) {
+        if (this.world) {
+            this.world.socket.disconnect();
+            delete this.connections[this.world.shard.name];
+            this._world.next(null);
         }
         if (server.status === 'online') {
             if (!this.connections.hasOwnProperty(server.name)) {
-                this._shard$.next(server);
-                this.connections[server.name] = io.connect('http://' + server.host + ':' + server.port);
+                this.connections[server.name] = new Connection(server, io.connect('http://' + server.host + ':' + server.port));
+                this._world.next(this.connections[server.name]);
             }
-            return this.get(server.name);
+            return this.world;
         }
         return null;
     }
 
     isConnected(name: string) {
-        return this.connections.hasOwnProperty(name) && this.connections[name].connected;
+        return this.connections.hasOwnProperty(name) && this.connections[name].socket.connected;
     }
 
     get(name: string) {

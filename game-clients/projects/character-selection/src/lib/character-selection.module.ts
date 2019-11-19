@@ -3,6 +3,7 @@ import {CharacterSelectionComponent} from './character-selection.component';
 import {ConnectionModule}            from "../../../connection/src/lib/connection.module";
 import {MatCardModule}               from "@angular/material/card";
 import {CommonModule}                from "@angular/common";
+import {MatListModule}               from "@angular/material/list";
 
 
 @NgModule({
@@ -10,7 +11,8 @@ import {CommonModule}                from "@angular/common";
     imports: [
         ConnectionModule,
         MatCardModule,
-        CommonModule
+        CommonModule,
+        MatListModule
     ],
     exports     : [CharacterSelectionComponent]
 })
