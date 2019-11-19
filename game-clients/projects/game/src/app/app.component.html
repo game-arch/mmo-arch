@@ -2,8 +2,8 @@
     <authentication *ngIf="auth.token === ''"></authentication>
     <ng-container *ngIf="auth.token !== ''">
         <ng-container *ngIf="connection.world$ | async as conn">
-            <server-selection *ngIf="!conn.shard"></server-selection>
-            <ng-container *ngIf="conn.shard">
+            <server-selection *ngIf="!conn.socket"></server-selection>
+            <ng-container *ngIf="conn.socket">
                 <character-selection></character-selection>
             </ng-container>
         </ng-container>

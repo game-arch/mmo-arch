@@ -1,9 +1,14 @@
-import {Injectable}      from '@angular/core';
-import * as io           from "socket.io-client";
+import {Injectable}                         from '@angular/core';
+import * as io                              from "socket.io-client";
 import Socket = SocketIOClient.Socket;
-import {GameShard}       from "../../../../../game-servers/lib/entities/game-shard";
-import {BehaviorSubject} from "rxjs";
-import {Connection}      from "./connection";
+import {GameShard}                          from "../../../../../game-servers/lib/entities/game-shard";
+import {BehaviorSubject}                    from "rxjs";
+import {Connection}                         from "./connection";
+import {Actions, ofActionDispatched, Store} from "@ngxs/store";
+import {AuthState}                          from "../../../authentication/src/lib/state/auth.state";
+import {Hosts}                              from "../../../game/src/lib/hosts";
+import {SetToken}                           from "../../../authentication/src/lib/state/auth.actions";
+import {filter}                             from "rxjs/operators";
 
 @Injectable()
 export class ConnectionManager {
@@ -18,22 +23,34 @@ export class ConnectionManager {
         return this._world.getValue();
     }
 
-    connectToLobby(url: string) {
+    constructor(private store: Store, private actions: Actions) {
+        this.actions.pipe(ofActionDispatched(SetToken), filter(action => action.token === ''))
+            .subscribe(() => {
+                this._world.next(new Connection({name: ''}, null));
+                Object.keys(this.connections).filter(key => {
+                    this.connections[key].socket.disconnect();
+                    delete this.connections[key];
+                });
+            });
+    }
+
+    connectToLobby() {
         if (!this.connections.hasOwnProperty('lobby')) {
-            this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(url));
+            this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(Hosts.LOBBY));
         }
         return this.get('lobby');
     }
 
     connectToWorld(server: GameShard) {
-        if (this.world) {
+        if (this.world.socket) {
             this.world.socket.disconnect();
             delete this.connections[this.world.shard.name];
             this._world.next(null);
         }
         if (server.status === 'online') {
+            let token = this.store.selectSnapshot(AuthState).token;
             if (!this.connections.hasOwnProperty(server.name)) {
-                this.connections[server.name] = new Connection(server, io.connect('http://' + server.host + ':' + server.port));
+                this.connections[server.name] = new Connection(server, io.connect('http://' + server.host + ':' + server.port + '?token=' + token));
                 this._world.next(this.connections[server.name]);
             }
             return this.world;

@@ -25,13 +25,13 @@ export class ServerListComponent implements OnInit {
     }
 
     ngOnInit() {
-        let socket    = this.manager.connectToLobby('lobby', Hosts.LOBBY);
-        this.servers$ = fromEvent(socket, Events.SERVER_LIST);
+        let connection = this.manager.connectToLobby();
+        this.servers$  = fromEvent(connection.socket, Events.SERVER_LIST);
     }
 
     onConnect(shard: GameShard) {
-        let socket = this.manager.connectToWorld(shard);
-        fromEvent(socket, 'connect', {once: true})
+        let connection = this.manager.connectToWorld(shard);
+        fromEvent(connection.socket, 'connect', {once: true})
             .pipe(takeUntil(this.destroy))
             .pipe(map(() => shard.name))
             .subscribe(name => this.connected.emit(name));
