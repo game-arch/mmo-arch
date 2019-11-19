@@ -25,7 +25,7 @@ export class ShardService {
     ) {
     }
 
-    async userConnected(socket: Socket) {
+    async verifyUser(socket: Socket) {
         try {
             let account: { id: number, email: string } = await this.account.getAccountByToken(socket.handshake.query.token);
             let user                                   = new User(
@@ -43,6 +43,10 @@ export class ShardService {
 
     async userDisconnected(socket: Socket) {
         this._users$.next(await from(this.users).pipe(filter(user => user.socket.id !== socket.id), toArray()).toPromise());
+    }
+
+    getUser(socket:Socket) {
+        return this._users$.getValue().filter(user => user.socket.id === socket.id)[0] || null;
     }
 
     async getCharacters(socket: Socket) {

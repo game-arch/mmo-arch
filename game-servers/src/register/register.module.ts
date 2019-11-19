@@ -5,10 +5,11 @@ import {RegisterGateway}    from "./register.gateway";
 import {DATABASE_MODULE}    from "../lib/database/database.module";
 import {RegisteredShard}    from "./entities/registered-shard";
 import {TypeOrmModule}      from "@nestjs/typeorm";
+import {ConnectedUser}      from "./entities/connected-user";
 
 @Module({
     imports    : [
-        TypeOrmModule.forFeature([RegisteredShard]),
+        TypeOrmModule.forFeature([RegisteredShard, ConnectedUser]),
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
             type    : 'mysql',

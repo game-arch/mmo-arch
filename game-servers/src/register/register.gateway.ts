@@ -36,6 +36,16 @@ export class RegisterGateway implements OnGatewayConnection, OnGatewayDisconnect
         this.server.emit(Events.SERVER_LIST, this.service.getAll());
     }
 
+    @SubscribeMessage(Events.USER_CONNECTED)
+    async onUserConnection(client: Socket, data: { accountId: number, shard: string }) {
+        await this.service.addUser(data);
+    }
+
+    @SubscribeMessage(Events.USER_DISCONNECTED)
+    async onUserDisconnection(client: Socket, data: { accountId: number, shard: string }) {
+        await this.service.removeUser(data);
+    }
+
     async handleDisconnect(client: Socket) {
         if (client.handshake.query.track !== 'false') {
             await this.service.offline(client.id);

@@ -2,20 +2,26 @@ import {Injectable, OnApplicationBootstrap} from '@nestjs/common';
 import {RegisteredShard}                    from "./entities/registered-shard";
 import {Repository}                         from "typeorm";
 import {InjectRepository}                   from "@nestjs/typeorm";
+import {ConnectedUser}                      from "./entities/connected-user";
 
 @Injectable()
 export class RegisterService implements OnApplicationBootstrap {
 
     private servers: RegisteredShard[] = [];
 
-    constructor(@InjectRepository(RegisteredShard) private repo: Repository<RegisteredShard>) {
+    constructor(
+        @InjectRepository(RegisteredShard)
+        private repo: Repository<RegisteredShard>,
+        @InjectRepository(ConnectedUser)
+        private userRepo: Repository<ConnectedUser>
+    ) {
     }
 
     getHello(): string {
         return 'Hello World!';
     }
 
-    async online(socketId: string, host: string, port:string, name: string) {
+    async online(socketId: string, host: string, port: string, name: string) {
         if (name && name !== '') {
             let server = await this.findByIpAndName(host, name);
             if (!server) {
@@ -25,7 +31,7 @@ export class RegisterService implements OnApplicationBootstrap {
             }
             server.socketId = socketId;
             server.status   = 'online';
-            server.port = port;
+            server.port     = port;
             await this.repo.save(server);
             this.servers = await this.repo.find();
         }
@@ -52,7 +58,7 @@ export class RegisterService implements OnApplicationBootstrap {
     async offline(socketId: string) {
         let server = await this.findBySocketId(socketId);
         if (server) {
-            server.status = 'offline';
+            server.status  = 'offline';
             server.current = 0;
             await this.repo.save(server);
             this.servers = await this.repo.find();
@@ -79,11 +85,34 @@ export class RegisterService implements OnApplicationBootstrap {
         this.servers = await this.repo.find();
     }
 
-    getHost(host:string) {
+    getHost(host: string) {
         if (host.indexOf('127.0.0.1') !== -1) {
             return 'localhost';
         }
         return host;
+    }
+
+    async addUser(user: { accountId: number, shard: string }) {
+        let registeredShard = this.servers.filter(shard => shard.name === user.shard)[0] || null;
+        if (registeredShard) {
+            if (!registeredShard.users) {
+                registeredShard.users = [];
+            }
+            let connected = new ConnectedUser(user.accountId, registeredShard);
+            registeredShard.users.push(connected);
+            await this.userRepo.save(connected, {reload: true});
+        }
+    }
+
+    async removeUser(user: { accountId: number, shard: string }) {
+        let registeredShard = this.servers.filter(shard => shard.name === user.shard)[0] || null;
+        if (registeredShard) {
+            if (!registeredShard.users) {
+                registeredShard.users = [];
+            }
+            await this.userRepo.delete({shard: registeredShard, accountId: user.accountId});
+            registeredShard.users = registeredShard.users.filter(conn => conn.accountId !== user.accountId);
+        }
     }
 
 }

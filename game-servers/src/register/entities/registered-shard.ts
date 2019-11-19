@@ -1,5 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {GameShard}                                      from "../../../lib/entities/game-shard";
+import {Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {GameShard}                                                           from "../../../lib/entities/game-shard";
+import {ConnectedUser}                                                       from "./connected-user";
 
 @Unique('socketId', ['socketId'])
 @Unique('name', ['name'])
@@ -22,6 +23,9 @@ export class RegisteredShard implements GameShard {
     current: number;
     @Column({nullable: false})
     status: 'online' | 'offline' = 'online';
+
+    @OneToMany(() => ConnectedUser, i => i.shard)
+    users: ConnectedUser[];
 
     constructor(host: string, port: string, socketId: string, name: string, capacity: number, current: number) {
         this.host     = host;

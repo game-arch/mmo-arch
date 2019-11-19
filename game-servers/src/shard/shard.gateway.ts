@@ -38,7 +38,11 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             if (this.service.users.length >= this.capacity) {
                 throw new Error("User Capacity Reached");
             }
-            await this.service.userConnected(client);
+            let user = await this.service.verifyUser(client);
+            this.socket.emit(Events.USER_CONNECTED, {
+                accountId: user.accountId,
+                shard    : this.names[process.env.NODE_APP_INSTANCE]
+            });
             this.update();
             client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(client));
         } catch (e) {
@@ -48,6 +52,10 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async handleDisconnect(client: Socket) {
+        this.socket.emit(Events.USER_DISCONNECTED, {
+            accountId: this.service.getUser(client).accountId,
+            shard    : this.names[process.env.NODE_APP_INSTANCE]
+        });
         await this.service.userDisconnected(client);
         this.update();
     }
