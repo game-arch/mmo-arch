@@ -14,3 +14,4 @@ LOBBY_HOST=localhost
 LOBBY_PORT=3000
 SHARD_HOST=localhost
 SHARD_PORT=3002
+JWT_SECRET=something-old

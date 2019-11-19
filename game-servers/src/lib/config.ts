@@ -11,7 +11,7 @@ export const config = {
         }
     },
     jwt         : {
-        secret: 'legends-of-triumph'
+        secret: process.env.JWT_SECRET || 'a-random-secret'
     },
     mysql       : {
         host    : process.env.MYSQL_HOST || 'localhost',
