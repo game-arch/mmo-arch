@@ -41,16 +41,16 @@ module.exports = {
             }
         },
         {
-            name: 'server-register',
+            name: 'server-presence',
             script: 'dist/src/main.js',
-            watch: ["dist/src/register", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
+            watch: ["dist/src/presence", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
             // Delay between restart
             watch_delay: 1000,
             watch_options: {
                 "followSymlinks": false
             },
             env: {
-                SERVER_TYPE: 'register'
+                SERVER_TYPE: 'presence'
             }
         },
         {

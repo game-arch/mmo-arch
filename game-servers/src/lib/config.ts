@@ -32,9 +32,9 @@ export const config = {
             host: process.env.SHARD_HOST || 'localhost',
             port: (parseInt(process.env.SHARD_PORT || ('' + PORTS.SHARD)) + parseInt(process.env.NODE_APP_INSTANCE)) + ''
         },
-        register: {
-            host: process.env.REGISTER_HOST || 'localhost',
-            port: process.env.REGISTER_PORT || PORTS.REGISTER
+        presence: {
+            host: process.env.PRESENCE_HOST || 'localhost',
+            port: process.env.PRESENCE_PORT || PORTS.PRESENCE
         }
     }
 };

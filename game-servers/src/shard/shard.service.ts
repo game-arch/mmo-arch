@@ -27,15 +27,8 @@ export class ShardService {
 
     async verifyUser(socket: Socket) {
         try {
-            let account: { id: number, email: string } = await this.account.getAccountByToken(socket.handshake.query.token);
-            let user                                   = new User(
-                socket.handshake.query.token,
-                account.id,
-                account.email,
-                socket
-            );
-            this._users$.next([...this._users$.getValue(), user]);
-            return user;
+            let account: { id: number, email: string } = await this.account.verifyAccount(socket.handshake.query.token);
+            return account;
         } catch (e) {
             throw new Error("Session Expired");
         }
@@ -45,15 +38,19 @@ export class ShardService {
         this._users$.next(await from(this.users).pipe(filter(user => user.socket.id !== socket.id), toArray()).toPromise());
     }
 
-    getUser(socket:Socket) {
-        return this._users$.getValue().filter(user => user.socket.id === socket.id)[0] || null;
+   async getUser(socket: Socket): Promise<{ id: number, email: string }> {
+        return await this.account.getAccount(socket.handshake.query.token, true);
     }
 
     async getCharacters(socket: Socket) {
-        let user = this._users$.getValue().filter(user => user.socket.id === socket.id)[0] || null;
-        if (user) {
-            let characters = await this.repo.find({accountId: user.accountId});
-            return await from(characters).pipe(map(({id, gender, name}) => ({id, gender, name})), toArray()).toPromise();
+        let account = await this.getUser(socket);
+        if (account) {
+            let characters = await this.repo.find({accountId: account.id});
+            return await from(characters).pipe(map(({id, gender, name}) => ({
+                id,
+                gender,
+                name
+            })), toArray()).toPromise();
         }
         return [];
     }

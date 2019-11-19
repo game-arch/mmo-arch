@@ -3,9 +3,11 @@ import {RegisteredShard}                    from "./entities/registered-shard";
 import {Repository}                         from "typeorm";
 import {InjectRepository}                   from "@nestjs/typeorm";
 import {ConnectedUser}                      from "./entities/connected-user";
+import {from}                               from "rxjs";
+import {map, toArray}                       from "rxjs/operators";
 
 @Injectable()
-export class RegisterService implements OnApplicationBootstrap {
+export class PresenceService implements OnApplicationBootstrap {
 
     private servers: RegisteredShard[] = [];
 
@@ -17,15 +19,11 @@ export class RegisterService implements OnApplicationBootstrap {
     ) {
     }
 
-    getHello(): string {
-        return 'Hello World!';
-    }
-
     async online(socketId: string, host: string, port: string, name: string) {
         if (name && name !== '') {
             let server = await this.findByIpAndName(host, name);
             if (!server) {
-                await this.repo.save(this.repo.create(new RegisteredShard(host, port, socketId, name, 10, 0)));
+                await this.repo.save(this.repo.create(new RegisteredShard(host, port, socketId, name, 100, 0)));
                 this.servers = await this.repo.find();
                 return;
             }
@@ -33,25 +31,24 @@ export class RegisterService implements OnApplicationBootstrap {
             server.status   = 'online';
             server.port     = port;
             await this.repo.save(server);
+            await this.userRepo.delete({shard: server});
             this.servers = await this.repo.find();
         }
     }
 
     private findBySocketId(socketId: string) {
-        return this.repo.findOne({where: {socketId}});
+        return this.servers.filter(server => server.socketId === socketId)[0] || null;
     }
 
     private findByIpAndName(host: string, name: string) {
         return this.repo.findOne({where: {host: host, name}});
     }
 
-    async set(socketId: string, capacity: number, current: number) {
-        let server = await this.findBySocketId(socketId);
+    async set(socketId: string) {
+        let server = this.findBySocketId(socketId);
         if (server) {
-            server.capacity = capacity;
-            server.current  = current;
+            server.current = server.users.length;
             await this.repo.save(server);
-            this.servers = await this.repo.find();
         }
     }
 
@@ -61,7 +58,8 @@ export class RegisterService implements OnApplicationBootstrap {
             server.status  = 'offline';
             server.current = 0;
             await this.repo.save(server);
-            this.servers = await this.repo.find();
+            await this.userRepo.delete({shard: server});
+            server.users = [];
         }
     }
 
@@ -69,8 +67,13 @@ export class RegisterService implements OnApplicationBootstrap {
         await this.repo.clear();
     }
 
-    getAll() {
-        return this.servers;
+    async getServers() {
+        return await from(this.servers)
+            .pipe(map(server => {
+                let clone = Object.assign({}, server);
+                delete clone.users;
+                return clone;
+            }), toArray()).toPromise();
     }
 
     async onApplicationBootstrap() {
@@ -101,6 +104,9 @@ export class RegisterService implements OnApplicationBootstrap {
             let connected = new ConnectedUser(user.accountId, registeredShard);
             registeredShard.users.push(connected);
             await this.userRepo.save(connected, {reload: true});
+            registeredShard.current = registeredShard.users.length;
+            await this.repo.save(registeredShard);
+
         }
     }
 
@@ -111,7 +117,9 @@ export class RegisterService implements OnApplicationBootstrap {
                 registeredShard.users = [];
             }
             await this.userRepo.delete({shard: registeredShard, accountId: user.accountId});
-            registeredShard.users = registeredShard.users.filter(conn => conn.accountId !== user.accountId);
+            registeredShard.users   = registeredShard.users.filter(conn => conn.accountId !== user.accountId);
+            registeredShard.current = registeredShard.users.length;
+            await this.repo.save(registeredShard);
         }
     }
 

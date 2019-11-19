@@ -43,8 +43,8 @@ export class AccountService {
         });
     }
 
-    async getAccountByToken(token: string) {
-        let data   = this.jwt.verify(token);
+    async getAccountByToken(token: string, ignoreExpiration:boolean = false) {
+        let data   = this.jwt.verify(token, {ignoreExpiration});
         let exists = await this.repo.findOne(parseInt(data.sub));
         if (!exists) {
             throw new RpcException(new UnauthorizedException("Invalid or Expired Token"));

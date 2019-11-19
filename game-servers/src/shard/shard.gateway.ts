@@ -17,7 +17,7 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     server: Server;
     socket: Socket;
 
-    capacity = 1;
+    capacity = 100;
 
     names = [
         'Maiden',
@@ -30,7 +30,7 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     afterInit(server: Server): any {
-        this.socket = io('http://' + config.servers.register.host + ':' + config.servers.register.port + '?name=' + this.names[process.env.NODE_APP_INSTANCE] + '&port=' + config.servers.shard.port);
+        this.socket = io('http://' + config.servers.presence.host + ':' + config.servers.presence.port + '?name=' + this.names[process.env.NODE_APP_INSTANCE] + '&port=' + config.servers.shard.port + '&capacity=' + this.capacity);
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
@@ -40,10 +40,9 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             }
             let user = await this.service.verifyUser(client);
             this.socket.emit(Events.USER_CONNECTED, {
-                accountId: user.accountId,
+                accountId: user.id,
                 shard    : this.names[process.env.NODE_APP_INSTANCE]
             });
-            this.update();
             client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(client));
         } catch (e) {
             client.emit("connection-error", e.message);
@@ -52,15 +51,10 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async handleDisconnect(client: Socket) {
+        let user = await this.service.getUser(client);
         this.socket.emit(Events.USER_DISCONNECTED, {
-            accountId: this.service.getUser(client).accountId,
+            accountId: user.id,
             shard    : this.names[process.env.NODE_APP_INSTANCE]
         });
-        await this.service.userDisconnected(client);
-        this.update();
-    }
-
-    update() {
-        this.socket.emit('update', {current: this.service.users.length, capacity: this.capacity});
     }
 }

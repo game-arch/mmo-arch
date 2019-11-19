@@ -31,4 +31,9 @@ export class AccountController {
     async verify(data: string) {
         return await this.service.getAccountByToken(data);
     }
+
+    @MessagePattern(Patterns.GET_ACCOUNT)
+    async get({token, ignoreExpiration}) {
+        return await this.service.getAccountByToken(token, ignoreExpiration);
+    }
 }

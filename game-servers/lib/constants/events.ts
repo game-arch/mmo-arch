@@ -1,7 +1,7 @@
 export class Events {
-    static readonly SERVER_LIST = 'lobby.servers';
-    static readonly CHARACTER_LIST = 'shard.characters';
-    static readonly USER_CONNECTED = 'register.user_connected';
-    static readonly USER_DISCONNECTED = 'register.user_disconnected';
+    static readonly SERVER_LIST       = 'presence.servers';
+    static readonly CHARACTER_LIST    = 'shard.characters';
+    static readonly USER_CONNECTED    = 'presence.user_connected';
+    static readonly USER_DISCONNECTED = 'presence.user_disconnected';
 
 }

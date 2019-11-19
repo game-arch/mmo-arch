@@ -1,7 +1,7 @@
 import {Module}             from '@nestjs/common';
-import {RegisterController} from './register.controller';
-import {RegisterService}    from './register.service';
-import {RegisterGateway}    from "./register.gateway";
+import {PresenceController} from './presence.controller';
+import {PresenceService}    from './presence.service';
+import {PresenceGateway}    from "./presence.gateway";
 import {DATABASE_MODULE}    from "../lib/database/database.module";
 import {RegisteredShard}    from "./entities/registered-shard";
 import {TypeOrmModule}      from "@nestjs/typeorm";
@@ -13,13 +13,13 @@ import {ConnectedUser}      from "./entities/connected-user";
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
             type    : 'mysql',
-            database: 'register',
+            database: 'presence',
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],
-    providers  : [RegisterGateway, RegisterService],
-    controllers: [RegisterController],
-    exports    : [RegisterGateway]
+    providers  : [PresenceGateway, PresenceService],
+    controllers: [PresenceController],
+    exports    : [PresenceGateway]
 })
-export class RegisterModule {
+export class PresenceModule {
 }
