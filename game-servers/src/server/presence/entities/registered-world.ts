@@ -1,11 +1,11 @@
 import {Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {GameShard}                                                           from "../../../../lib/entities/game-shard";
 import {ConnectedUser}                                                       from "./connected-user";
+import {GameWorld}                                                           from "../../../../lib/entities/game-world";
 
 @Unique('socketId', ['socketId'])
 @Unique('name', ['name'])
 @Entity()
-export class RegisteredShard implements GameShard {
+export class RegisteredWorld implements GameWorld {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -24,7 +24,7 @@ export class RegisteredShard implements GameShard {
     @Column({nullable: false})
     status: 'online' | 'offline' = 'online';
 
-    @OneToMany(() => ConnectedUser, i => i.shard)
+    @OneToMany(() => ConnectedUser, i => i.world)
     users: ConnectedUser[];
 
     constructor(host: string, port: string, socketId: string, name: string, capacity: number, current: number) {

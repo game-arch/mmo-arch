@@ -1,7 +1,7 @@
 import {OnGatewayConnection, OnGatewayInit, WebSocketGateway, WebSocketServer} from "@nestjs/websockets";
 import {Server, Socket}                                                        from "socket.io";
 import * as io                                                                 from "socket.io-client";
-import {RegisteredShard}                                                       from "../presence/entities/registered-shard";
+import {RegisteredWorld}                                                       from "../presence/entities/registered-world";
 import {Events}                                                                from "../../../lib/constants/events";
 import {config}                                                                from "../../lib/config";
 
@@ -11,7 +11,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayInit {
     server: Server;
     socket: Socket;
 
-    servers: RegisteredShard[] = [];
+    servers: RegisteredWorld[] = [];
 
     handleConnection(client: Socket, ...args: any[]): any {
         client.emit(Events.SERVER_LIST, this.servers);

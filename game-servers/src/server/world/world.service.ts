@@ -9,7 +9,7 @@ import {Character}             from "./entities/character";
 import {InjectRepository}      from "@nestjs/typeorm";
 
 @Injectable()
-export class ShardService {
+export class WorldService {
 
     private _users$ = new BehaviorSubject<User[]>([]);
     users$          = this._users$.asObservable();

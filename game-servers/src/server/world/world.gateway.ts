@@ -8,11 +8,11 @@ import {
 import {Server, Socket} from "socket.io";
 import * as io          from "socket.io-client";
 import {config}         from "../../lib/config";
-import {ShardService}   from "./shard.service";
+import {WorldService}   from "./world.service";
 import {Events}         from "../../../lib/constants/events";
 
 @WebSocketGateway()
-export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
+export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
     @WebSocketServer()
     server: Server;
     socket: Socket;
@@ -25,12 +25,12 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         'Alcatraz'
     ];
 
-    constructor(private service: ShardService) {
+    constructor(private service: WorldService) {
 
     }
 
     afterInit(server: Server): any {
-        this.socket = io('http://' + config.servers.presence.host + ':' + config.servers.presence.port + '?name=' + this.names[process.env.NODE_APP_INSTANCE] + '&port=' + config.servers.shard.port + '&capacity=' + this.capacity);
+        this.socket = io('http://' + config.servers.presence.host + ':' + config.servers.presence.port + '?name=' + this.names[process.env.NODE_APP_INSTANCE] + '&port=' + config.servers.world.port + '&capacity=' + this.capacity);
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
@@ -41,7 +41,7 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             let user = await this.service.verifyUser(client);
             this.socket.emit(Events.USER_CONNECTED, {
                 accountId: user.id,
-                shard    : this.names[process.env.NODE_APP_INSTANCE]
+                world    : this.names[process.env.NODE_APP_INSTANCE]
             });
             client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(client));
         } catch (e) {
@@ -54,7 +54,7 @@ export class ShardGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         let user = await this.service.getUser(client);
         this.socket.emit(Events.USER_DISCONNECTED, {
             accountId: user.id,
-            shard    : this.names[process.env.NODE_APP_INSTANCE]
+            world    : this.names[process.env.NODE_APP_INSTANCE]
         });
     }
 }

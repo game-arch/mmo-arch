@@ -28,9 +28,9 @@ export const config = {
             host: process.env.LOBBY_HOST || 'localhost',
             port: process.env.LOBBY_PORT || PORTS.LOBBY
         },
-        shard   : {
-            host: process.env.SHARD_HOST || 'localhost',
-            port: (parseInt(process.env.SHARD_PORT || ('' + PORTS.SHARD)) + parseInt(process.env.NODE_APP_INSTANCE)) + ''
+        world   : {
+            host: process.env.WORLD_HOST || 'localhost',
+            port: (parseInt(process.env.WORLD_PORT || ('' + PORTS.WORLD)) + parseInt(process.env.NODE_APP_INSTANCE)) + ''
         },
         presence: {
             host: process.env.PRESENCE_HOST || 'localhost',

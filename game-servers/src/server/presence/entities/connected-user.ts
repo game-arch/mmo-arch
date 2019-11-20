@@ -1,20 +1,20 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {RegisteredShard}                                           from "./registered-shard";
+import {RegisteredWorld}                                           from "./registered-world";
 
 @Entity()
-@Unique('shard-user', ['shard', 'accountId'])
+@Unique('world-user', ['world', 'accountId'])
 export class ConnectedUser {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(t => RegisteredShard, s => s.users)
-    shard: RegisteredShard;
+    @ManyToOne(t => RegisteredWorld, s => s.users)
+    world: RegisteredWorld;
 
     @Column()
     accountId: number;
 
-    constructor(accountId:number, shard:RegisteredShard) {
+    constructor(accountId: number, world: RegisteredWorld) {
         this.accountId = accountId;
-        this.shard = shard;
+        this.world     = world;
     }
 }

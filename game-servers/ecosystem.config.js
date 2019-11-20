@@ -11,6 +11,45 @@ module.exports = {
             watch: false
         },
         {
+            name: 'micro-commerce',
+            script: 'dist/src/main.js',
+            watch: ["dist/src/microservice/commerce", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'microservice/commerce'
+            }
+        },
+        {
+            name: 'micro-character',
+            script: 'dist/src/main.js',
+            watch: ["dist/src/microservice/character", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'microservice/character'
+            }
+        },
+        {
+            name: 'micro-stats',
+            script: 'dist/src/main.js',
+            watch: ["dist/src/microservice/stats", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'microservice/stats'
+            }
+        },
+        {
             name: 'micro-quest',
             script: 'dist/src/main.js',
             watch: ["dist/src/microservice/quest", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],

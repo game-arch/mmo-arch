@@ -3,13 +3,13 @@ import {PresenceController} from './presence.controller';
 import {PresenceService}    from './presence.service';
 import {PresenceGateway}    from "./presence.gateway";
 import {DATABASE_MODULE}    from "../../lib/database/database.module";
-import {RegisteredShard}    from "./entities/registered-shard";
+import {RegisteredWorld}    from "./entities/registered-world";
 import {TypeOrmModule}      from "@nestjs/typeorm";
 import {ConnectedUser}      from "./entities/connected-user";
 
 @Module({
     imports    : [
-        TypeOrmModule.forFeature([RegisteredShard, ConnectedUser]),
+        TypeOrmModule.forFeature([RegisteredWorld, ConnectedUser]),
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
             type    : 'mysql',

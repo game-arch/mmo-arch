@@ -22,7 +22,7 @@ export class PresenceGateway implements OnGatewayConnection, OnGatewayDisconnect
     async handleConnection(client: Socket, ...args: any[]) {
         if (Boolean(client.handshake.query.name)) {
             let name = client.handshake.query.name;
-            let port = client.handshake.query.port || config.servers.shard.port;
+            let port = client.handshake.query.port || config.servers.world.port;
             await this.service.online(client.id, this.service.getHost(client.handshake.address), port, name);
             client.broadcast.emit(Events.SERVER_LIST, await this.service.getServers());
             return;
@@ -32,13 +32,13 @@ export class PresenceGateway implements OnGatewayConnection, OnGatewayDisconnect
     }
 
     @SubscribeMessage(Events.USER_CONNECTED)
-    async onUserConnection(client: Socket, data: { accountId: number, shard: string }) {
+    async onUserConnection(client: Socket, data: { accountId: number, world: string }) {
         await this.service.addUser(data);
         this.server.emit(Events.SERVER_LIST, await this.service.getServers());
     }
 
     @SubscribeMessage(Events.USER_DISCONNECTED)
-    async onUserDisconnection(client: Socket, data: { accountId: number, shard: string }) {
+    async onUserDisconnection(client: Socket, data: { accountId: number, world: string }) {
         await this.service.removeUser(data);
         this.server.emit(Events.SERVER_LIST, await this.service.getServers());
     }

@@ -1,11 +1,11 @@
 import {Controller, Get, Req, Res} from '@nestjs/common';
-import {ShardService}              from './shard.service';
+import {WorldService}              from './world.service';
 import {Request, Response}         from "express";
 
 @Controller()
-export class ShardController {
+export class WorldController {
     constructor(
-        private readonly appService: ShardService
+        private readonly appService: WorldService
     ) {
     }
 }
