@@ -1,6 +1,6 @@
 import {NestFactory}    from '@nestjs/core';
 import {AccountModule}  from './account.module';
-import {createDatabase} from "../../lib/database/database.module";
+import {createDatabase} from "../../lib/database.module";
 import {Logger}         from "@nestjs/common";
 import {options}        from "./microservice.options";
 

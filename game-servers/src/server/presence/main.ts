@@ -1,7 +1,7 @@
 import {NestFactory}    from '@nestjs/core';
 import {PresenceModule} from './presence.module';
 import {PORTS}          from "../../../lib/constants/ports";
-import {createDatabase} from "../../lib/database/database.module";
+import {createDatabase} from "../../lib/database.module";
 
 async function bootstrap() {
     await createDatabase('presence');

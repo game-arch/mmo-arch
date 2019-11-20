@@ -2,7 +2,7 @@ import {Module}             from '@nestjs/common';
 import {PresenceController} from './presence.controller';
 import {PresenceService}    from './presence.service';
 import {PresenceGateway}    from "./presence.gateway";
-import {DATABASE_MODULE}    from "../../lib/database/database.module";
+import {DATABASE_MODULE}    from "../../lib/database.module";
 import {RegisteredWorld}    from "./entities/registered-world";
 import {TypeOrmModule}      from "@nestjs/typeorm";
 import {ConnectedUser}      from "./entities/connected-user";

@@ -1,6 +1,6 @@
 import {Module}                   from "@nestjs/common";
 import {AccountClient}            from "./account.client";
-import {MicroserviceClientModule} from "../../../lib/microservice-client.module";
+import {MicroserviceClientModule} from "../../microservice-client.module";
 
 @Module({
     imports  : [

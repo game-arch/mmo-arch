@@ -1,7 +1,7 @@
 import {Module}          from '@nestjs/common';
 import {AreaController}  from './area.controller';
 import {AreaService}     from './area.service';
-import {DATABASE_MODULE} from "../../lib/database/database.module";
+import {DATABASE_MODULE} from "../../lib/database.module";
 import {TypeOrmModule}   from "@nestjs/typeorm";
 
 @Module({

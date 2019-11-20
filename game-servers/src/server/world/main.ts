@@ -1,6 +1,6 @@
 import {NestFactory}    from '@nestjs/core';
 import {WorldModule}    from './world.module';
-import {createDatabase} from "../../lib/database/database.module";
+import {createDatabase} from "../../lib/database.module";
 import {config}         from "../../lib/config";
 
 async function bootstrap() {

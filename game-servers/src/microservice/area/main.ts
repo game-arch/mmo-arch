@@ -1,6 +1,6 @@
 import {NestFactory}    from '@nestjs/core';
 import {AreaModule}     from './area.module';
-import {createDatabase} from "../../lib/database/database.module";
+import {createDatabase} from "../../lib/database.module";
 import {config}         from "../../lib/config";
 import {Logger}         from "@nestjs/common";
 

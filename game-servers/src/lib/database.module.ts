@@ -1,6 +1,6 @@
 import {TypeOrmModuleOptions} from "@nestjs/typeorm";
 import {createConnection}     from "typeorm";
-import {config}               from "../config";
+import {config}               from "./config";
 
 export const DATABASE_MODULE: TypeOrmModuleOptions = {
     type               : 'mysql',

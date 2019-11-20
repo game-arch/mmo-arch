@@ -1,7 +1,7 @@
 import {Module}          from '@nestjs/common';
 import {StatsController} from './stats.controller';
 import {StatsService}    from './stats.service';
-import {DATABASE_MODULE} from "../../lib/database/database.module";
+import {DATABASE_MODULE} from "../../lib/database.module";
 import {TypeOrmModule}   from "@nestjs/typeorm";
 
 @Module({
