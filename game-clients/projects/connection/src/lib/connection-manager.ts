@@ -1,7 +1,7 @@
 import {Injectable}                         from '@angular/core';
 import * as io                              from "socket.io-client";
 import Socket = SocketIOClient.Socket;
-import {GameShard}                          from "../../../../../game-servers/lib/entities/game-world";
+import {GameWorld}                          from "../../../../../game-servers/lib/entities/game-world";
 import {BehaviorSubject}                    from "rxjs";
 import {Connection}                         from "./connection";
 import {Actions, ofActionDispatched, Store} from "@ngxs/store";
@@ -41,7 +41,7 @@ export class ConnectionManager {
         return this.get('lobby');
     }
 
-    connectToWorld(server: GameShard) {
+    connectToWorld(server: GameWorld) {
         if (this.world.socket) {
             this.disconnect(this.world.world.name);
         }
