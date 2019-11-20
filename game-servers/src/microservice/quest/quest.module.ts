@@ -1,6 +1,6 @@
 import {Module}          from '@nestjs/common';
-import {MapController}   from './map.controller';
-import {MapService}      from './map.service';
+import {QuestController} from './quest.controller';
+import {QuestService}    from './quest.service';
 import {DATABASE_MODULE} from "../../lib/database/database.module";
 import {TypeOrmModule}   from "@nestjs/typeorm";
 
@@ -8,11 +8,11 @@ import {TypeOrmModule}   from "@nestjs/typeorm";
     imports    : [TypeOrmModule.forRoot({
         ...DATABASE_MODULE,
         type    : 'mysql',
-        database: 'map',
+        database: 'quest',
         entities: [__dirname + '/entities/*{.js,.ts}']
     })],
-    controllers: [MapController],
-    providers  : [MapService],
+    controllers: [QuestController],
+    providers  : [QuestService],
 })
-export class MapModule {
+export class QuestModule {
 }

@@ -14,7 +14,7 @@ import {ItemConfiguration} from "./entities/item-configuration";
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
             type    : 'mysql',
-            database: 'map',
+            database: 'item',
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],

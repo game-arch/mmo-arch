@@ -11,10 +11,21 @@ module.exports = {
             watch: false
         },
         {
+            name: 'micro-quest',
+            script: 'dist/src/main.js',
+            watch: ["dist/src/microservice/quest", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'microservice/quest'
+            }
+        },
+        {
             name: 'micro-account',
             script: 'dist/src/main.js',
-            instances: 2,
-            exec_mode: 'cluster',
             watch: ["dist/src/microservice/account", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
             // Delay between restart
             watch_delay: 1000,
@@ -28,8 +39,6 @@ module.exports = {
         {
             name: 'micro-item',
             script: 'dist/src/main.js',
-            instances: 2,
-            exec_mode: 'cluster',
             watch: ["dist/src/microservice/item", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
             // Delay between restart
             watch_delay: 1000,
@@ -43,8 +52,6 @@ module.exports = {
         {
             name: 'micro-map',
             script: 'dist/src/main.js',
-            instances: 2,
-            exec_mode: 'cluster',
             watch: ["dist/src/microservice/map", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
             // Delay between restart
             watch_delay: 1000,
