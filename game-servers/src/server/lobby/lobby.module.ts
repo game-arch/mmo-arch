@@ -8,12 +8,6 @@ import {AccountClientModule} from "../../microservice/account/client/account-cli
 
 @Module({
     imports    : [
-        TypeOrmModule.forRoot({
-            ...DATABASE_MODULE,
-            type    : 'mysql',
-            database: 'lobby',
-            entities: [__dirname + '/**/*.entity{.js,.ts}']
-        }),
         AccountClientModule
     ],
     controllers: [LobbyController],

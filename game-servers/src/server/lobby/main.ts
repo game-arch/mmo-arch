@@ -6,7 +6,6 @@ import {createDatabase} from "../../lib/database.module";
 import {config}         from "../../lib/config";
 
 async function bootstrap() {
-    await createDatabase('lobby');
     const app = await NestFactory.create(LobbyModule);
     app.connectMicroservice(config.microservice);
     app.enableCors({
