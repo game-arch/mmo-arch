@@ -1,24 +1,24 @@
 import {NestFactory}    from '@nestjs/core';
-import {QuestModule}    from './quest.module';
+import {AreaModule}     from './area.module';
 import {createDatabase} from "../../lib/database/database.module";
 import {config}         from "../../lib/config";
 import {Logger}         from "@nestjs/common";
 
 
-const logger = new Logger('Quest');
+const logger = new Logger('Area');
 
 async function bootstrap() {
-    await createDatabase('quest');
-    const app = await NestFactory.createMicroservice(QuestModule, {
+    await createDatabase('area');
+    const app = await NestFactory.createMicroservice(AreaModule, {
         transport: config.microservice.transport,
-        options: {
-            url: config.microservice.options.url,
-            queue: 'quest'
+        options  : {
+            url  : config.microservice.options.url,
+            queue: 'area'
         }
     });
     app.useLogger(logger);
     await app.listen(() => {
-        logger.log("Quest Microservice is listening ...");
+        logger.log("Area Microservice is listening ...");
     });
 }
 

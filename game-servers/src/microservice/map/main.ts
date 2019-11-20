@@ -9,7 +9,13 @@ const logger = new Logger('Map');
 
 async function bootstrap() {
     await createDatabase('map');
-    const app = await NestFactory.createMicroservice(MapModule, config.microservice);
+    const app = await NestFactory.createMicroservice(MapModule, {
+        transport: config.microservice.transport,
+        options: {
+            url: config.microservice.options.url,
+            queue: 'map'
+        }
+    });
     app.useLogger(logger);
     await app.listen(() => {
         logger.log("Map Microservice is listening ...");

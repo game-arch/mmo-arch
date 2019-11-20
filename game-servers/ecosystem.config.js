@@ -11,6 +11,19 @@ module.exports = {
             watch: false
         },
         {
+            name: 'micro-ai',
+            script: 'dist/src/main.js',
+            watch: ["dist/src/microservice/ai", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'microservice/ai'
+            }
+        },
+        {
             name: 'micro-commerce',
             script: 'dist/src/main.js',
             watch: ["dist/src/microservice/commerce", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
@@ -86,6 +99,19 @@ module.exports = {
             },
             env: {
                 SERVER_TYPE: 'microservice/item'
+            }
+        },
+        {
+            name: 'micro-area',
+            script: 'dist/src/main.js',
+            watch: ["dist/src/microservice/area", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'microservice/area'
             }
         },
         {

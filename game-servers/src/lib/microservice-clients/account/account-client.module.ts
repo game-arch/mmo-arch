@@ -3,7 +3,7 @@ import {AccountClient} from "./account.client";
 import {ClientModule}  from "../client.module";
 
 @Module({
-    imports: [
+    imports  : [
         ClientModule
     ],
     providers: [

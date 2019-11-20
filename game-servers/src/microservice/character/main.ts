@@ -9,7 +9,13 @@ const logger = new Logger('Character');
 
 async function bootstrap() {
     await createDatabase('character');
-    const app = await NestFactory.createMicroservice(CharacterModule, config.microservice);
+    const app = await NestFactory.createMicroservice(CharacterModule,{
+        transport: config.microservice.transport,
+        options: {
+            url: config.microservice.options.url,
+            queue: 'character'
+        }
+    });
     app.useLogger(logger);
     await app.listen(() => {
         logger.log("Character Microservice is listening ...");
