@@ -12,7 +12,7 @@ async function bootstrap() {
     const app = await NestFactory.createMicroservice(QuestModule, config.microservice);
     app.useLogger(logger);
     await app.listen(() => {
-        logger.log("Map Microservice is listening ...");
+        logger.log("Quest Microservice is listening ...");
     });
 }
 
