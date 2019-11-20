@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnInit} from '@angular/core';
 import {Socket}                          from "ngx-socket-io";
 import {EMPTY, fromEvent, Observable}    from "rxjs";
 import {ConnectionManager}               from "../../../connection/src/lib/connection-manager";
-import {GameShard}                       from "../../../../../game-servers/lib/entities/game-shard";
+import {GameShard}                       from "../../../../../game-servers/lib/entities/game-world";
 import {Events}                          from "../../../../../game-servers/lib/constants/events";
 import {Hosts}                           from "../../../game/src/lib/hosts";
 import {map, takeUntil}                  from "rxjs/operators";
@@ -31,8 +31,8 @@ export class ServerListComponent implements OnInit {
         this.servers$  = fromEvent(connection.socket, Events.SERVER_LIST);
     }
 
-    onConnect(shard: GameShard) {
-        let connection = this.manager.connectToWorld(shard);
+    onConnect(world: GameShard) {
+        let connection = this.manager.connectToWorld(world);
         fromEvent(connection.socket, 'connection-error', {once: true})
             .subscribe((err) => {
                 console.error(err);
@@ -40,7 +40,7 @@ export class ServerListComponent implements OnInit {
             });
         fromEvent(connection.socket, 'connect', {once: true})
             .pipe(takeUntil(this.destroy))
-            .pipe(map(() => shard.name))
+            .pipe(map(() => world.name))
             .subscribe(name => this.connected.emit(name));
     }
 

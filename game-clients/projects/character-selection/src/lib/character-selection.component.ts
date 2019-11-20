@@ -19,7 +19,7 @@ export class CharacterSelectionComponent implements OnInit {
 
     disconnect() {
         if (this.connection.world) {
-            this.connection.disconnect(this.connection.world.shard.name);
+            this.connection.disconnect(this.connection.world.world.name);
         }
     }
 }

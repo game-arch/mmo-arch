@@ -7,7 +7,7 @@
                 Character Selection
             </mat-card-title>
             <mat-card-subtitle>
-                World: {{conn.shard.name}}
+                World: {{conn.world.name}}
             </mat-card-subtitle>
             <mat-card-content>
                 <mat-nav-list *ngIf="conn.characters$ | async as characters">

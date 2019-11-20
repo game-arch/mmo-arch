@@ -7,7 +7,7 @@ export class Connection<T = { name: string }> {
 
     characters$: Observable<GameCharacter[]>;
 
-    constructor(public shard: T, public socket: Socket) {
+    constructor(public world: T, public socket: Socket) {
         this.characters$ = fromEvent(socket, Events.CHARACTER_LIST);
 
     }

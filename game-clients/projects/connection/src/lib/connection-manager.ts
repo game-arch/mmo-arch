@@ -1,7 +1,7 @@
 import {Injectable}                         from '@angular/core';
 import * as io                              from "socket.io-client";
 import Socket = SocketIOClient.Socket;
-import {GameShard}                          from "../../../../../game-servers/lib/entities/game-shard";
+import {GameShard}                          from "../../../../../game-servers/lib/entities/game-world";
 import {BehaviorSubject}                    from "rxjs";
 import {Connection}                         from "./connection";
 import {Actions, ofActionDispatched, Store} from "@ngxs/store";
@@ -43,7 +43,7 @@ export class ConnectionManager {
 
     connectToWorld(server: GameShard) {
         if (this.world.socket) {
-            this.disconnect(this.world.shard.name);
+            this.disconnect(this.world.world.name);
         }
         if (server.status === 'online') {
             let token = this.store.selectSnapshot(AuthState).token;
@@ -72,8 +72,8 @@ export class ConnectionManager {
         if (server.socket.connected) {
             server.socket.disconnect();
         }
-        delete this.connections[server.shard.name];
-        if (this.world.shard.name === server.shard.name) {
+        delete this.connections[server.world.name];
+        if (this.world.world.name === server.world.name) {
             this._world.next(new Connection({name: ''}, null));
         }
     }
