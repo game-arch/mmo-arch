@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="fb6bb089-217d-4e54-9557-5646f8f63b25" name="AWS" url="http://ec2-3-17-129-177.us-east-2.compute.amazonaws.com">
+        <fileTransfer host="ec2-3-17-129-177.us-east-2.compute.amazonaws.com" port="22" privateKey="$USER_HOME$/remote.pem" rootFolder="/home/bitnami" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -8,7 +8,7 @@ import {Logger}         from "@nestjs/common";
 const logger = new Logger('Map');
 
 async function bootstrap() {
-    await createDatabase('account');
+    await createDatabase('map');
     const app = await NestFactory.createMicroservice(MapModule, config.microservice);
     app.useLogger(logger);
     await app.listen(() => {
