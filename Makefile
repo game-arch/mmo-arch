@@ -1,6 +1,7 @@
 install:
 	cd game-clients && npm i
 	cd game-servers && npm i
+	cd game-servers && npm run build
 
 start:
 	cd game-clients && make start
