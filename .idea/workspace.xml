@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e56b9b86-df18-45ac-bc2d-950eb03d6c7e" name="Default Changelist" comment="" />
+    <list default="true" id="e56b9b86-df18-45ac-bc2d-950eb03d6c7e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,14 +42,15 @@
       <recent name="C:\Users\jwhen\game\game-servers\src\account" />
     </key>
     <key name="es6.move.members.recent.items">
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice-client.module.ts" />
       <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/account" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/account/client" />
       <recent name="$PROJECT_DIR$/game-servers/src/server" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice" />
-      <recent name="$PROJECT_DIR$/game-servers/src/inventory/entities" />
-      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice-clients" />
-      <recent name="$PROJECT_DIR$/game-clients/projects/game/src/assets/icons" />
     </key>
   </component>
   <component name="RunDashboard">

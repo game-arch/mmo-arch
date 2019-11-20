@@ -4,7 +4,7 @@ import {LobbyService}        from './lobby.service';
 import {DATABASE_MODULE}     from "../../lib/database/database.module";
 import {TypeOrmModule}       from "@nestjs/typeorm";
 import {LobbyGateway}        from "./lobby.gateway";
-import {AccountClientModule} from "../../lib/microservice-clients/account/account-client.module";
+import {AccountClientModule} from "../../microservice/account/client/account-client.module";
 
 @Module({
     imports    : [

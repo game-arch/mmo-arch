@@ -6,7 +6,7 @@ import {Account}             from "./entities/account";
 import {AccountService}      from "./account.service";
 import {JwtModule}           from "@nestjs/jwt";
 import {config}              from "../../lib/config";
-import {AccountClientModule} from "../../lib/microservice-clients/account/account-client.module";
+import {AccountClientModule} from "./client/account-client.module";
 
 @Module({
     imports    : [

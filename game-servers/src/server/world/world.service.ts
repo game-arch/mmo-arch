@@ -1,5 +1,5 @@
 import {Injectable}            from '@nestjs/common';
-import {AccountClient}         from "../../lib/microservice-clients/account/account.client";
+import {AccountClient}         from "../../microservice/account/client/account.client";
 import {Socket}                from "socket.io";
 import {User}                  from "./user";
 import {BehaviorSubject, from} from "rxjs";

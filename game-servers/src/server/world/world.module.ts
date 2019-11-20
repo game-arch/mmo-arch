@@ -5,7 +5,7 @@ import {WorldGateway}        from "./world.gateway";
 import {DATABASE_MODULE}     from "../../lib/database/database.module";
 import {TypeOrmModule}       from "@nestjs/typeorm";
 import {Character}           from "./entities/character";
-import {AccountClientModule} from "../../lib/microservice-clients/account/account-client.module";
+import {AccountClientModule} from "../../microservice/account/client/account-client.module";
 
 @Module({
     imports    : [
