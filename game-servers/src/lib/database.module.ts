@@ -24,7 +24,7 @@ export async function createDatabase(name: string) {
             type    : 'mysql',
             database: ''
         });
-        await connection.query('CREATE DATABASE IF NOT EXISTS ' + name);
+        await connection.query('CREATE DATABASE IF NOT EXISTS `' + name + '`');
         await connection.close();
     } catch (e) {
         console.log(e);

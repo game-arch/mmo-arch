@@ -12,8 +12,9 @@ async function bootstrap() {
     const app = await NestFactory.createMicroservice(AiModule, {
         transport: config.microservice.transport,
         options  : {
-            url  : config.microservice.options.url,
+            ...config.microservice.options,
             queue: 'area'
+
         }
     });
     app.useLogger(logger);

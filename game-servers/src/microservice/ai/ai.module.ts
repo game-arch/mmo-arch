@@ -8,7 +8,7 @@ import {TypeOrmModule}   from "@nestjs/typeorm";
     imports    : [TypeOrmModule.forRoot({
         ...DATABASE_MODULE,
         type    : 'mysql',
-        database: 'map',
+        database: 'ai',
         entities: [__dirname + '/entities/*{.js,.ts}']
     })],
     controllers: [AiController],

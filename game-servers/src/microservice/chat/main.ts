@@ -12,7 +12,7 @@ async function bootstrap() {
     const app = await NestFactory.createMicroservice(ChatModule, {
         transport: config.microservice.transport,
         options: {
-            url: config.microservice.options.url,
+            ...config.microservice.options,
             queue: 'chat'
         }
     });
