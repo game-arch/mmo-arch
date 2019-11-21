@@ -36,12 +36,13 @@ export class ConnectionManager {
 
     connectToLobby() {
         if (!this.connections.hasOwnProperty('lobby')) {
-            let token = this.store.selectSnapshot(AuthState).token;
-            this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(Hosts.LOBBY + '?token=' + token, {transports: ['websocket']}));
+            this.openConnection('lobby', {name: 'lobby'}, Hosts.LOBBY);
             this.connections['lobby'].socket.on('connect-error', (error) => {
                 this.store.dispatch(new SetToken());
             });
+            return this.get('lobby');
         }
+        this.get('lobby').socket.connect();
         return this.get('lobby');
     }
 
@@ -50,11 +51,10 @@ export class ConnectionManager {
             this.disconnect(this.world.world.name);
         }
         if (server.status === 'online') {
-            let token = this.store.selectSnapshot(AuthState).token;
             if (!this.connections.hasOwnProperty(server.name)) {
-                this.connections[server.name] = new Connection(server, io.connect('http://' + server.host + ':' + server.port + '?token=' + token, {transports: ['websocket']}));
+                this.openConnection(server.name, server, 'http://' + server.host + ':' + server.port);
                 this.get(server.name).socket.on('connect', () => this.disconnect('lobby'));
-                this.get(server.name).socket.on('disconnect', () => this.get('lobby').socket.connect());
+                this.get(server.name).socket.on('disconnect', () => this.connectToLobby());
             } else {
                 this.connections[server.name].socket.connect();
             }
@@ -83,6 +83,11 @@ export class ConnectionManager {
         if (this.world.world.name === server.world.name) {
             this._world.next(new Connection({name: ''}, null));
         }
+    }
+
+    openConnection(name: string, server: { name: string }, location: string) {
+        let token              = this.store.selectSnapshot(AuthState).token;
+        this.connections[name] = new Connection(server, io.connect(location + '?token=' + token, {transports: ['websocket']}));
     }
 
 }
