@@ -41,9 +41,10 @@ export class PresenceService implements OnApplicationBootstrap {
 
     private async loadServers() {
         this.servers = await this.repo.createQueryBuilder('world')
+                                 .select('world.name, world.index, MAX(world.host) host, MAX(world.port) port, SUM(world.current) current, SUM(world.capacity) capacity, MAX(world.status) status')
                                  .groupBy('world.name, world.index')
-                                 .orderBy('world.status', 'DESC')
-                                 .getMany();
+                                 .orderBy('7', 'DESC')
+                                 .getRawMany();
     }
 
     private findBySocketId(socketId: string) {

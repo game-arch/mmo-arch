@@ -27,7 +27,7 @@ export class WorldService {
 
     async verifyUser(socket: Socket) {
         try {
-            let account: { id: number, email: string } = await this.account.verifyAccount(socket.handshake.query.token);
+            let account: { id: number, email: string } = await this.account.getAccount(socket.handshake.query.token, true);
             return account;
         } catch (e) {
             throw new Error("Session Expired");

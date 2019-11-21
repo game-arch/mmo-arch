@@ -1,7 +1,5 @@
 export interface GameWorld {
-    id: number;
-    socketId: string;
-    index:number;
+    index: number;
     host: string;
     port: number;
     name: string;

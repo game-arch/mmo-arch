@@ -36,7 +36,12 @@ export class ConnectionManager {
 
     connectToLobby() {
         if (!this.connections.hasOwnProperty('lobby')) {
-            this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(Hosts.LOBBY, {transports: ['websocket']}));
+            let token = this.store.selectSnapshot(AuthState).token;
+            this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(Hosts.LOBBY + '?token=' + token, {transports: ['websocket']}));
+            this.connections['lobby'].socket.on('connect-error', (error) => {
+                console.error(error);
+                this.store.dispatch(new SetToken());
+            });
         }
         return this.get('lobby');
     }
