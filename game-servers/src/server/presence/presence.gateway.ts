@@ -25,7 +25,6 @@ export class PresenceGateway implements OnGatewayConnection, OnGatewayDisconnect
             let port       = parseInt(client.handshake.query.port || config.servers.world.port);
             let instanceId = parseInt(client.handshake.query.instanceId || '1');
             await this.service.online(client.id, this.service.getHost(client.handshake.address), port, instanceId, name);
-            client.broadcast.emit(Events.SERVER_LIST, this.service.getServers());
             return;
         }
 
@@ -36,25 +35,22 @@ export class PresenceGateway implements OnGatewayConnection, OnGatewayDisconnect
     async onUserConnection(client: Socket, data: { accountId: number, world: string }) {
         await this.service.addUser(data);
         this.server.emit(Events.USER_CONNECTED, data);
-        this.server.emit(Events.SERVER_LIST, this.service.getServers());
     }
 
     @SubscribeMessage(Events.USER_DISCONNECTED)
     async onUserDisconnection(client: Socket, data: { accountId: number, world: string }) {
         await this.service.removeUser(data);
         this.server.emit(Events.USER_DISCONNECTED, data);
-        this.server.emit(Events.SERVER_LIST, this.service.getServers());
     }
 
     async handleDisconnect(client: Socket) {
-        if (client.handshake.query.track !== 'false') {
-            await this.service.offline(client.id);
-            this.server.emit(Events.SERVER_LIST, this.service.getServers());
-        }
+        await this.service.offline(client.id);
     }
 
     async onApplicationBootstrap() {
-
+        this.service.sendServers.subscribe(() => {
+            this.server.emit(Events.SERVER_LIST, this.service.getServers());
+        })
     }
 
 

@@ -1,6 +1,5 @@
 import {
     OnGatewayConnection,
-    OnGatewayDisconnect,
     OnGatewayInit,
     WebSocketGateway,
     WebSocketServer
@@ -12,7 +11,7 @@ import {GameWorld}      from "../../../lib/entities/game-world";
 import {PresenceClient} from "../presence/presence.client";
 
 @WebSocketGateway()
-export class LobbyGateway implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
+export class LobbyGateway implements OnGatewayConnection, OnGatewayInit {
     @WebSocketServer()
     server: Server;
     socket: Socket;

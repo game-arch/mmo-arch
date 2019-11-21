@@ -3,13 +3,14 @@ import {RegisteredWorld}                    from "./entities/registered-world";
 import {Repository}                         from "typeorm";
 import {InjectRepository}                   from "@nestjs/typeorm";
 import {ConnectedUser}                      from "./entities/connected-user";
-import {from}                               from "rxjs";
+import {from, Subject}                      from "rxjs";
 import {map, toArray}                       from "rxjs/operators";
 
 @Injectable()
 export class PresenceService implements OnApplicationBootstrap {
 
     private servers: RegisteredWorld[] = [];
+    sendServers                        = new Subject();
 
     constructor(
         @InjectRepository(RegisteredWorld)
@@ -41,18 +42,19 @@ export class PresenceService implements OnApplicationBootstrap {
 
     private async loadServers() {
         this.servers = await this.repo.createQueryBuilder('world')
-                                 .select('world.name, world.index, MAX(world.host) host, MAX(world.port) port, SUM(world.current) current, SUM(world.capacity) capacity, MAX(world.status) status')
+                                 .select('world.name, world.index, MAX(world.host) host, MAX(world.port) port, SUM(world.current) current, SUM(IF (world.status = "online", world.capacity, 0)) capacity, MAX(world.status) status')
                                  .groupBy('world.name, world.index')
                                  .orderBy('7', 'DESC')
                                  .getRawMany();
+        this.sendServers.next(this.servers);
     }
 
-    private findBySocketId(socketId: string) {
-        return this.servers.filter(server => server.socketId === socketId)[0] || null;
+    async findBySocketId(socketId: string) {
+        return await this.repo.findOne({socketId});
     }
 
     async set(socketId: string) {
-        let server = this.findBySocketId(socketId);
+        let server = await this.findBySocketId(socketId);
         if (server) {
             await this.repo.save(server);
         }
@@ -65,6 +67,7 @@ export class PresenceService implements OnApplicationBootstrap {
             server.current = 0;
             await this.repo.save(server);
             await this.userRepo.delete({world: server.name});
+            await this.loadServers();
         }
     }
 
