@@ -23,7 +23,7 @@ export class PresenceService implements OnApplicationBootstrap {
         if (name && name !== '') {
             let server = await this.repo.findOne({where: {host, name, port, instanceId: instanceId + 1}});
             if (!server) {
-                let count   = await this.repo.query('select count(*) count from presence.registered_world where host = ? and name = ? and port = ?', [host, name, port]);
+                let count   = await this.repo.query('select count(*) count from presence.registered_world where name = ? group by host, port', [host, name, port]);
                 let world   = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, socketId, name, 100, 0));
                 world.index = parseInt(count[0].count) + 1;
                 await this.repo.save(world);

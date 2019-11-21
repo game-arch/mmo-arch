@@ -36,8 +36,14 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             + '&instanceId='
             + this.instanceId
             + '&port=' + config.servers.world.port
-            + '&capacity=' + this.capacity
+            + '&capacity=' + this.capacity,
+            {
+                transports: ['websocket']
+            }
         );
+        this.socket.on('reconnect_attempt', () => {
+            this.socket['io'].opts.transports = ['websocket'];
+        });
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
