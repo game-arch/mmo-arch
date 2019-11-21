@@ -39,7 +39,6 @@ export class ConnectionManager {
             let token = this.store.selectSnapshot(AuthState).token;
             this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(Hosts.LOBBY + '?token=' + token, {transports: ['websocket']}));
             this.connections['lobby'].socket.on('connect-error', (error) => {
-                console.error(error);
                 this.store.dispatch(new SetToken());
             });
         }
@@ -54,8 +53,12 @@ export class ConnectionManager {
             let token = this.store.selectSnapshot(AuthState).token;
             if (!this.connections.hasOwnProperty(server.name)) {
                 this.connections[server.name] = new Connection(server, io.connect('http://' + server.host + ':' + server.port + '?token=' + token, {transports: ['websocket']}));
-                this._world.next(this.connections[server.name]);
+                this.get(server.name).socket.on('connect', () => this.disconnect('lobby'));
+                this.get(server.name).socket.on('disconnect', () => this.get('lobby').socket.connect());
+            } else {
+                this.connections[server.name].socket.connect();
             }
+            this._world.next(this.connections[server.name]);
             return this.world;
         }
         return null;
@@ -77,7 +80,6 @@ export class ConnectionManager {
         if (server.socket.connected) {
             server.socket.disconnect();
         }
-        delete this.connections[server.world.name];
         if (this.world.world.name === server.world.name) {
             this._world.next(new Connection({name: ''}, null));
         }

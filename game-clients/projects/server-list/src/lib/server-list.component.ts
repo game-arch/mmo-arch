@@ -32,6 +32,7 @@ export class ServerListComponent implements OnInit {
 
     onConnect(world: GameWorld) {
         let connection = this.manager.connectToWorld(world);
+        console.log(connection);
         fromEvent(connection.socket, 'connection-error', {once: true})
             .subscribe((err) => {
                 console.error(err);
