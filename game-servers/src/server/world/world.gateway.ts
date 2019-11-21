@@ -20,18 +20,24 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     capacity = 100;
 
-    names = [
-        'Maiden',
-        'Voyage',
-        'Alcatraz'
-    ];
+    name = process.env.WORLD_NAME || 'Maiden';
+
+    instanceId = parseInt(process.env.NODE_APP_INSTANCE);
 
     constructor(private service: WorldService) {
 
     }
 
     afterInit(server: Server): any {
-        this.socket = io('http://' + config.servers.presence.host + ':' + config.servers.presence.port + '?name=' + this.names[process.env.NODE_APP_INSTANCE] + '&port=' + config.servers.world.port + '&capacity=' + this.capacity);
+        this.socket = io(
+            'http://' + config.servers.presence.host
+            + ':' + config.servers.presence.port
+            + '?name=' + this.name
+            + '&instanceId='
+            + this.instanceId
+            + '&port=' + config.servers.world.port
+            + '&capacity=' + this.capacity
+        );
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
@@ -42,7 +48,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             let user = await this.service.verifyUser(client);
             this.socket.emit(Events.USER_CONNECTED, {
                 accountId: user.id,
-                world    : this.names[process.env.NODE_APP_INSTANCE]
+                world    : this.name
             });
             client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(client));
         } catch (e) {
@@ -70,7 +76,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         let user = await this.service.getUser(client);
         this.socket.emit(Events.USER_DISCONNECTED, {
             accountId: user.id,
-            world    : this.names[process.env.NODE_APP_INSTANCE]
+            world    : this.name
         });
     }
 }

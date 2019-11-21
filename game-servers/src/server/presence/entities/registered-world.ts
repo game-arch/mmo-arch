@@ -1,9 +1,8 @@
-import {Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {ConnectedUser}                                                       from "./connected-user";
-import {GameWorld}                                                           from "../../../../lib/entities/game-world";
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {GameWorld}                                      from "../../../../lib/entities/game-world";
 
 @Unique('socketId', ['socketId'])
-@Unique('name', ['name'])
+@Unique('instance', ['name', 'host', 'port', 'instanceId'])
 @Entity()
 export class RegisteredWorld implements GameWorld {
 
@@ -12,9 +11,13 @@ export class RegisteredWorld implements GameWorld {
     @Column()
     socketId: string;
     @Column()
-    host: string;
+    instanceId: number;
+    @Column({default: 1})
+    index: number;
     @Column()
-    port: string;
+    host: string;
+    @Column('int')
+    port: number;
     @Column({nullable: false})
     name: string;
     @Column('int')
@@ -23,17 +26,17 @@ export class RegisteredWorld implements GameWorld {
     current: number;
     @Column({nullable: false})
     status: 'online' | 'offline' = 'online';
+    @Column({default: false})
+    full: boolean;
 
-    @OneToMany(() => ConnectedUser, i => i.world)
-    users: ConnectedUser[];
-
-    constructor(host: string, port: string, socketId: string, name: string, capacity: number, current: number) {
-        this.host     = host;
-        this.port     = port;
-        this.socketId = socketId;
-        this.name     = name;
-        this.capacity = capacity;
-        this.current  = current;
+    constructor(host: string, port: number, instanceId: number, socketId: string, name: string, capacity: number, current: number) {
+        this.host       = host;
+        this.port       = port;
+        this.instanceId = instanceId;
+        this.socketId   = socketId;
+        this.name       = name;
+        this.capacity   = capacity;
+        this.current    = current;
 
     }
 }

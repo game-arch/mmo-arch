@@ -36,7 +36,7 @@ export class ConnectionManager {
 
     connectToLobby() {
         if (!this.connections.hasOwnProperty('lobby')) {
-            this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(Hosts.LOBBY));
+            this.connections['lobby'] = new Connection({name: 'lobby'}, io.connect(Hosts.LOBBY, {transports: ['websocket']}));
         }
         return this.get('lobby');
     }
@@ -48,7 +48,7 @@ export class ConnectionManager {
         if (server.status === 'online') {
             let token = this.store.selectSnapshot(AuthState).token;
             if (!this.connections.hasOwnProperty(server.name)) {
-                this.connections[server.name] = new Connection(server, io.connect('http://' + server.host + ':' + server.port + '?token=' + token));
+                this.connections[server.name] = new Connection(server, io.connect('http://' + server.host + ':' + server.port + '?token=' + token, {transports: ['websocket']}));
                 this._world.next(this.connections[server.name]);
             }
             return this.world;

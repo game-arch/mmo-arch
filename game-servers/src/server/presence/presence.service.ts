@@ -19,35 +19,37 @@ export class PresenceService implements OnApplicationBootstrap {
     ) {
     }
 
-    async online(socketId: string, host: string, port: string, name: string) {
+    async online(socketId: string, host: string, port: number, instanceId: number, name: string) {
         if (name && name !== '') {
-            let server = await this.findByIpAndName(host, name);
+            let server = await this.repo.findOne({where: {host, name, port, instanceId: instanceId + 1}});
             if (!server) {
-                await this.repo.save(this.repo.create(new RegisteredWorld(host, port, socketId, name, 100, 0)));
-                this.servers = await this.repo.find();
+                let count   = await this.repo.query('select count(*) count from presence.registered_world where host = ? and name = ? and port = ?', [host, name, port]);
+                let world   = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, socketId, name, 100, 0));
+                world.index = parseInt(count[0].count) + 1;
+                await this.repo.save(world);
+                await this.loadServers();
                 return;
             }
             server.socketId = socketId;
             server.status   = 'online';
             server.port     = port;
             await this.repo.save(server);
-            await this.userRepo.delete({world: server});
-            this.servers = await this.repo.find();
+            await this.userRepo.delete({world: server.name});
+            await this.loadServers();
         }
+    }
+
+    private async loadServers() {
+        this.servers = await this.repo.find({where: {index: 1}, order: {full: 1, name: 1, index: 1}});
     }
 
     private findBySocketId(socketId: string) {
         return this.servers.filter(server => server.socketId === socketId)[0] || null;
     }
 
-    private findByIpAndName(host: string, name: string) {
-        return this.repo.findOne({where: {host: host, name}});
-    }
-
     async set(socketId: string) {
         let server = this.findBySocketId(socketId);
         if (server) {
-            server.current = server.users.length;
             await this.repo.save(server);
         }
     }
@@ -58,8 +60,7 @@ export class PresenceService implements OnApplicationBootstrap {
             server.status  = 'offline';
             server.current = 0;
             await this.repo.save(server);
-            await this.userRepo.delete({world: server});
-            server.users = [];
+            await this.userRepo.delete({world: server.name});
         }
     }
 
@@ -67,13 +68,8 @@ export class PresenceService implements OnApplicationBootstrap {
         await this.repo.clear();
     }
 
-    async getServers() {
-        return await from(this.servers)
-            .pipe(map(server => {
-                let clone = Object.assign({}, server);
-                delete clone.users;
-                return clone;
-            }), toArray()).toPromise();
+    getServers() {
+        return this.servers;
     }
 
     async onApplicationBootstrap() {
@@ -85,7 +81,7 @@ export class PresenceService implements OnApplicationBootstrap {
                   .update(RegisteredWorld, {status: 'offline'})
                   .where('status = :status', {status: 'online'})
                   .execute();
-        this.servers = await this.repo.find();
+        await this.loadServers();
     }
 
     getHost(host: string) {
@@ -98,27 +94,27 @@ export class PresenceService implements OnApplicationBootstrap {
     async addUser(user: { accountId: number, world: string }) {
         let registeredShard = this.servers.filter(world => world.name === user.world)[0] || null;
         if (registeredShard) {
-            if (!registeredShard.users) {
-                registeredShard.users = [];
-            }
-            let connected = new ConnectedUser(user.accountId, registeredShard);
-            registeredShard.users.push(connected);
+            let connected = new ConnectedUser(user.accountId, registeredShard.name);
             await this.userRepo.save(connected, {reload: true});
-            registeredShard.current = registeredShard.users.length;
+            let count               = await this.getConnectedUserCount(registeredShard.name);
+            registeredShard.current = count[0].count;
+            registeredShard.full    = registeredShard.current >= registeredShard.capacity;
             await this.repo.save(registeredShard);
 
         }
     }
 
+    private async getConnectedUserCount(name: string) {
+        return await this.userRepo.query('select count(1) count from presence.connected_user where world = ?', [name]);
+    }
+
     async removeUser(user: { accountId: number, world: string }) {
         let registeredShard = this.servers.filter(world => world.name === user.world)[0] || null;
         if (registeredShard) {
-            if (!registeredShard.users) {
-                registeredShard.users = [];
-            }
-            await this.userRepo.delete({world: registeredShard, accountId: user.accountId});
-            registeredShard.users   = registeredShard.users.filter(conn => conn.accountId !== user.accountId);
-            registeredShard.current = registeredShard.users.length;
+            await this.userRepo.delete({world: registeredShard.name, accountId: user.accountId});
+            let count               = await this.getConnectedUserCount(registeredShard.name);
+            registeredShard.current = count[0].count;
+            registeredShard.full    = registeredShard.current >= registeredShard.capacity;
             await this.repo.save(registeredShard);
         }
     }

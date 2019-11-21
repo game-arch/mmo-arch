@@ -4,6 +4,7 @@ import {Account}                                              from "./entities/a
 import {Repository}                                           from "typeorm";
 import {RpcException}                                         from "@nestjs/microservices";
 import {JwtService}                                           from "@nestjs/jwt";
+import {SignOptions}                                          from "jsonwebtoken";
 
 @Injectable()
 export class AccountService {
@@ -29,7 +30,7 @@ export class AccountService {
         return this.jwt.sign({
             username: email,
             sub     : account.id
-        });
+        } as SignOptions);
     }
 
     async login(email: string, password: string) {
@@ -40,10 +41,10 @@ export class AccountService {
         return this.jwt.sign({
             username: email,
             sub     : account.id
-        });
+        } as SignOptions);
     }
 
-    async getAccountByToken(token: string, ignoreExpiration:boolean = false) {
+    async getAccountByToken(token: string, ignoreExpiration: boolean = false) {
         let data   = this.jwt.verify(token, {ignoreExpiration});
         let exists = await this.repo.findOne(parseInt(data.sub));
         if (!exists) {

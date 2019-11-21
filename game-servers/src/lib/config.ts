@@ -31,7 +31,7 @@ export const config = {
         },
         world   : {
             host: process.env.WORLD_HOST || 'localhost',
-            port: (parseInt(process.env.WORLD_PORT || ('' + PORTS.WORLD)) + parseInt(process.env.NODE_APP_INSTANCE)) + ''
+            port: (parseInt(process.env.WORLD_PORT || ('' + PORTS.WORLD)))
         },
         presence: {
             host: process.env.PRESENCE_HOST || 'localhost',

@@ -5,7 +5,12 @@
             {{server.status === 'online' ? 'wifi' : 'wifi_off'}}
         </mat-icon>
         <div matLine [style.min-width.px]="200" [style.padding-right.px]="16"
-             [style.font-weight]="manager.isConnected(server.name) ? 'bold' : 'inherited'">{{server.name}}</div>
-        <div style="white-space:nowrap;" [style.color]="server.current >= server.capacity ? '#aaff00' : ''">{{server.current}} / {{server.capacity}}</div>
+             [style.font-weight]="manager.isConnected(server.name) ? 'bold' : 'inherited'">
+            {{server.name}}
+            <ng-container *ngIf="server.index > 1">({{server.index}})</ng-container>
+        </div>
+        <div style="white-space:nowrap;" [style.color]="server.current >= server.capacity ? '#aaff00' : ''">
+            {{server.current}} / {{server.capacity}}
+        </div>
     </a>
 </mat-nav-list>
