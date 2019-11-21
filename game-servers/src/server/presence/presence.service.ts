@@ -23,9 +23,9 @@ export class PresenceService implements OnApplicationBootstrap {
         if (name && name !== '') {
             let server = await this.repo.findOne({where: {host, name, port, instanceId: instanceId + 1}});
             if (!server) {
-                let count   = await this.repo.query('select count(*) count from presence.registered_world where name = ? group by host, port', [host, name, port]);
+                let count   = await this.repo.query('select distinct host, port, name from presence.registered_world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
                 let world   = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, socketId, name, 100, 0));
-                world.index = parseInt(count[0].count) + 1;
+                world.index = count.length + 1;
                 await this.repo.save(world);
                 await this.loadServers();
                 return;
@@ -40,7 +40,10 @@ export class PresenceService implements OnApplicationBootstrap {
     }
 
     private async loadServers() {
-        this.servers = await this.repo.find({where: {index: 1}, order: {full: 1, name: 1, index: 1}});
+        this.servers = await this.repo.createQueryBuilder('world')
+                                 .groupBy('world.name, world.index')
+                                 .orderBy('world.status', 'DESC')
+                                 .getMany();
     }
 
     private findBySocketId(socketId: string) {
