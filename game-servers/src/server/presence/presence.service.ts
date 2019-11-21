@@ -95,14 +95,14 @@ export class PresenceService implements OnApplicationBootstrap {
     }
 
     async addUser(user: { accountId: number, world: string }) {
-        let registeredShard = this.servers.filter(world => world.name === user.world)[0] || null;
-        if (registeredShard) {
-            let connected = new ConnectedUser(user.accountId, registeredShard.name);
+        let registeredWorld = this.servers.filter(world => world.name === user.world)[0] || null;
+        if (registeredWorld) {
+            let connected = new ConnectedUser(user.accountId, registeredWorld.name);
             await this.userRepo.save(connected, {reload: true});
-            let count               = await this.getConnectedUserCount(registeredShard.name);
-            registeredShard.current = count[0].count;
-            registeredShard.full    = registeredShard.current >= registeredShard.capacity;
-            await this.repo.save(registeredShard);
+            let count               = await this.getConnectedUserCount(registeredWorld.name);
+            registeredWorld.current = count[0].count;
+            registeredWorld.full    = registeredWorld.current >= registeredWorld.capacity;
+            await this.repo.save(registeredWorld);
 
         }
     }
@@ -112,13 +112,13 @@ export class PresenceService implements OnApplicationBootstrap {
     }
 
     async removeUser(user: { accountId: number, world: string }) {
-        let registeredShard = this.servers.filter(world => world.name === user.world)[0] || null;
-        if (registeredShard) {
-            await this.userRepo.delete({world: registeredShard.name, accountId: user.accountId});
-            let count               = await this.getConnectedUserCount(registeredShard.name);
-            registeredShard.current = count[0].count;
-            registeredShard.full    = registeredShard.current >= registeredShard.capacity;
-            await this.repo.save(registeredShard);
+        let registeredWorld = this.servers.filter(world => world.name === user.world)[0] || null;
+        if (registeredWorld) {
+            await this.userRepo.delete({world: registeredWorld.name, accountId: user.accountId});
+            let count               = await this.getConnectedUserCount(registeredWorld.name);
+            registeredWorld.current = count[0].count;
+            registeredWorld.full    = registeredWorld.current >= registeredWorld.capacity;
+            await this.repo.save(registeredWorld);
         }
     }
 
