@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ConnectionManager} from "../../../connection/src/lib/connection-manager";
-import {GameCharacter}     from "../../../../../game-servers/lib/entities/game-character";
+import {Component, OnInit}      from '@angular/core';
+import {ConnectionManager}      from "../../../connection/src/lib/connection-manager";
+import {GameCharacter}          from "../../../../../game-servers/lib/entities/game-character";
+import {MatDialog}              from "@angular/material/dialog";
+import {CharacterFormComponent} from "./character-form.component";
 
 @Component({
     selector   : 'character-selection',
@@ -11,7 +13,10 @@ export class CharacterSelectionComponent implements OnInit {
 
     selected: GameCharacter = null;
 
-    constructor(private connection: ConnectionManager) {
+    constructor(
+        private connection: ConnectionManager,
+        private dialog: MatDialog
+    ) {
     }
 
     ngOnInit() {
@@ -21,5 +26,9 @@ export class CharacterSelectionComponent implements OnInit {
         if (this.connection.world) {
             this.connection.disconnect(this.connection.world.world.name);
         }
+    }
+
+    create() {
+        this.dialog.open(CharacterFormComponent);
     }
 }

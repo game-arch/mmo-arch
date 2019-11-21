@@ -1,15 +1,16 @@
 import {
     OnGatewayConnection,
     OnGatewayDisconnect,
-    OnGatewayInit,
+    OnGatewayInit, SubscribeMessage,
     WebSocketGateway,
     WebSocketServer
-}                       from "@nestjs/websockets";
-import {Server, Socket} from "socket.io";
-import * as io          from "socket.io-client";
-import {config}         from "../../lib/config";
-import {WorldService}   from "./world.service";
-import {Events}         from "../../../lib/constants/events";
+}                        from "@nestjs/websockets";
+import {Server, Socket}  from "socket.io";
+import * as io           from "socket.io-client";
+import {config}          from "../../lib/config";
+import {WorldService}    from "./world.service";
+import {Events}          from "../../../lib/constants/events";
+import {CharacterEvents} from "../../microservice/character/character.events";
 
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
@@ -47,6 +48,21 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         } catch (e) {
             client.emit("connection-error", e.message);
             client.disconnect(true);
+        }
+    }
+
+    @SubscribeMessage(CharacterEvents.CREATE)
+    async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
+        try {
+            let character = await this.service.createCharacter(client, data.name, data.gender);
+            if (character) {
+                client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(client));
+                client.emit(Events.CHARACTER_CREATED, character);
+                return;
+            }
+            client.emit(Events.CHARACTER_NOT_CREATED);
+        } catch (e) {
+            client.emit(Events.CHARACTER_NOT_CREATED, e.response);
         }
     }
 

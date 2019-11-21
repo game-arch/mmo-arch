@@ -1,7 +1,8 @@
-import {Column, Entity, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {GameCharacter}                                    from "../../../../lib/entities/game-character";
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {GameCharacter}                                  from "../../../../lib/entities/game-character";
 
 @Entity()
+@Unique('name', ['name'])
 export class Character implements GameCharacter {
 
     @PrimaryGeneratedColumn()

@@ -5,8 +5,9 @@ import {User}                  from "./user";
 import {BehaviorSubject, from} from "rxjs";
 import {filter, map, toArray}  from "rxjs/operators";
 import {Repository}            from "typeorm";
-import {Character}             from "./entities/character";
+import {Character}             from "../../microservice/character/entities/character";
 import {InjectRepository}      from "@nestjs/typeorm";
+import {CharacterClient}       from "../../microservice/character/client/character.client";
 
 @Injectable()
 export class WorldService {
@@ -19,9 +20,8 @@ export class WorldService {
     }
 
     constructor(
-        @InjectRepository(Character)
-        private repo: Repository<Character>,
-        private account: AccountClient
+        private account: AccountClient,
+        private character: CharacterClient
     ) {
     }
 
@@ -41,9 +41,17 @@ export class WorldService {
     async getCharacters(socket: Socket) {
         let account = await this.getUser(socket);
         if (account) {
-            return await this.repo.find({accountId: account.id});
+            return await this.character.getAll(account.id);
         }
         return [];
+    }
+
+    async createCharacter(socket: Socket, name: string, gender: 'male' | 'female') {
+        let account = await this.getUser(socket);
+        if (account) {
+            return await this.character.create(account.id, name, gender);
+        }
+        return null;
     }
 }
 
