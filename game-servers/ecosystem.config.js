@@ -1,11 +1,6 @@
 module.exports = {
     apps: [
         {
-            name: '_redis',
-            script: 'redis-server',
-            watch: false
-        },
-        {
             name: '_builder',
             script: 'npm run build -- --watch',
             watch: false
