@@ -4,12 +4,16 @@ import {AccountClient}                   from "../../microservice/account/client
 import {Request, Response}               from "express";
 import {EventPattern, MessagePattern}    from "@nestjs/microservices";
 import {AccountEvents}                   from "../../microservice/account/account.events";
+import {Events}                          from "../../../lib/constants/events";
+import {GameWorld}                       from "../../../lib/entities/game-world";
+import {LobbyGateway}                    from "./lobby.gateway";
 
 @Controller()
 export class LobbyController {
     constructor(
         private  appService: LobbyService,
-        private account: AccountClient
+        private account: AccountClient,
+        private gateway: LobbyGateway
     ) {
     }
 
@@ -42,8 +46,9 @@ export class LobbyController {
         response.status(500).send(e.message || 'Internal Server Error');
     }
 
-    @EventPattern(AccountEvents.UPDATED)
-    onAccountChange(data: any) {
-        console.log('Account Updated', data);
+    @EventPattern(Events.SERVER_LIST)
+    serverList(servers: GameWorld[]) {
+        this.gateway.servers = servers;
+        this.gateway.server.emit(Events.SERVER_LIST, servers);
     }
 }

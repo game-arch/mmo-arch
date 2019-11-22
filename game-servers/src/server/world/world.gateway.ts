@@ -6,16 +6,12 @@ import {
     WebSocketServer
 }                          from "@nestjs/websockets";
 import {Server, Socket}    from "socket.io";
-import * as io             from "socket.io-client";
-import {config}            from "../../lib/config";
 import {WorldService}      from "./world.service";
 import {Events}            from "../../../lib/constants/events";
 import {CharacterEvents}   from "../../microservice/character/character.events";
-import {PresenceClient}    from "../presence/presence.client";
 import {ConflictException} from "@nestjs/common";
-import {from}              from "rxjs";
-import {first}             from "rxjs/operators";
-import {WorldPresence}     from "./world.presence";
+import {PresenceClient}    from "../../microservice/presence/client/presence.client";
+import {config}            from "../../lib/config";
 
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
@@ -30,23 +26,19 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     accounts: number[] = [];
 
-    constructor(private service: WorldService, private presence: WorldPresence) {
+    serverId = null;
+
+    constructor(private service: WorldService, private presence: PresenceClient) {
 
     }
 
-    afterInit(server: Server): any {
-        this.presence.socket.on('connect', async () => {
-            await this.presence.serverList$.pipe(first()).toPromise();
-            from(this.accounts)
-                .subscribe(id => {
-                    this.presence.socket.emit(Events.USER_CONNECTED, {
-                        accountId: id,
-                        world    : this.name
-                    });
-                })
-        });
-        this.presence.socket.on(Events.CHARACTER_JOINED, name => this.server.emit(Events.CHARACTER_JOINED, name));
-        this.presence.socket.on(Events.CHARACTER_LEFT, name => this.server.emit(Events.CHARACTER_LEFT, name));
+    async afterInit(server: Server) {
+        this.serverId = await this.presence.register(
+            config.servers.world.host,
+            config.servers.world.port,
+            process.env.WORLD_NAME || 'Maiden',
+            parseInt(process.env.NODE_APP_INSTANCE)
+        );
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
@@ -59,10 +51,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
                 throw new ConflictException("User already logged in!");
             }
             this.accounts.push(user.id);
-            this.presence.socket.emit(Events.USER_CONNECTED, {
-                accountId: user.id,
-                world    : this.name
-            });
+            await this.presence.userOnline(this.serverId, user.id);
             client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(client));
         } catch (e) {
             client.emit("connection-error", e.message);
@@ -85,34 +74,35 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         }
     }
 
-    @SubscribeMessage(Events.CHARACTER_JOINED)
+    @SubscribeMessage(Events.CHARACTER_ONLINE)
     async characterJoined(client: Socket, character: { name: string }) {
-        let user = await this.service.getUser(client);
-        this.presence.socket.emit(Events.CHARACTER_JOINED, {
-            accountId: user.id,
-            name     : character.name
-        });
-        this.presence.socket.once('disconnect', () => client.emit(Events.CHARACTER_LEFT, character.name));
+        try {
+            let user = await this.service.getUser(client);
+            await this.presence.characterOnline(user.id, character.name);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
-    @SubscribeMessage(Events.CHARACTER_LEFT)
-    async characterLeft(client: Socket, character: { name: string }) {
-        let user = await this.service.getUser(client);
-        this.presence.socket.emit(Events.CHARACTER_LEFT, {
-            accountId: user.id,
-            name     : character.name
-        })
-
+    @SubscribeMessage(Events.CHARACTER_OFFLINE)
+    async characterLeft(client: Socket) {
+        try {
+            let user = await this.service.getUser(client);
+            await this.presence.characterOffline(user.id);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     async handleDisconnect(client: Socket) {
-        let user = await this.service.getUser(client);
-        if (this.accounts.indexOf(user.id) !== -1) {
-            this.accounts.splice(this.accounts.indexOf(user.id), 1);
+        try {
+            let user = await this.service.getUser(client);
+            if (this.accounts.indexOf(user.id) !== -1) {
+                this.accounts.splice(this.accounts.indexOf(user.id), 1);
+            }
+            await this.presence.userOffline(this.serverId, user.id);
+        } catch (e) {
+            console.error(e);
         }
-        this.presence.socket.emit(Events.USER_DISCONNECTED, {
-            accountId: user.id,
-            world    : this.name
-        });
     }
 }

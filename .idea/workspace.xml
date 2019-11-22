@@ -26,7 +26,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/game-servers/src/microservice/character/client" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/game-servers/src/microservice/presence" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -34,23 +34,23 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/game-clients/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/character" />
-      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/presence" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/character/client" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice" />
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/account" />
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/account/client" />
+      <recent name="$PROJECT_DIR$/game-servers/src" />
+      <recent name="C:\Users\jwhen\game-architecture\game-libs" />
     </key>
     <key name="es6.move.members.recent.items">
       <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice-client.module.ts" />
       <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/character/client" />
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/game-servers/src/microservice" />
-      <recent name="$PROJECT_DIR$/game-servers/src" />
-      <recent name="C:\Users\jwhen\game-architecture\game-libs" />
-      <recent name="C:\Users\jwhen\game-architecture\game-clients\projects\game\src\assets\backgrounds" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/character" />
+      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/account" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/account/client" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -95,7 +95,7 @@
       <workItem from="1574092432922" duration="14916000" />
       <workItem from="1574121741480" duration="9448000" />
       <workItem from="1574302940233" duration="14882000" />
-      <workItem from="1574359066729" duration="11427000" />
+      <workItem from="1574359066729" duration="17027000" />
     </task>
     <servers />
   </component>

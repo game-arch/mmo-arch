@@ -1,14 +1,14 @@
-import {Module}              from '@nestjs/common';
-import {LobbyController}     from './lobby.controller';
-import {LobbyService}        from './lobby.service';
-import {DATABASE_MODULE}     from "../../lib/database.module";
-import {TypeOrmModule}       from "@nestjs/typeorm";
-import {LobbyGateway}        from "./lobby.gateway";
-import {AccountClientModule} from "../../microservice/account/client/account-client.module";
+import {Module}               from '@nestjs/common';
+import {LobbyController}      from './lobby.controller';
+import {LobbyService}         from './lobby.service';
+import {LobbyGateway}         from "./lobby.gateway";
+import {AccountClientModule}  from "../../microservice/account/client/account-client.module";
+import {PresenceClientModule} from "../../microservice/presence/client/presence-client.module";
 
 @Module({
     imports    : [
-        AccountClientModule
+        AccountClientModule,
+        PresenceClientModule
     ],
     controllers: [LobbyController],
     providers  : [

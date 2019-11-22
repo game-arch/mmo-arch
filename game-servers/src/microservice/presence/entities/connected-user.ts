@@ -4,14 +4,14 @@ import {RegisteredWorld}                                                        
 @Entity()
 @Unique('user', ['accountId'])
 @Unique('character', ['characterName'])
-@Index('serverSocketId', ['serverSocketId'])
+@Index('serverId', ['serverId'])
 export class ConnectedUser {
     @PrimaryGeneratedColumn()
     id: number;
     @Column()
     world: string;
     @Column()
-    serverSocketId: string;
+    serverId: number;
 
     @Column()
     accountId: number;
@@ -19,9 +19,9 @@ export class ConnectedUser {
     @Column({default: ''})
     characterName: string;
 
-    constructor(accountId: number, world: string, serverSocketId: string) {
+    constructor(accountId: number, world: string, serverId: number) {
         this.accountId      = accountId;
         this.world          = world;
-        this.serverSocketId = serverSocketId;
+        this.serverId = serverId;
     }
 }

@@ -1,13 +1,9 @@
-import {Injectable}            from '@nestjs/common';
-import {AccountClient}         from "../../microservice/account/client/account.client";
-import {Socket}                from "socket.io";
-import {User}                  from "./user";
-import {BehaviorSubject, from} from "rxjs";
-import {filter, map, toArray}  from "rxjs/operators";
-import {Repository}            from "typeorm";
-import {Character}             from "../../microservice/character/entities/character";
-import {InjectRepository}      from "@nestjs/typeorm";
-import {CharacterClient}       from "../../microservice/character/client/character.client";
+import {Injectable}      from '@nestjs/common';
+import {AccountClient}   from "../../microservice/account/client/account.client";
+import {Socket}          from "socket.io";
+import {User}            from "./user";
+import {BehaviorSubject} from "rxjs";
+import {CharacterClient} from "../../microservice/character/client/character.client";
 
 @Injectable()
 export class WorldService {

@@ -35,7 +35,7 @@ export class CharacterSelectionComponent implements OnInit {
 
     join() {
         if (this.connection.world) {
-            this.connection.world.socket.emit(Events.CHARACTER_JOINED, {name: this.selected.name});
+            this.connection.world.socket.emit(Events.CHARACTER_ONLINE, {name: this.selected.name});
         }
     }
 }

@@ -1,34 +1,35 @@
 import {
-    OnGatewayConnection,
+    OnGatewayConnection, OnGatewayDisconnect,
     OnGatewayInit,
     WebSocketGateway,
     WebSocketServer
-}                       from "@nestjs/websockets";
-import {Server, Socket} from "socket.io";
-import {Events}         from "../../../lib/constants/events";
-import {LobbyService}   from "./lobby.service";
-import {GameWorld}      from "../../../lib/entities/game-world";
-import {PresenceClient} from "../presence/presence.client";
+}                                 from "@nestjs/websockets";
+import {Server, Socket}           from "socket.io";
+import {Events}                   from "../../../lib/constants/events";
+import {LobbyService}             from "./lobby.service";
+import {GameWorld}                from "../../../lib/entities/game-world";
+import {PresenceClient}           from "../../microservice/presence/client/presence.client";
+import {interval, merge, Subject} from "rxjs";
+import {EventPattern}             from "@nestjs/microservices";
 
 @WebSocketGateway()
-export class LobbyGateway implements OnGatewayConnection, OnGatewayInit {
+export class LobbyGateway implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
     @WebSocketServer()
     server: Server;
     socket: Socket;
 
     servers: GameWorld[] = [];
 
-    presence: PresenceClient;
+    pull = new Subject();
 
-
-    constructor(private service: LobbyService) {
+    constructor(private service: LobbyService, private presence: PresenceClient) {
 
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
         try {
             await this.service.getAccount(client);
-            this.updateServerList(this.servers);
+            client.emit(Events.SERVER_LIST, this.servers);
         } catch (e) {
             client.emit('connect-error', 'Not Authorized');
             client.disconnect(true);
@@ -36,13 +37,18 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayInit {
     }
 
 
-    afterInit(server: Server): any {
-        this.presence = new PresenceClient('?track=false');
-        this.presence.serverList$.subscribe(data => this.updateServerList(data));
+    async afterInit(server: Server) {
+        this.servers = await this.presence.getServers();
     }
 
-    private updateServerList(data) {
-        this.servers = data;
-        this.server.emit(Events.SERVER_LIST, data);
+    handleDisconnect(client: Socket) {
+        this.pull.next();
+    }
+
+    @EventPattern(Events.SERVER_LIST)
+    serverList(servers: GameWorld[]) {
+        console.log('got event!');
+        this.servers = servers;
+        this.server.emit(Events.SERVER_LIST, servers);
     }
 }

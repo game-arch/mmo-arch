@@ -1,19 +1,6 @@
 module.exports = {
     apps: [
         {
-            name: 'server-presence',
-            script: 'dist/src/main.js',
-            watch: ["dist/src/server/presence", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
-            // Delay between restart
-            watch_delay: 1000,
-            watch_options: {
-                "followSymlinks": false
-            },
-            env: {
-                SERVER_TYPE: 'server/presence'
-            }
-        },
-        {
             name: 'server-world',
             script: 'dist/src/main.js',
             instances: 2,

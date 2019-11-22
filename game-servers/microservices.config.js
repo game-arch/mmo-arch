@@ -1,6 +1,19 @@
 module.exports = {
     apps: [
         {
+            name: 'micro-presence',
+            script: 'dist/src/main.js',
+            watch: ["dist/src/microservice/presence", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'microservice/presence'
+            }
+        },
+        {
             name: 'micro-ai',
             script: 'dist/src/main.js',
             watch: ["dist/src/microservice/ai", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
