@@ -1,4 +1,4 @@
-import {Module}               from '@nestjs/common';
+import {Logger, Module}       from '@nestjs/common';
 import {LobbyController}      from './lobby.controller';
 import {LobbyService}         from './lobby.service';
 import {LobbyGateway}         from "./lobby.gateway";
@@ -13,7 +13,8 @@ import {PresenceClientModule} from "../../microservice/presence/client/presence-
     controllers: [LobbyController],
     providers  : [
         LobbyService,
-        LobbyGateway
+        LobbyGateway,
+        Logger
     ]
 })
 export class LobbyModule {

@@ -1,4 +1,4 @@
-import {Module}                from '@nestjs/common';
+import {Logger, Module}        from '@nestjs/common';
 import {WorldController}       from './world.controller';
 import {WorldService}          from './world.service';
 import {WorldGateway}          from "./world.gateway";
@@ -13,7 +13,7 @@ import {PresenceClientModule}  from "../../microservice/presence/client/presence
         PresenceClientModule
     ],
     controllers: [WorldController],
-    providers  : [WorldService, WorldGateway],
+    providers  : [WorldService, WorldGateway, Logger],
 })
 export class WorldModule {
 }

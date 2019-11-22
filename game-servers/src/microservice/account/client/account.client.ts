@@ -22,10 +22,6 @@ export class AccountClient {
         this.client.emit(AccountEvents.UPDATED, {id, email});
     }
 
-    async verifyAccount(token: string) {
-        return await this.client.send(AccountEvents.VERIFY, token).pipe(first()).toPromise();
-    }
-
     async getAccount(token: string, ignoreExpiration: boolean) {
         return await this.client.send(AccountEvents.GET, {token, ignoreExpiration}).pipe(first()).toPromise();
     }

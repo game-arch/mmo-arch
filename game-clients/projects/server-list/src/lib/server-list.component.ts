@@ -4,7 +4,7 @@ import {EMPTY, fromEvent, Observable}    from "rxjs";
 import {ConnectionManager}               from "../../../connection/src/lib/connection-manager";
 import {GameWorld}                       from "../../../../../game-servers/lib/entities/game-world";
 import {Events}                          from "../../../../../game-servers/lib/constants/events";
-import {map, takeUntil}                  from "rxjs/operators";
+import {map, takeUntil, tap}             from "rxjs/operators";
 import {Store}                           from "@ngxs/store";
 import {SetToken}                        from "../../../authentication/src/lib/state/auth.actions";
 
@@ -27,13 +27,15 @@ export class ServerListComponent implements OnInit {
 
     ngOnInit() {
         let connection = this.manager.connectToLobby();
-        this.servers$  = fromEvent(connection.socket, Events.SERVER_LIST);
+        this.servers$  = fromEvent<GameWorld[]>(connection.socket, Events.SERVER_LIST).pipe(tap(list => {
+            console.log("got server list", list);
+        }));
     }
 
     onConnect(world: GameWorld) {
         let connection = this.manager.connectToWorld(world);
         console.log(connection);
-        fromEvent(connection.socket, 'connection-error', {once: true})
+        fromEvent(connection.socket, 'connect-error', {once: true})
             .subscribe((err) => {
                 console.error(err);
                 this.store.dispatch(new SetToken());

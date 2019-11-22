@@ -32,11 +32,18 @@ export class PresenceClient {
     }
 
     async getServers() {
-        console.log('get servers');
         return await this.client.send(Events.SERVER_LIST, {}).pipe(first()).toPromise();
     }
 
     sendServers(servers: GameWorld[]) {
         this.client.emit(Events.SERVER_LIST, servers);
+    }
+
+    sendCharacterStatus(serverId: number, worldName: string, accountId: number, name: string, status: 'online' | 'offline') {
+        if (status === 'online') {
+            this.client.emit(Events.CHARACTER_ONLINE + '.' + worldName, {serverId, accountId, name});
+            return;
+        }
+        this.client.emit(Events.CHARACTER_OFFLINE + '.' + worldName, {serverId, accountId, name});
     }
 }

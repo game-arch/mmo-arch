@@ -77,7 +77,7 @@ export class ConnectionManager {
     disconnect(name: string) {
         let server = this.get(name);
         if (server.socket.connected) {
-            server.socket.disconnect();
+            server.socket.close();
         }
         if (this.world.world.name === server.world.name) {
             this._world.next(new Connection({name: ''}, null));
@@ -86,7 +86,10 @@ export class ConnectionManager {
 
     openConnection(name: string, server: { name: string }, location: string) {
         let token              = this.store.selectSnapshot(AuthState).token;
-        this.connections[name] = new Connection(server, io.connect(location + '?token=' + token, {transports: ['websocket']}));
+        this.connections[name] = new Connection(server, io.connect(location + '?token=' + token, {
+            transports: ['websocket'],
+            reconnection: true
+        }));
     }
 
 }

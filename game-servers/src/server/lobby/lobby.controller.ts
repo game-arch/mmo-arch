@@ -2,8 +2,7 @@ import {Controller, Get, Post, Req, Res} from '@nestjs/common';
 import {LobbyService}                    from './lobby.service';
 import {AccountClient}                   from "../../microservice/account/client/account.client";
 import {Request, Response}               from "express";
-import {EventPattern, MessagePattern}    from "@nestjs/microservices";
-import {AccountEvents}                   from "../../microservice/account/account.events";
+import {EventPattern}                    from "@nestjs/microservices";
 import {Events}                          from "../../../lib/constants/events";
 import {GameWorld}                       from "../../../lib/entities/game-world";
 import {LobbyGateway}                    from "./lobby.gateway";
@@ -49,6 +48,7 @@ export class LobbyController {
     @EventPattern(Events.SERVER_LIST)
     serverList(servers: GameWorld[]) {
         this.gateway.servers = servers;
+        console.log(servers);
         this.gateway.server.emit(Events.SERVER_LIST, servers);
     }
 }

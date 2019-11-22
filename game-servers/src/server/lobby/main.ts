@@ -1,8 +1,6 @@
 import {NestFactory}    from '@nestjs/core';
 import {LobbyModule}    from './lobby.module';
-import {RedisIoAdapter} from "../../lib/redis-io.adapter";
 import {PORTS}          from "../../../lib/constants/ports";
-import {createDatabase} from "../../lib/database.module";
 import {config}         from "../../lib/config";
 
 async function bootstrap() {

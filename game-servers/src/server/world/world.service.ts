@@ -34,20 +34,12 @@ export class WorldService {
         return await this.account.getAccount(socket.handshake.query.token, true);
     }
 
-    async getCharacters(socket: Socket) {
-        let account = await this.getUser(socket);
-        if (account) {
-            return await this.character.getAll(account.id);
-        }
-        return [];
+    async getCharacters(accountId: number) {
+        return await this.character.getAll(accountId);
     }
 
-    async createCharacter(socket: Socket, name: string, gender: 'male' | 'female') {
-        let account = await this.getUser(socket);
-        if (account) {
-            return await this.character.create(account.id, name, gender);
-        }
-        return null;
+    async createCharacter(accountId: number, name: string, gender: 'male' | 'female') {
+        return await this.character.create(accountId, name, gender);
     }
 }
 

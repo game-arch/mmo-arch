@@ -1,6 +1,7 @@
 import {Injectable, UnauthorizedException} from '@nestjs/common';
 import {Socket}                            from "socket.io";
 import {AccountClient}                     from "../../microservice/account/client/account.client";
+import {PresenceClient}                    from "../../microservice/presence/client/presence.client";
 
 @Injectable()
 export class LobbyService {
@@ -8,7 +9,10 @@ export class LobbyService {
     accountsBySocketId: { [socketId: string]: number }  = {};
     socketsByAccountId: { [accountId: number]: Socket } = {};
 
-    constructor(private account: AccountClient) {
+    constructor(
+        private account: AccountClient,
+        private presence: PresenceClient
+    ) {
 
     }
 
@@ -18,5 +22,9 @@ export class LobbyService {
             throw new UnauthorizedException();
         }
         return account;
+    }
+
+    async getServers() {
+        return await this.presence.getServers();
     }
 }

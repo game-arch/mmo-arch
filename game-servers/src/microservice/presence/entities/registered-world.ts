@@ -3,7 +3,7 @@ import {GameWorld}                                      from "../../../../lib/en
 
 @Unique('instance', ['name', 'host', 'port', 'instanceId'])
 @Entity()
-export class RegisteredWorld implements GameWorld {
+export class RegisteredWorld {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -19,20 +19,17 @@ export class RegisteredWorld implements GameWorld {
     name: string;
     @Column('int')
     capacity: number;
-    @Column('int')
-    current: number;
     @Column({nullable: false})
     status: 'online' | 'offline' = 'online';
     @Column({default: false})
     full: boolean;
 
-    constructor(host: string, port: number, instanceId: number, name: string, capacity: number, current: number) {
+    constructor(host: string, port: number, instanceId: number, name: string, capacity: number) {
         this.host       = host;
         this.port       = port;
         this.instanceId = instanceId;
         this.name       = name;
         this.capacity   = capacity;
-        this.current    = current;
 
     }
 }

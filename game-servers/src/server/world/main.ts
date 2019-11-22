@@ -6,11 +6,13 @@ import {config}         from "../../lib/config";
 async function bootstrap() {
     await createDatabase('world');
     const app = await NestFactory.create(WorldModule);
+    app.connectMicroservice(config.microservice);
     app.enableCors({
         origin     : true,
         credentials: true
     });
 
+    await app.startAllMicroservices();
     await app.listen(config.servers.world.port);
 }
 

@@ -1,11 +1,13 @@
 import {HttpModule, Logger, Module} from '@nestjs/common';
-import {PresenceService}            from './presence.service';
+import {UserPresence}               from './user.presence';
 import {PresenceController}         from "./presence.controller";
 import {DATABASE_MODULE}            from "../../lib/database.module";
 import {RegisteredWorld}            from "./entities/registered-world";
 import {TypeOrmModule}              from "@nestjs/typeorm";
 import {ConnectedUser}              from "./entities/connected-user";
 import {PresenceClientModule}       from "./client/presence-client.module";
+import {ServerPresence}             from "./server.presence";
+import {CharacterPresence}          from "./character.presence";
 
 @Module({
     imports    : [
@@ -19,7 +21,7 @@ import {PresenceClientModule}       from "./client/presence-client.module";
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],
-    providers  : [PresenceService, Logger],
+    providers  : [UserPresence, Logger, ServerPresence, CharacterPresence],
     controllers: [PresenceController]
 })
 export class PresenceModule {
