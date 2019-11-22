@@ -37,7 +37,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayInit {
 
 
     afterInit(server: Server): any {
-        this.presence = new PresenceClient();
+        this.presence = new PresenceClient('?track=false');
         this.presence.serverList$.subscribe(data => this.updateServerList(data));
     }
 

@@ -1,14 +1,15 @@
-import {Injectable, OnApplicationBootstrap} from '@nestjs/common';
-import {RegisteredWorld}                    from "./entities/registered-world";
-import {Repository}                         from "typeorm";
-import {InjectRepository}                   from "@nestjs/typeorm";
-import {ConnectedUser}                      from "./entities/connected-user";
-import {from, Subject}                      from "rxjs";
-import {map, toArray}                       from "rxjs/operators";
+import {Injectable, Logger, OnApplicationBootstrap} from '@nestjs/common';
+import {RegisteredWorld}                            from "./entities/registered-world";
+import {Repository}                                 from "typeorm";
+import {InjectRepository}                           from "@nestjs/typeorm";
+import {ConnectedUser}                              from "./entities/connected-user";
+import {from, Subject}                              from "rxjs";
+import {map, toArray}                               from "rxjs/operators";
+import {WebSocketServer}                            from "@nestjs/websockets";
+import {Server}                                     from "socket.io";
 
 @Injectable()
 export class PresenceService implements OnApplicationBootstrap {
-
     private servers: RegisteredWorld[] = [];
     sendServers                        = new Subject();
 
@@ -16,27 +17,32 @@ export class PresenceService implements OnApplicationBootstrap {
         @InjectRepository(RegisteredWorld)
         private repo: Repository<RegisteredWorld>,
         @InjectRepository(ConnectedUser)
-        private userRepo: Repository<ConnectedUser>
+        private userRepo: Repository<ConnectedUser>,
+        private logger: Logger
     ) {
     }
 
     async online(socketId: string, host: string, port: number, instanceId: number, name: string) {
-        if (name && name !== '') {
-            let server = await this.repo.findOne({where: {host, name, port, instanceId: instanceId + 1}});
-            if (!server) {
-                let count   = await this.repo.query('select distinct host, port, name from presence.registered_world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
-                let world   = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, socketId, name, 100, 0));
-                world.index = count.length + 1;
-                await this.repo.save(world);
+        try {
+            if (name && name !== '' && host !== '' && Boolean(socketId)) {
+                let server = await this.repo.findOne({where: {host, name, port, instanceId: instanceId + 1}});
+                if (!server) {
+                    let count   = await this.repo.query('select distinct host, port, name from presence.registered_world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
+                    let world   = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, socketId, name, 100, 0));
+                    world.index = count.length + 1;
+                    await this.repo.save(world);
+                    await this.loadServers();
+                    return;
+                }
+                await this.userRepo.delete({serverSocketId: socketId});
+                server.socketId = socketId;
+                server.status   = 'online';
+                server.port     = port;
+                await this.repo.save(server);
                 await this.loadServers();
-                return;
             }
-            server.socketId = socketId;
-            server.status   = 'online';
-            server.port     = port;
-            await this.repo.save(server);
-            await this.userRepo.delete({world: server.name});
-            await this.loadServers();
+        } catch (e) {
+            console.error(e);
         }
     }
 
@@ -61,13 +67,19 @@ export class PresenceService implements OnApplicationBootstrap {
     }
 
     async offline(socketId: string) {
-        let server = await this.findBySocketId(socketId);
-        if (server) {
-            server.status  = 'offline';
-            server.current = 0;
-            await this.repo.save(server);
-            await this.userRepo.delete({world: server.name});
-            await this.loadServers();
+        try {
+            if (Boolean(socketId)) {
+                let server = await this.findBySocketId(socketId);
+                if (server) {
+                    server.status  = 'offline';
+                    server.current = 0;
+                    await this.repo.save(server);
+                    await this.userRepo.delete({serverSocketId: socketId});
+                    await this.loadServers();
+                }
+            }
+        } catch (e) {
+            console.error(e);
         }
     }
 
@@ -98,31 +110,75 @@ export class PresenceService implements OnApplicationBootstrap {
         return host;
     }
 
-    async addUser(user: { accountId: number, world: string }) {
-        let registeredWorld = this.servers.filter(world => world.name === user.world)[0] || null;
-        if (registeredWorld) {
-            let connected = new ConnectedUser(user.accountId, registeredWorld.name);
-            await this.userRepo.save(connected, {reload: true});
-            let count               = await this.getConnectedUserCount(registeredWorld.name);
-            registeredWorld.current = count[0].count;
-            registeredWorld.full    = registeredWorld.current >= registeredWorld.capacity;
-            await this.repo.save(registeredWorld);
-
+    async addUser(socketId: string, user: { accountId: number, world: string }) {
+        try {
+            let registeredWorld = await this.findBySocketId(socketId);
+            if (registeredWorld) {
+                let connected = new ConnectedUser(user.accountId, registeredWorld.name, socketId);
+                let found     = await this.userRepo.findOne({accountId: user.accountId});
+                if (found) {
+                    connected                = found;
+                    connected.world          = registeredWorld.name;
+                    connected.serverSocketId = socketId;
+                    connected.characterName  = '';
+                }
+                await this.userRepo.save(connected);
+                let count               = await this.getConnectedUserCount(socketId);
+                registeredWorld.current = count[0].count;
+                registeredWorld.full    = registeredWorld.current >= registeredWorld.capacity;
+                await this.repo.save(registeredWorld);
+                await this.loadServers();
+            }
+        } catch (e) {
+            console.error(e);
         }
     }
 
-    private async getConnectedUserCount(name: string) {
-        return await this.userRepo.query('select count(1) count from presence.connected_user where world = ?', [name]);
+    private async getConnectedUserCount(socketId: string) {
+        return await this.userRepo.query('select count(1) count from presence.connected_user where serverSocketId = ?', [socketId]);
     }
 
-    async removeUser(user: { accountId: number, world: string }) {
-        let registeredWorld = this.servers.filter(world => world.name === user.world)[0] || null;
-        if (registeredWorld) {
-            await this.userRepo.delete({world: registeredWorld.name, accountId: user.accountId});
-            let count               = await this.getConnectedUserCount(registeredWorld.name);
-            registeredWorld.current = count[0].count;
-            registeredWorld.full    = registeredWorld.current >= registeredWorld.capacity;
-            await this.repo.save(registeredWorld);
+    async removeUser(socketId: string, user: { accountId: number, world: string }) {
+        try {
+            let registeredWorld = await this.findBySocketId(socketId);
+            if (registeredWorld) {
+                await this.characterLeave(user);
+                await this.userRepo.delete({accountId: user.accountId});
+                let count               = await this.getConnectedUserCount(socketId);
+                registeredWorld.current = count[0].count;
+                registeredWorld.full    = registeredWorld.current >= registeredWorld.capacity;
+                await this.repo.save(registeredWorld);
+                await this.loadServers();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async characterJoin(character: { accountId: number, name: string }) {
+        try {
+            let user = await this.userRepo.findOne({where: {accountId: character.accountId}});
+            if (user) {
+                user.characterName = character.name;
+                await this.userRepo.save(user);
+                this.logger.log("The player '" + character.name + "' has signed in.");
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async characterLeave(character: { accountId: number }) {
+        try {
+            let user = await this.userRepo.findOne({where: {accountId: character.accountId}});
+            if (user) {
+                let name           = '' + user.characterName;
+                user.characterName = '';
+                await this.userRepo.save(user);
+                this.logger.log("The player '" + name + "' has signed out.");
+            }
+        } catch (e) {
+            console.error(e);
         }
     }
 

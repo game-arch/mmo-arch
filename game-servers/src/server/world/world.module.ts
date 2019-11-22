@@ -4,6 +4,7 @@ import {WorldService}          from './world.service';
 import {WorldGateway}          from "./world.gateway";
 import {AccountClientModule}   from "../../microservice/account/client/account-client.module";
 import {CharacterClientModule} from "../../microservice/character/client/character-client.module";
+import {WorldPresence}         from "./world.presence";
 
 @Module({
     imports    : [
@@ -11,7 +12,7 @@ import {CharacterClientModule} from "../../microservice/character/client/charact
         CharacterClientModule
     ],
     controllers: [WorldController],
-    providers  : [WorldService, WorldGateway],
+    providers  : [WorldService, WorldGateway, WorldPresence],
 })
 export class WorldModule {
 }

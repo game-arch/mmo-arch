@@ -2,7 +2,7 @@
     <div style="flex:1"></div>
     <div style="display:flex">
         <div style="flex:1"></div>
-        <mat-card>
+        <mat-card style="min-width:600px">
             <mat-card-title>
                 Character Selection
             </mat-card-title>
@@ -22,9 +22,12 @@
                 <button mat-raised-button (click)="create()">
                     Create
                 </button>
-                <div style="flex:1"></div>
                 <button mat-button *ngIf="selected !== null">
                     Delete
+                </button>
+                <div style="flex:1"></div>
+                <button mat-raised-button (click)="join()" *ngIf="selected !== null">
+                    Enter Game
                 </button>
             </mat-card-actions>
         </mat-card>

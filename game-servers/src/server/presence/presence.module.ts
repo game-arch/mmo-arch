@@ -1,4 +1,4 @@
-import {Module}             from '@nestjs/common';
+import {Logger, Module}     from '@nestjs/common';
 import {PresenceController} from './presence.controller';
 import {PresenceService}    from './presence.service';
 import {PresenceGateway}    from "./presence.gateway";
@@ -17,7 +17,7 @@ import {ConnectedUser}      from "./entities/connected-user";
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],
-    providers  : [PresenceGateway, PresenceService],
+    providers  : [PresenceGateway, PresenceService, Logger],
     controllers: [PresenceController],
     exports    : [PresenceGateway]
 })

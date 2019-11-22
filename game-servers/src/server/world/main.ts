@@ -11,7 +11,6 @@ async function bootstrap() {
         credentials: true
     });
 
-    // await app.listen(config.servers.world.port);
     await app.listen(config.servers.world.port);
 }
 

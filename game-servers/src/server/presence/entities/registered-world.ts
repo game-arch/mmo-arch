@@ -8,9 +8,9 @@ export class RegisteredWorld implements GameWorld {
 
     @PrimaryGeneratedColumn()
     id: number;
-    @Column()
+    @Column({default: ''})
     socketId: string;
-    @Column()
+    @Column({default: null})
     instanceId: number;
     @Column({default: 1})
     index: number;

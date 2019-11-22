@@ -33,14 +33,26 @@ export class PresenceGateway implements OnGatewayConnection, OnGatewayDisconnect
 
     @SubscribeMessage(Events.USER_CONNECTED)
     async onUserConnection(client: Socket, data: { accountId: number, world: string }) {
-        await this.service.addUser(data);
+        await this.service.addUser(client.id, data);
         this.server.emit(Events.USER_CONNECTED, data);
     }
 
     @SubscribeMessage(Events.USER_DISCONNECTED)
     async onUserDisconnection(client: Socket, data: { accountId: number, world: string }) {
-        await this.service.removeUser(data);
+        await this.service.removeUser(client.id, data);
         this.server.emit(Events.USER_DISCONNECTED, data);
+    }
+
+    @SubscribeMessage(Events.CHARACTER_JOINED)
+    async onCharacterSelection(client: Socket, character: { accountId: number, name: string }) {
+        await this.service.characterJoin(character);
+        this.server.emit(Events.CHARACTER_JOINED, character.name);
+    }
+
+    @SubscribeMessage(Events.CHARACTER_LEFT)
+    async onCharacterLeave(client: Socket, character: { accountId: number, name: string }) {
+        await this.service.characterLeave(character);
+        this.server.emit(Events.CHARACTER_LEFT, character.name);
     }
 
     async handleDisconnect(client: Socket) {

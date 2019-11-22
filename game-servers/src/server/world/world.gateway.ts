@@ -4,19 +4,23 @@ import {
     OnGatewayInit, SubscribeMessage,
     WebSocketGateway,
     WebSocketServer
-}                        from "@nestjs/websockets";
-import {Server, Socket}  from "socket.io";
-import * as io           from "socket.io-client";
-import {config}          from "../../lib/config";
-import {WorldService}    from "./world.service";
-import {Events}          from "../../../lib/constants/events";
-import {CharacterEvents} from "../../microservice/character/character.events";
+}                          from "@nestjs/websockets";
+import {Server, Socket}    from "socket.io";
+import * as io             from "socket.io-client";
+import {config}            from "../../lib/config";
+import {WorldService}      from "./world.service";
+import {Events}            from "../../../lib/constants/events";
+import {CharacterEvents}   from "../../microservice/character/character.events";
+import {PresenceClient}    from "../presence/presence.client";
+import {ConflictException} from "@nestjs/common";
+import {from}              from "rxjs";
+import {first}             from "rxjs/operators";
+import {WorldPresence}     from "./world.presence";
 
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection {
     @WebSocketServer()
     server: Server;
-    socket: Socket;
 
     capacity = 100;
 
@@ -24,26 +28,25 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     instanceId = parseInt(process.env.NODE_APP_INSTANCE);
 
-    constructor(private service: WorldService) {
+    accounts: number[] = [];
+
+    constructor(private service: WorldService, private presence: WorldPresence) {
 
     }
 
     afterInit(server: Server): any {
-        this.socket = io(
-            'http://' + config.servers.presence.host
-            + ':' + config.servers.presence.port
-            + '?name=' + this.name
-            + '&instanceId='
-            + this.instanceId
-            + '&port=' + config.servers.world.port
-            + '&capacity=' + this.capacity,
-            {
-                transports: ['websocket']
-            }
-        );
-        this.socket.on('reconnect_attempt', () => {
-            this.socket['io'].opts.transports = ['websocket'];
+        this.presence.socket.on('connect', async () => {
+            await this.presence.serverList$.pipe(first()).toPromise();
+            from(this.accounts)
+                .subscribe(id => {
+                    this.presence.socket.emit(Events.USER_CONNECTED, {
+                        accountId: id,
+                        world    : this.name
+                    });
+                })
         });
+        this.presence.socket.on(Events.CHARACTER_JOINED, name => this.server.emit(Events.CHARACTER_JOINED, name));
+        this.presence.socket.on(Events.CHARACTER_LEFT, name => this.server.emit(Events.CHARACTER_LEFT, name));
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
@@ -52,7 +55,11 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
                 throw new Error("User Capacity Reached");
             }
             let user = await this.service.verifyUser(client);
-            this.socket.emit(Events.USER_CONNECTED, {
+            if (this.accounts.indexOf(user.id) !== -1) {
+                throw new ConflictException("User already logged in!");
+            }
+            this.accounts.push(user.id);
+            this.presence.socket.emit(Events.USER_CONNECTED, {
                 accountId: user.id,
                 world    : this.name
             });
@@ -78,9 +85,32 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         }
     }
 
+    @SubscribeMessage(Events.CHARACTER_JOINED)
+    async characterJoined(client: Socket, character: { name: string }) {
+        let user = await this.service.getUser(client);
+        this.presence.socket.emit(Events.CHARACTER_JOINED, {
+            accountId: user.id,
+            name     : character.name
+        });
+        this.presence.socket.once('disconnect', () => client.emit(Events.CHARACTER_LEFT, character.name));
+    }
+
+    @SubscribeMessage(Events.CHARACTER_LEFT)
+    async characterLeft(client: Socket, character: { name: string }) {
+        let user = await this.service.getUser(client);
+        this.presence.socket.emit(Events.CHARACTER_LEFT, {
+            accountId: user.id,
+            name     : character.name
+        })
+
+    }
+
     async handleDisconnect(client: Socket) {
         let user = await this.service.getUser(client);
-        this.socket.emit(Events.USER_DISCONNECTED, {
+        if (this.accounts.indexOf(user.id) !== -1) {
+            this.accounts.splice(this.accounts.indexOf(user.id), 1);
+        }
+        this.presence.socket.emit(Events.USER_DISCONNECTED, {
             accountId: user.id,
             world    : this.name
         });
