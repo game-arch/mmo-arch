@@ -5,7 +5,9 @@ import {SetToken}                    from "./auth.actions";
 @State<AuthModel>({
     name    : 'auth',
     defaults: {
-        token: ''
+        token    : '',
+        world    : '',
+        character: ''
     }
 })
 export class AuthState {
@@ -14,4 +16,5 @@ export class AuthState {
     setToken(context: StateContext<AuthModel>, {token}: SetToken) {
         context.setState({token});
     }
+
 }
