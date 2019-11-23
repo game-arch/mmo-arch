@@ -22,7 +22,7 @@
     <br/><br/>
 </div>
 <div mat-dialog-actions>
-    <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid">
+    <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid" (click)="submit()">
         Save
     </button>
     <button mat-button type="button">

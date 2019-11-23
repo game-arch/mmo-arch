@@ -22,7 +22,6 @@ export class MicroserviceClientModule implements OnApplicationBootstrap {
     }
 
     async onApplicationBootstrap() {
-        console.log('connect to microservices!');
         await this.client.connect();
     }
 

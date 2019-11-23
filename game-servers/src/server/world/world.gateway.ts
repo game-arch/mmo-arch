@@ -12,6 +12,7 @@ import {CharacterEvents}                                  from "../../microservi
 import {ConflictException, Logger, OnApplicationShutdown} from "@nestjs/common";
 import {PresenceClient}                                   from "../../microservice/presence/client/presence.client";
 import {config}                                           from "../../lib/config";
+import {ClientProxy}                                      from "@nestjs/microservices";
 
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
@@ -27,7 +28,8 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     constructor(
         private logger: Logger,
         private service: WorldService,
-        private presence: PresenceClient
+        private presence: PresenceClient,
+        private client: ClientProxy
     ) {
 
     }
@@ -68,6 +70,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             if (character) {
                 client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(accountId));
                 client.emit(Events.CHARACTER_CREATED, character);
+                this.client.emit(Events.CHARACTER_CREATED, character);
                 return;
             }
             client.emit(Events.CHARACTER_NOT_CREATED);

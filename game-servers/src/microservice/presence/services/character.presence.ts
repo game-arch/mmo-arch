@@ -25,16 +25,16 @@ export class CharacterPresence {
     }
 
     private async updateCharacterNameForUser(user, name: string) {
+        let previousName = user.characterName + '';
         if (user.characterName !== name) {
-            let previousName   = user.characterName + '';
             user.characterName = name;
             await this.userRepo.save(user);
-            this.updateStatuses(previousName, '', user);
         }
+        this.updateStatuses(previousName, name, user);
     }
 
     private updateStatuses(previousName: string, nextName: string, user) {
-        if (previousName !== '') {
+        if (previousName !== '' && previousName !== nextName) {
             this.emitter.sendCharacterStatus(user.world, {...user, characterName: previousName}, 'offline');
             this.logger.log("The player '" + previousName + "' has signed out.");
         }

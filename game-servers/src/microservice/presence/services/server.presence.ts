@@ -30,14 +30,14 @@ export class ServerPresence implements OnApplicationBootstrap {
             if (name && name !== '' && host !== '') {
                 let server: RegisteredWorld;
                 try {
-                    await this.repo.update({host, name, port, instanceId: instanceId + 1}, {status: 'online'});
-                    server = await this.repo.findOne({host, name, port, instanceId: instanceId + 1});
+                    server        = await this.repo.findOne({host, name, port, instanceId: instanceId + 1});
+                    server.status = 'online';
                 } catch (e) {
                     let count    = await this.repo.query('select distinct host, port, name from presence.registered_world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
                     server       = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, name, 100));
                     server.index = count.length + 1;
-                    await this.repo.save(server);
                 }
+                await this.repo.save(server);
                 this.logger.log('Server ' + server.id + ' has come online.');
                 this.sendServers.next();
                 return server.id;
