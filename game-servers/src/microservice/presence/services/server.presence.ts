@@ -37,7 +37,6 @@ export class ServerPresence implements OnApplicationBootstrap {
                 } else {
                     server.status     = 'online';
                     server.port       = port;
-                    server.lastPulsed = new Date();
                     await this.repo.save(server, {reload: true});
                 }
                 this.logger.log('Server ' + server.id + ' has come online.');

@@ -13,5 +13,4 @@ export class Events {
     static readonly CHARACTER_NOT_CREATED = 'character.not_created';
     static readonly USER_CONNECTED        = 'presence.user_connected';
     static readonly USER_DISCONNECTED     = 'presence.user_disconnected';
-    static readonly SERVER_PULSE          = 'presence.server_pulse';
 }

@@ -34,9 +34,6 @@ export class PresenceClient {
         this.client.emit(Events.CHARACTER_OFFLINE, {accountId});
     }
 
-    pulseServer(serverId: number) {
-        this.client.emit(Events.SERVER_PULSE, {serverId});
-    }
 
     serverOffline(serverId: number) {
         this.client.emit(Events.SERVER_OFFLINE, {serverId});
