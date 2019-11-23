@@ -28,16 +28,15 @@ export class ServerPresence implements OnApplicationBootstrap {
     async register(host: string, port: number, instanceId: number, name: string) {
         try {
             if (name && name !== '' && host !== '') {
-                let server = await this.repo.findOne({where: {host, name, port, instanceId: instanceId + 1}});
-                if (!server) {
-                    let count   = await this.repo.query('select distinct host, port, name from presence.registered_world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
-                    let world   = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, name, 100));
-                    world.index = count.length + 1;
-                    await this.repo.save(world);
-                } else {
-                    server.status     = 'online';
-                    server.port       = port;
-                    await this.repo.save(server, {reload: true});
+                let server: RegisteredWorld;
+                try {
+                    await this.repo.update({host, name, port, instanceId: instanceId + 1}, {status: 'online'});
+                    server = await this.repo.findOne({host, name, port, instanceId: instanceId + 1});
+                } catch (e) {
+                    let count    = await this.repo.query('select distinct host, port, name from presence.registered_world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
+                    server       = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, name, 100));
+                    server.index = count.length + 1;
+                    await this.repo.save(server);
                 }
                 this.logger.log('Server ' + server.id + ' has come online.');
                 this.sendServers.next();
@@ -55,11 +54,9 @@ export class ServerPresence implements OnApplicationBootstrap {
     }
 
     private async toggleServerStatus(serverId: number, status: 'offline' | 'online') {
-        let server    = await this.repo.findOne(serverId);
-        server.status = status;
+        await this.repo.update(serverId, {status});
         await this.userRepo.delete({serverId});
-        await this.repo.save(server);
-        this.logger.log('Server ' + server.id + ' is ' + status + '.');
+        this.logger.log('Server ' + serverId + ' is ' + status + '.');
         this.sendServers.next();
     }
 
