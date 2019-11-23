@@ -3,17 +3,14 @@ import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from "typeorm";
 @Entity()
 @Index('mapId', ['mapId'])
 @Index('location', ['mapId', 'x', 'y'])
-@Unique('character', ['serverId', 'accountId', 'characterId'])
-export class CharacterLocation {
+export class ResourceLocation {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    serverId: number;
+    world: string;
     @Column()
-    accountId: number;
-    @Column()
-    characterId: number;
+    resourceId: number;
     @Column()
     mapId: number;
     @Column()

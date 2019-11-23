@@ -17,7 +17,7 @@ export const DATABASE_MODULE: TypeOrmModuleOptions = {
     }
 };
 
-export async function createDatabase(name: string) {
+export async function createDatabase(name: string, close:boolean = true) {
     try {
         let connection = await createConnection({
             ...DATABASE_MODULE,
@@ -25,7 +25,10 @@ export async function createDatabase(name: string) {
             database: ''
         });
         await connection.query('CREATE DATABASE IF NOT EXISTS `' + name + '`');
-        await connection.close();
+        if (close) {
+            await connection.close();
+        }
+        return connection;
     } catch (e) {
         console.log(e);
     }

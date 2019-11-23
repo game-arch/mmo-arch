@@ -2,6 +2,7 @@ import {Injectable}      from "@nestjs/common";
 import {ClientProxy}     from "@nestjs/microservices";
 import {first}           from "rxjs/operators";
 import {CharacterEvents} from "../character.events";
+import {Character}       from "../entities/character";
 
 @Injectable()
 export class CharacterClient {
@@ -10,7 +11,7 @@ export class CharacterClient {
 
     }
 
-    async create(accountId: number, name: string, gender: 'male' | 'female'): Promise<string> {
+    async create(accountId: number, name: string, gender: 'male' | 'female'): Promise<Character> {
         return await this.client.send(CharacterEvents.CREATE, {accountId, name, gender}).pipe(first()).toPromise();
     }
 

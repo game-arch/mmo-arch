@@ -6,9 +6,6 @@ import {PresenceClient}                    from "../../microservice/presence/cli
 @Injectable()
 export class LobbyService {
 
-    accountsBySocketId: { [socketId: string]: number }  = {};
-    socketsByAccountId: { [accountId: number]: Socket } = {};
-
     constructor(
         private account: AccountClient,
         private presence: PresenceClient
@@ -17,7 +14,7 @@ export class LobbyService {
     }
 
     async getAccount(client: Socket) {
-        let account = await this.account.getAccount(client.handshake.query.token, true);
+        let account = await this.account.getAccount(client.handshake.query.token, false);
         if (!account) {
             throw new UnauthorizedException();
         }

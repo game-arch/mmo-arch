@@ -10,7 +10,17 @@ export class MapController {
 
 
     @EventPattern(Events.CHARACTER_CREATED)
-    characterCreated(data: any) {
+    characterCreated(data: { characterId: number, accountId: number, world: string }) {
         console.log(data);
+    }
+
+    @EventPattern(Events.CHARACTER_ONLINE)
+    characterOnline(data) {
+
+    }
+
+    @EventPattern(Events.CHARACTER_OFFLINE)
+    characterOffline(data) {
+
     }
 }

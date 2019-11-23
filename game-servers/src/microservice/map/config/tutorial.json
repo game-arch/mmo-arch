@@ -1,0 +1,10 @@
+{
+  "name": "Tutorial",
+  "entities": [
+    {
+      "type": "tree"
+    }
+  ],
+  "width": "10",
+  "height": "10",
+}

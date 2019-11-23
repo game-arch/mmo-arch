@@ -1,24 +1,23 @@
 import {NestFactory}    from '@nestjs/core';
-import {MapModule}      from './map.module';
+import {PhysicsModule}  from './physics.module';
 import {createDatabase} from "../../lib/database.module";
 import {config}         from "../../lib/config";
 import {Logger}         from "@nestjs/common";
 
 
-const logger = new Logger('Map');
+const logger = new Logger('Physics');
 
 async function bootstrap() {
-    await createDatabase('map');
-    const app = await NestFactory.createMicroservice(MapModule, {
+    const app = await NestFactory.createMicroservice(PhysicsModule, {
         transport: config.microservice.transport,
-        options  : {
+        options: {
             ...config.microservice.options,
-            queue: 'map'
+            queue: 'physics'
         }
     });
     app.useLogger(logger);
     await app.listen(() => {
-        logger.log("Map Microservice is listening ...");
+        logger.log("Physics Microservice is listening ...");
     });
 }
 

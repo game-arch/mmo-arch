@@ -13,6 +13,7 @@ import {ConflictException, Logger, OnApplicationShutdown} from "@nestjs/common";
 import {PresenceClient}                                   from "../../microservice/presence/client/presence.client";
 import {config}                                           from "../../lib/config";
 import {ClientProxy}                                      from "@nestjs/microservices";
+import {Character}                                        from "../../microservice/character/entities/character";
 
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
@@ -65,12 +66,16 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     @SubscribeMessage(CharacterEvents.CREATE)
     async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
         try {
-            let accountId = this.sockets[client.id].id;
-            let character = await this.service.createCharacter(accountId, data.name, data.gender);
+            let accountId            = this.sockets[client.id].id;
+            let character: Character = await this.service.createCharacter(accountId, data.name, data.gender);
             if (character) {
                 client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(accountId));
                 client.emit(Events.CHARACTER_CREATED, character);
-                this.client.emit(Events.CHARACTER_CREATED, character);
+                this.client.emit(Events.CHARACTER_CREATED, {
+                    accountId,
+                    characterId: character.id,
+                    world      : WorldGateway.worldName
+                });
                 return;
             }
             client.emit(Events.CHARACTER_NOT_CREATED);

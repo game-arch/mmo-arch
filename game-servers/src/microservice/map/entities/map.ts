@@ -1,11 +1,13 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 
+@Unique('name', ['name'])
+@Unique('constant', ['constant'])
 @Entity()
 export class Map {
     @PrimaryGeneratedColumn()
     id: number;
     @Column()
-    name: string;
+    constant:string;
     @Column()
-    filePath: string;
+    name: string;
 }

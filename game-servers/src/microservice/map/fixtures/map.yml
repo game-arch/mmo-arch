@@ -1,0 +1,5 @@
+entity: Map
+items:
+    map1:
+      constant: tutorial
+      name: Tutorial Island

@@ -129,6 +129,21 @@ module.exports = {
             env: {
                 SERVER_TYPE: 'microservice/presence'
             }
+        },
+        {
+            name: 'micro-physics',
+            script: 'dist/src/main.js',
+            instances: '2',
+            exec_mode: 'cluster',
+            watch: ["dist/src/microservice/physics", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
+            // Delay between restart
+            watch_delay: 1000,
+            watch_options: {
+                "followSymlinks": false
+            },
+            env: {
+                SERVER_TYPE: 'microservice/physics'
+            }
         }
     ]
 };
