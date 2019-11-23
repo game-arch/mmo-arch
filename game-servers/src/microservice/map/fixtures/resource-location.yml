@@ -1,0 +1,17 @@
+entity: ResourceLocation
+items:
+  resourceLocation1:
+    resourceId: 1
+    mapId: 1
+    x: 20
+    y: 45
+  resourceLocation2:
+    resourceId: 1
+    mapId: 1
+    x: 25
+    y: 30
+  resourceLocation3:
+    resourceId: 1
+    mapId: 1
+    x: 98
+    y: 68

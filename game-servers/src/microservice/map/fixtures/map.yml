@@ -1,5 +1,6 @@
 entity: Map
 items:
-    map1:
-      constant: tutorial
-      name: Tutorial Island
+  map1:
+    id: 1
+    constant: tutorial
+    name: Tutorial Island

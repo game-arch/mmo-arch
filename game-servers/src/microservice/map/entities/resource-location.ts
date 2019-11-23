@@ -8,8 +8,6 @@ export class ResourceLocation {
     id: number;
 
     @Column()
-    world: string;
-    @Column()
     resourceId: number;
     @Column()
     mapId: number;
