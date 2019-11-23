@@ -24,15 +24,20 @@ export class WorldController {
         return Object.keys(this.gateway.accounts).map(key => this.gateway.accounts[key]);
     }
 
+    @EventPattern(Events.PRESENCE_ONLINE)
+    async onPresenceOnline() {
+        await this.gateway.afterInit(this.gateway.server);
+    }
+
     @EventPattern(Events.CHARACTER_ONLINE + '.' + WorldGateway.worldName)
-    onCharacterJoin(data: { accountId: number, serverId: number, name: string }) {
-        this.logger.log('Character ' + data.name + ' is online.');
+    onCharacterJoin(data: { accountId: number, serverId: number, characterName: string }) {
+        this.logger.log('Character ' + data.characterName + ' is online.');
         this.gateway.server.emit(Events.CHARACTER_ONLINE, data);
     }
 
     @EventPattern(Events.CHARACTER_OFFLINE + '.' + WorldGateway.worldName)
-    onCharacterLeave(data: { accountId: number, serverId: number, name: string }) {
-        this.logger.log('Character ' + data.name + ' is offline.');
+    onCharacterLeave(data: { accountId: number, serverId: number, characterName: string }) {
+        this.logger.log('Character ' + data.characterName + ' is offline.');
         this.gateway.server.emit(Events.CHARACTER_OFFLINE, data);
     }
 }

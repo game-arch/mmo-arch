@@ -11,7 +11,7 @@ async function bootstrap() {
         origin     : true,
         credentials: true
     });
-
+    await app.enableShutdownHooks();
     await app.startAllMicroservices();
     await app.listen(config.servers.world.port);
 }

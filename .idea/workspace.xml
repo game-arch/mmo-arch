@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e56b9b86-df18-45ac-bc2d-950eb03d6c7e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/game.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/game.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,11 +47,11 @@
       <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/presence/services" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice/character" />
       <recent name="$PROJECT_DIR$/game-servers/src/lib" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice/account" />
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/account/client" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -95,7 +96,7 @@
       <workItem from="1574092432922" duration="14916000" />
       <workItem from="1574121741480" duration="9448000" />
       <workItem from="1574302940233" duration="14882000" />
-      <workItem from="1574359066729" duration="24220000" />
+      <workItem from="1574359066729" duration="29617000" />
     </task>
     <servers />
   </component>

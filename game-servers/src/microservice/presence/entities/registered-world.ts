@@ -23,6 +23,8 @@ export class RegisteredWorld {
     status: 'online' | 'offline' = 'online';
     @Column({default: false})
     full: boolean;
+    @Column('datetime', {nullable: true})
+    lastPulsed: Date;
 
     constructor(host: string, port: number, instanceId: number, name: string, capacity: number) {
         this.host       = host;
@@ -30,6 +32,6 @@ export class RegisteredWorld {
         this.instanceId = instanceId;
         this.name       = name;
         this.capacity   = capacity;
-
+        this.lastPulsed = new Date();
     }
 }
