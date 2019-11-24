@@ -14,12 +14,12 @@ export class PresenceEmitter {
         this.client.emit(Events.SERVER_LIST, servers);
     }
 
-    sendCharacterStatus(worldName: string, user: { serverId, accountId, characterName }, status: 'online' | 'offline') {
+    sendCharacterStatus(world: string, user: { serverId, accountId, characterName }, status: 'online' | 'offline') {
         if (status === 'online') {
-            this.client.emit(Events.CHARACTER_ONLINE + '.' + worldName, user);
+            this.client.emit(Events.CHARACTER_ONLINE + '.' + world, user);
             return;
         }
-        this.client.emit(Events.CHARACTER_OFFLINE + '.' + worldName, user);
+        this.client.emit(Events.CHARACTER_OFFLINE + '.' + world, user);
     }
 
     nowOnline() {

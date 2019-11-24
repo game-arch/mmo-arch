@@ -15,8 +15,7 @@ export class UserPresence {
         private repo: Repository<RegisteredWorld>,
         @InjectRepository(ConnectedUser)
         private userRepo: Repository<ConnectedUser>,
-        private logger: Logger,
-        private emitter: PresenceEmitter
+        private logger: Logger
     ) {
     }
 
@@ -24,7 +23,7 @@ export class UserPresence {
         try {
             let registeredWorld = await this.repo.findOne(serverId);
             if (registeredWorld) {
-                let connected = new ConnectedUser(accountId, registeredWorld.name, serverId);
+                let connected = new ConnectedUser(accountId, registeredWorld.constant, serverId);
                 await this.userRepo.delete({accountId});
                 await this.userRepo.save(connected, {reload: true});
                 await this.repo.save(registeredWorld);

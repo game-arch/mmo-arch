@@ -2,8 +2,6 @@ import {UserPresence}                       from "./services/user.presence";
 import {Controller, OnApplicationBootstrap} from "@nestjs/common";
 import {Events}                             from "../../../lib/constants/events";
 import {EventPattern, MessagePattern}       from "@nestjs/microservices";
-import {interval}                           from "rxjs";
-import {first}                              from "rxjs/operators";
 import {ServerPresence}                     from "./services/server.presence";
 import {CharacterPresence}                  from "./services/character.presence";
 import {PresenceEmitter}                    from "./emitter/presence.emitter";
@@ -24,8 +22,8 @@ export class PresenceController implements OnApplicationBootstrap {
     }
 
     @MessagePattern(Events.REGISTER_SERVER)
-    async register({name, port, instanceId, host}: { name: string, port: number, instanceId: number, host: string }) {
-        return await this.server.register(this.server.getHost(host), port, instanceId, name);
+    async register({constant, name, port, instanceId, host}: { constant: string, name: string, port: number, instanceId: number, host: string }) {
+        return await this.server.register(this.server.getHost(host), port, instanceId, constant, name);
     }
 
     @EventPattern(Events.USER_CONNECTED)
