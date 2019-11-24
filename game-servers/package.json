@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "fixtures:map": "fixtures src/microservice/map/fixtures --config src/microservice/map/typeorm.config.ts --sync --require=ts-node/register --require=tsconfig-paths/register"
+    "fixtures:map": "fixtures src/world/map/fixtures --config src/world/map/typeorm.config.ts --sync --require=ts-node/register --require=tsconfig-paths/register"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",

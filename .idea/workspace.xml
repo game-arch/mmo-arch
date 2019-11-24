@@ -47,11 +47,11 @@
       <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
+      <recent name="$PROJECT_DIR$/game-servers/src/world" />
+      <recent name="$PROJECT_DIR$/game-servers/src/global" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice/presence/services" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice" />
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/character" />
-      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/account" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -96,7 +96,7 @@
       <workItem from="1574092432922" duration="14916000" />
       <workItem from="1574121741480" duration="9448000" />
       <workItem from="1574302940233" duration="14882000" />
-      <workItem from="1574359066729" duration="36780000" />
+      <workItem from="1574359066729" duration="39716000" />
     </task>
     <servers />
   </component>

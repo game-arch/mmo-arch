@@ -1,4 +1,4 @@
-import {CharacterEvents} from "../../src/microservice/character/character.events";
+import {CharacterEvents} from "../../src/world/character/character.events";
 
 export class Events {
     static readonly PRESENCE_ONLINE       = 'precense.online';
