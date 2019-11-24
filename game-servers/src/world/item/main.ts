@@ -9,7 +9,7 @@ import {WorldConstants} from "../constants";
 const logger = new Logger(WorldConstants.NAME + ' Item');
 
 async function bootstrap() {
-    await createDatabase(WorldConstants.DB_PREFIX + '_item');
+    await createDatabase(WorldConstants.DB_NAME);
     const app = await NestFactory.createMicroservice(ItemModule, {
         transport: config.microservice.transport,
         options: {

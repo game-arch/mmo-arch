@@ -9,7 +9,7 @@ import {WorldConstants} from "../constants";
 const logger = new Logger(WorldConstants.NAME + ' AI');
 
 async function bootstrap() {
-    await createDatabase(WorldConstants.DB_PREFIX + '_ai');
+    await createDatabase(WorldConstants.DB_NAME);
     const app = await NestFactory.createMicroservice(AiModule, {
         transport: config.microservice.transport,
         options  : {

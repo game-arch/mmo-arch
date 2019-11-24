@@ -9,7 +9,7 @@ import {WorldConstants} from "../constants";
 const logger = new Logger(WorldConstants.NAME + ' Map');
 
 async function bootstrap() {
-    await createDatabase(WorldConstants.DB_PREFIX + '_map');
+    await createDatabase(WorldConstants.DB_NAME);
     const app = await NestFactory.createMicroservice(MapModule, {
         transport: config.microservice.transport,
         options  : {

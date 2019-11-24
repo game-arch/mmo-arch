@@ -3,6 +3,6 @@ import {WorldConstants}  from "../constants";
 
 module.exports = {
     ...DATABASE_MODULE,
-    database: WorldConstants.DB_PREFIX + '_map',
+    database: WorldConstants.DB_NAME,
     entities: [__dirname + '/entities/*.ts']
 };

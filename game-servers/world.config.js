@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: 'world-server-' + (process.env.WORLD_CONSTANT || 'maiden'),
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-server',
             script: 'dist/src/main.js',
             instances: 2,
             exec_mode: 'cluster',
@@ -19,7 +19,7 @@ module.exports = {
             }
         },
         {
-            name: 'world-quest-' + (process.env.WORLD_CONSTANT || 'maiden'),
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-quest',
             script: 'dist/src/main.js',
             watch: ["dist/src/world/quest", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
             // Delay between restart
@@ -34,7 +34,7 @@ module.exports = {
             }
         },
         {
-            name: 'world-commerce-' + (process.env.WORLD_CONSTANT || 'maiden'),
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-commerce',
             script: 'dist/src/main.js',
             watch: ["dist/src/world/commerce", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
             // Delay between restart
@@ -49,7 +49,7 @@ module.exports = {
             }
         },
         {
-            name: 'world-ai-' + (process.env.WORLD_CONSTANT || 'maiden'),
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-ai',
             script: 'dist/src/main.js',
             watch: ["dist/src/world/ai", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
             // Delay between restart
@@ -64,7 +64,7 @@ module.exports = {
             }
         },
         {
-            name: 'world-character-' + (process.env.WORLD_CONSTANT || 'maiden'),
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-character',
             script: 'dist/src/main.js',
             watch: ["dist/src/world/character", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
             // Delay between restart
@@ -79,7 +79,7 @@ module.exports = {
             }
         },
         {
-            name: 'world-item-' + (process.env.WORLD_CONSTANT || 'maiden'),
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-item',
             script: 'dist/src/main.js',
             watch: ["dist/src/world/item", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
             // Delay between restart
@@ -94,7 +94,7 @@ module.exports = {
             }
         },
         {
-            name: 'world-map-' + (process.env.WORLD_CONSTANT || 'maiden'),
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-map',
             script: 'dist/src/main.js',
             watch: ["dist/src/world/map", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
             // Delay between restart

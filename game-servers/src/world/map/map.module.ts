@@ -18,7 +18,7 @@ import {TutorialMap}      from "./maps/tutorial.map";
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
             type    : 'mysql',
-            database: WorldConstants.DB_PREFIX + '_map',
+            database: WorldConstants.DB_NAME,
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],

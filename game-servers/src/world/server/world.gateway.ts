@@ -21,7 +21,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     @WebSocketServer()
     server: Server;
     capacity                                                                                            = 100;
-    static worldName                                                                                    = WorldConstants.NAME;
     accounts: { [id: number]: { id: number, email: string, socketId: string, character: string } }      = {};
     sockets: { [socketId: string]: { id: number, email: string, socketId: string, character: string } } = {};
 
@@ -40,7 +39,8 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         this.serverId = await this.presence.register(
             config.servers.world.host,
             config.servers.world.port,
-            WorldGateway.worldName,
+            WorldConstants.CONSTANT,
+            WorldConstants.NAME,
             parseInt(process.env.NODE_APP_INSTANCE)
         );
     }
@@ -75,7 +75,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
                 this.client.emit(Events.CHARACTER_CREATED, {
                     accountId,
                     characterId: character.id,
-                    world      : WorldGateway.worldName
+                    world      : WorldConstants.CONSTANT
                 });
                 return;
             }

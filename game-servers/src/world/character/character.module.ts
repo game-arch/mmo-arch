@@ -12,7 +12,7 @@ import {WorldConstants}      from "../constants";
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
             type    : 'mysql',
-            database: WorldConstants.DB_PREFIX + '_character',
+            database: WorldConstants.DB_NAME,
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],

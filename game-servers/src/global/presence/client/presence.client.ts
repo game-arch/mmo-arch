@@ -1,7 +1,7 @@
-import {Injectable}  from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 import {ClientProxy} from "@nestjs/microservices";
-import {first, tap}  from "rxjs/operators";
-import {Events}      from "../../../../lib/constants/events";
+import {first, tap} from "rxjs/operators";
+import {Events} from "../../../../lib/constants/events";
 
 @Injectable()
 export class PresenceClient {
@@ -10,8 +10,14 @@ export class PresenceClient {
 
     }
 
-    async register(host: string, port: number, name: string, instanceId: number): Promise<string> {
-        return await this.client.send(Events.REGISTER_SERVER, {host, port, name, instanceId}).pipe(first()).toPromise();
+    async register(host: string, port: number, constant: string, name: string, instanceId: number): Promise<string> {
+        return await this.client.send(Events.REGISTER_SERVER, {
+            host,
+            port,
+            constant,
+            name,
+            instanceId
+        }).pipe(first()).toPromise();
     }
 
     async getServers() {
