@@ -8,24 +8,25 @@ import {AuthState}                          from "../../../authentication/src/li
 import {Hosts}                              from "../../../game/src/lib/hosts";
 import {SetToken}                           from "../../../authentication/src/lib/state/auth.actions";
 import {filter}                             from "rxjs/operators";
+import {WorldConnection}                    from "./world-connection";
 
 @Injectable()
 export class ConnectionManager {
 
     private connections: { [name: string]: Connection } = {};
 
-    private _world = new BehaviorSubject<Connection>(new Connection({name: ''}, null));
+    private _world = new BehaviorSubject<WorldConnection>(new WorldConnection(null, null));
 
     world$ = this._world.asObservable();
 
-    get world() {
+    get world(): WorldConnection {
         return this._world.getValue();
     }
 
     constructor(private store: Store, private actions: Actions) {
         this.actions.pipe(ofActionDispatched(SetToken), filter(action => action.token === ''))
             .subscribe(() => {
-                this._world.next(new Connection({name: ''}, null));
+                this._world.next(new WorldConnection(null, null));
                 Object.keys(this.connections).filter(key => {
                     this.connections[key].socket.disconnect();
                     delete this.connections[key];
@@ -46,18 +47,19 @@ export class ConnectionManager {
     }
 
     connectToWorld(server: GameWorld) {
-        if (this.world.socket) {
+        if (this.world.socket && this.world.world) {
             this.disconnect(this.world.world.name);
         }
         if (server.status === 'online') {
             if (!this.connections.hasOwnProperty(server.name)) {
-                this.openConnection(server.name, server, 'http://' + server.host + ':' + server.port);
+                let connection = this.openWorldConnection(server.name, server, 'http://' + server.host + ':' + server.port);
                 this.get(server.name).socket.on('connect', () => this.disconnect('lobby'));
                 this.get(server.name).socket.on('disconnect', () => this.connectToLobby());
+                return connection;
             } else {
                 this.connections[server.name].socket.connect();
+                this._world.next(this.get(server.name) as WorldConnection);
             }
-            this._world.next(this.connections[server.name]);
             return this.world;
         }
         return null;
@@ -80,16 +82,27 @@ export class ConnectionManager {
             server.socket.close();
         }
         if (this.world.world.name === server.world.name) {
-            this._world.next(new Connection({name: ''}, null));
+            this._world.next(new WorldConnection(null, null));
         }
     }
 
     openConnection(name: string, server: { name: string }, location: string) {
         let token              = this.store.selectSnapshot(AuthState).token;
         this.connections[name] = new Connection(server, io.connect(location + '?token=' + token, {
-            transports: ['websocket'],
+            transports  : ['websocket'],
             reconnection: true
         }));
+    }
+
+    openWorldConnection(name: string, server: GameWorld, location: string) {
+        let token              = this.store.selectSnapshot(AuthState).token;
+        let worldConnection    = new WorldConnection(server, io.connect(location + '?token=' + token, {
+            transports  : ['websocket'],
+            reconnection: true
+        }));
+        this.connections[name] = worldConnection;
+        this._world.next(worldConnection);
+        return worldConnection;
     }
 
 }

@@ -1,5 +1,4 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
-import {Socket}                          from "ngx-socket-io";
 import {EMPTY, fromEvent, Observable}    from "rxjs";
 import {ConnectionManager}               from "../../../connection/src/lib/connection-manager";
 import {GameWorld}                       from "../../../../../game-servers/lib/entities/game-world";
@@ -34,7 +33,6 @@ export class ServerListComponent implements OnInit {
 
     onConnect(world: GameWorld) {
         let connection = this.manager.connectToWorld(world);
-        console.log(connection);
         fromEvent(connection.socket, 'connect-error', {once: true})
             .subscribe((err) => {
                 console.error(err);

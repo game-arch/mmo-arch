@@ -19,19 +19,14 @@ export class RegisteredWorld {
     constant: string;
     @Column({nullable: false})
     name: string;
-    @Column('int')
-    capacity: number;
     @Column({nullable: false})
     status: 'online' | 'offline' = 'online';
-    @Column({default: false})
-    full: boolean;
 
-    constructor(host: string, port: number, instanceId: number, constant: string, name: string, capacity: number) {
+    constructor(host: string, port: number, instanceId: number, constant: string, name: string) {
         this.host       = host;
         this.port       = port;
         this.instanceId = instanceId;
         this.constant   = constant;
         this.name       = name;
-        this.capacity   = capacity;
     }
 }

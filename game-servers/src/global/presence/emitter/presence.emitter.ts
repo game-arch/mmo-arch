@@ -1,7 +1,7 @@
-import {Injectable}  from "@nestjs/common";
-import {ClientProxy} from "@nestjs/microservices";
-import {GameWorld}   from "../../../../lib/entities/game-world";
-import {Events}      from "../../../../lib/constants/events";
+import {Injectable}    from "@nestjs/common";
+import {ClientProxy}   from "@nestjs/microservices";
+import {GameWorld}     from "../../../../lib/entities/game-world";
+import {Events}        from "../../../../lib/constants/events";
 
 @Injectable()
 export class PresenceEmitter {
@@ -14,7 +14,7 @@ export class PresenceEmitter {
         this.client.emit(Events.SERVER_LIST, servers);
     }
 
-    sendCharacterStatus(world: string, user: { serverId, accountId, characterName }, status: 'online' | 'offline') {
+    sendCharacterStatus(world: string, user: any, status: 'online' | 'offline') {
         if (status === 'online') {
             this.client.emit(Events.CHARACTER_ONLINE + '.' + world, user);
             return;

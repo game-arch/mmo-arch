@@ -1,6 +1,6 @@
 <mat-nav-list *ngIf="servers$ | async as servers">
     <a mat-list-item *ngFor="let server of servers" (click)="onConnect(server)"
-       [style.pointer-events]="server.status === 'online' && server.current < server.capacity ? 'all' : 'none'">
+       [style.pointer-events]="server.status === 'online' ? 'all' : 'none'">
         <mat-icon matListIcon [style.color]="server.status === 'online' ? '#22ff88' : 'gray'">
             {{server.status === 'online' ? 'wifi' : 'wifi_off'}}
         </mat-icon>
@@ -8,9 +8,6 @@
              [style.font-weight]="manager.isConnected(server.name) ? 'bold' : 'inherited'">
             {{server.name}}
             <ng-container *ngIf="server.index > 1">({{server.index}})</ng-container>
-        </div>
-        <div style="white-space:nowrap;" [style.color]="server.current >= server.capacity ? '#aaff00' : ''">
-            {{server.current}} / {{server.capacity}}
         </div>
     </a>
 </mat-nav-list>

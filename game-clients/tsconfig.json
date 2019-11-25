@@ -48,6 +48,12 @@
       ],
       "character-selection/*": [
         "dist/character-selection/*"
+      ],
+      "player": [
+        "dist/player"
+      ],
+      "player/*": [
+        "dist/player/*"
       ]
     }
   },

@@ -3,6 +3,8 @@ import {InjectRepository}                                            from "@nest
 import {Character}                                                   from "./entities/character";
 import {QueryFailedError, Repository}                                from "typeorm";
 import {RpcException}                                                from "@nestjs/microservices";
+import {AllCharactersOffline, CharacterOffline, CharacterOnline}     from "../../../lib/actions";
+import {from}                                                        from "rxjs";
 
 @Injectable()
 export class CharacterService {
@@ -10,10 +12,6 @@ export class CharacterService {
         @InjectRepository(Character)
         private repo: Repository<Character>) {
 
-    }
-
-    getHello(): string {
-        return 'Hello World!';
     }
 
     async getCharactersByAccountId(accountId: number) {
@@ -33,6 +31,24 @@ export class CharacterService {
                 throw new RpcException(new ConflictException("Character Name Already Taken"));
             }
             throw new RpcException(new InternalServerErrorException(e.message));
+        }
+    }
+
+    async characterOnline(data: CharacterOnline) {
+        let character    = await this.repo.findOne(data);
+        character.status = 'online';
+        await this.repo.save(character);
+    }
+
+    async characterOffline(data: CharacterOffline) {
+        let character    = await this.repo.findOne(data);
+        character.status = 'offline';
+        await this.repo.save(character);
+    }
+
+    async allCharactersOffline(data: AllCharactersOffline) {
+        for (let character of data.characters) {
+            await this.characterOffline(character);
         }
     }
 }

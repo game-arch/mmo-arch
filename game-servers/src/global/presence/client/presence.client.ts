@@ -24,23 +24,6 @@ export class PresenceClient {
         return await this.client.send(Events.SERVER_LIST, {}).pipe(first()).toPromise();
     }
 
-    userOnline(serverId: number, accountId: number) {
-        this.client.emit(Events.USER_CONNECTED, {serverId, accountId});
-    }
-
-    userOffline(serverId: number, accountId: number) {
-        this.client.emit(Events.USER_DISCONNECTED, {serverId, accountId});
-    }
-
-    characterOnline(accountId: number, name: string) {
-        this.client.emit(Events.CHARACTER_ONLINE, {name, accountId});
-    }
-
-    characterOffline(accountId: number) {
-        this.client.emit(Events.CHARACTER_OFFLINE, {accountId});
-    }
-
-
     serverOffline(serverId: number) {
         this.client.emit(Events.SERVER_OFFLINE, {serverId});
     }

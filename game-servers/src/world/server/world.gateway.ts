@@ -15,6 +15,8 @@ import {config}                                           from "../../lib/config
 import {ClientProxy}                                      from "@nestjs/microservices";
 import {Character}                                        from "../character/entities/character";
 import {WorldConstants}                                   from "../constants";
+import {CharacterClient}                                  from "../character/client/character.client";
+import {CharacterOffline, CharacterOnline}                from "../../../lib/actions";
 
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
@@ -30,6 +32,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         private logger: Logger,
         private service: WorldService,
         private presence: PresenceClient,
+        private character: CharacterClient,
         private client: ClientProxy
     ) {
 
@@ -56,7 +59,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             }
             this.accounts[user.id]  = {...user, socketId: client.id, character: ''};
             this.sockets[client.id] = this.accounts[user.id];
-            this.presence.userOnline(this.serverId, user.id);
             client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(user.id));
         } catch (e) {
             client.emit("connect-error", e.message);
@@ -77,51 +79,63 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
                     characterId: character.id,
                     world      : WorldConstants.CONSTANT
                 });
-                return;
+                return {status: 'success'};
             }
             client.emit(Events.CHARACTER_NOT_CREATED);
+            return {status: 'error'};
         } catch (e) {
             client.emit(Events.CHARACTER_NOT_CREATED, e.response);
+            return {status: 'error'};
         }
     }
 
-    @SubscribeMessage(Events.CHARACTER_ONLINE)
+    @SubscribeMessage(CharacterOnline.event)
     async characterJoined(client: Socket, character: { name: string }) {
         try {
             let user = this.sockets[client.id];
-            this.presence.characterOnline(user.id, character.name);
+            this.character.characterOnline(user.id, character.name);
             user.character = character.name;
             client.join('character.' + character.name);
+            return {status: 'success'};
         } catch (e) {
             this.logger.error(e);
+            return {status: 'error'};
         }
     }
 
-    @SubscribeMessage(Events.CHARACTER_OFFLINE)
+    @SubscribeMessage(CharacterOffline.event)
     async characterLeft(client: Socket) {
         try {
             let user              = this.sockets[client.id];
             let previousCharacter = user.character;
-            this.presence.characterOffline(user.id);
+            this.character.characterOffline(user.id, previousCharacter);
             user.character = '';
             client.leave('character.' + previousCharacter);
+            return {status: 'success'};
         } catch (e) {
             this.logger.error(e);
+            return {status: 'error'};
         }
     }
 
     async handleDisconnect(client: Socket) {
         try {
-            let user = await this.service.getUser(client);
+            let user = this.sockets[client.id];
+            if (user.character !== '') {
+                this.character.characterOffline(user.id, user.character);
+            }
             delete this.accounts[user.id];
             delete this.sockets[client.id];
-            this.presence.userOffline(this.serverId, user.id);
         } catch (e) {
             this.logger.error(e);
         }
     }
 
     async onApplicationShutdown(signal?: string) {
+        this.character.allCharactersOffline(Object.keys(this.accounts).map(key => (new CharacterOffline(
+            this.accounts[key].id,
+            this.accounts[key].character
+        ))));
         this.presence.serverOffline(this.serverId);
     }
 }

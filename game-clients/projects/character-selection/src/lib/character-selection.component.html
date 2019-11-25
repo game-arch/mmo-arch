@@ -10,8 +10,8 @@
                 World: {{conn.world.name}}
             </mat-card-subtitle>
             <mat-card-content>
-                <mat-nav-list *ngIf="conn.characters$ | async as characters">
-                    <a mat-list-item *ngFor="let character of characters" (click)="selected = character"
+                <mat-nav-list >
+                    <a mat-list-item *ngFor="let character of conn.characters" (click)="selected = character"
                        [class.active]="selected?.id === character.id">
                         <mat-icon matListIcon [svgIcon]="character.gender"></mat-icon>
                         <div matLine>{{character.name}}</div>

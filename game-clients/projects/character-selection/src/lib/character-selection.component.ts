@@ -3,7 +3,6 @@ import {ConnectionManager}      from "../../../connection/src/lib/connection-man
 import {GameCharacter}          from "../../../../../game-servers/lib/entities/game-character";
 import {MatDialog}              from "@angular/material/dialog";
 import {CharacterFormComponent} from "./character-form.component";
-import {Events}                 from "../../../../../game-servers/lib/constants/events";
 
 @Component({
     selector   : 'character-selection',
@@ -35,7 +34,7 @@ export class CharacterSelectionComponent implements OnInit {
 
     join() {
         if (this.connection.world) {
-            this.connection.world.socket.emit(Events.CHARACTER_ONLINE, {name: this.selected.name});
+            this.connection.world.selectCharacter(this.selected.name);
         }
     }
 }

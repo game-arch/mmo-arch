@@ -1,7 +1,9 @@
-import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {GameCharacter}                                  from "../../../../lib/entities/game-character";
+import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {GameCharacter}                                         from "../../../../lib/entities/game-character";
 
 @Entity()
+@Index('user', ['accountId', 'name'])
+@Index('status', ['status'])
 @Unique('name', ['name'])
 export class Character implements GameCharacter {
 
@@ -16,4 +18,11 @@ export class Character implements GameCharacter {
 
     @Column()
     gender: 'male' | 'female' = 'male';
+
+    @Column()
+    status: 'online' | 'offline' = 'offline';
+
+    @Column({nullable: true})
+    lastOnline: Date;
+
 }

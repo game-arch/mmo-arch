@@ -2,7 +2,6 @@ import {HttpService, Injectable, Logger, OnApplicationBootstrap} from "@nestjs/c
 import {InjectRepository}                                        from "@nestjs/typeorm";
 import {RegisteredWorld}                                         from "../entities/registered-world";
 import {Repository}                                              from "typeorm";
-import {ConnectedUser}                                           from "../entities/connected-user";
 import {PresenceEmitter}                                         from "../emitter/presence.emitter";
 import {Subject}                                                 from "rxjs";
 import {mergeMap, throttleTime}                                  from "rxjs/operators";
@@ -18,14 +17,12 @@ export class ServerPresence implements OnApplicationBootstrap {
         private http: HttpService,
         @InjectRepository(RegisteredWorld)
         private repo: Repository<RegisteredWorld>,
-        @InjectRepository(ConnectedUser)
-        private userRepo: Repository<ConnectedUser>,
         private logger: Logger,
         private emitter: PresenceEmitter
     ) {
     }
 
-    async register(host: string, port: number, instanceId: number, constant:string, name: string) {
+    async register(host: string, port: number, instanceId: number, constant: string, name: string) {
         try {
             if (name && name !== '' && host !== '') {
                 let server: RegisteredWorld;
@@ -34,7 +31,7 @@ export class ServerPresence implements OnApplicationBootstrap {
                     server.status = 'online';
                 } catch (e) {
                     let count    = await this.repo.query('select distinct host, port, name from presence.registered_world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
-                    server       = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, constant, name, 100));
+                    server       = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, constant, name));
                     server.index = count.length + 1;
                 }
                 await this.repo.save(server);
@@ -55,7 +52,6 @@ export class ServerPresence implements OnApplicationBootstrap {
 
     private async toggleServerStatus(serverId: number, status: 'offline' | 'online') {
         await this.repo.update(serverId, {status});
-        await this.userRepo.delete({serverId});
         this.logger.log('Server ' + serverId + ' is ' + status + '.');
         this.sendServers.next();
     }
@@ -66,15 +62,13 @@ export class ServerPresence implements OnApplicationBootstrap {
 
     async clear() {
         await this.repo.clear();
-        await this.userRepo.clear();
     }
 
     async getServers() {
         let builder = this.repo.createQueryBuilder('world')
-                          .select('world.name, world.index, MAX(world.host) host, MAX(world.port) port, COUNT(user.accountId) current, SUM(IF (world.status = "online", world.capacity, 0)) capacity, MAX(world.status) status')
-                          .leftJoin(ConnectedUser, 'user', 'user.serverId = world.id')
+                          .select('world.name, world.index, MAX(world.host) host, MAX(world.port) port, MAX(world.status) status')
                           .groupBy('world.name, world.index')
-                          .orderBy('7', 'DESC');
+                          .orderBy('5', 'DESC');
         return await builder.getRawMany();
     }
 
