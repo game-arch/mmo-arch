@@ -1,14 +1,5 @@
-<div style="display:flex;height:100%;flex-direction:column;" *ngIf="world">
-    <div style="flex:1"></div>
-    <div style="display:flex">
-        <div style="flex:1"></div>
-        <mat-card style="min-width:600px">
-            <canvas id="game-canvas" width="800" height="600"></canvas>
-        </mat-card>
-        <div style="flex:1"></div>
-    </div>
-    <div style="flex:1"></div>
-</div>
-<button mat-raised-button color="accent" style="position:fixed;left:16px;bottom:16px;" (click)="signOut()">
+<canvas #canvas id="game-canvas" width="800" height="600"></canvas>
+<button mat-raised-button color="accent" style="position:fixed;left:16px;bottom:16px;" *ngIf="world"
+        (click)="signOut()">
     Character Screen
 </button>

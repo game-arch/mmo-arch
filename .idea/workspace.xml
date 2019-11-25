@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e56b9b86-df18-45ac-bc2d-950eb03d6c7e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/game.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/game.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,23 +35,23 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/game-clients/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/game-servers/src/world" />
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice" />
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/presence" />
-      <recent name="$PROJECT_DIR$/game-servers/src/microservice/character/client" />
-      <recent name="$PROJECT_DIR$/game-servers/src" />
-    </key>
-    <key name="es6.move.members.recent.items">
-      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice-client.module.ts" />
-      <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/game-servers/src/world/presence" />
       <recent name="$PROJECT_DIR$/game-servers/src/lib" />
       <recent name="$PROJECT_DIR$/game-servers/src/world" />
       <recent name="$PROJECT_DIR$/game-servers/src/global" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice/presence/services" />
+    </key>
+    <key name="es6.move.members.recent.items">
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice-client.module.ts" />
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game-servers/src/world" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/presence" />
+      <recent name="$PROJECT_DIR$/game-servers/src/microservice/character/client" />
+      <recent name="$PROJECT_DIR$/game-servers/src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -96,7 +97,7 @@
       <workItem from="1574121741480" duration="9448000" />
       <workItem from="1574302940233" duration="14882000" />
       <workItem from="1574359066729" duration="40894000" />
-      <workItem from="1574696042994" duration="2795000" />
+      <workItem from="1574696042994" duration="5436000" />
     </task>
     <servers />
   </component>
