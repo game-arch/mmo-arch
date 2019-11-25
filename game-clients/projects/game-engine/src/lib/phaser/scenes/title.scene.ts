@@ -1,13 +1,13 @@
 import Scene = Phaser.Scene;
-import {Injectable} from "@angular/core";
-import {Location}   from "@angular/common";
+import {Inject, Injectable} from "@angular/core";
+import {Location}           from "@angular/common";
 import Image = Phaser.GameObjects.Image;
 
 @Injectable()
 export class TitleScene extends Scene {
     background: Image;
 
-    constructor(private location: Location) {
+    constructor(@Inject(Location) private location: Location) {
         super({
             key: 'title'
         });
@@ -19,7 +19,7 @@ export class TitleScene extends Scene {
     }
 
     preload() {
-        this.load.image('background', this.location.normalize('/assets/backgrounds/login.png'));
+        this.load.image('background', this.location.prepareExternalUrl('/assets/backgrounds/login.png'));
     }
 
     create() {
@@ -27,6 +27,7 @@ export class TitleScene extends Scene {
     }
 
     update(time: number, delta: number): void {
+        console.log(this.background);
         this.background.width  = this.game.scale.width;
         this.background.height = this.game.scale.height;
     }

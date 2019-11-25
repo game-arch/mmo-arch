@@ -1,8 +1,7 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ConnectionManager}                                       from "../../../connection/src/lib/connection-manager";
-import {CharacterOffline}                                        from "../../../../../game-servers/lib/actions";
-import {Game}                                                    from 'phaser';
-import {GAME_CONFIG}                                             from "./phaser/config";
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {ConnectionManager}                               from "../../../connection/src/lib/connection-manager";
+import {CharacterOffline}                                from "../../../../../game-servers/lib/actions";
+import {GameEngineService}                               from "./game-engine.service";
 
 @Component({
     selector   : 'game-engine',
@@ -10,8 +9,6 @@ import {GAME_CONFIG}                                             from "./phaser/
     styles     : []
 })
 export class GameEngineComponent implements AfterViewInit {
-
-    game: Game;
     @ViewChild('canvas', {static: true})
     canvas: ElementRef;
 
@@ -19,11 +16,11 @@ export class GameEngineComponent implements AfterViewInit {
         return this.connection.world;
     }
 
-    constructor(public connection: ConnectionManager) {
+    constructor(public connection: ConnectionManager, public service: GameEngineService) {
     }
 
     ngAfterViewInit() {
-        this.game = new Game({...GAME_CONFIG, canvas: this.canvas.nativeElement});
+        this.service.init(this.canvas.nativeElement);
     }
 
     signOut() {

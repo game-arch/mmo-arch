@@ -12,12 +12,14 @@ import {CharacterSelectionModule} from "../../../character-selection/src/lib/cha
 import {ConnectionModule}         from "../../../connection/src/lib/connection.module";
 import {MatButtonModule}          from "@angular/material/button";
 import {GameEngineModule}         from "../../../game-engine/src/lib/game-engine.module";
+import {RouterModule}             from "@angular/router";
 
 @NgModule({
     declarations: [
         AppComponent
     ],
     imports: [
+        RouterModule.forRoot([]),
         BrowserModule,
         HttpClientModule,
         BrowserAnimationsModule,
