@@ -6,6 +6,7 @@ export interface MapConfig {
 }
 
 export interface CollisionConfig {
+    mass?: number
     position: [number, number]
     shape: 'circle' | 'rectangle' | 'polygon'
     points?: [number, number][]

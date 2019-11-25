@@ -1,5 +1,5 @@
-import {Body, Box, Circle, Plane, World} from "p2";
-import {MapConfig}                       from "../config/config";
+import {Body, Box, Circle, World} from "p2";
+import {MapConfig}                from "../config/config";
 
 
 export abstract class MapHandler {
@@ -11,7 +11,7 @@ export abstract class MapHandler {
     protected constructor(config: MapConfig) {
         this.world = new World();
         for (let collision of config.collisions) {
-            let body = new Body({mass: 0, position: [collision.x, collision.y]});
+            let body = new Body({mass: collision.mass || 0, position: collision.position});
             if (collision.shape === 'circle') {
                 body.addShape(new Circle({
                     radius: collision.radius
