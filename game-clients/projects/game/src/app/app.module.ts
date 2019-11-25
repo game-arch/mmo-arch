@@ -11,6 +11,7 @@ import {ServerSelectionModule}    from "../../../server-selection/src/lib/server
 import {CharacterSelectionModule} from "../../../character-selection/src/lib/character-selection.module";
 import {ConnectionModule}         from "../../../connection/src/lib/connection.module";
 import {MatButtonModule}          from "@angular/material/button";
+import {GameEngineModule}         from "../../../game-engine/src/lib/game-engine.module";
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import {MatButtonModule}          from "@angular/material/button";
         AuthenticationModule,
         ServerSelectionModule,
         CharacterSelectionModule,
+        GameEngineModule,
         NgxsModule.forRoot([]),
         NgxsStoragePluginModule.forRoot({
             key: [

@@ -30,7 +30,9 @@
             "styles": [
               "projects/game/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+                "node_modules/phaser/dist/phaser.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -425,33 +427,33 @@
         }
       }
     },
-    "player": {
+    "game-engine": {
       "projectType": "library",
-      "root": "projects/player",
-      "sourceRoot": "projects/player/src",
+      "root": "projects/game-engine",
+      "sourceRoot": "projects/game-engine/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/player/tsconfig.lib.json",
-            "project": "projects/player/ng-package.json"
+            "tsConfig": "projects/game-engine/tsconfig.lib.json",
+            "project": "projects/game-engine/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/player/src/test.ts",
-            "tsConfig": "projects/player/tsconfig.spec.json",
-            "karmaConfig": "projects/player/karma.conf.js"
+            "main": "projects/game-engine/src/test.ts",
+            "tsConfig": "projects/game-engine/tsconfig.spec.json",
+            "karmaConfig": "projects/game-engine/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/player/tsconfig.lib.json",
-              "projects/player/tsconfig.spec.json"
+              "projects/game-engine/tsconfig.lib.json",
+              "projects/game-engine/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
