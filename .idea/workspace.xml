@@ -26,7 +26,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/game-servers/src/world" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -96,6 +96,7 @@
       <workItem from="1574121741480" duration="9448000" />
       <workItem from="1574302940233" duration="14882000" />
       <workItem from="1574359066729" duration="40894000" />
+      <workItem from="1574696042994" duration="22000" />
     </task>
     <servers />
   </component>

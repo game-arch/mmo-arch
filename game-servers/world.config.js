@@ -94,7 +94,7 @@ module.exports = {
             }
         },
         {
-            name: (process.env.WORLD_CONSTANT || 'maiden') + '-map',
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-map-tutorial',
             script: 'dist/src/main.js',
             watch: ["dist/src/world/map", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],
             // Delay between restart
