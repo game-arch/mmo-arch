@@ -9,7 +9,10 @@ export const TUTORIAL_CONFIG: MapConfig = {
             shape   : 'polygon',
             position: [600, 320],
             points  : [
-                [0, 0]
+                [-5, -5],
+                [0, 5],
+                [2, 10],
+                [0, -8]
             ]
         },
         {
