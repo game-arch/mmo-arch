@@ -2,6 +2,7 @@ import {Controller, Get, OnApplicationBootstrap, OnApplicationShutdown} from '@n
 import {MapService}                                                     from './map.service';
 import {EventPattern}                                                   from "@nestjs/microservices";
 import {CharacterCreated, CharacterLoggedIn, CharacterLoggedOut}        from "../../global/character/actions";
+import {PlayerChangedMap}                                               from "./actions";
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -12,6 +13,11 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     @EventPattern(CharacterCreated.event)
     characterCreated(data: CharacterCreated) {
         console.log(data);
+    }
+
+    @EventPattern(PlayerChangedMap.event)
+    async changedMap(data: PlayerChangedMap) {
+        await this.service.changeMap(data.characterId, data.world, data.map, data.newX, data.newY);
     }
 
     @EventPattern(CharacterLoggedIn.event)
