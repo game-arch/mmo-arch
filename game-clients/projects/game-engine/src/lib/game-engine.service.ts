@@ -4,7 +4,8 @@ import {Game}                               from "phaser";
 import {GAME_CONFIG}                        from "./phaser/config";
 import {SceneFactory}                       from "./phaser/scenes/scene-factory.service";
 import {fromEvent}                          from "rxjs";
-import {takeUntil}                          from "rxjs/operators";
+import {mergeMap, takeUntil}                from "rxjs/operators";
+import {PlayerEnteredMap, PlayerLeftMap}    from "../../../../../game-servers/src/world/map/actions";
 
 @Injectable()
 export class GameEngineService {
@@ -38,6 +39,23 @@ export class GameEngineService {
             this.game.scene.start(scene);
         });
 
+        this.connection.world$
+            .pipe(takeUntil(this.destroyed))
+            .subscribe(world => {
+                if (world.socket) {
+                    fromEvent(world.socket, PlayerEnteredMap.event)
+                        .pipe(takeUntil(this.destroyed))
+                        .subscribe((data) => {
+                            console.log('Player Joined', data);
+                        });
+
+                    fromEvent(world.socket, PlayerLeftMap.event)
+                        .pipe(takeUntil(this.destroyed))
+                        .subscribe((data) => {
+                            console.log('Player Left', data);
+                        });
+                }
+            });
     }
 
     destroy() {

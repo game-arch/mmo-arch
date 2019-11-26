@@ -13,10 +13,6 @@ export class TutorialMap extends MapHandler {
 
     stop$ = new Subject();
 
-    nonPlayers: { [npcId: number]: { id: number, name: string, details: any, body: Body } }                     = {};
-    players: { [characterId: number]: { id: number, name: string, details: any, body: Body } }                  = {};
-    resources: { [resourceId: number]: { id: number, name: string, details: any, health: number, body: Body } } = {};
-
 
     constructor() {
         super(TUTORIAL_CONFIG);

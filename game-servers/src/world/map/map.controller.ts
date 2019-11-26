@@ -15,14 +15,13 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     }
 
     @EventPattern(CharacterLoggedIn.event)
-    characterLoggedIn(data) {
-        console.log('logged in', data);
+    async characterLoggedIn(data: CharacterLoggedIn) {
+        await this.service.playerJoinedMap(data.characterId, data.world);
     }
 
     @EventPattern(CharacterLoggedOut.event)
-    characterLoggedOut(data) {
-        console.log('logged out', data);
-
+    async characterLoggedOut(data) {
+        await this.service.playerLeftMap(data.characterId, data.world);
     }
 
     onApplicationBootstrap() {

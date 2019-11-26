@@ -23,13 +23,22 @@ import {
     CharacterOnline
 }                                                         from "../../global/character/actions";
 
+export interface User {
+    id: number,
+    email: string,
+    socket:Socket,
+    socketId: string,
+    character: { id: number, name: string }
+}
+
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;
-    capacity                                                                                            = 100;
-    accounts: { [id: number]: { id: number, email: string, socketId: string, character: {id:number, name:string} } }      = {};
-    sockets: { [socketId: string]: { id: number, email: string, socketId: string, character: {id:number, name:string} } } = {};
+    capacity                                    = 100;
+    accounts: { [id: number]: User }            = {};
+    sockets: { [socketId: string]: User }       = {};
+    characters: { [characterId: number]: User } = {};
 
     serverId = null;
 
@@ -62,7 +71,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             if (this.accounts[user.id]) {
                 throw new ConflictException("User already logged in!");
             }
-            this.accounts[user.id]  = {...user, socketId: client.id, character: null};
+            this.accounts[user.id]  = {...user, socketId: client.id, character: null, socket: client};
             this.sockets[client.id] = this.accounts[user.id];
             client.emit(CharacterGetAll.event, await this.service.getCharacters(user.id));
         } catch (e) {
@@ -91,11 +100,12 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     @SubscribeMessage(CharacterOnline.event)
-    async characterJoined(client: Socket, character:{id:number, name:string}) {
+    async characterJoined(client: Socket, character: { id: number, name: string }) {
         try {
             let user = this.sockets[client.id];
             this.character.characterOnline(character.id);
-            user.character = character;
+            user.character                = character;
+            this.characters[character.id] = user;
             client.join('character.' + character.name);
             return {status: 'success'};
         } catch (e) {
@@ -105,12 +115,13 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     @SubscribeMessage(CharacterOffline.event)
-    async characterLeft(client: Socket) {
+    async characterLeft(client: Socket, data: CharacterOffline) {
         try {
             let user              = this.sockets[client.id];
             let previousCharacter = user.character;
-            this.character.characterOffline(previousCharacter.id);
+            this.character.characterOffline(data.characterId);
             user.character = null;
+            delete this.characters[data.characterId];
             client.leave('character.' + previousCharacter.name);
             return {status: 'success'};
         } catch (e) {
@@ -124,6 +135,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             let user = this.sockets[client.id];
             if (user.character !== null) {
                 this.character.characterOffline(user.character.id);
+                delete this.characters[user.character.id];
             }
             delete this.accounts[user.id];
             delete this.sockets[client.id];

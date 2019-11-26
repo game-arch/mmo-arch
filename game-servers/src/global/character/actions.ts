@@ -60,6 +60,7 @@ export class CharacterLoggedIn {
     constructor(
         public characterId: number,
         public name: string,
+        public world:string,
         public gender: 'male' | 'female'
     ) {
 
@@ -70,7 +71,8 @@ export class CharacterLoggedOut {
 
     constructor(
         public characterId: number,
-        public name: string
+        public name: string,
+        public world:string
     ) {
 
     }

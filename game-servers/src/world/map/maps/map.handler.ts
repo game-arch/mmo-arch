@@ -1,5 +1,6 @@
 import {Body, Box, Circle, World} from "p2";
 import {MapConfig}                from "../config/config";
+import {Player}                   from "../entities/player";
 
 
 export abstract class MapHandler {
@@ -7,6 +8,10 @@ export abstract class MapHandler {
     name: string;
 
     world: World;
+
+    nonPlayers: { [npcId: number]: { id: number, name: string, details: any, body: Body } }                     = {};
+    players: { [characterId: number]: Player }                                                                  = {};
+    resources: { [resourceId: number]: { id: number, name: string, details: any, health: number, body: Body } } = {};
 
     protected constructor(config: MapConfig) {
         this.world = new World();
@@ -35,4 +40,14 @@ export abstract class MapHandler {
     abstract stop();
 
 
+    addPlayer(player: Player) {
+        this.world.addBody(player.body);
+        this.players[player.characterId] = player;
+
+    }
+
+    removePlayer(player: Player) {
+        this.world.removeBody(this.players[player.characterId].body);
+        delete this.players[player.characterId];
+    }
 }
