@@ -1,14 +1,14 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import {ConnectionManager}                               from "../../../connection/src/lib/connection-manager";
-import {CharacterOffline}                                from "../../../../../game-servers/lib/actions";
-import {GameEngineService}                               from "./game-engine.service";
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
+import {ConnectionManager}                                          from "../../../connection/src/lib/connection-manager";
+import {CharacterOffline}                                           from "../../../../../game-servers/lib/actions";
+import {GameEngineService}                                          from "./game-engine.service";
 
 @Component({
     selector   : 'game-engine',
     templateUrl: 'game-engine.component.html',
-    styles     : []
+    styleUrls  : ['game-engine.component.scss']
 })
-export class GameEngineComponent implements AfterViewInit {
+export class GameEngineComponent implements AfterViewInit, OnDestroy {
     @ViewChild('canvas', {static: true})
     canvas: ElementRef;
 
@@ -21,6 +21,10 @@ export class GameEngineComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.service.init(this.canvas.nativeElement);
+    }
+
+    ngOnDestroy() {
+        this.service.destroy();
     }
 
     signOut() {

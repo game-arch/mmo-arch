@@ -1,3 +1,4 @@
+<game-engine></game-engine>
 <ng-container *ngIf="auth$ | async as auth">
     <authentication *ngIf="auth.token === ''"></authentication>
     <ng-container *ngIf="auth.token !== ''">
@@ -5,7 +6,6 @@
             <server-selection *ngIf="!conn.socket"></server-selection>
             <ng-container *ngIf="conn.socket">
                 <character-selection *ngIf="conn.selectedCharacter === ''"></character-selection>
-                <game-engine *ngIf="conn.selectedCharacter !== ''"></game-engine>
             </ng-container>
         </ng-container>
         <button mat-raised-button style="position:fixed; bottom:16px;right:16px;" (click)="logout()">Logout</button>

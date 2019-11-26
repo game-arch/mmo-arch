@@ -1,5 +1,4 @@
 <canvas #canvas id="game-canvas" width="800" height="600"></canvas>
-<button mat-raised-button color="accent" style="position:fixed;left:16px;bottom:16px;" *ngIf="world"
-        (click)="signOut()">
+<button mat-raised-button color="accent" style="position:fixed;left:16px;bottom:16px;" *ngIf="world.socket" (click)="signOut()">
     Character Screen
 </button>
