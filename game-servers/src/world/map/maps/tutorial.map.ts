@@ -16,6 +16,7 @@ export class TutorialMap extends MapHandler {
 
     constructor() {
         super(TUTORIAL_CONFIG);
+        this.configure();
     }
 
     start() {

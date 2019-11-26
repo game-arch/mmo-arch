@@ -16,4 +16,6 @@ export interface CollisionConfig {
     originX?: number
     originY?: number
     rotation?: number
+    solid?: boolean
+    transitionTo?: string
 }

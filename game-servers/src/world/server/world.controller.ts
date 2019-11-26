@@ -35,6 +35,11 @@ export class WorldController {
     @EventPattern(CharacterLoggedIn.event)
     onCharacterJoin(data: CharacterLoggedIn) {
         if (data.world === WorldConstants.CONSTANT) {
+            this.gateway.loggedInCharacters[data.characterId] = {
+                id: data.characterId,
+                name: data.name,
+                map: ''
+            };
             this.logger.log(data.name + ' is online.');
             this.gateway.server.emit(CharacterLoggedIn.event, data);
         }
@@ -43,6 +48,7 @@ export class WorldController {
     @EventPattern(CharacterLoggedOut.event)
     onCharacterLeave(data: CharacterLoggedOut) {
         if (data.world === WorldConstants.CONSTANT) {
+            delete this.gateway.loggedInCharacters[data.characterId];
             this.logger.log(data.name + ' is offline.');
             this.gateway.server.emit(CharacterLoggedOut.event, data);
         }
@@ -51,24 +57,14 @@ export class WorldController {
     @EventPattern(PlayerEnteredMap.event)
     onMapJoined(data: PlayerEnteredMap) {
         if (data.world === WorldConstants.CONSTANT) {
-            if (this.gateway.characters.hasOwnProperty(data.characterId)) {
-                this.gateway.characters[data.characterId].socket.join('map.' + data.map);
-                this.gateway.server.to('map.' + data.map).emit(PlayerEnteredMap.event, {
-                    ...this.gateway.characters[data.characterId].character,
-                    x: data.x,
-                    y: data.y
-                });
-            }
+            this.gateway.playerJoin(data.characterId, data.map, data.x, data.y);
         }
     }
 
     @EventPattern(PlayerLeftMap.event)
     onMapLeft(data: PlayerLeftMap) {
         if (data.world === WorldConstants.CONSTANT) {
-            if (this.gateway.characters.hasOwnProperty(data.characterId)) {
-                this.gateway.characters[data.characterId].socket.leave('map.' + data.map);
-                this.gateway.server.to('map.' + data.map).emit(PlayerLeftMap.event, this.gateway.characters[data.characterId].character);
-            }
+            this.gateway.playerLeave(data.characterId, data.map);
         }
     }
 }

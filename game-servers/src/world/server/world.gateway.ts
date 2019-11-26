@@ -22,12 +22,13 @@ import {
     CharacterOffline,
     CharacterOnline
 }                                                         from "../../global/character/actions";
+import {PlayerEnteredMap, PlayerLeftMap}                  from "../map/actions";
 
 export interface User {
     id: number,
     email: string,
-    socket:Socket,
-    socketId: string,
+    socket?: Socket,
+    socketId?: string,
     character: { id: number, name: string }
 }
 
@@ -35,12 +36,20 @@ export interface User {
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;
-    capacity                                    = 100;
-    accounts: { [id: number]: User }            = {};
-    sockets: { [socketId: string]: User }       = {};
-    characters: { [characterId: number]: User } = {};
+    capacity                                                                                 = 100;
+    accounts: { [id: number]: User }                                                         = {};
+    sockets: { [socketId: string]: User }                                                    = {};
+    characters: { [characterId: number]: User }                                              = {};
+    loggedInCharacters: { [characterId: number]: { id: number, name: string, map: string } } = {};
 
     serverId = null;
+
+    getCharacter(id: number) {
+        return {
+            local   : this.characters[id],
+            loggedIn: this.loggedInCharacters[id]
+        };
+    }
 
     constructor(
         private logger: Logger,
@@ -135,6 +144,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             let user = this.sockets[client.id];
             if (user.character !== null) {
                 this.character.characterOffline(user.character.id);
+                this.playerLeave(user.character.id, this.loggedInCharacters[user.character.id].map);
                 delete this.characters[user.character.id];
             }
             delete this.accounts[user.id];
@@ -149,5 +159,30 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             this.accounts[key].character.id
         ))));
         this.presence.serverOffline(this.serverId);
+    }
+
+    playerJoin(characterId: number, map: string, x: number, y: number) {
+        let character = this.getCharacter(characterId);
+        if (character.loggedIn) {
+            if (character.local) {
+                character.loggedIn.map = map;
+                character.local.socket.join('map.' + map);
+            }
+            this.server.to('map.' + map).emit(PlayerEnteredMap.event, {
+                ...character.loggedIn,
+                x,
+                y
+            });
+        }
+    }
+
+    playerLeave(characterId: number, map: string) {
+        let character = this.getCharacter(characterId);
+        if (character.loggedIn) {
+            this.server.to('map.' + map).emit(PlayerLeftMap.event, character.loggedIn);
+            if (character.local) {
+                character.local.socket.leave('map.' + map);
+            }
+        }
     }
 }

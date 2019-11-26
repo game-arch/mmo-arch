@@ -7,16 +7,25 @@ export function loadCollisions(config: MapConfig, scene: Scene) {
     for (let collision of config.collisions) {
         if (collision.shape === 'circle') {
             let shape = scene.add.circle(collision.position[0], collision.position[1], collision.radius, 0x0000ff);
+            if (Boolean(collision.transitionTo)) {
+                shape.fillColor = 0xaaaaaa;
+            }
             shape.setOrigin(0,0);
             shapes.push(shape);
         }
         if (collision.shape === 'rectangle') {
             let shape = scene.add.rectangle(collision.position[0], collision.position[1], collision.width, collision.height, 0x0055ff);
+            if (Boolean(collision.transitionTo)) {
+                shape.fillColor = 0xaaaaaa;
+            }
             shape.setOrigin(0,0);
             shapes.push(shape);
         }
         if (collision.shape === 'polygon') {
             let shape = scene.add.polygon(collision.position[0], collision.position[1], collision.points, 0xff2200);
+            if (Boolean(collision.transitionTo)) {
+                shape.fillColor = 0xaaaaaa;
+            }
             shape.setOrigin(0,0);
             shapes.push(shape);
         }

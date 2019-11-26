@@ -6,15 +6,18 @@ import {SceneFactory}                       from "./phaser/scenes/scene-factory.
 import {fromEvent}                          from "rxjs";
 import {mergeMap, takeUntil}                from "rxjs/operators";
 import {PlayerEnteredMap, PlayerLeftMap}    from "../../../../../game-servers/src/world/map/actions";
+import {CharacterOffline, CharacterOnline}  from "../../../../../game-servers/src/global/character/actions";
+import Scene = Phaser.Scene;
+import {Player}                             from "./phaser/entities/player";
 
 @Injectable()
 export class GameEngineService {
 
     game: Game;
 
-    private currentScene = 'title';
-
-    private destroyed = new EventEmitter();
+    private currentSceneKey = 'title';
+    private currentScene: Scene;
+    private destroyed       = new EventEmitter();
 
 
     constructor(
@@ -32,10 +35,11 @@ export class GameEngineService {
             .pipe(takeUntil(this.destroyed))
             .subscribe(() => this.game.events.emit('resize', window.innerWidth, window.innerHeight));
         this.game.events.on('game.scene', (scene) => {
-            if (this.currentScene !== '') {
-                this.game.scene.stop(this.currentScene);
+            if (this.currentSceneKey !== '') {
+                this.game.scene.stop(this.currentSceneKey);
             }
-            this.currentScene = scene;
+            this.currentSceneKey = scene;
+            this.currentScene    = this.game.scene.getScene(scene);
             this.game.scene.start(scene);
         });
 
@@ -45,8 +49,9 @@ export class GameEngineService {
                 if (world.socket) {
                     fromEvent(world.socket, PlayerEnteredMap.event)
                         .pipe(takeUntil(this.destroyed))
-                        .subscribe((data) => {
+                        .subscribe((data: PlayerEnteredMap) => {
                             console.log('Player Joined', data);
+                            let player = new Player(this.currentScene, data.x, data.y);
                         });
 
                     fromEvent(world.socket, PlayerLeftMap.event)
