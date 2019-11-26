@@ -4,7 +4,7 @@ import {GameCharacter}                                         from "../../../..
 @Entity()
 @Index('user', ['accountId', 'name'])
 @Index('status', ['status'])
-@Unique('name', ['name'])
+@Unique('name', ['world','name'])
 export class Character implements GameCharacter {
 
     @PrimaryGeneratedColumn()
@@ -12,6 +12,8 @@ export class Character implements GameCharacter {
 
     @Column()
     accountId: number;
+    @Column()
+    world:string;
 
     @Column()
     name: string;

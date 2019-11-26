@@ -3,7 +3,8 @@ import {AccountClient}   from "../../global/account/client/account.client";
 import {Socket}          from "socket.io";
 import {User}            from "./user";
 import {BehaviorSubject} from "rxjs";
-import {CharacterClient} from "../character/client/character.client";
+import {CharacterClient} from "../../global/character/client/character.client";
+import {WorldConstants}  from "../constants";
 
 @Injectable()
 export class WorldService {
@@ -35,11 +36,11 @@ export class WorldService {
     }
 
     async getCharacters(accountId: number) {
-        return await this.character.getAll(accountId);
+        return await this.character.getAll(accountId, WorldConstants.CONSTANT);
     }
 
     async createCharacter(accountId: number, name: string, gender: 'male' | 'female') {
-        return await this.character.create(accountId, name, gender);
+        return await this.character.create(accountId, WorldConstants.CONSTANT, name, gender);
     }
 }
 

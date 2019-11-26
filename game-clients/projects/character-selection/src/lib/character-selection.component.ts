@@ -36,7 +36,7 @@ export class CharacterSelectionComponent implements OnInit {
 
     async join() {
         if (this.connection.world) {
-            await this.connection.world.selectCharacter(this.selected.name);
+            await this.connection.world.selectCharacter(this.selected.id);
             this.engine.game.events.emit('game.scene', 'tutorial');
         }
     }

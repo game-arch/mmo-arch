@@ -14,6 +14,7 @@ async function bootstrap() {
         transport: config.microservice.transport,
         options: {
             ...config.microservice.options,
+            name: WorldConstants.NAME + ' Commerce',
             queue: WorldConstants.CONSTANT + 'commerce'
         }
     });

@@ -12,6 +12,7 @@ async function bootstrap() {
         transport: config.microservice.transport,
         options  : {
             ...config.microservice.options,
+            name: 'Presence',
             queue: 'presence'
         }
     });

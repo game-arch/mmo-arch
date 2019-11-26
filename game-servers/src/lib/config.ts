@@ -3,7 +3,7 @@ import {PORTS}       from "../../lib/constants/ports";
 import {NatsOptions} from "@nestjs/microservices";
 
 export const config = {
-    microservice      : <NatsOptions>{
+    microservice: <NatsOptions>{
         transport: Transport.NATS,
         options  : {
             url : 'nats://' + (process.env.NATS_HOST || 'localhost') + ':' + (process.env.NATS_PORT || '4222'),
@@ -11,20 +11,20 @@ export const config = {
             pass: process.env.NATS_PASSWORD || ''
         }
     },
-    jwt               : {
+    jwt         : {
         secret: process.env.JWT_SECRET || 'a-random-secret'
     },
-    mysql             : {
+    mysql       : {
         host    : process.env.MYSQL_HOST || 'localhost',
         port    : parseInt(process.env.MYSQL_PORT || '3306'),
         username: process.env.MYSQL_USERNAME || 'root',
         password: process.env.MYSQL_PASSWORD || ''
     },
-    redis             : {
+    redis       : {
         host: process.env.REDIS_HOST || 'localhost',
         port: parseInt(process.env.REDIS_PORT || '6379')
     },
-    servers           : {
+    servers     : {
         lobby   : {
             host: process.env.LOBBY_HOST || 'localhost',
             port: process.env.LOBBY_PORT || PORTS.LOBBY

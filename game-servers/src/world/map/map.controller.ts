@@ -1,7 +1,7 @@
 import {Controller, Get, OnApplicationBootstrap, OnApplicationShutdown} from '@nestjs/common';
 import {MapService}                                                     from './map.service';
 import {EventPattern}                                                   from "@nestjs/microservices";
-import {Events}                                                         from "../../../lib/constants/events";
+import {CharacterCreated, CharacterLoggedIn, CharacterLoggedOut}        from "../../global/character/actions";
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -9,18 +9,19 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     }
 
 
-    @EventPattern(Events.CHARACTER_CREATED)
-    characterCreated(data: { characterId: number, accountId: number, world: string }) {
+    @EventPattern(CharacterCreated.event)
+    characterCreated(data: CharacterCreated) {
         console.log(data);
     }
 
-    @EventPattern(Events.CHARACTER_ONLINE)
-    characterOnline(data) {
-
+    @EventPattern(CharacterLoggedIn.event)
+    characterLoggedIn(data) {
+        console.log('logged in', data);
     }
 
-    @EventPattern(Events.CHARACTER_OFFLINE)
-    characterOffline(data) {
+    @EventPattern(CharacterLoggedOut.event)
+    characterLoggedOut(data) {
+        console.log('logged out', data);
 
     }
 

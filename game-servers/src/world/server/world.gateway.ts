@@ -7,24 +7,29 @@ import {
 }                                                         from "@nestjs/websockets";
 import {Server, Socket}                                   from "socket.io";
 import {WorldService}                                     from "./world.service";
-import {Events}                                           from "../../../lib/constants/events";
-import {CharacterEvents}                                  from "../character/character.events";
 import {ConflictException, Logger, OnApplicationShutdown} from "@nestjs/common";
 import {PresenceClient}                                   from "../../global/presence/client/presence.client";
 import {config}                                           from "../../lib/config";
 import {ClientProxy}                                      from "@nestjs/microservices";
-import {Character}                                        from "../character/entities/character";
+import {Character}                                        from "../../global/character/entities/character";
 import {WorldConstants}                                   from "../constants";
-import {CharacterClient}                                  from "../character/client/character.client";
-import {CharacterOffline, CharacterOnline}                from "../../../lib/actions";
+import {CharacterClient}                                  from "../../global/character/client/character.client";
+import {
+    CharacterCreate,
+    CharacterCreated,
+    CharacterGetAll,
+    CharacterNotCreated,
+    CharacterOffline,
+    CharacterOnline
+}                                                         from "../../global/character/actions";
 
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;
     capacity                                                                                            = 100;
-    accounts: { [id: number]: { id: number, email: string, socketId: string, character: string } }      = {};
-    sockets: { [socketId: string]: { id: number, email: string, socketId: string, character: string } } = {};
+    accounts: { [id: number]: { id: number, email: string, socketId: string, character: {id:number, name:string} } }      = {};
+    sockets: { [socketId: string]: { id: number, email: string, socketId: string, character: {id:number, name:string} } } = {};
 
     serverId = null;
 
@@ -57,44 +62,40 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             if (this.accounts[user.id]) {
                 throw new ConflictException("User already logged in!");
             }
-            this.accounts[user.id]  = {...user, socketId: client.id, character: ''};
+            this.accounts[user.id]  = {...user, socketId: client.id, character: null};
             this.sockets[client.id] = this.accounts[user.id];
-            client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(user.id));
+            client.emit(CharacterGetAll.event, await this.service.getCharacters(user.id));
         } catch (e) {
             client.emit("connect-error", e.message);
             client.disconnect(true);
         }
     }
 
-    @SubscribeMessage(CharacterEvents.CREATE)
+    @SubscribeMessage(CharacterCreate.event)
     async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
         try {
             let accountId            = this.sockets[client.id].id;
             let character: Character = await this.service.createCharacter(accountId, data.name, data.gender);
             if (character) {
-                client.emit(Events.CHARACTER_LIST, await this.service.getCharacters(accountId));
-                client.emit(Events.CHARACTER_CREATED, character);
-                this.client.emit(Events.CHARACTER_CREATED, {
-                    accountId,
-                    characterId: character.id,
-                    world      : WorldConstants.CONSTANT
-                });
+                client.emit(CharacterGetAll.event, await this.service.getCharacters(accountId));
+                client.emit(CharacterCreated.event, new CharacterCreated(character.accountId, character.world, character.id));
+                this.client.emit(CharacterCreated.event, new CharacterCreated(character.accountId, character.world, character.id));
                 return {status: 'success'};
             }
-            client.emit(Events.CHARACTER_NOT_CREATED);
+            client.emit(CharacterNotCreated.event);
             return {status: 'error'};
         } catch (e) {
-            client.emit(Events.CHARACTER_NOT_CREATED, e.response);
+            client.emit(CharacterNotCreated.event, new CharacterNotCreated(e.response));
             return {status: 'error'};
         }
     }
 
     @SubscribeMessage(CharacterOnline.event)
-    async characterJoined(client: Socket, character: { name: string }) {
+    async characterJoined(client: Socket, character:{id:number, name:string}) {
         try {
             let user = this.sockets[client.id];
-            this.character.characterOnline(user.id, character.name);
-            user.character = character.name;
+            this.character.characterOnline(character.id);
+            user.character = character;
             client.join('character.' + character.name);
             return {status: 'success'};
         } catch (e) {
@@ -108,9 +109,9 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         try {
             let user              = this.sockets[client.id];
             let previousCharacter = user.character;
-            this.character.characterOffline(user.id, previousCharacter);
-            user.character = '';
-            client.leave('character.' + previousCharacter);
+            this.character.characterOffline(previousCharacter.id);
+            user.character = null;
+            client.leave('character.' + previousCharacter.name);
             return {status: 'success'};
         } catch (e) {
             this.logger.error(e);
@@ -121,8 +122,8 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     async handleDisconnect(client: Socket) {
         try {
             let user = this.sockets[client.id];
-            if (user.character !== '') {
-                this.character.characterOffline(user.id, user.character);
+            if (user.character !== null) {
+                this.character.characterOffline(user.character.id);
             }
             delete this.accounts[user.id];
             delete this.sockets[client.id];
@@ -133,8 +134,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async onApplicationShutdown(signal?: string) {
         this.character.allCharactersOffline(Object.keys(this.accounts).map(key => (new CharacterOffline(
-            this.accounts[key].id,
-            this.accounts[key].character
+            this.accounts[key].character.id
         ))));
         this.presence.serverOffline(this.serverId);
     }

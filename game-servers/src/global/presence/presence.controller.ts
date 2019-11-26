@@ -1,8 +1,8 @@
-import {Controller, OnApplicationBootstrap} from "@nestjs/common";
-import {Events}                             from "../../../lib/constants/events";
-import {EventPattern, MessagePattern}       from "@nestjs/microservices";
-import {ServerPresence}                     from "./services/server.presence";
-import {PresenceEmitter}                    from "./emitter/presence.emitter";
+import {Controller, OnApplicationBootstrap}        from "@nestjs/common";
+import {EventPattern, MessagePattern}              from "@nestjs/microservices";
+import {ServerPresence}                            from "./services/server.presence";
+import {PresenceEmitter}                           from "./emitter/presence.emitter";
+import {GetServers, RegisterServer, ServerOffline} from "./actions";
 
 @Controller()
 export class PresenceController implements OnApplicationBootstrap {
@@ -12,18 +12,18 @@ export class PresenceController implements OnApplicationBootstrap {
     ) {
     }
 
-    @MessagePattern(Events.SERVER_LIST)
+    @MessagePattern(GetServers.event)
     async getServers() {
         return await this.server.getServers();
     }
 
-    @MessagePattern(Events.REGISTER_SERVER)
-    async register({constant, name, port, instanceId, host}: { constant: string, name: string, port: number, instanceId: number, host: string }) {
+    @MessagePattern(RegisterServer.event)
+    async register({constant, name, port, instanceId, host}: RegisterServer) {
         return await this.server.register(this.server.getHost(host), port, instanceId, constant, name);
     }
 
-    @EventPattern(Events.SERVER_OFFLINE)
-    async serverOffline({serverId}: { serverId: number }) {
+    @EventPattern(ServerOffline.event)
+    async serverOffline({serverId}: ServerOffline) {
         await this.server.offline(serverId);
     }
 

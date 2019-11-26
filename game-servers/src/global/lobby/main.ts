@@ -5,7 +5,13 @@ import {config}      from "../../lib/config";
 
 async function bootstrap() {
     const app = await NestFactory.create(LobbyModule);
-    app.connectMicroservice(config.microservice);
+    app.connectMicroservice({
+        transport: config.microservice.transport,
+        options  : {
+            ...config.microservice.options,
+            name: 'Lobby Server'
+        }
+    });
     app.enableCors({
         origin     : true,
         credentials: true

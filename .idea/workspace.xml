@@ -34,23 +34,23 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/game-clients/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/game-clients/projects/game-engine/src/lib/phaser/scenes/title" />
-      <recent name="$PROJECT_DIR$/game-clients/projects/game/src/assets/sprites" />
-      <recent name="$PROJECT_DIR$/game-servers/src/world/presence" />
-      <recent name="$PROJECT_DIR$/game-servers/src/lib" />
-      <recent name="$PROJECT_DIR$/game-servers/src/world" />
-    </key>
-    <key name="es6.move.members.recent.items">
-      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice-client.module.ts" />
-      <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/game-servers/src/world" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice/presence" />
       <recent name="$PROJECT_DIR$/game-servers/src/microservice/character/client" />
       <recent name="$PROJECT_DIR$/game-servers/src" />
+    </key>
+    <key name="es6.move.members.recent.items">
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/microservice-client.module.ts" />
+      <recent name="$PROJECT_DIR$/game-servers/src/lib/config.ts" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game-servers/src/global/character" />
+      <recent name="$PROJECT_DIR$/game-servers/src/global" />
+      <recent name="$PROJECT_DIR$/game-clients/projects/game-engine/src/lib/phaser/scenes/title" />
+      <recent name="$PROJECT_DIR$/game-clients/projects/game/src/assets/sprites" />
+      <recent name="$PROJECT_DIR$/game-servers/src/world/presence" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -96,7 +96,8 @@
       <workItem from="1574121741480" duration="9448000" />
       <workItem from="1574302940233" duration="14882000" />
       <workItem from="1574359066729" duration="40894000" />
-      <workItem from="1574696042994" duration="14205000" />
+      <workItem from="1574696042994" duration="14345000" />
+      <workItem from="1574783110181" duration="5337000" />
     </task>
     <servers />
   </component>

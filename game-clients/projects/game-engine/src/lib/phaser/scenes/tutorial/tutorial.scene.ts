@@ -1,6 +1,6 @@
 import Scene = Phaser.Scene;
 import {Location}                          from "@angular/common";
-import {CharacterOffline, CharacterOnline} from "../../../../../../../../game-servers/lib/actions";
+import {CharacterOffline, CharacterOnline} from "../../../../../../../../game-servers/src/global/character/actions";
 import {ConnectionManager}                 from "../../../../../../connection/src/lib/connection-manager";
 import {fromEvent}                         from "rxjs";
 import {takeUntil}                         from "rxjs/operators";

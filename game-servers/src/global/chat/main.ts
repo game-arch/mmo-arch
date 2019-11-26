@@ -1,25 +1,25 @@
 import {NestFactory}    from '@nestjs/core';
-import {ItemModule}     from './item.module';
+import {ChatModule}     from './chat.module';
 import {createDatabase} from "../../lib/database.module";
 import {config}         from "../../lib/config";
 import {Logger}         from "@nestjs/common";
-import {WorldConstants} from "../constants";
 
 
-const logger = new Logger(WorldConstants.NAME + ' Item');
+const logger = new Logger('Chat');
 
 async function bootstrap() {
-    await createDatabase(WorldConstants.DB_NAME);
-    const app = await NestFactory.createMicroservice(ItemModule, {
+    await createDatabase('chat');
+    const app = await NestFactory.createMicroservice(ChatModule, {
         transport: config.microservice.transport,
         options: {
             ...config.microservice.options,
-            queue: WorldConstants.CONSTANT + '.item'
+            name: 'Chat',
+            queue: 'chat'
         }
     });
     app.useLogger(logger);
     await app.listen(() => {
-        logger.log(WorldConstants.NAME + " Item Microservice is listening ...");
+        logger.log("Chat Microservice is listening ...");
     });
 }
 

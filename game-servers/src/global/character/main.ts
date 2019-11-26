@@ -3,23 +3,23 @@ import {CharacterModule} from './character.module';
 import {createDatabase}  from "../../lib/database.module";
 import {config}          from "../../lib/config";
 import {Logger}          from "@nestjs/common";
-import {WorldConstants}  from "../constants";
 
 
-const logger = new Logger(WorldConstants.NAME + ' Character');
+const logger = new Logger('Character');
 
 async function bootstrap() {
-    await createDatabase(WorldConstants.DB_NAME);
-    const app = await NestFactory.createMicroservice(CharacterModule,{
+    await createDatabase('character');
+    const app = await NestFactory.createMicroservice(CharacterModule, {
         transport: config.microservice.transport,
-        options: {
+        options  : {
             ...config.microservice.options,
-            queue: WorldConstants.CONSTANT + '.character'
+            name : 'Character',
+            queue: 'character'
         }
     });
     app.useLogger(logger);
     await app.listen(() => {
-        logger.log(WorldConstants.NAME + " Character Microservice is listening ...");
+        logger.log("Character Microservice is listening ...");
     });
 }
 

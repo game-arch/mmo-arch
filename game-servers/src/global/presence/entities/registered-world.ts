@@ -1,5 +1,4 @@
 import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {GameWorld}                                      from "../../../../lib/entities/game-world";
 
 @Unique('instance', ['constant', 'host', 'port', 'instanceId'])
 @Entity()

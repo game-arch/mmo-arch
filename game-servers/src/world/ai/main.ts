@@ -14,7 +14,8 @@ async function bootstrap() {
         transport: config.microservice.transport,
         options  : {
             ...config.microservice.options,
-            queue: WorldConstants.CONSTANT + '.area'
+            name: WorldConstants.NAME + ' AI',
+            queue: WorldConstants.CONSTANT + '.ai'
 
         }
     });

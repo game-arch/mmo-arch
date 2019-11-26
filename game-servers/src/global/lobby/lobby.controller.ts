@@ -1,11 +1,11 @@
 import {Controller, Get, Logger, Post, Req, Res} from '@nestjs/common';
-import {LobbyService}                            from './lobby.service';
-import {AccountClient}                           from "../account/client/account.client";
-import {Request, Response}                       from "express";
-import {EventPattern}                            from "@nestjs/microservices";
-import {Events}                                  from "../../../lib/constants/events";
-import {GameWorld}                               from "../../../lib/entities/game-world";
-import {LobbyGateway}                            from "./lobby.gateway";
+import {LobbyService}      from './lobby.service';
+import {AccountClient}     from "../account/client/account.client";
+import {Request, Response} from "express";
+import {EventPattern}      from "@nestjs/microservices";
+import {GameWorld}         from "../../../lib/entities/game-world";
+import {LobbyGateway}      from "./lobby.gateway";
+import {GetServers}        from "../presence/actions";
 
 @Controller()
 export class LobbyController {
@@ -46,10 +46,10 @@ export class LobbyController {
         response.status(500).send(e.message || 'Internal Server Error');
     }
 
-    @EventPattern(Events.SERVER_LIST)
+    @EventPattern(GetServers.event)
     serverList(servers: GameWorld[]) {
         this.gateway.servers = servers;
-        this.gateway.server.emit(Events.SERVER_LIST, servers);
+        this.gateway.server.emit(GetServers.event, servers);
         this.logger.log('Server list updated.');
     }
 }

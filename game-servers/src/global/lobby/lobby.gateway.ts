@@ -6,8 +6,8 @@ import {
 import {Server, Socket} from "socket.io";
 import {LobbyService}   from "./lobby.service";
 import {GameWorld}      from "../../../lib/entities/game-world";
-import {Events}         from "../../../lib/constants/events";
 import {Logger}         from "@nestjs/common";
+import {GetServers}     from "../presence/actions";
 
 @WebSocketGateway()
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
@@ -28,7 +28,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect, O
     async handleConnection(client: Socket) {
         try {
             this.accounts[client.id] = await this.service.getAccount(client);
-            client.emit(Events.SERVER_LIST, this.servers);
+            client.emit(GetServers.event, this.servers);
             this.logger.log(this.accounts[client.id].email + ' connected.');
         } catch (e) {
             this.logger.log(client.id + ' was not authorized, disconnecting socket.');
@@ -46,6 +46,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect, O
 
     async afterInit(server: Server) {
         this.servers = await this.service.getServers();
-        this.server.emit(Events.SERVER_LIST, this.servers);
+        this.server.emit(GetServers.event, this.servers);
     }
 }

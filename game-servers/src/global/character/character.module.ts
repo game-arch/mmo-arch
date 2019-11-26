@@ -4,7 +4,7 @@ import {CharacterService}    from './character.service';
 import {DATABASE_MODULE}     from "../../lib/database.module";
 import {TypeOrmModule}       from "@nestjs/typeorm";
 import {Character}           from "./entities/character";
-import {WorldConstants}      from "../constants";
+import {CharacterEmitter}    from "./character.emitter";
 
 @Module({
     imports    : [
@@ -12,12 +12,12 @@ import {WorldConstants}      from "../constants";
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,
             type    : 'mysql',
-            database: WorldConstants.DB_NAME,
+            database: 'character',
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],
     controllers: [CharacterController],
-    providers  : [CharacterService],
+    providers  : [CharacterService, CharacterEmitter],
 })
 export class CharacterModule {
 }

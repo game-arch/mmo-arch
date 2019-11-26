@@ -1,15 +1,19 @@
 import {NestFactory}    from '@nestjs/core';
 import {WorldModule}    from './world.module';
-import {createDatabase} from "../../lib/database.module";
 import {config}         from "../../lib/config";
 import {Logger}         from "@nestjs/common";
 import {WorldConstants} from "../constants";
 
 const logger = new Logger(WorldConstants.NAME + ' Server');
 async function bootstrap() {
-    await createDatabase('world');
     const app = await NestFactory.create(WorldModule);
-    app.connectMicroservice(config.microservice);
+    app.connectMicroservice({
+        transport: config.microservice.transport,
+        options: {
+            ...config.microservice.options,
+            name: WorldConstants.NAME + ' Server'
+        }
+    });
     app.enableCors({
         origin     : true,
         credentials: true

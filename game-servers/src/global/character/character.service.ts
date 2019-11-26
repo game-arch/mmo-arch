@@ -3,25 +3,28 @@ import {InjectRepository}                                            from "@nest
 import {Character}                                                   from "./entities/character";
 import {QueryFailedError, Repository}                                from "typeorm";
 import {RpcException}                                                from "@nestjs/microservices";
-import {AllCharactersOffline, CharacterOffline, CharacterOnline}     from "../../../lib/actions";
+import {AllCharactersOffline, CharacterOffline, CharacterOnline}     from "./actions";
 import {from}                                                        from "rxjs";
+import {CharacterEmitter}                                            from "./character.emitter";
 
 @Injectable()
 export class CharacterService {
     constructor(
+        private emitter: CharacterEmitter,
         @InjectRepository(Character)
         private repo: Repository<Character>) {
 
     }
 
-    async getCharactersByAccountId(accountId: number) {
-        return await this.repo.find({accountId});
+    async getCharactersFor(accountId: number, world: string) {
+        return await this.repo.find({accountId, world});
     }
 
-    async createCharacterFor(accountId: number, name: string, gender: 'male' | 'female') {
+    async createCharacterFor(accountId: number, world: string, name: string, gender: 'male' | 'female') {
         try {
             let character       = this.repo.create();
             character.name      = name;
+            character.world     = world;
             character.accountId = accountId;
             character.gender    = gender;
             await this.repo.save(character);
@@ -35,15 +38,17 @@ export class CharacterService {
     }
 
     async characterOnline(data: CharacterOnline) {
-        let character    = await this.repo.findOne(data);
+        let character    = await this.repo.findOne({id: data.characterId});
         character.status = 'online';
         await this.repo.save(character);
+        this.emitter.characterLoggedIn(character.id, character.gender, character.name);
     }
 
     async characterOffline(data: CharacterOffline) {
-        let character    = await this.repo.findOne(data);
+        let character    = await this.repo.findOne({id: data.characterId});
         character.status = 'offline';
         await this.repo.save(character);
+        this.emitter.characterLoggedOut(character.id, character.name);
     }
 
     async allCharactersOffline(data: AllCharactersOffline) {

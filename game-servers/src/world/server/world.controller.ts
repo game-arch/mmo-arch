@@ -1,9 +1,8 @@
-import {Controller, Get, Logger}           from '@nestjs/common';
-import {WorldGateway}                      from "./world.gateway";
-import {EventPattern}                      from "@nestjs/microservices";
-import {Events}                            from "../../../lib/constants/events";
-import {WorldConstants}                    from "../constants";
-import {CharacterOffline, CharacterOnline} from "../../../lib/actions";
+import {Controller, Get, Logger}               from '@nestjs/common';
+import {WorldGateway}                          from "./world.gateway";
+import {EventPattern}                          from "@nestjs/microservices";
+import {CharacterLoggedIn, CharacterLoggedOut} from "../../global/character/actions";
+import {PresenceOnline}                        from "../../global/presence/actions";
 
 @Controller()
 export class WorldController {
@@ -26,20 +25,20 @@ export class WorldController {
         return Object.keys(this.gateway.accounts).map(key => this.gateway.accounts[key]);
     }
 
-    @EventPattern(Events.PRESENCE_ONLINE)
+    @EventPattern(PresenceOnline.event)
     async onPresenceOnline() {
         await this.gateway.afterInit(this.gateway.server);
     }
 
-    @EventPattern(CharacterOnline.event)
-    onCharacterJoin(data: CharacterOnline) {
+    @EventPattern(CharacterLoggedIn.event)
+    onCharacterJoin(data: CharacterLoggedIn) {
         this.logger.log(data.name + ' is online.');
-        this.gateway.server.emit(CharacterOnline.event, data);
+        this.gateway.server.emit(CharacterLoggedIn.event, data);
     }
 
-    @EventPattern(CharacterOffline.event)
-    onCharacterLeave(data: CharacterOffline) {
+    @EventPattern(CharacterLoggedOut.event)
+    onCharacterLeave(data: CharacterLoggedOut) {
         this.logger.log(data.name + ' is offline.');
-        this.gateway.server.emit(CharacterOffline.event, data);
+        this.gateway.server.emit(CharacterLoggedOut.event, data);
     }
 }

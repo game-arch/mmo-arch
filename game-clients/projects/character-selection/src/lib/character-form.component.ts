@@ -1,10 +1,10 @@
-import {Component, EventEmitter}            from "@angular/core";
-import {ConnectionManager}                  from "../../../connection/src/lib/connection-manager";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Events}                             from "../../../../../game-servers/lib/constants/events";
-import {MatDialogRef}                       from "@angular/material/dialog";
-import {fromEvent}                          from "rxjs";
-import {takeUntil}                          from "rxjs/operators";
+import {Component, EventEmitter}                                from "@angular/core";
+import {ConnectionManager}                                      from "../../../connection/src/lib/connection-manager";
+import {FormControl, FormGroup, Validators}                     from "@angular/forms";
+import {MatDialogRef}                                           from "@angular/material/dialog";
+import {fromEvent}                                              from "rxjs";
+import {takeUntil}                                              from "rxjs/operators";
+import {CharacterCreate, CharacterCreated, CharacterNotCreated} from "../../../../../game-servers/src/global/character/actions";
 
 @Component({
     selector   : 'character-form',
@@ -24,22 +24,22 @@ export class CharacterFormComponent {
     }
 
     ngOnInit() {
-        fromEvent(this.connection.world.socket, Events.CHARACTER_CREATED)
+        fromEvent(this.connection.world.socket, CharacterCreated.event)
             .pipe(takeUntil(this.destroy))
             .subscribe(() => {
                 this.ref.close();
             });
-        fromEvent(this.connection.world.socket, Events.CHARACTER_NOT_CREATED)
+        fromEvent(this.connection.world.socket, CharacterNotCreated.event)
             .pipe(takeUntil(this.destroy))
-            .subscribe((data: any) => {
-                if (data.statusCode === 409) {
+            .subscribe((data: CharacterNotCreated) => {
+                if (data.error.statusCode === 409) {
                     this.form.get('name').setErrors({unique: true});
                 }
             });
     }
 
     submit() {
-        this.connection.world.socket.emit(Events.CREATE_CHARACTER, this.form.getRawValue());
+        this.connection.world.socket.emit(CharacterCreate.event, this.form.getRawValue());
     }
 
     ngOnDestroy() {
