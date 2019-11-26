@@ -8,7 +8,7 @@ export class WorldConnection extends Connection {
 
     characters: GameCharacter[] = [];
 
-    selectedCharacter = '';
+    selectedCharacter: { id: number, name: string } = null;
 
     constructor(public world?: GameWorld, public socket?: Socket) {
         super(world, socket);
@@ -16,18 +16,18 @@ export class WorldConnection extends Connection {
             this.socket.on(CharacterGetAll.event, list => this.characters = list);
             this.socket.on('disconnect', (typeOfDisconnect) => {
                 if (typeOfDisconnect === 'io client disconnect') {
-                    this.selectedCharacter = '';
+                    this.selectedCharacter = null;
                     return;
                 }
-                if (this.selectedCharacter !== '') {
+                if (this.selectedCharacter !== null) {
                     console.info('Disconnected from world... trying to reconnect...');
                 }
             });
             this.socket.on('connect', () => {
-                if (this.selectedCharacter !== '') {
+                if (this.selectedCharacter !== null) {
                     console.info('Connecting as ' + this.selectedCharacter + '...');
                     this.socket.once(CharacterGetAll.event, async () => {
-                        await this.selectCharacter(this.selectedCharacter);
+                        await this.selectCharacter(this.selectedCharacter.name, this.selectedCharacter.id);
                     });
                 }
             });
@@ -38,7 +38,7 @@ export class WorldConnection extends Connection {
         return new Promise((resolve, reject) => {
             this.socket.emit(CharacterOnline.event, {id: characterId, name: characterName}, (data) => {
                 if (data.status === 'success') {
-                    this.selectedCharacter = characterName;
+                    this.selectedCharacter = {id: characterId, name: characterName};
                     console.log('You are logged in as ' + characterName);
                     resolve(data);
                 } else {
