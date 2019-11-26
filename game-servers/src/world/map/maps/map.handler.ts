@@ -2,6 +2,8 @@ import {Body, Box, Circle, World} from "p2";
 import {MapConfig}                from "../config/config";
 import {Player}                   from "../entities/player";
 import {MapEmitter}               from "../map.emitter";
+import {from}                     from "rxjs";
+import {map, toArray}             from "rxjs/operators";
 
 
 export abstract class MapHandler {
@@ -37,7 +39,7 @@ export abstract class MapHandler {
             }
             if (Boolean(collision.transitionTo)) {
                 body.on('beginContact', (...args) => {
-                   console.log('collision!', args);
+                    console.log('collision!', args);
                 });
             }
             this.world.addBody(body);
@@ -58,5 +60,18 @@ export abstract class MapHandler {
     removePlayer(player: Player) {
         this.world.removeBody(this.players[player.characterId].body);
         delete this.players[player.characterId];
+    }
+
+    async getAllPlayers() {
+        return await from(Object.keys(this.players)).pipe(
+            map(key => {
+                return {
+                    characterId: this.players[key].characterId,
+                    x          : this.players[key].x,
+                    y          : this.players[key].y
+                }
+            }),
+            toArray()
+        ).toPromise();
     }
 }

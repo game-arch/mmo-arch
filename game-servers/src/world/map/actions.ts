@@ -5,6 +5,7 @@ export class PlayerEnteredMap {
 
     }
 }
+
 export class PlayerChangedMap {
     static readonly event = 'map.player_changed_map';
 
@@ -17,6 +18,14 @@ export class PlayerLeftMap {
     static readonly event = 'map.player_left';
 
     constructor(public characterId: number, public world: string, public map: string) {
+
+    }
+}
+
+export class AllPlayers {
+    static readonly event = 'map.all_players';
+
+    constructor(public world: string, public map: string, public players: { characterId: number, x: number, y: number }[]) {
 
     }
 }

@@ -49,6 +49,7 @@ export class MapService {
         if (player) {
             this.emitter.playerJoinedMap(characterId, world, player.map, player.x, player.y);
             this.map.addPlayer(player);
+            this.emitter.allPlayers(world, player.map, await this.map.getAllPlayers());
         }
     }
 
@@ -57,6 +58,7 @@ export class MapService {
         if (player) {
             this.emitter.playerLeftMap(characterId, world, player.map);
             this.map.removePlayer(player);
+            this.emitter.allPlayers(world, player.map, await this.map.getAllPlayers());
         }
 
     }

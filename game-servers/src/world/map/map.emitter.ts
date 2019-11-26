@@ -1,6 +1,6 @@
-import {Injectable}                      from "@nestjs/common";
-import {ClientProxy}                     from "@nestjs/microservices";
-import {PlayerEnteredMap, PlayerLeftMap} from "./actions";
+import {Injectable}                                  from "@nestjs/common";
+import {ClientProxy}                                 from "@nestjs/microservices";
+import {AllPlayers, PlayerEnteredMap, PlayerLeftMap} from "./actions";
 
 @Injectable()
 export class MapEmitter {
@@ -15,5 +15,9 @@ export class MapEmitter {
 
     playerLeftMap(characterId: number, world: string, map: string) {
         this.client.emit(PlayerLeftMap.event, new PlayerLeftMap(characterId, world, map));
+    }
+
+    allPlayers(world:string, map:string, players:{characterId:number, x:number, y:number}[]) {
+        this.client.emit(AllPlayers.event, new AllPlayers(world, map, players));
     }
 }

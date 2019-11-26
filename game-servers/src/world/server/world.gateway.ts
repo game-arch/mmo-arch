@@ -178,9 +178,12 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     playerLeave(characterId: number, map: string) {
         let character = this.getCharacter(characterId);
+        console.log(character.loggedIn);
         if (character.loggedIn) {
+            console.log('send logged out event');
             this.server.to('map.' + map).emit(PlayerLeftMap.event, character.loggedIn);
             if (character.local) {
+                console.log('leave map');
                 character.local.socket.leave('map.' + map);
             }
         }
