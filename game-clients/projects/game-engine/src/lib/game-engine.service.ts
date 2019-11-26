@@ -1,14 +1,14 @@
-import {EventEmitter, Injectable, Injector} from '@angular/core';
-import {ConnectionManager}                  from "../../../connection/src/lib/connection-manager";
-import {Game}                               from "phaser";
-import {GAME_CONFIG}                        from "./phaser/config";
-import {SceneFactory}                       from "./phaser/scenes/scene-factory.service";
-import {fromEvent}                          from "rxjs";
-import {mergeMap, takeUntil}                from "rxjs/operators";
-import {PlayerEnteredMap, PlayerLeftMap}    from "../../../../../game-servers/src/world/map/actions";
-import {CharacterOffline, CharacterOnline}  from "../../../../../game-servers/src/global/character/actions";
+import {EventEmitter, Injectable, Injector}          from '@angular/core';
+import {ConnectionManager}                           from "../../../connection/src/lib/connection-manager";
+import {Game}                                        from "phaser";
+import {GAME_CONFIG}                                 from "./phaser/config";
+import {SceneFactory}                                from "./phaser/scenes/scene-factory.service";
+import {from, fromEvent}                             from "rxjs";
+import {mergeMap, takeUntil}                         from "rxjs/operators";
+import {AllPlayers, PlayerEnteredMap, PlayerLeftMap} from "../../../../../game-servers/src/world/map/actions";
+import {CharacterOffline, CharacterOnline}           from "../../../../../game-servers/src/global/character/actions";
 import Scene = Phaser.Scene;
-import {Player}                             from "./phaser/entities/player";
+import {Player}                                      from "./phaser/entities/player";
 
 @Injectable()
 export class GameEngineService {
@@ -19,6 +19,7 @@ export class GameEngineService {
     private currentScene: Scene;
     private destroyed       = new EventEmitter();
 
+    players: { [charaacterId: number]: Player } = {};
 
     constructor(
         public scenes: SceneFactory,
@@ -51,16 +52,38 @@ export class GameEngineService {
                         .pipe(takeUntil(this.destroyed))
                         .subscribe((data: PlayerEnteredMap) => {
                             console.log('Player Joined', data);
-                            let player = new Player(this.currentScene, data.x, data.y);
+                            this.addOrUpdatePlayer(data);
                         });
 
                     fromEvent(world.socket, PlayerLeftMap.event)
                         .pipe(takeUntil(this.destroyed))
-                        .subscribe((data) => {
+                        .subscribe((data: PlayerLeftMap) => {
                             console.log('Player Left', data);
+                            this.removePlayer(data);
+                        });
+                    fromEvent(world.socket, AllPlayers.event)
+                        .pipe(takeUntil(this.destroyed))
+                        .pipe(mergeMap((players: { characterId: number, x: number, y: number }[]) => from(players)))
+                        .subscribe(player => {
+                            this.addOrUpdatePlayer(player);
                         });
                 }
             });
+    }
+
+    private removePlayer(data: PlayerLeftMap) {
+        if (this.players.hasOwnProperty(data.characterId)) {
+            this.players[data.characterId].graphics.destroy(true);
+            delete this.players[data.characterId];
+        }
+    }
+
+    private addOrUpdatePlayer(data: { characterId: number, x: number, y: number }) {
+        if (!this.players.hasOwnProperty(data.characterId)) {
+            this.players[data.characterId] = new Player(this.currentScene, data.x, data.y);
+            return;
+        }
+        this.players[data.characterId].body.reset(data.x, data.y);
     }
 
     destroy() {
