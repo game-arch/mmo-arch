@@ -6,6 +6,11 @@ export const TUTORIAL_CONFIG: MapConfig = {
     height    : 768,
     collisions: [
         {
+            shape: 'circle',
+            position: [320, 500],
+            radius: 100
+        },
+        {
             shape   : 'polygon',
             position: [600, 320],
             points  : [

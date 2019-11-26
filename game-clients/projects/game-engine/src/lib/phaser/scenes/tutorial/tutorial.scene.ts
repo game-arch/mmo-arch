@@ -25,12 +25,14 @@ export class TutorialScene extends Scene {
 
     create() {
         fromEvent(this.connection.world.socket, CharacterOnline.event)
+            .pipe(takeUntil(fromEvent(this.game.events, 'game.scene')))
             .pipe(takeUntil(fromEvent(this.game.events, 'destroy')))
             .subscribe(data => {
                 console.log('character online', data);
             });
 
         fromEvent(this.connection.world.socket, CharacterOffline.event)
+            .pipe(takeUntil(fromEvent(this.game.events, 'game.scene')))
             .pipe(takeUntil(fromEvent(this.game.events, 'destroy')))
             .subscribe(data => {
                 console.log('character offline', data);

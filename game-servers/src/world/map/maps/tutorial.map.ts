@@ -3,12 +3,15 @@ import {Injectable}      from "@nestjs/common";
 import {TUTORIAL_CONFIG} from "../config/tutorial";
 
 @Injectable()
-export class TutorialMap implements MapHandler {
+export class TutorialMap extends MapHandler {
 
     constant: string = 'tutorial';
     name: string     = 'Tutorial Island';
 
-    config = TUTORIAL_CONFIG;
+
+    constructor() {
+        super(TUTORIAL_CONFIG);
+    }
 
     start() {
         console.log('Tutorial Map Started');
