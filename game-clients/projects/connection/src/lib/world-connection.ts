@@ -36,13 +36,17 @@ export class WorldConnection extends Connection {
     }
 
     selectCharacter(character: string) {
-        this.socket.emit(CharacterOnline.event, {name: character}, (data) => {
-            if (data.status === 'success') {
-                this.selectedCharacter = character;
-                console.log('You are logged in as ' + this.selectedCharacter);
-            } else {
-                console.log("Could not sign in as " + character);
-            }
+        return new Promise((resolve, reject) => {
+            this.socket.emit(CharacterOnline.event, {name: character}, (data) => {
+                if (data.status === 'success') {
+                    this.selectedCharacter = character;
+                    console.log('You are logged in as ' + this.selectedCharacter);
+                    resolve(data);
+                } else {
+                    console.log("Could not sign in as " + character);
+                    reject();
+                }
+            });
         });
     }
 }

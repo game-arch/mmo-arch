@@ -2,42 +2,42 @@ import {MapConfig} from "./config";
 
 export const TUTORIAL_CONFIG: MapConfig = {
     name      : "Tutorial",
-    width     : 1000,
-    height    : 1000,
+    width     : 1024,
+    height    : 768,
     collisions: [
         {
             shape   : 'polygon',
             position: [600, 320],
             points  : [
-                [-5, -5],
-                [0, 5],
-                [2, 10],
-                [0, -8]
+                [-50, -50],
+                [0, 150],
+                [20, 100],
+                [0, -80]
             ]
         },
         {
             shape   : 'rectangle',
             position: [0, 0],
-            width   : 1000,
+            width   : 1024,
             height  : 32
         },
         {
             shape   : 'rectangle',
             position: [0, 0],
             width   : 32,
-            height  : 1000
+            height  : 768
         },
         {
             shape   : 'rectangle',
-            position: [0, 968],
-            width   : 1000,
+            position: [0, 768 - 32],
+            width   : 1024,
             height  : 32
         },
         {
             shape   : 'rectangle',
-            position: [968, 0],
+            position: [1024 - 32, 0],
             width   : 32,
-            height  : 1000
+            height  : 768
         }
     ]
 };

@@ -3,6 +3,7 @@ import {ConnectionManager}      from "../../../connection/src/lib/connection-man
 import {GameCharacter}          from "../../../../../game-servers/lib/entities/game-character";
 import {MatDialog}              from "@angular/material/dialog";
 import {CharacterFormComponent} from "./character-form.component";
+import {GameEngineService}      from "../../../game-engine/src/lib/game-engine.service";
 
 @Component({
     selector   : 'character-selection',
@@ -14,6 +15,7 @@ export class CharacterSelectionComponent implements OnInit {
     selected: GameCharacter = null;
 
     constructor(
+        private engine: GameEngineService,
         private connection: ConnectionManager,
         private dialog: MatDialog
     ) {
@@ -32,9 +34,10 @@ export class CharacterSelectionComponent implements OnInit {
         this.dialog.open(CharacterFormComponent);
     }
 
-    join() {
+    async join() {
         if (this.connection.world) {
-            this.connection.world.selectCharacter(this.selected.name);
+            await this.connection.world.selectCharacter(this.selected.name);
+            this.engine.game.events.emit('game.scene', 'tutorial');
         }
     }
 }

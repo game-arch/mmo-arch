@@ -2,7 +2,6 @@ import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {ConnectionManager}                  from "../../../connection/src/lib/connection-manager";
 import {Game}                               from "phaser";
 import {GAME_CONFIG}                        from "./phaser/config";
-import {TitleScene}                         from "./phaser/scenes/title.scene";
 import {SceneFactory}                       from "./phaser/scenes/scene-factory.service";
 import {fromEvent}                          from "rxjs";
 import {takeUntil}                          from "rxjs/operators";
@@ -11,9 +10,11 @@ import {takeUntil}                          from "rxjs/operators";
 export class GameEngineService {
 
     game: Game;
-    title: TitleScene;
+
+    private currentScene = 'title';
 
     private destroyed = new EventEmitter();
+
 
     constructor(
         public scenes: SceneFactory,
@@ -22,16 +23,25 @@ export class GameEngineService {
     }
 
     init(canvas: HTMLCanvasElement) {
-        this.title = this.scenes.title();
-        this.game  = new Game({...GAME_CONFIG, canvas});
-        this.game.scene.add('title', this.title);
+        this.game = new Game({...GAME_CONFIG, canvas});
+        this.game.scene.add('title', this.scenes.title());
+        this.game.scene.add('tutorial', this.scenes.tutorial());
         this.game.scene.start('title');
         fromEvent(window, 'resize')
             .pipe(takeUntil(this.destroyed))
             .subscribe(() => this.game.events.emit('resize', window.innerWidth, window.innerHeight));
+        this.game.events.on('game.scene', (scene) => {
+            if (this.currentScene !== '') {
+                this.game.scene.stop(this.currentScene);
+            }
+            this.currentScene = scene;
+            this.game.scene.start(scene);
+        });
+
     }
 
     destroy() {
+        this.game.events.emit('destroy');
         this.game.destroy(true);
         this.destroyed.emit();
     }
