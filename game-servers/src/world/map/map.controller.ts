@@ -2,7 +2,7 @@ import {Controller, Get, OnApplicationBootstrap, OnApplicationShutdown, Req, Res
 import {MapService}                                                               from './map.service';
 import {EventPattern, MessagePattern}                                             from "@nestjs/microservices";
 import {CharacterCreated, CharacterLoggedIn, CharacterLoggedOut}                  from "../../global/character/actions";
-import {GetAllPlayers, PlayerChangedMap}                                          from "./actions";
+import {GetAllPlayers, PlayerChangedMap, PlayerMoved}                             from "./actions";
 import {Request, Response}                                                        from "express";
 import {MapEmitter}                                                               from "./map.emitter";
 
@@ -40,8 +40,17 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     }
 
     @EventPattern(CharacterLoggedOut.event)
-    async characterLoggedOut(data) {
+    async characterLoggedOut(data: CharacterLoggedOut) {
         await this.service.playerLeftMap(data.characterId, data.world);
+    }
+
+    @EventPattern(PlayerMoved.event)
+    async playerMoved(data: PlayerMoved) {
+        if (data.map === this.service.map.constant) {
+            if (this.service.map.players[data.characterId]) {
+                this.service.map.movePlayer(data);
+            }
+        }
     }
 
     onApplicationBootstrap() {

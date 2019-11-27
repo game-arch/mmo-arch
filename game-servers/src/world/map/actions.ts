@@ -45,3 +45,11 @@ export class GetAllPlayers {
 
     }
 }
+
+export class PlayerMoved {
+    static readonly event = 'map.player_moved';
+
+    constructor(public characterId: number, public world: string, public map: string, public inputs: { x: number, y: number }) {
+
+    }
+}

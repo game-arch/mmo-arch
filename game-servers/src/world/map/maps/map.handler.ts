@@ -4,6 +4,7 @@ import {Player}                   from "../entities/player";
 import {MapEmitter}               from "../map.emitter";
 import {from}                     from "rxjs";
 import {map, toArray}             from "rxjs/operators";
+import {PlayerMoved}              from "../actions";
 
 
 export abstract class MapHandler {
@@ -75,5 +76,9 @@ export abstract class MapHandler {
             }),
             toArray()
         ).toPromise();
+    }
+
+    movePlayer(data: PlayerMoved) {
+        console.log('player moved!');
     }
 }
