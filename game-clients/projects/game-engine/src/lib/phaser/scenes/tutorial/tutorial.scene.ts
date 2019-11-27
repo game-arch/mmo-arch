@@ -2,36 +2,36 @@ import Scene = Phaser.Scene;
 import {Location}            from "@angular/common";
 import {ConnectionManager}   from "../../../../../../connection/src/lib/connection-manager";
 import {TUTORIAL_CONFIG}     from "../../../../../../../../game-servers/src/world/map/config/tutorial";
-import {loadCollisions}      from "../collisions";
 import {
     AllPlayers,
     PlayerDirectionalInput,
     PlayerEnteredMap,
     PlayerLeftMap
 }                            from "../../../../../../../../game-servers/src/world/map/actions";
-import {Player}              from "../../entities/player";
 import {from, fromEvent}     from "rxjs";
 import {mergeMap, takeUntil} from "rxjs/operators";
 import {EventEmitter}        from "@angular/core";
-import Vector2 = Phaser.Math.Vector2;
+import {PlayerSprite}        from "../../../../../../../../game-servers/src/world/map/phaser/playerSprite";
+import {loadCollisions}      from "../../../../../../../../game-servers/src/world/map/phaser/collisions";
+import Group = Phaser.Physics.Arcade.Group;
 
 export class TutorialScene extends Scene {
 
-    directionMap                                = {
+    directionMap                                      = {
         s: 'down',
         w: 'up',
         a: 'left',
         d: 'right'
     };
-    directions                                  = {
+    directions                                        = {
         up    : false,
         down  : false,
         right : false,
         bottom: false
     };
-    players: { [charaacterId: number]: Player } = {};
+    players: { [charaacterId: number]: PlayerSprite } = {};
 
-    self: Player;
+    self: PlayerSprite;
 
     destroyed = new EventEmitter();
 
@@ -49,10 +49,12 @@ export class TutorialScene extends Scene {
 
     }
 
+    collisionGroup: Group;
 
     create() {
-        let world = this.connection.world;
-        loadCollisions(TUTORIAL_CONFIG, this);
+        this.physics.world.TILE_BIAS = 40;
+        let world           = this.connection.world;
+        this.collisionGroup = loadCollisions(TUTORIAL_CONFIG, this);
         this.game.events.once('game.scene', () => this.destroyed.emit());
         this.input.keyboard.on('keydown', (event: KeyboardEvent) => {
             event.stopPropagation();
@@ -113,8 +115,10 @@ export class TutorialScene extends Scene {
     private addOrUpdatePlayer(data: { characterId: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
         let player = this.players[data.characterId];
         if (!player) {
-            this.players[data.characterId] = new Player(this, data.x + 16, data.y + 16);
+            this.players[data.characterId] = new PlayerSprite();
             player                         = this.players[data.characterId];
+            player.init(this, data.x + 16, data.y + 16);
+            this.physics.add.collider(player.graphics, this.collisionGroup);
             if (this.connection.world.selectedCharacter.id === data.characterId) {
                 this.self = player;
                 this.cameras.main.startFollow(player.body, true, 0.05, 0.05);

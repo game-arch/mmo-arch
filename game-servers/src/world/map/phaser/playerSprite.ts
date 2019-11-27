@@ -41,8 +41,9 @@ export class PlayerSprite {
     init(scene: Phaser.Scene, x, y) {
         this.graphics = scene.add.circle(x, y, 16, 0x00aa00);
         scene.physics.add.existing(this.graphics);
-        this.body                    = this.graphics.body as Body;
-        this.body.isCircle = true;
+        this.body = this.graphics.body as Body;
+        this.body.setSize(48, 48);
+        this.body.isCircle           = true;
         this.body.collideWorldBounds = true;
         this.body.debugShowBody      = true;
         this.body.debugShowVelocity  = true;

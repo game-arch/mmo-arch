@@ -5,16 +5,7 @@ import {GAME_CONFIG}                        from "./phaser/config";
 import {SceneFactory}                       from "./phaser/scenes/scene-factory.service";
 import {from, fromEvent}                    from "rxjs";
 import {mergeMap, takeUntil}                from "rxjs/operators";
-import {
-    AllPlayers,
-    PlayerDirectionalInput,
-    PlayerEnteredMap,
-    PlayerLeftMap
-}                                           from "../../../../../game-servers/src/world/map/actions";
-import {CharacterOffline, CharacterOnline}  from "../../../../../game-servers/src/global/character/actions";
 import Scene = Phaser.Scene;
-import {Player}                             from "./phaser/entities/player";
-import Vector2 = Phaser.Math.Vector2;
 
 @Injectable()
 export class GameEngineService {
@@ -47,7 +38,6 @@ export class GameEngineService {
             this.currentScene    = this.game.scene.getScene(scene);
             this.game.scene.start(scene);
         });
-
         this.connection.world$
             .pipe(takeUntil(this.destroyed))
             .subscribe(world => {

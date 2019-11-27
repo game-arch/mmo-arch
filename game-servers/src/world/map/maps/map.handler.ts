@@ -28,7 +28,8 @@ export class MapHandler extends Scene {
     }
 
     create() {
-        this.collisionGroup = loadCollisions(this.config, this);
+        this.physics.world.TILE_BIAS = 40;
+        this.collisionGroup          = loadCollisions(this.config, this);
     }
 
     update(time: number, delta: number) {
