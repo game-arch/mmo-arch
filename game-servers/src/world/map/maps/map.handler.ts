@@ -66,14 +66,7 @@ export abstract class MapHandler {
 
     async getAllPlayers() {
         return await from(Object.keys(this.players)).pipe(
-            map(key => {
-                return {
-                    characterId: this.players[key].characterId,
-                    name       : this.players[key].name,
-                    x          : this.players[key].x,
-                    y          : this.players[key].y
-                }
-            }),
+            map(key => this.players[key].asPayload()),
             toArray()
         ).toPromise();
     }

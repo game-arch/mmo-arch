@@ -20,7 +20,7 @@ export class Player {
     @Column()
     y: number;
     @Column()
-    name:string;
+    name: string;
 
     body: Body;
 
@@ -30,5 +30,14 @@ export class Player {
         this.body.addShape(new Circle({
             radius: 16
         }));
+    }
+
+    asPayload() {
+        return {
+            characterId: this.characterId,
+            name       : this.name,
+            x          : this.body.position[0],
+            y          : this.body.position[1]
+        }
     }
 }
