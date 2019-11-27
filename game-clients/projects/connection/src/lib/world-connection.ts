@@ -1,7 +1,7 @@
-import {Connection}                       from "./connection";
-import {GameWorld}                        from "../../../../../game-servers/lib/entities/game-world";
-import {CharacterGetAll, CharacterOnline} from "../../../../../game-servers/src/global/character/actions";
-import {GameCharacter}                    from "../../../../../game-servers/lib/entities/game-character";
+import {Connection}                     from "./connection";
+import {GameWorld}                      from "../../../../../game-servers/lib/entities/game-world";
+import {GetCharacters, CharacterOnline} from "../../../../../game-servers/src/global/character/actions";
+import {GameCharacter}                  from "../../../../../game-servers/lib/entities/game-character";
 
 export class WorldConnection extends Connection {
 
@@ -13,7 +13,7 @@ export class WorldConnection extends Connection {
     constructor(public world?: GameWorld, public location?: string, public token ?: string) {
         super(world, (location ? location + '/world' : null), token);
         if (this.socket) {
-            this.socket.on(CharacterGetAll.event, list => this.characters = list);
+            this.socket.on(GetCharacters.event, list => this.characters = list);
             this.socket.on('disconnect', (typeOfDisconnect) => {
                 if (typeOfDisconnect === 'io client disconnect') {
                     this.selectedCharacter = null;
@@ -26,7 +26,7 @@ export class WorldConnection extends Connection {
             this.socket.on('connect', () => {
                 if (this.selectedCharacter !== null) {
                     console.info('Connecting as ' + this.selectedCharacter + '...');
-                    this.socket.once(CharacterGetAll.event, async () => {
+                    this.socket.once(GetCharacters.event, async () => {
                         await this.selectCharacter(this.selectedCharacter.name, this.selectedCharacter.id);
                     });
                 }

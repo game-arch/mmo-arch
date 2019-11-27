@@ -4,9 +4,9 @@ import {EventPattern, MessagePattern} from "@nestjs/microservices";
 import {
     AllCharactersOffline,
     CharacterCreate,
-    CharacterGetAll,
+    GetCharacters,
     CharacterOffline,
-    CharacterOnline, GetCharacterName
+    CharacterOnline, GetCharacter, GetCharacterName
 }                                     from "./actions";
 
 @Controller()
@@ -16,9 +16,14 @@ export class CharacterController {
 
     }
 
-    @MessagePattern(CharacterGetAll.event)
-    async getCharacters(data: CharacterGetAll) {
+    @MessagePattern(GetCharacters.event)
+    async getCharacters(data: GetCharacters) {
         return await this.service.getCharactersFor(data.accountId, data.world);
+    }
+
+    @MessagePattern(GetCharacter.event)
+    async getCharacter(data: GetCharacter) {
+        return await this.service.getCharacter(data.characterId);
     }
 
     @MessagePattern(CharacterCreate.event)

@@ -1,5 +1,4 @@
 import {Injectable}                         from '@angular/core';
-import * as io                              from "socket.io-client";
 import {GameWorld}                          from "../../../../../game-servers/lib/entities/game-world";
 import {BehaviorSubject}                    from "rxjs";
 import {Connection}                         from "./connection";
@@ -9,7 +8,6 @@ import {Hosts}                              from "../../../game/src/lib/hosts";
 import {SetToken}                           from "../../../authentication/src/lib/state/auth.actions";
 import {filter}                             from "rxjs/operators";
 import {WorldConnection}                    from "./world-connection";
-import {Manager}                            from 'socket.io-client';
 
 @Injectable()
 export class ConnectionManager {
@@ -53,7 +51,6 @@ export class ConnectionManager {
         }
         if (server.status === 'online') {
             if (!this.connections.hasOwnProperty(server.name)) {
-                let manager    = new Manager('http://' + server.host + ':' + server.port);
                 let connection = this.openWorldConnection(server.name, server, 'http://' + server.host + ':' + server.port);
                 this.get(server.name).socket.on('connect', () => this.disconnect('lobby'));
                 return connection;

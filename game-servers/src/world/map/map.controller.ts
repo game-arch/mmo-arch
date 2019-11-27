@@ -2,9 +2,10 @@ import {Controller, Get, OnApplicationBootstrap, OnApplicationShutdown, Req, Res
 import {MapService}                                                               from './map.service';
 import {EventPattern, MessagePattern}                                             from "@nestjs/microservices";
 import {CharacterCreated, CharacterLoggedIn, CharacterLoggedOut}                  from "../../global/character/actions";
-import {GetAllPlayers, PlayerChangedMap, PlayerMoved}                             from "./actions";
+import {GetAllPlayers, PlayerChangedMap, PlayerDirectionalInput}                  from "./actions";
 import {Request, Response}                                                        from "express";
 import {MapEmitter}                                                               from "./map.emitter";
+import {WorldConstants}                                                           from "../constants";
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -31,24 +32,30 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(PlayerChangedMap.event)
     async changedMap(data: PlayerChangedMap) {
-        await this.service.changeMap(data.characterId, data.world, data.map, data.newX, data.newY);
+        if (data.world === WorldConstants.CONSTANT) {
+            await this.service.changeMap(data.characterId, data.world, data.map, data.newX, data.newY);
+        }
     }
 
     @EventPattern(CharacterLoggedIn.event)
     async characterLoggedIn(data: CharacterLoggedIn) {
-        await this.service.playerJoinedMap(data.characterId, data.name, data.world);
+        if (data.world === WorldConstants.CONSTANT) {
+            await this.service.playerJoinedMap(data.characterId, data.name, data.world);
+        }
     }
 
     @EventPattern(CharacterLoggedOut.event)
     async characterLoggedOut(data: CharacterLoggedOut) {
-        await this.service.playerLeftMap(data.characterId, data.world);
+        if (data.world === WorldConstants.CONSTANT) {
+            await this.service.playerLeftMap(data.characterId, data.world);
+        }
     }
 
-    @EventPattern(PlayerMoved.event)
-    async playerMoved(data: PlayerMoved) {
-        if (data.map === this.service.map.constant) {
-            if (this.service.map.players[data.characterId]) {
-                this.service.map.movePlayer(data);
+    @EventPattern(PlayerDirectionalInput.event)
+    async playerMoved(data: PlayerDirectionalInput) {
+        if (data.world === WorldConstants.CONSTANT) {
+            if (data.map === this.service.map.constant) {
+                this.service.movePlayer(data);
             }
         }
     }

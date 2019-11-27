@@ -1,9 +1,7 @@
-import {MapHandler}        from "./map.handler";
-import {Injectable}        from "@nestjs/common";
-import {TUTORIAL_CONFIG}   from "../config/tutorial";
-import {interval, Subject} from "rxjs";
-import {takeUntil}         from "rxjs/operators";
-import {Body}              from "p2";
+import {MapHandler}      from "./map.handler";
+import {Injectable}      from "@nestjs/common";
+import {TUTORIAL_CONFIG} from "../config/tutorial";
+import {Subject}         from "rxjs";
 
 @Injectable()
 export class TutorialMap extends MapHandler {
@@ -19,19 +17,6 @@ export class TutorialMap extends MapHandler {
         this.configure();
     }
 
-    start() {
-        console.log('Tutorial Map Started');
-        let lastCalled = null;
-        interval(1000 / 60)
-            .pipe(takeUntil(this.stop$))
-            .subscribe(() => {
-                this.world.step(new Date().valueOf(), lastCalled);
-                lastCalled = new Date().valueOf();
-            });
-    }
 
-    stop() {
-        this.stop$.next();
-    }
 
 }

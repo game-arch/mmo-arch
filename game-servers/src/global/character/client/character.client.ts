@@ -5,9 +5,9 @@ import {Character}   from "../entities/character";
 import {
     AllCharactersOffline,
     CharacterCreate,
-    CharacterGetAll,
+    GetCharacters,
     CharacterOffline,
-    CharacterOnline, GetCharacterName
+    CharacterOnline, GetCharacter, GetCharacterName
 }                    from "../actions";
 
 @Injectable()
@@ -22,23 +22,27 @@ export class CharacterClient {
     }
 
     async getAll(accountId: number, world: string) {
-        return await this.client.send(CharacterGetAll.event, new CharacterGetAll(accountId, world)).pipe(first()).toPromise();
+        return await this.client.send(GetCharacters.event, new GetCharacters(accountId, world)).pipe(first()).toPromise();
     }
 
-    characterOnline(characterId: number) {
-        this.client.emit(CharacterOnline.event, new CharacterOnline(characterId));
+    characterOnline(id: number) {
+        this.client.emit(CharacterOnline.event, new CharacterOnline(id));
     }
 
-    characterOffline(characterId) {
-        this.client.emit(CharacterOffline.event, new CharacterOffline(characterId));
+    characterOffline(id: number) {
+        this.client.emit(CharacterOffline.event, new CharacterOffline(id));
     }
 
     allCharactersOffline(data: CharacterOffline[]) {
         this.client.emit(AllCharactersOffline.event, new AllCharactersOffline(data));
     }
 
-    async getCharacterName(characterId: number) {
-        return await this.client.send(GetCharacterName.event, new GetCharacterName(characterId)).pipe(first()).toPromise();
+    async getCharacterName(id: number) {
+        return await this.client.send(GetCharacterName.event, new GetCharacterName(id)).pipe(first()).toPromise();
+    }
+
+    async getCharacter(id: number): Promise<Character> {
+        return await this.client.send(GetCharacter.event, new GetCharacter(id)).pipe(first()).toPromise();
     }
 
 }

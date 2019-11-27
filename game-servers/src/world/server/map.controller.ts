@@ -1,8 +1,8 @@
-import {Controller}                                  from "@nestjs/common";
-import {EventPattern}                                from "@nestjs/microservices";
-import {AllPlayers, PlayerEnteredMap, PlayerLeftMap} from "../map/actions";
-import {WorldConstants}                              from "../constants";
-import {MapGateway}                                  from "./map.gateway";
+import {Controller}                                                          from "@nestjs/common";
+import {EventPattern}                                                        from "@nestjs/microservices";
+import {AllPlayers, PlayerDirectionalInput, PlayerEnteredMap, PlayerLeftMap} from "../map/actions";
+import {WorldConstants}                                                      from "../constants";
+import {MapGateway}                                                          from "./map.gateway";
 
 @Controller()
 export class MapController {
@@ -31,6 +31,16 @@ export class MapController {
     onAllPlayers(data: AllPlayers) {
         if (data.world === WorldConstants.CONSTANT) {
             this.gateway.allPlayers(data);
+        }
+    }
+
+    @EventPattern(PlayerDirectionalInput.event)
+    async playerMoved(data: PlayerDirectionalInput) {
+        if (data.world === WorldConstants.CONSTANT) {
+            this.gateway.server.to('map.' + data.map).emit(PlayerDirectionalInput.event, {
+                characterId: data.characterId,
+                directions : data.directions
+            });
         }
     }
 }

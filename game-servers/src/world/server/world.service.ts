@@ -5,6 +5,7 @@ import {User}            from "./user";
 import {BehaviorSubject} from "rxjs";
 import {CharacterClient} from "../../global/character/client/character.client";
 import {WorldConstants}  from "../constants";
+import {MapClient}       from "../map/client/map.client";
 
 export class Player {
 
@@ -23,7 +24,8 @@ export class WorldService {
 
     constructor(
         private account: AccountClient,
-        private character: CharacterClient
+        private character: CharacterClient,
+        private map: MapClient
     ) {
     }
 
@@ -42,24 +44,32 @@ export class WorldService {
         delete this.sockets[client.id];
     }
 
-    storeCharacter(client: Socket, character: { id: number, name: string }) {
-        let player = this.sockets[client.id];
-        this.character.characterOnline(character.id);
-        player.character              = {
-            id  : character.id,
-            name: character.name,
-            map : ''
-        };
-        this.characters[character.id] = player;
-        client.join('character.' + character.name);
+    async storeCharacter(client: Socket, character: { id: number, name: string }) {
+        let player   = this.sockets[client.id];
+        let verified = await this.character.getCharacter(character.id);
+        if (verified.accountId === this.sockets[client.id].accountId) {
+            if (verified.world === WorldConstants.CONSTANT) {
+                this.character.characterOnline(character.id);
+                player.character              = {
+                    id  : character.id,
+                    name: character.name,
+                    map : ''
+                };
+                this.characters[character.id] = player;
+                client.join('character.' + character.name);
+                return;
+            }
+            throw new Error("Character's World does not match '" + WorldConstants.CONSTANT + "'");
+        }
+        throw new Error("Character's Account ID does not match Socket's");
     }
 
-    removeCharacter(client: Socket, characterId: number) {
+    removeCharacter(client: Socket) {
         let player            = this.sockets[client.id];
         let previousCharacter = player.character;
-        this.character.characterOffline(characterId);
+        this.character.characterOffline(previousCharacter.id);
         player.character = null;
-        delete this.characters[characterId];
+        delete this.characters[previousCharacter.id];
         client.leave('character.' + previousCharacter.name);
     }
 
@@ -78,6 +88,12 @@ export class WorldService {
 
     async createCharacter(accountId: number, name: string, gender: 'male' | 'female') {
         return await this.character.create(accountId, WorldConstants.CONSTANT, name, gender);
+    }
+
+    playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+        console.log('move player!');
+        let character = this.sockets[client.id].character;
+        this.map.playerDirectionalInput(character.id, WorldConstants.CONSTANT, character.map, data.directions);
     }
 }
 

@@ -33,7 +33,7 @@ export class CharacterNotCreated {
     }
 }
 
-export class CharacterGetAll {
+export class GetCharacters {
     static readonly event = 'character.get_all';
 
     constructor(
@@ -43,10 +43,22 @@ export class CharacterGetAll {
 
     }
 }
+
+export class GetCharacter {
+    static readonly event = 'character.get';
+
+    constructor(
+        public characterId: number
+    ) {
+
+    }
+}
+
 export class GetCharacterName {
     static readonly event = 'character.get_name';
+
     constructor(
-        public characterId:number
+        public characterId: number
     ) {
 
     }
@@ -68,19 +80,20 @@ export class CharacterLoggedIn {
     constructor(
         public characterId: number,
         public name: string,
-        public world:string,
+        public world: string,
         public gender: 'male' | 'female'
     ) {
 
     }
 }
+
 export class CharacterLoggedOut {
     static readonly event = 'character.logged_out';
 
     constructor(
         public characterId: number,
         public name: string,
-        public world:string
+        public world: string
     ) {
 
     }

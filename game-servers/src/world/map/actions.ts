@@ -33,7 +33,7 @@ export class PlayerLeftMap {
 export class AllPlayers {
     static readonly event = 'map.all_players';
 
-    constructor(public world: string, public map: string, public players: { characterId: number, x: number, y: number }[]) {
+    constructor(public world: string, public map: string, public players: { characterId: number, x: number, y: number, moving: { up:boolean,down:boolean,left:boolean,right:boolean}}[]) {
 
     }
 }
@@ -46,10 +46,10 @@ export class GetAllPlayers {
     }
 }
 
-export class PlayerMoved {
-    static readonly event = 'map.player_moved';
+export class PlayerDirectionalInput {
+    static readonly event = 'map.player_directional_input';
 
-    constructor(public characterId: number, public world: string, public map: string, public inputs: { x: number, y: number }) {
+    constructor(public characterId: number, public world: string, public map: string, public directions: { up:boolean,down:boolean,left:boolean,right:boolean}) {
 
     }
 }

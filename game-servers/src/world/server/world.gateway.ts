@@ -17,7 +17,7 @@ import {CharacterClient}                                  from "../../global/cha
 import {
     CharacterCreate,
     CharacterCreated,
-    CharacterGetAll,
+    GetCharacters,
     CharacterNotCreated,
     CharacterOffline,
     CharacterOnline
@@ -65,11 +65,12 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
                 throw new Error("Server Limit Reached");
             }
             let user = await this.service.verifyUser(client);
+            console.log(this.service.accounts[user.id]);
             if (this.service.accounts[user.id]) {
                 throw new ConflictException("User already logged in!");
             }
             this.service.storeUser(client, user.id);
-            client.emit(CharacterGetAll.event, await this.service.getCharacters(user.id));
+            client.emit(GetCharacters.event, await this.service.getCharacters(user.id));
         } catch (e) {
             client.emit("connect-error", e.message);
             client.disconnect(true);
@@ -82,7 +83,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             let accountId            = this.service.sockets[client.id].accountId;
             let character: Character = await this.service.createCharacter(accountId, data.name, data.gender);
             if (character) {
-                client.emit(CharacterGetAll.event, await this.service.getCharacters(accountId));
+                client.emit(GetCharacters.event, await this.service.getCharacters(accountId));
                 client.emit(CharacterCreated.event, new CharacterCreated(character.accountId, character.world, character.id));
                 this.client.emit(CharacterCreated.event, new CharacterCreated(character.accountId, character.world, character.id));
                 return {status: 'success'};
@@ -98,7 +99,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     @SubscribeMessage(CharacterOnline.event)
     async characterJoined(client: Socket, character: { id: number, name: string }) {
         try {
-            this.service.storeCharacter(client, character);
+            await this.service.storeCharacter(client, character);
             return {status: 'success'};
         } catch (e) {
             this.logger.error(e);
@@ -107,9 +108,9 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     @SubscribeMessage(CharacterOffline.event)
-    async characterLeft(client: Socket, data: CharacterOffline) {
+    async characterLeft(client: Socket) {
         try {
-            this.service.removeCharacter(client, data.characterId);
+            this.service.removeCharacter(client);
             return {status: 'success'};
         } catch (e) {
             this.logger.error(e);

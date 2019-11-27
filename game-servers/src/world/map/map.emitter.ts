@@ -17,7 +17,7 @@ export class MapEmitter {
         this.client.emit(PlayerLeftMap.event, new PlayerLeftMap(characterId, world, name, map));
     }
 
-    allPlayers(world:string, map:string, players:{characterId:number, x:number, y:number}[]) {
+    allPlayers(world:string, map:string, players:{characterId:number, x:number, y:number, moving: { up:boolean,down:boolean,left:boolean,right:boolean}}[]) {
         this.client.emit(AllPlayers.event, new AllPlayers(world, map, players));
     }
 

@@ -1,11 +1,17 @@
-import {Inject, Injectable, Type} from '@nestjs/common';
-import {MapConstants}             from "./constants";
-import {MapHandler}               from "./maps/map.handler";
-import {Repository}               from "typeorm";
-import {Player}                   from "./entities/player";
-import {InjectRepository}         from "@nestjs/typeorm";
-import {MapEmitter}               from "./map.emitter";
-import {CharacterClient}          from "../../global/character/client/character.client";
+import {Inject, Injectable, Type}                                   from '@nestjs/common';
+import {MapConstants}                                               from "./constants";
+import {MapHandler}                                                 from "./maps/map.handler";
+import {Repository}                                                 from "typeorm";
+import {Player}                                                     from "./entities/player";
+import {InjectRepository}                                           from "@nestjs/typeorm";
+import {MapEmitter}                                                 from "./map.emitter";
+import {CharacterClient}                                            from "../../global/character/client/character.client";
+import {PlayerDirectionalInput}                                     from "./actions";
+import {concatMap, map, mergeMap, takeUntil, throttleTime, toArray} from "rxjs/operators";
+import {async}                                                      from "rxjs/internal/scheduler/async";
+import {WorldConstants}                                             from "../constants";
+import {fromPromise}                                                from "rxjs/internal-compatibility";
+import {from, interval}                                             from "rxjs";
 
 @Injectable()
 export class MapService {
@@ -23,6 +29,19 @@ export class MapService {
 
     start() {
         this.map.start();
+        this.map.savePlayer.pipe(takeUntil(this.map.stop$))
+            .subscribe(async player => {
+                if (player) {
+                    console.log('save player!');
+                    await this.playerRepo.save(player);
+                }
+            });
+        this.map.emitter.pipe(takeUntil(this.map.stop$))
+            .pipe(concatMap(() => fromPromise(this.map.getAllPlayers())))
+            .pipe(throttleTime(300, async, {leading: true, trailing: true}))
+            .subscribe((players) => {
+                this.emitter.allPlayers(WorldConstants.CONSTANT, this.map.constant, players);
+            });
     }
 
     stop() {
@@ -64,6 +83,12 @@ export class MapService {
             this.emitter.allPlayers(world, player.map, await this.map.getAllPlayers());
         }
 
+    }
+
+    movePlayer(data: PlayerDirectionalInput) {
+        if (this.map.players[data.characterId]) {
+            this.map.movePlayer(data);
+        }
     }
 
 }
