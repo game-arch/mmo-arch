@@ -1,5 +1,4 @@
 import {Connection}                       from "./connection";
-import Socket = SocketIOClient.Socket;
 import {GameWorld}                        from "../../../../../game-servers/lib/entities/game-world";
 import {CharacterGetAll, CharacterOnline} from "../../../../../game-servers/src/global/character/actions";
 import {GameCharacter}                    from "../../../../../game-servers/lib/entities/game-character";
@@ -10,8 +9,9 @@ export class WorldConnection extends Connection {
 
     selectedCharacter: { id: number, name: string } = null;
 
-    constructor(public world?: GameWorld, public socket?: Socket) {
-        super(world, socket);
+
+    constructor(public world?: GameWorld, public location?: string, public token ?: string) {
+        super(world, (location ? location + '/world' : null), token);
         if (this.socket) {
             this.socket.on(CharacterGetAll.event, list => this.characters = list);
             this.socket.on('disconnect', (typeOfDisconnect) => {

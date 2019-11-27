@@ -22,33 +22,19 @@ import {
     CharacterOffline,
     CharacterOnline
 }                                                         from "../../global/character/actions";
-import {AllPlayers, PlayerEnteredMap, PlayerLeftMap}      from "../map/actions";
 import {from}                                             from "rxjs";
-import {MapClient}                                        from "../map/client/map.client";
 
-export interface User {
-    id: number,
-    email: string,
-    socket?: Socket,
-    socketId?: string,
-    character: { id: number, name: string, map: string }
-}
-
-@WebSocketGateway()
+@WebSocketGateway({namespace: 'world'})
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;
-    capacity                                    = 100;
-    accounts: { [id: number]: User }            = {};
-    sockets: { [socketId: string]: User }       = {};
-    characters: { [characterId: number]: User } = {};
+    capacity = 100;
 
     serverId = null;
 
     constructor(
         private logger: Logger,
         private service: WorldService,
-        private map: MapClient,
         private presence: PresenceClient,
         private character: CharacterClient,
         private client: ClientProxy
@@ -67,7 +53,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async sendCharacters() {
-        await from(Object.keys(this.characters))
+        await from(Object.keys(this.service.characters))
             .subscribe(id => {
                 this.character.characterOnline(parseInt(id));
             });
@@ -75,15 +61,14 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async handleConnection(client: Socket, ...args: any[]) {
         try {
-            if (this.service.users.length >= this.capacity) {
-                throw new Error("User Capacity Reached");
+            if (Object.keys(this.service.accounts).length >= this.capacity) {
+                throw new Error("Server Limit Reached");
             }
             let user = await this.service.verifyUser(client);
-            if (this.accounts[user.id]) {
+            if (this.service.accounts[user.id]) {
                 throw new ConflictException("User already logged in!");
             }
-            this.accounts[user.id]  = {...user, socketId: client.id, character: null, socket: client};
-            this.sockets[client.id] = this.accounts[user.id];
+            this.service.storeUser(client, user.id);
             client.emit(CharacterGetAll.event, await this.service.getCharacters(user.id));
         } catch (e) {
             client.emit("connect-error", e.message);
@@ -94,7 +79,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     @SubscribeMessage(CharacterCreate.event)
     async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
         try {
-            let accountId            = this.sockets[client.id].id;
+            let accountId            = this.service.sockets[client.id].accountId;
             let character: Character = await this.service.createCharacter(accountId, data.name, data.gender);
             if (character) {
                 client.emit(CharacterGetAll.event, await this.service.getCharacters(accountId));
@@ -113,11 +98,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     @SubscribeMessage(CharacterOnline.event)
     async characterJoined(client: Socket, character: { id: number, name: string }) {
         try {
-            let user = this.sockets[client.id];
-            this.character.characterOnline(character.id);
-            user.character                = {...character, map: ''};
-            this.characters[character.id] = user;
-            client.join('character.' + character.name);
+            this.service.storeCharacter(client, character);
             return {status: 'success'};
         } catch (e) {
             this.logger.error(e);
@@ -128,12 +109,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     @SubscribeMessage(CharacterOffline.event)
     async characterLeft(client: Socket, data: CharacterOffline) {
         try {
-            let user              = this.sockets[client.id];
-            let previousCharacter = user.character;
-            this.character.characterOffline(data.characterId);
-            user.character = null;
-            delete this.characters[data.characterId];
-            client.leave('character.' + previousCharacter.name);
+            this.service.removeCharacter(client, data.characterId);
             return {status: 'success'};
         } catch (e) {
             this.logger.error(e);
@@ -143,38 +119,14 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async handleDisconnect(client: Socket) {
         try {
-            let user = this.sockets[client.id];
-            if (user.character !== null) {
-                this.character.characterOffline(user.character.id);
-                delete this.characters[user.character.id];
-            }
-            delete this.accounts[user.id];
-            delete this.sockets[client.id];
+            this.service.removePlayer(client);
         } catch (e) {
             this.logger.error(e);
         }
     }
 
     async onApplicationShutdown(signal?: string) {
-        this.character.allCharactersOffline(Object.keys(this.characters).map(id => (new CharacterOffline(parseInt(id)))));
+        this.character.allCharactersOffline(Object.keys(this.service.characters).map(id => (new CharacterOffline(parseInt(id)))));
         this.presence.serverOffline(this.serverId);
-    }
-
-    playerJoin(data: PlayerEnteredMap) {
-        if (this.characters.hasOwnProperty(data.characterId)) {
-            this.characters[data.characterId].socket.join('map.' + data.map);
-        }
-        this.server.to('map.' + data.map).emit(PlayerEnteredMap.event, data);
-    }
-
-    playerLeave(data: PlayerLeftMap) {
-        this.server.to('map.' + data.map).emit(PlayerLeftMap.event, data);
-        if (this.characters[data.characterId]) {
-            this.characters[data.characterId].socket.leave('map.' + data.map);
-        }
-    }
-
-    allPlayers(data: AllPlayers) {
-        this.server.to('map.' + data.map).emit(AllPlayers.event, data.players);
     }
 }

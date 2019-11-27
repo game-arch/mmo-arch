@@ -9,6 +9,7 @@ import {Hosts}                              from "../../../game/src/lib/hosts";
 import {SetToken}                           from "../../../authentication/src/lib/state/auth.actions";
 import {filter}                             from "rxjs/operators";
 import {WorldConnection}                    from "./world-connection";
+import {Manager}                            from 'socket.io-client';
 
 @Injectable()
 export class ConnectionManager {
@@ -52,9 +53,9 @@ export class ConnectionManager {
         }
         if (server.status === 'online') {
             if (!this.connections.hasOwnProperty(server.name)) {
+                let manager    = new Manager('http://' + server.host + ':' + server.port);
                 let connection = this.openWorldConnection(server.name, server, 'http://' + server.host + ':' + server.port);
                 this.get(server.name).socket.on('connect', () => this.disconnect('lobby'));
-                this.get(server.name).socket.on('disconnect', () => this.connectToLobby());
                 return connection;
             } else {
                 this.connections[server.name].socket.connect();
@@ -87,19 +88,14 @@ export class ConnectionManager {
     }
 
     openConnection(name: string, server: { name: string }, location: string) {
+        console.log(location);
         let token              = this.store.selectSnapshot(AuthState).token;
-        this.connections[name] = new Connection(server, io.connect(location + '?token=' + token, {
-            transports  : ['websocket'],
-            reconnection: true
-        }));
+        this.connections[name] = new Connection(server, location, token);
     }
 
     openWorldConnection(name: string, server: GameWorld, location: string) {
         let token              = this.store.selectSnapshot(AuthState).token;
-        let worldConnection    = new WorldConnection(server, io.connect(location + '?token=' + token, {
-            transports  : ['websocket'],
-            reconnection: true
-        }));
+        let worldConnection    = new WorldConnection(server, location, token);
         this.connections[name] = worldConnection;
         this._world.next(worldConnection);
         return worldConnection;

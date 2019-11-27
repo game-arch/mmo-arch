@@ -5,6 +5,7 @@ import {CharacterLoggedIn, CharacterLoggedOut}                  from "../../glob
 import {PresenceOnline}                                         from "../../global/presence/actions";
 import {WorldConstants}                                         from "../constants";
 import {AllPlayers, MapOnline, PlayerEnteredMap, PlayerLeftMap} from "../map/actions";
+import {WorldService}                                           from "./world.service";
 
 @Controller()
 export class WorldController {
@@ -12,6 +13,7 @@ export class WorldController {
 
     constructor(
         private logger: Logger,
+        private service: WorldService,
         private gateway: WorldGateway
     ) {
 
@@ -24,7 +26,15 @@ export class WorldController {
 
     @Get('connections')
     async userCount() {
-        return Object.keys(this.gateway.accounts).map(key => this.gateway.accounts[key]);
+        return Object.keys(this.service.accounts).map(key => {
+            let player = this.service.accounts[key];
+
+            return {
+                accountId: player.accountId,
+                socketId : player.socket.id,
+                character: player.character
+            }
+        });
     }
 
     @EventPattern(PresenceOnline.event)
@@ -50,27 +60,6 @@ export class WorldController {
         if (data.world === WorldConstants.CONSTANT) {
             this.logger.log(data.name + ' is offline.');
             this.gateway.server.emit(CharacterLoggedOut.event, data);
-        }
-    }
-
-    @EventPattern(PlayerEnteredMap.event)
-    async onMapJoined(data: PlayerEnteredMap) {
-        if (data.world === WorldConstants.CONSTANT) {
-            this.gateway.playerJoin(data);
-        }
-    }
-
-    @EventPattern(PlayerLeftMap.event)
-    async onMapLeft(data: PlayerLeftMap) {
-        if (data.world === WorldConstants.CONSTANT) {
-            this.gateway.playerLeave(data);
-        }
-    }
-
-    @EventPattern(AllPlayers.event)
-    onAllPlayers(data: AllPlayers) {
-        if (data.world === WorldConstants.CONSTANT) {
-            this.gateway.allPlayers(data);
         }
     }
 }
