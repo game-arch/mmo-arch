@@ -5,6 +5,7 @@ import {Repository}               from "typeorm";
 import {Player}                   from "./entities/player";
 import {InjectRepository}         from "@nestjs/typeorm";
 import {MapEmitter}               from "./map.emitter";
+import {CharacterClient}          from "../../global/character/client/character.client";
 
 @Injectable()
 export class MapService {
@@ -12,7 +13,8 @@ export class MapService {
 
     constructor(
         private emitter: MapEmitter,
-        @Inject(MapConstants.MAP) private map: MapHandler,
+        private character: CharacterClient,
+        @Inject(MapConstants.MAP) public map: MapHandler,
         @InjectRepository(Player) private playerRepo: Repository<Player>
     ) {
 
@@ -35,28 +37,29 @@ export class MapService {
             player.x    = newX;
             player.y    = newY;
             await this.playerRepo.save(player);
-            this.emitter.playerLeftMap(characterId, world, lastMap);
-            this.emitter.playerJoinedMap(characterId, world, player.map, player.x, player.y);
+            this.emitter.playerLeftMap(characterId, world, player.name, lastMap);
+            this.emitter.playerJoinedMap(characterId, world, player.name, player.map, player.x, player.y);
         }
     }
 
-    async playerJoinedMap(characterId: number, world: string) {
+    async playerJoinedMap(characterId: number, name: string, world: string) {
         let player = await this.playerRepo.findOne({characterId});
         if (!player && this.map.constant === 'tutorial') {
-            player = this.playerRepo.create({characterId, world, map: this.map.name, x: 100, y: 100});
-            await this.playerRepo.save(player);
+            player = this.playerRepo.create({characterId, world, map: 'tutorial', x: 100, y: 100});
         }
         if (player) {
-            this.emitter.playerJoinedMap(characterId, world, player.map, player.x, player.y);
+            player.name = name;
+            await this.playerRepo.save(player);
+            this.emitter.playerJoinedMap(characterId, world, name, player.map, player.x, player.y);
             this.map.addPlayer(player);
             this.emitter.allPlayers(world, player.map, await this.map.getAllPlayers());
         }
     }
 
     async playerLeftMap(characterId: number, world: string) {
-        let player = await this.playerRepo.findOne({characterId, world, map: this.map.constant});
+        let player = await this.playerRepo.findOne({characterId});
         if (player) {
-            this.emitter.playerLeftMap(characterId, world, player.map);
+            this.emitter.playerLeftMap(characterId, world, player.name, player.map);
             this.map.removePlayer(player);
             this.emitter.allPlayers(world, player.map, await this.map.getAllPlayers());
         }

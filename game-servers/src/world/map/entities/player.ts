@@ -19,6 +19,8 @@ export class Player {
     x: number;
     @Column()
     y: number;
+    @Column()
+    name:string;
 
     body: Body;
 

@@ -22,38 +22,33 @@ import {
     CharacterOffline,
     CharacterOnline
 }                                                         from "../../global/character/actions";
-import {PlayerEnteredMap, PlayerLeftMap}                  from "../map/actions";
+import {AllPlayers, PlayerEnteredMap, PlayerLeftMap}      from "../map/actions";
+import {from}                                             from "rxjs";
+import {MapClient}                                        from "../map/client/map.client";
 
 export interface User {
     id: number,
     email: string,
     socket?: Socket,
     socketId?: string,
-    character: { id: number, name: string }
+    character: { id: number, name: string, map: string }
 }
 
 @WebSocketGateway()
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;
-    capacity                                                                                 = 100;
-    accounts: { [id: number]: User }                                                         = {};
-    sockets: { [socketId: string]: User }                                                    = {};
-    characters: { [characterId: number]: User }                                              = {};
-    loggedInCharacters: { [characterId: number]: { id: number, name: string, map: string } } = {};
+    capacity                                    = 100;
+    accounts: { [id: number]: User }            = {};
+    sockets: { [socketId: string]: User }       = {};
+    characters: { [characterId: number]: User } = {};
 
     serverId = null;
-
-    getCharacter(id: number) {
-        return {
-            local   : this.characters[id],
-            loggedIn: this.loggedInCharacters[id]
-        };
-    }
 
     constructor(
         private logger: Logger,
         private service: WorldService,
+        private map: MapClient,
         private presence: PresenceClient,
         private character: CharacterClient,
         private client: ClientProxy
@@ -69,6 +64,13 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             WorldConstants.NAME,
             parseInt(process.env.NODE_APP_INSTANCE)
         );
+    }
+
+    async sendCharacters() {
+        await from(Object.keys(this.characters))
+            .subscribe(id => {
+                this.character.characterOnline(parseInt(id));
+            });
     }
 
     async handleConnection(client: Socket, ...args: any[]) {
@@ -113,7 +115,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         try {
             let user = this.sockets[client.id];
             this.character.characterOnline(character.id);
-            user.character                = character;
+            user.character                = {...character, map: ''};
             this.characters[character.id] = user;
             client.join('character.' + character.name);
             return {status: 'success'};
@@ -144,7 +146,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             let user = this.sockets[client.id];
             if (user.character !== null) {
                 this.character.characterOffline(user.character.id);
-                this.playerLeave(user.character.id, this.loggedInCharacters[user.character.id].map);
                 delete this.characters[user.character.id];
             }
             delete this.accounts[user.id];
@@ -155,37 +156,25 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async onApplicationShutdown(signal?: string) {
-        this.character.allCharactersOffline(Object.keys(this.accounts).map(key => (new CharacterOffline(
-            this.accounts[key].character.id
-        ))));
+        this.character.allCharactersOffline(Object.keys(this.characters).map(id => (new CharacterOffline(parseInt(id)))));
         this.presence.serverOffline(this.serverId);
     }
 
-    playerJoin(characterId: number, map: string, x: number, y: number) {
-        let character = this.getCharacter(characterId);
-        if (character.loggedIn) {
-            if (character.local) {
-                character.loggedIn.map = map;
-                character.local.socket.join('map.' + map);
-            }
-            this.server.to('map.' + map).emit(PlayerEnteredMap.event, {
-                ...character.loggedIn,
-                x,
-                y
-            });
+    playerJoin(data: PlayerEnteredMap) {
+        if (this.characters.hasOwnProperty(data.characterId)) {
+            this.characters[data.characterId].socket.join('map.' + data.map);
+        }
+        this.server.to('map.' + data.map).emit(PlayerEnteredMap.event, data);
+    }
+
+    playerLeave(data: PlayerLeftMap) {
+        this.server.to('map.' + data.map).emit(PlayerLeftMap.event, data);
+        if (this.characters[data.characterId]) {
+            this.characters[data.characterId].socket.leave('map.' + data.map);
         }
     }
 
-    playerLeave(characterId: number, map: string) {
-        let character = this.getCharacter(characterId);
-        console.log(character.loggedIn);
-        if (character.loggedIn) {
-            console.log('send logged out event');
-            this.server.to('map.' + map).emit(PlayerLeftMap.event, character.loggedIn);
-            if (character.local) {
-                console.log('leave map');
-                character.local.socket.leave('map.' + map);
-            }
-        }
+    allPlayers(data: AllPlayers) {
+        this.server.to('map.' + data.map).emit(AllPlayers.event, data.players);
     }
 }

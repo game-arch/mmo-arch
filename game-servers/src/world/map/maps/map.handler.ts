@@ -52,14 +52,15 @@ export abstract class MapHandler {
 
 
     addPlayer(player: Player) {
-        this.world.addBody(player.body);
         this.players[player.characterId] = player;
-
+        this.world.addBody(player.body);
     }
 
     removePlayer(player: Player) {
-        this.world.removeBody(this.players[player.characterId].body);
-        delete this.players[player.characterId];
+        if (this.players[player.characterId]) {
+            this.world.removeBody(this.players[player.characterId].body);
+            delete this.players[player.characterId];
+        }
     }
 
     async getAllPlayers() {
@@ -67,6 +68,7 @@ export abstract class MapHandler {
             map(key => {
                 return {
                     characterId: this.players[key].characterId,
+                    name       : this.players[key].name,
                     x          : this.players[key].x,
                     y          : this.players[key].y
                 }

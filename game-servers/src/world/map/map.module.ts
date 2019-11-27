@@ -13,10 +13,12 @@ import {WorldConstants}           from "../constants";
 import {TutorialMap}              from "./maps/tutorial.map";
 import {MicroserviceClientModule} from "../../lib/microservice-client.module";
 import {MapEmitter}               from "./map.emitter";
+import {CharacterClientModule}    from "../../global/character/client/character-client.module";
 
 @Module({
     imports    : [
         MicroserviceClientModule,
+        CharacterClientModule,
         TypeOrmModule.forFeature([Map, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,

@@ -52,9 +52,7 @@ export class GameEngineService {
                         .pipe(takeUntil(this.destroyed))
                         .subscribe((data: PlayerEnteredMap) => {
                             console.log('Player Joined', data);
-                            this.addOrUpdatePlayer(data);
                         });
-
                     fromEvent(world.socket, PlayerLeftMap.event)
                         .pipe(takeUntil(this.destroyed))
                         .subscribe((data: PlayerLeftMap) => {

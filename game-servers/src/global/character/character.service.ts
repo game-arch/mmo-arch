@@ -20,6 +20,10 @@ export class CharacterService {
         return await this.repo.find({accountId, world});
     }
 
+    async getCharacterName(characterId:number) {
+        return (await this.repo.findOne(characterId)).name;
+    }
+
     async createCharacterFor(accountId: number, world: string, name: string, gender: 'male' | 'female') {
         try {
             let character       = this.repo.create();

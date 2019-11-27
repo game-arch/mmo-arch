@@ -1,14 +1,28 @@
-import {Controller, Get, OnApplicationBootstrap, OnApplicationShutdown} from '@nestjs/common';
-import {MapService}                                                     from './map.service';
-import {EventPattern}                                                   from "@nestjs/microservices";
-import {CharacterCreated, CharacterLoggedIn, CharacterLoggedOut}        from "../../global/character/actions";
-import {PlayerChangedMap}                                               from "./actions";
+import {Controller, Get, OnApplicationBootstrap, OnApplicationShutdown, Req, Res} from '@nestjs/common';
+import {MapService}                                                               from './map.service';
+import {EventPattern, MessagePattern}                                             from "@nestjs/microservices";
+import {CharacterCreated, CharacterLoggedIn, CharacterLoggedOut}                  from "../../global/character/actions";
+import {GetAllPlayers, PlayerChangedMap}                                          from "./actions";
+import {Request, Response}                                                        from "express";
+import {MapEmitter}                                                               from "./map.emitter";
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
-    constructor(private readonly service: MapService) {
+    constructor(
+        private readonly emitter: MapEmitter,
+        private readonly service: MapService
+    ) {
     }
 
+    @Get('players')
+    async getPlayers(@Req() request: Request, @Res() response: Response) {
+        return await this.service.map.getAllPlayers();
+    }
+
+    @MessagePattern(GetAllPlayers.event)
+    async getAllPlayers(data: GetAllPlayers) {
+        return await this.service.map.getAllPlayers();
+    }
 
     @EventPattern(CharacterCreated.event)
     characterCreated(data: CharacterCreated) {
@@ -22,7 +36,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(CharacterLoggedIn.event)
     async characterLoggedIn(data: CharacterLoggedIn) {
-        await this.service.playerJoinedMap(data.characterId, data.world);
+        await this.service.playerJoinedMap(data.characterId, data.name, data.world);
     }
 
     @EventPattern(CharacterLoggedOut.event)
@@ -32,6 +46,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     onApplicationBootstrap() {
         this.service.start();
+        this.emitter.nowOnline();
     }
 
     onApplicationShutdown(signal?: string) {

@@ -43,6 +43,14 @@ export class CharacterGetAll {
 
     }
 }
+export class GetCharacterName {
+    static readonly event = 'character.get_name';
+    constructor(
+        public characterId:number
+    ) {
+
+    }
+}
 
 export class CharacterOnline {
     static readonly event = 'character.online';

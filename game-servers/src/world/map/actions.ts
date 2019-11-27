@@ -1,7 +1,15 @@
+export class MapOnline {
+    static readonly event = 'map.online';
+
+    constructor() {
+
+    }
+}
+
 export class PlayerEnteredMap {
     static readonly event = 'map.player_entered';
 
-    constructor(public characterId: number, public world: string, public map: string, public x: number, public y: number) {
+    constructor(public characterId: number, public world: string, public name: string, public map: string, public x: number, public y: number) {
 
     }
 }
@@ -17,7 +25,7 @@ export class PlayerChangedMap {
 export class PlayerLeftMap {
     static readonly event = 'map.player_left';
 
-    constructor(public characterId: number, public world: string, public map: string) {
+    constructor(public characterId: number, public world: string, public name: string, public map: string) {
 
     }
 }
@@ -26,6 +34,14 @@ export class AllPlayers {
     static readonly event = 'map.all_players';
 
     constructor(public world: string, public map: string, public players: { characterId: number, x: number, y: number }[]) {
+
+    }
+}
+
+export class GetAllPlayers {
+    static readonly event = 'map.get_all_players';
+
+    constructor(public world: string, public map: string) {
 
     }
 }

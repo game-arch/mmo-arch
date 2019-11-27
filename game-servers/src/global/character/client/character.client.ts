@@ -7,7 +7,7 @@ import {
     CharacterCreate,
     CharacterGetAll,
     CharacterOffline,
-    CharacterOnline
+    CharacterOnline, GetCharacterName
 }                    from "../actions";
 
 @Injectable()
@@ -35,6 +35,10 @@ export class CharacterClient {
 
     allCharactersOffline(data: CharacterOffline[]) {
         this.client.emit(AllCharactersOffline.event, new AllCharactersOffline(data));
+    }
+
+    async getCharacterName(characterId: number) {
+        return await this.client.send(GetCharacterName.event, new GetCharacterName(characterId)).pipe(first()).toPromise();
     }
 
 }

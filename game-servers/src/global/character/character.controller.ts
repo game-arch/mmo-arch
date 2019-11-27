@@ -6,7 +6,7 @@ import {
     CharacterCreate,
     CharacterGetAll,
     CharacterOffline,
-    CharacterOnline
+    CharacterOnline, GetCharacterName
 }                                     from "./actions";
 
 @Controller()
@@ -38,8 +38,12 @@ export class CharacterController {
 
     @EventPattern(AllCharactersOffline.event)
     async allCharactersOffline(data: AllCharactersOffline) {
-        console.log(data);
         await this.service.allCharactersOffline(data);
+    }
+
+    @MessagePattern(GetCharacterName.event)
+    async getCharacterName(data: GetCharacterName) {
+        return await this.service.getCharacterName(data.characterId);
     }
 
 }
