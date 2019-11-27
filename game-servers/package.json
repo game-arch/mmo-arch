@@ -21,6 +21,7 @@
     "fixtures:map": "fixtures src/world/map/fixtures --config src/world/map/typeorm.config.ts --sync --require=ts-node/register --require=tsconfig-paths/register"
   },
   "dependencies": {
+    "@geckos.io/phaser-on-nodejs": "^1.0.4",
     "@nestjs/common": "^6.7.2",
     "@nestjs/core": "^6.7.2",
     "@nestjs/jwt": "^6.1.1",
@@ -44,6 +45,7 @@
     "nats": "^1.3.2",
     "p2": "^0.7.1",
     "passport-jwt": "^4.0.0",
+    "phaser": "^3.21.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",

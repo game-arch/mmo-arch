@@ -1,77 +1,45 @@
-import {Body, Box, Circle, World} from "p2";
-import {MapConfig}                from "../config/config";
-import {Player}                   from "../entities/player";
-import {MapEmitter}               from "../map.emitter";
-import {from, interval, Subject}  from "rxjs";
-import {map, takeUntil, toArray}  from "rxjs/operators";
-import {PlayerDirectionalInput}   from "../actions";
+import {MapConfig}               from "../config/config";
+import {Player}                  from "../entities/player";
+import {from, interval, Subject} from "rxjs";
+import {map, takeUntil, toArray} from "rxjs/operators";
+import {PlayerDirectionalInput}  from "../actions";
+import Scene = Phaser.Scene;
+import {loadCollisions}          from "../phaser/collisions";
+import Group = Phaser.Physics.Arcade.Group;
 
 
-export class MapHandler {
+export class MapHandler extends Scene {
     constant: string;
     name: string;
 
-    world: World;
-
     stop$ = new Subject();
 
-    nonPlayers: { [npcId: number]: { id: number, name: string, details: any, body: Body } }                     = {};
-    players: { [characterId: number]: Player }                                                                  = {};
-    resources: { [resourceId: number]: { id: number, name: string, details: any, health: number, body: Body } } = {};
-    emitter                                                                                                     = new Subject();
+    players: { [characterId: number]: Player } = {};
+    emitter                                    = new Subject();
+
+    collisionGroup: Group;
 
     savePlayer = new Subject<Player>();
 
     constructor(public config: MapConfig) {
+        super({
+            key: config.name
+        });
     }
 
-    configure() {
-        this.world = new World({islandSplit: true});
-        for (let collision of this.config.collisions) {
-            let body = new Body({mass: collision.mass || 0, position: collision.position});
-            if (collision.shape === 'circle') {
-                body.addShape(new Circle({
-                    radius: collision.radius
-                }));
-            }
-            if (collision.shape === 'rectangle') {
-                body.addShape(new Box({
-                    width : collision.width,
-                    height: collision.height
-                }));
-            }
-            if (collision.shape === 'polygon') {
-                body.fromPolygon(collision.points);
-            }
-            if (Boolean(collision.transitionTo)) {
-                body.on('beginContact', (...args) => {
-                    console.log('collision!', args);
-                });
-            }
-            this.world.addBody(body);
-        }
+    create() {
+        this.collisionGroup = loadCollisions(this.config, this);
     }
 
-    start() {
-        console.log('Tutorial Map Started');
-        let lastCalled = null;
-        interval(1000 / 60)
-            .pipe(takeUntil(this.stop$))
-            .subscribe(() => {
-                this.world.step(new Date().valueOf(), lastCalled);
-                lastCalled = new Date().valueOf();
-                this.emitter.next();
-            });
-    }
-
-    stop() {
-        this.stop$.next();
+    update(time: number, delta: number) {
+        this.emitter.next();
     }
 
 
     addPlayer(player: Player) {
         this.players[player.characterId] = player;
-        this.world.addBody(player.body);
+        this.players[player.characterId].init(this, player._x, player._y);
+        this.physics.add.collider(player.graphics, this.collisionGroup);
         player.onStopMoving.pipe(takeUntil(player.stopListening))
               .subscribe(() => this.savePlayer.next(player));
     }
@@ -79,7 +47,7 @@ export class MapHandler {
     removePlayer(player: Player) {
         if (this.players[player.characterId]) {
             this.players[player.characterId].stopListening.next();
-            this.world.removeBody(this.players[player.characterId].body);
+            this.players[player.characterId].graphics.destroy(true);
             delete this.players[player.characterId];
         }
     }
@@ -92,7 +60,6 @@ export class MapHandler {
     }
 
     movePlayer(data: PlayerDirectionalInput) {
-        console.log('player moved!');
         let player = this.players[data.characterId];
         if (player) {
             player.moving = {

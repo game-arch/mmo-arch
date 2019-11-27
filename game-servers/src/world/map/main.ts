@@ -1,3 +1,5 @@
+import "@geckos.io/phaser-on-nodejs";
+import "phaser";
 import {NestFactory}    from '@nestjs/core';
 import {MapModule}      from './map.module';
 import {createDatabase} from "../../lib/database.module";
@@ -14,7 +16,7 @@ async function bootstrap() {
         transport: config.microservice.transport,
         options  : {
             ...config.microservice.options,
-            name: WorldConstants.NAME + ' Map',
+            name : WorldConstants.NAME + ' Map',
             queue: WorldConstants.CONSTANT + '.map'
         }
     });

@@ -12,10 +12,12 @@ import {async}                                                      from "rxjs/i
 import {WorldConstants}                                             from "../constants";
 import {fromPromise}                                                from "rxjs/internal-compatibility";
 import {from, interval}                                             from "rxjs";
+import {Game}                                                       from "phaser";
 
 @Injectable()
 export class MapService {
 
+    phaser: Game;
 
     constructor(
         private emitter: MapEmitter,
@@ -24,11 +26,28 @@ export class MapService {
         @InjectRepository(Player) private playerRepo: Repository<Player>
     ) {
 
+        this.phaser = new Game({
+            type   : Phaser.HEADLESS,
+            width  : 1024,
+            height : 768,
+            banner : true,
+            audio  : {
+                noAudio: true
+            },
+            scene  : [this.map],
+            physics: {
+                default: 'arcade',
+                arcade : {
+                    gravity: {y: 0, x: 0}
+                }
+            }
+        });
+
     }
 
 
     start() {
-        this.map.start();
+        this.phaser.scene.start(this.map.constant);
         this.map.savePlayer.pipe(takeUntil(this.map.stop$))
             .subscribe(async player => {
                 if (player) {
@@ -37,15 +56,16 @@ export class MapService {
                 }
             });
         this.map.emitter.pipe(takeUntil(this.map.stop$))
+            .pipe(throttleTime(1000, async, {leading: true}))
             .pipe(concatMap(() => fromPromise(this.map.getAllPlayers())))
-            .pipe(throttleTime(300, async, {leading: true, trailing: true}))
+            .pipe(throttleTime(1000, async, {leading: true}))
             .subscribe((players) => {
                 this.emitter.allPlayers(WorldConstants.CONSTANT, this.map.constant, players);
             });
     }
 
     stop() {
-        this.map.stop();
+        this.phaser.scene.stop(this.map.constant);
     }
 
     async changeMap(characterId: number, world: string, map: string, newX: number, newY: number) {
