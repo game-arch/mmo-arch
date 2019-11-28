@@ -40,8 +40,8 @@ export class MapHandler extends Scene {
     addPlayer(player: Player) {
         this.players[player.characterId] = player;
         this.players[player.characterId].init(this, player._x, player._y);
-        this.physics.add.collider(player.circle, this.collisionGroups.colliders);
-        this.physics.add.overlap(player.circle, this.collisionGroups.overlaps);
+        this.physics.add.collider(player.graphic, this.collisionGroups.colliders);
+        this.physics.add.overlap(player.graphic, this.collisionGroups.overlaps);
         player.onStopMoving.pipe(takeUntil(player.stopListening))
               .subscribe(() => this.savePlayer.next(player));
     }
@@ -49,7 +49,7 @@ export class MapHandler extends Scene {
     removePlayer(player: Player) {
         if (this.players[player.characterId]) {
             this.players[player.characterId].stopListening.next();
-            this.players[player.characterId].circle.destroy(true);
+            this.players[player.characterId].graphic.destroy(true);
             delete this.players[player.characterId];
         }
     }

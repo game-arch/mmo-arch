@@ -8,25 +8,25 @@ export class PlayerSprite {
     onStartMoving: Subject<any>;
     onStopMoving: Subject<any>;
 
-    circle: PlayerGraphic;
+    graphic: PlayerGraphic;
     _moving: { up: boolean, down: boolean, left: boolean, right: boolean };
 
     set moving(value: { up: boolean, down: boolean, left: boolean, right: boolean }) {
-        this.circle.moving = value;
+        this.graphic.moving = value;
     }
 
     get body() {
-        if (!this.circle) {
+        if (!this.graphic) {
             return null;
         }
-        return this.circle.body;
+        return this.graphic.body;
     }
 
     init(scene: Phaser.Scene, x, y) {
-        this.circle        = new PlayerGraphic(scene, x, y);
-        this.stopListening = this.circle.stopListening;
-        this.onStartMoving = this.circle.onStartMoving;
-        this.onStopMoving  = this.circle.onStopMoving;
+        this.graphic       = new PlayerGraphic(scene, x, y);
+        this.stopListening = this.graphic.stopListening;
+        this.onStartMoving = this.graphic.onStartMoving;
+        this.onStopMoving  = this.graphic.onStopMoving;
     }
 
 }

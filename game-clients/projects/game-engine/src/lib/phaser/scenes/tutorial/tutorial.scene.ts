@@ -107,7 +107,7 @@ export class TutorialScene extends Scene {
 
     private removePlayer(data: PlayerLeftMap) {
         if (this.players.hasOwnProperty(data.characterId)) {
-            this.players[data.characterId].circle.destroy(true);
+            this.players[data.characterId].graphic.destroy(true);
             delete this.players[data.characterId];
         }
     }
@@ -118,8 +118,8 @@ export class TutorialScene extends Scene {
             this.players[data.characterId] = new PlayerSprite();
             player                         = this.players[data.characterId];
             player.init(this, data.x + 16, data.y + 16);
-            this.physics.add.collider(player.circle, this.collisionGroups.colliders);
-            this.physics.add.overlap(player.circle, this.collisionGroups.overlaps);
+            this.physics.add.collider(player.graphic, this.collisionGroups.colliders);
+            this.physics.add.overlap(player.graphic, this.collisionGroups.overlaps);
             if (this.connection.world.selectedCharacter.id === data.characterId) {
                 this.self = player;
                 this.cameras.main.startFollow(player.body, true, 0.05, 0.05);
