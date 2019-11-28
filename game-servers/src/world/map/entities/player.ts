@@ -55,8 +55,8 @@ export class Player extends Mob {
         return {
             characterId: this.characterId,
             name       : this.name,
-            x          : this.sprite.body.position.x,
-            y          : this.sprite.body.position.y,
+            x          : this.x,
+            y          : this.y,
             moving     : this.sprite.moving
         }
     }

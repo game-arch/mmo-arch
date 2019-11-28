@@ -96,6 +96,7 @@ export class TutorialScene extends BaseScene implements Scene {
     }
 
     private addOrUpdatePlayer(data: { characterId: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+        console.log(data);
         let player = this.entities.player[data.characterId];
         if (!player) {
             player = this.createPlayer(data);
@@ -109,7 +110,6 @@ export class TutorialScene extends BaseScene implements Scene {
     private createPlayer(data: { characterId: number; x: number; y: number; moving?: { up: boolean; down: boolean; left: boolean; right: boolean } }) {
         let player = new Mob();
         this.addEntity('player', player, data.characterId);
-        player.sprite.body.reset(data.x + 16, data.y + 16);
         if (this.connection.world.selectedCharacter.id === data.characterId) {
             this.setSelf(player);
         }

@@ -1,13 +1,13 @@
-import {MapConfig}               from "../config/config";
-import {Player}                  from "../entities/player";
-import {Subject}                 from "rxjs";
-import {takeUntil, throttleTime} from "rxjs/operators";
-import {loadCollisions}          from "../phaser/collisions";
-import {BaseScene}               from "./base.scene";
+import {MapConfig}                    from "../config/config";
+import {Player}                       from "../entities/player";
+import {Subject}                      from "rxjs";
+import {takeUntil, tap, throttleTime} from "rxjs/operators";
+import {loadCollisions}               from "../phaser/collisions";
+import {BaseScene}                    from "./base.scene";
 import Scene = Phaser.Scene;
-import {Mob}                     from "../phaser/mob";
-import {PlayerDirectionalInput}  from "../actions";
-import {async}                   from "rxjs/internal/scheduler/async";
+import {Mob}                          from "../phaser/mob";
+import {PlayerDirectionalInput}       from "../actions";
+import {async}                        from "rxjs/internal/scheduler/async";
 
 
 export class BackendScene extends BaseScene implements Scene {
@@ -34,8 +34,11 @@ export class BackendScene extends BaseScene implements Scene {
     addPlayer(player: Player) {
         this.addEntity('player', player, player.characterId);
         player.sprite.onStopMoving.pipe(takeUntil(player.sprite.stopListening))
-              .pipe(throttleTime(1000, async, {leading: true}))
+              .pipe(tap(() => console.log('save!')))
+              .pipe(throttleTime(1000, async, {trailing: true, leading: true}))
+              .pipe(tap(() => console.log('save2!')))
               .subscribe(() => this.savePlayer.next(player));
+
     }
 
     removePlayer(player: Player) {

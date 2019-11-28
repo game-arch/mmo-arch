@@ -23,11 +23,12 @@ export class MobSprite extends Sprite {
         this.body.collideWorldBounds = true;
     }
 
+    lastVelocity: Vector2 = new Vector2();
+
     preUpdate(...args: any[]) {
         let value = this.moving;
         if (value) {
             let velocity: Vector2 = new Vector2();
-            let previousVelocity  = this.body.velocity.clone();
             let speed             = Physics.CLIENT_SPEED_BASE * Physics.SPEED_MODIFIER;
             if (value.up) {
                 velocity.y = -speed;
@@ -44,12 +45,13 @@ export class MobSprite extends Sprite {
                 velocity.x = parseInt('' + (velocity.x * 0.75));
             }
             this.body.setVelocity(velocity.x, velocity.y);
-            if (previousVelocity.x === 0 && previousVelocity.y === 0 && (velocity.x !== 0 || velocity.y !== 0)) {
+            if (this.lastVelocity.x === 0 && this.lastVelocity.y === 0 && (velocity.x !== 0 || velocity.y !== 0)) {
                 this.onStartMoving.next();
             }
-            if (velocity.x === 0 && velocity.y === 0 && (previousVelocity.x !== 0 || previousVelocity.y !== 0)) {
+            if (velocity.x === 0 && velocity.y === 0 && (this.lastVelocity.x !== 0 || this.lastVelocity.y !== 0)) {
                 this.onStopMoving.next();
             }
+            this.lastVelocity = this.body.velocity.clone();
         }
     }
 }
