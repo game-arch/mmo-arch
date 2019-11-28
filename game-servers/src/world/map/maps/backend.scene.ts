@@ -34,9 +34,7 @@ export class BackendScene extends BaseScene implements Scene {
     addPlayer(player: Player) {
         this.addEntity('player', player, player.characterId);
         player.sprite.onStopMoving.pipe(takeUntil(player.sprite.stopListening))
-              .pipe(tap(() => console.log('save!')))
               .pipe(throttleTime(1000, async, {trailing: true, leading: true}))
-              .pipe(tap(() => console.log('save2!')))
               .subscribe(() => this.savePlayer.next(player));
 
     }
