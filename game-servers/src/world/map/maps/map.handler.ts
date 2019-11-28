@@ -17,7 +17,7 @@ export class MapHandler extends Scene {
     players: { [characterId: number]: Player } = {};
     emitter                                    = new Subject();
 
-    collisionGroup: Group;
+    collisionGroups: {overlaps:Group, colliders: Group};
 
     savePlayer = new Subject<Player>();
 
@@ -29,7 +29,7 @@ export class MapHandler extends Scene {
 
     create() {
         this.physics.world.TILE_BIAS = 40;
-        this.collisionGroup          = loadCollisions(this.config, this);
+        this.collisionGroups          = loadCollisions(this.config, this);
     }
 
     update(time: number, delta: number) {
@@ -40,7 +40,8 @@ export class MapHandler extends Scene {
     addPlayer(player: Player) {
         this.players[player.characterId] = player;
         this.players[player.characterId].init(this, player._x, player._y);
-        this.physics.add.collider(player.graphics, this.collisionGroup);
+        this.physics.add.collider(player.circle, this.collisionGroups.colliders);
+        this.physics.add.overlap(player.circle, this.collisionGroups.overlaps);
         player.onStopMoving.pipe(takeUntil(player.stopListening))
               .subscribe(() => this.savePlayer.next(player));
     }
@@ -48,7 +49,7 @@ export class MapHandler extends Scene {
     removePlayer(player: Player) {
         if (this.players[player.characterId]) {
             this.players[player.characterId].stopListening.next();
-            this.players[player.characterId].graphics.destroy(true);
+            this.players[player.characterId].circle.destroy(true);
             delete this.players[player.characterId];
         }
     }

@@ -7,7 +7,7 @@ export const TUTORIAL_CONFIG: MapConfig = {
     collisions: [
         {
             solid:true,
-            shape: 'circle',
+            shape: 'rectangle',
             position: [320, 500],
             radius: 100
         },

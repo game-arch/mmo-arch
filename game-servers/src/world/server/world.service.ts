@@ -91,7 +91,6 @@ export class WorldService {
     }
 
     playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
-        console.log('move player!');
         let character = this.sockets[client.id].character;
         this.map.playerDirectionalInput(character.id, WorldConstants.CONSTANT, character.map, data.directions);
     }

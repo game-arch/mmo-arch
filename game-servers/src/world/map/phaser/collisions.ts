@@ -4,7 +4,8 @@ import Body = Phaser.Physics.Arcade.Body;
 
 export function loadCollisions(config: MapConfig, scene: Scene) {
     scene.physics.world.setBounds(0, 0, config.width, config.height);
-    let shapes = [];
+    let colliders = [];
+    let overlaps  = [];
 
     function addCollisionShape(shape, collision) {
         if (Boolean(collision.transitionTo)) {
@@ -12,9 +13,12 @@ export function loadCollisions(config: MapConfig, scene: Scene) {
         }
         shape.setOrigin(0, 0);
         scene.physics.add.existing(shape);
-        (shape.body as Body).immovable     = true;
-        (shape.body as Body).debugShowBody = true;
-        shapes.push(shape);
+        (shape.body as Body).immovable = true;
+        if (collision.transitionTo) {
+            overlaps.push(shape);
+            return;
+        }
+        colliders.push(shape);
     }
 
     function iterate() {
@@ -37,9 +41,16 @@ export function loadCollisions(config: MapConfig, scene: Scene) {
     }
 
     iterate();
-    return scene.physics.add.group(shapes, {
-        visible      : true,
-        frameQuantity: 30,
-        immovable    : true
-    });
+    return {
+        colliders: scene.physics.add.group(colliders, {
+            visible      : true,
+            frameQuantity: 30,
+            immovable    : true
+        }),
+        overlaps : scene.physics.add.group(overlaps, {
+            visible      : true,
+            frameQuantity: 30,
+            immovable    : true
+        })
+    }
 }
