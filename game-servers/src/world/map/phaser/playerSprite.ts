@@ -31,7 +31,7 @@ export class PlayerSprite {
         }
         if (velocity.x !== 0 && velocity.y !== 0) {
             velocity.y = velocity.y * 0.75;
-            velocity.x = velocity.y * 0.75;
+            velocity.x = velocity.x * 0.75;
         }
         this.body.setVelocity(velocity.x, velocity.y);
         if (previousVelocity[0] === 0 && previousVelocity[1] === 0 && (velocity[0] !== 0 || velocity[1] !== 0)) {
