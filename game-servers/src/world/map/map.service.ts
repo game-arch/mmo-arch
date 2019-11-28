@@ -1,6 +1,6 @@
 import {Inject, Injectable, Type}                                   from '@nestjs/common';
 import {MapConstants}                                               from "./constants";
-import {MapHandler}                                                 from "./maps/map.handler";
+import {BaseScene}                                                  from "./maps/base.scene";
 import {Repository}                                                 from "typeorm";
 import {Player}                                                     from "./entities/player";
 import {InjectRepository}                                           from "@nestjs/typeorm";
@@ -13,6 +13,7 @@ import {WorldConstants}                                             from "../con
 import {fromPromise}                                                from "rxjs/internal-compatibility";
 import {from, interval}                                             from "rxjs";
 import {Game}                                                       from "phaser";
+import {BackendScene}                                               from "./maps/backend.scene";
 
 @Injectable()
 export class MapService {
@@ -22,7 +23,7 @@ export class MapService {
     constructor(
         private emitter: MapEmitter,
         private character: CharacterClient,
-        @Inject(MapConstants.MAP) public map: MapHandler,
+        @Inject(MapConstants.MAP) public map: BackendScene,
         @InjectRepository(Player) private playerRepo: Repository<Player>
     ) {
 
@@ -51,7 +52,6 @@ export class MapService {
         this.map.savePlayer.pipe(takeUntil(this.map.stop$))
             .subscribe(async player => {
                 if (player) {
-                    console.log('save player!');
                     await this.playerRepo.save(player);
                 }
             });
@@ -65,6 +65,7 @@ export class MapService {
     }
 
     stop() {
+        this.map.stop$.next();
         this.phaser.scene.stop(this.map.constant);
     }
 
@@ -106,7 +107,7 @@ export class MapService {
     }
 
     movePlayer(data: PlayerDirectionalInput) {
-        if (this.map.players[data.characterId]) {
+        if (this.map.entities.player[data.characterId]) {
             this.map.movePlayer(data);
         }
     }

@@ -1,8 +1,8 @@
 export interface MapConfig {
     name: string
-    width: number
-    height: number
-    collisions: CollisionConfig[]
+    width?: number
+    height?: number
+    collisions?: CollisionConfig[]
 }
 
 export interface CollisionConfig {

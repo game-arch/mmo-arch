@@ -27,7 +27,6 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(CharacterCreated.event)
     characterCreated(data: CharacterCreated) {
-        console.log(data);
     }
 
     @EventPattern(PlayerChangedMap.event)

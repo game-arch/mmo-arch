@@ -1,5 +1,3 @@
-import Scene = Phaser.Scene;
-import {Location}            from "@angular/common";
 import {ConnectionManager}   from "../../../../../../connection/src/lib/connection-manager";
 import {TUTORIAL_CONFIG}     from "../../../../../../../../game-servers/src/world/map/config/tutorial";
 import {
@@ -11,55 +9,46 @@ import {
 import {from, fromEvent}     from "rxjs";
 import {mergeMap, takeUntil} from "rxjs/operators";
 import {EventEmitter}        from "@angular/core";
-import {PlayerSprite}        from "../../../../../../../../game-servers/src/world/map/phaser/playerSprite";
+import {Mob}                 from "../../../../../../../../game-servers/src/world/map/phaser/mob";
+import {BaseScene}           from "../../../../../../../../game-servers/src/world/map/maps/base.scene";
 import {loadCollisions}      from "../../../../../../../../game-servers/src/world/map/phaser/collisions";
-import Group = Phaser.Physics.Arcade.Group;
+import Scene = Phaser.Scene;
 
-export class TutorialScene extends Scene {
+export class TutorialScene extends BaseScene implements Scene {
 
-    directionMap                                      = {
+    directionMap = {
         s: 'down',
         w: 'up',
         a: 'left',
         d: 'right'
     };
-    directions                                        = {
+    directions   = {
         up    : false,
         down  : false,
         right : false,
         bottom: false
     };
-    players: { [charaacterId: number]: PlayerSprite } = {};
 
-    self: PlayerSprite;
+    self: Mob;
 
     destroyed = new EventEmitter();
 
-    constructor(private connection: ConnectionManager, private location: Location) {
-        super({
-            key: 'tutorial'
-        });
+    constructor(private connection: ConnectionManager) {
+        super(TUTORIAL_CONFIG);
     }
 
-    preload() {
 
+    update(time: number, delta: number) {
     }
-
-    init() {
-
-    }
-
-    collisionGroups: { overlaps: Group, colliders: Group };
 
     create() {
-        this.physics.world.TILE_BIAS = 40;
-        let world                    = this.connection.world;
-        this.collisionGroups         = loadCollisions(TUTORIAL_CONFIG, this);
+        super.create();
+        let world = this.connection.world;
         this.game.events.once('game.scene', () => this.destroyed.emit());
         this.input.keyboard.on('keydown', (event: KeyboardEvent) => {
-            event.stopPropagation();
-            event.stopImmediatePropagation();
             if (this.directionMap.hasOwnProperty(event.key)) {
+                event.stopPropagation();
+                event.stopImmediatePropagation();
                 if (!this.directions[this.directionMap[event.key]]) {
                     this.directions[this.directionMap[event.key]] = true;
                     this.connection.world.socket.emit(PlayerDirectionalInput.event, {directions: this.directions});
@@ -67,9 +56,9 @@ export class TutorialScene extends Scene {
             }
         });
         this.input.keyboard.on('keyup', (event: KeyboardEvent) => {
-            event.stopPropagation();
-            event.stopImmediatePropagation();
             if (this.directionMap.hasOwnProperty(event.key)) {
+                event.stopPropagation();
+                event.stopImmediatePropagation();
                 if (this.directions[this.directionMap[event.key]]) {
                     this.directions[this.directionMap[event.key]] = false;
                     this.connection.world.socket.emit(PlayerDirectionalInput.event, {directions: this.directions});
@@ -96,38 +85,39 @@ export class TutorialScene extends Scene {
         fromEvent(world.socket, PlayerDirectionalInput.event)
             .pipe(takeUntil(this.destroyed))
             .subscribe((data: PlayerDirectionalInput) => {
-                if (this.players[data.characterId]) {
-                    this.players[data.characterId].moving = data.directions;
+                if (this.entities.player[data.characterId]) {
+                    this.entities.player[data.characterId].moving = data.directions;
                 }
             });
     }
 
-    update(time: number, delta: number): void {
-    }
-
     private removePlayer(data: PlayerLeftMap) {
-        if (this.players.hasOwnProperty(data.characterId)) {
-            this.players[data.characterId].graphic.destroy(true);
-            delete this.players[data.characterId];
-        }
+        this.removeEntity('player', data.characterId);
     }
 
     private addOrUpdatePlayer(data: { characterId: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
-        let player = this.players[data.characterId];
+        let player = this.entities.player[data.characterId];
         if (!player) {
-            this.players[data.characterId] = new PlayerSprite();
-            player                         = this.players[data.characterId];
-            player.init(this, data.x + 16, data.y + 16);
-            this.physics.add.collider(player.graphic, this.collisionGroups.colliders);
-            this.physics.add.overlap(player.graphic, this.collisionGroups.overlaps);
-            if (this.connection.world.selectedCharacter.id === data.characterId) {
-                this.self = player;
-                this.cameras.main.startFollow(player.body, true, 0.05, 0.05);
-            }
+            player = this.createPlayer(data);
         }
-        player.body.reset(data.x + 16, data.y + 16);
+        player.sprite.body.reset(data.x + 16, data.y + 16);
         if (data.moving) {
             player.moving = data.moving;
         }
+    }
+
+    private createPlayer(data: { characterId: number; x: number; y: number; moving?: { up: boolean; down: boolean; left: boolean; right: boolean } }) {
+        let player = new Mob();
+        this.addEntity('player', player, data.characterId);
+        player.sprite.body.reset(data.x + 16, data.y + 16);
+        if (this.connection.world.selectedCharacter.id === data.characterId) {
+            this.setSelf(player);
+        }
+        return player;
+    }
+
+    private setSelf(player) {
+        this.self = player;
+        this.cameras.main.startFollow(player.sprite.body, true, 0.05, 0.05);
     }
 }

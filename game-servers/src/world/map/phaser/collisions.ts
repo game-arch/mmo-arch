@@ -1,13 +1,14 @@
 import {MapConfig} from "../config/config";
 import Scene = Phaser.Scene;
 import Body = Phaser.Physics.Arcade.Body;
+import Shape = Phaser.GameObjects.Shape;
 
 export function loadCollisions(config: MapConfig, scene: Scene) {
     scene.physics.world.setBounds(0, 0, config.width, config.height);
     let colliders = [];
     let overlaps  = [];
 
-    function addCollisionShape(shape, collision) {
+    function addCollisionShape(shape: Shape, collision) {
         if (Boolean(collision.transitionTo)) {
             shape.fillColor = 0xaaaaaa;
         }

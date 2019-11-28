@@ -65,7 +65,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
                 throw new Error("Server Limit Reached");
             }
             let user = await this.service.verifyUser(client);
-            console.log(this.service.accounts[user.id]);
             if (this.service.accounts[user.id]) {
                 throw new ConflictException("User already logged in!");
             }

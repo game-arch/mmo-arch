@@ -1,19 +1,13 @@
 import Scene = Phaser.Scene;
-import {Location} from "@angular/common";
+import {Location}  from "@angular/common";
 import Image = Phaser.GameObjects.Image;
+import {BaseScene} from "../../../../../../../../game-servers/src/world/map/maps/base.scene";
 
-export class TitleScene extends Scene {
+export class TitleScene extends BaseScene {
     background: Image;
 
     constructor(private location: Location) {
-        super({
-            key: 'title'
-        });
-    }
-
-
-    init() {
-
+        super({name: 'title'});
     }
 
     preload() {
