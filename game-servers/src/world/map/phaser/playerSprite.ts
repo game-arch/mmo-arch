@@ -29,7 +29,11 @@ export class PlayerSprite {
         } else if (value.right) {
             velocity.x = speed;
         }
-        this.body.velocity = velocity;
+        if (velocity.x !== 0 && velocity.y !== 0) {
+            velocity.y = velocity.y * 0.75;
+            velocity.x = velocity.y * 0.75;
+        }
+        this.body.setVelocity(velocity.x, velocity.y);
         if (previousVelocity[0] === 0 && previousVelocity[1] === 0 && (velocity[0] !== 0 || velocity[1] !== 0)) {
             this.onStartMoving.next();
         }
@@ -41,8 +45,8 @@ export class PlayerSprite {
     init(scene: Phaser.Scene, x, y) {
         this.graphics = scene.add.circle(x, y, 16, 0x00aa00);
         scene.physics.add.existing(this.graphics);
-        this.body = this.graphics.body as Body;
-        this.body.setSize(48, 48);
+        this.body                    = this.graphics.body as Body;
+        this.body.mass               = 100;
         this.body.isCircle           = true;
         this.body.collideWorldBounds = true;
         this.body.debugShowBody      = true;
