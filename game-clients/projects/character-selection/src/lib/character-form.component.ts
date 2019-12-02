@@ -4,7 +4,7 @@ import {FormControl, FormGroup, Validators}                     from "@angular/f
 import {MatDialogRef}                                           from "@angular/material/dialog";
 import {fromEvent}                                              from "rxjs";
 import {takeUntil}                                              from "rxjs/operators";
-import {CharacterCreate, CharacterCreated, CharacterNotCreated} from "../../../../../game-servers/src/global/character/actions";
+import {CreateCharacter, CharacterCreated, CharacterNotCreated} from "../../../../../game-servers/src/global/character/actions";
 
 @Component({
     selector   : 'character-form',
@@ -39,7 +39,7 @@ export class CharacterFormComponent {
     }
 
     submit() {
-        this.connection.world.socket.emit(CharacterCreate.event, this.form.getRawValue());
+        this.connection.world.socket.emit(CreateCharacter.event, this.form.getRawValue());
     }
 
     ngOnDestroy() {

@@ -4,7 +4,7 @@ import {first}       from "rxjs/operators";
 import {Character}   from "../entities/character";
 import {
     AllCharactersOffline,
-    CharacterCreate,
+    CreateCharacter,
     GetCharacters,
     CharacterOffline,
     CharacterOnline, GetCharacter, GetCharacterName
@@ -18,7 +18,7 @@ export class CharacterClient {
     }
 
     async create(accountId: number, world: string, name: string, gender: 'male' | 'female'): Promise<Character> {
-        return await this.client.send(CharacterCreate.event, new CharacterCreate(accountId, world, name, gender)).pipe(first()).toPromise();
+        return await this.client.send(CreateCharacter.event, new CreateCharacter(accountId, world, name, gender)).pipe(first()).toPromise();
     }
 
     async getAll(accountId: number, world: string) {

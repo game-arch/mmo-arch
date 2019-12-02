@@ -1,7 +1,7 @@
 import {Controller, Get, OnApplicationBootstrap, OnApplicationShutdown, Req, Res} from '@nestjs/common';
 import {MapService}                                                               from './map.service';
 import {EventPattern, MessagePattern}                                             from "@nestjs/microservices";
-import {CharacterCreated, CharacterLoggedIn, CharacterLoggedOut}                  from "../../global/character/actions";
+import {CharacterLoggedIn, CharacterLoggedOut}                                    from "../../global/character/actions";
 import {GetAllPlayers, PlayerChangedMap, PlayerDirectionalInput}                  from "./actions";
 import {Request, Response}                                                        from "express";
 import {MapEmitter}                                                               from "./map.emitter";
@@ -23,10 +23,6 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     @MessagePattern(GetAllPlayers.event)
     async getAllPlayers(data: GetAllPlayers) {
         return await this.service.map.getAllPlayers();
-    }
-
-    @EventPattern(CharacterCreated.event)
-    characterCreated(data: CharacterCreated) {
     }
 
     @EventPattern(PlayerChangedMap.event)

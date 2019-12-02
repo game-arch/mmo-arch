@@ -3,7 +3,7 @@ import {CharacterService}             from './character.service';
 import {EventPattern, MessagePattern} from "@nestjs/microservices";
 import {
     AllCharactersOffline,
-    CharacterCreate,
+    CreateCharacter,
     GetCharacters,
     CharacterOffline,
     CharacterOnline, GetCharacter, GetCharacterName
@@ -26,8 +26,8 @@ export class CharacterController {
         return await this.service.getCharacter(data.characterId);
     }
 
-    @MessagePattern(CharacterCreate.event)
-    async createCharacter(data: CharacterCreate) {
+    @MessagePattern(CreateCharacter.event)
+    async createCharacter(data: CreateCharacter) {
         return await this.service.createCharacterFor(data.accountId, data.world, data.name, data.gender);
     }
 

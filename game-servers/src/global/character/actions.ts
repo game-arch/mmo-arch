@@ -1,4 +1,4 @@
-export class CharacterCreate {
+export class CreateCharacter {
     static readonly event = 'character.create';
 
     constructor(
@@ -15,7 +15,6 @@ export class CharacterCreated {
     static readonly event = 'character.created';
 
     constructor(
-        public accountId: number,
         public world: string,
         public characterId: number
     ) {
