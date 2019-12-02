@@ -71,18 +71,25 @@ export class MapService {
     }
 
     async changedMaps(characterId: number, world: string, map: string, newX: number, newY: number) {
-        let player     = await this.playerRepo.findOne({characterId});
-        let lastMap    = player.map + '';
-        player.map     = map;
-        player.x       = newX;
-        player.y       = newY;
-        let transition = await this.transitionRepo.findOne({map: lastMap, destinationMap: map});
-        if (transition) {
-            player.x = transition.destinationX;
-            player.y = transition.destinationY;
+        let player = await this.playerRepo.findOne({characterId, world});
+        if (player) {
+            let lastMap = player.map + '';
+            if (lastMap === this.map.constant) {
+                this.playerLeftMap(player)
+            }
+            if (map === this.map.constant) {
+                player.map     = map;
+                player.x       = newX;
+                player.y       = newY;
+                let transition = await this.transitionRepo.findOne({map: lastMap, destinationMap: map});
+                if (transition) {
+                    player.x = transition.destinationX;
+                    player.y = transition.destinationY;
+                }
+                await this.playerRepo.save(player);
+                this.playerJoinedMap(player);
+            }
         }
-        await this.playerRepo.save(player);
-        this.emitter.playerChangedMaps(world, lastMap, player.map, characterId, player.name, player.x, player.y);
     }
 
     async loggedIn(characterId: number, name: string, world: string) {
@@ -93,18 +100,26 @@ export class MapService {
         if (player) {
             player.name = name;
             await this.playerRepo.save(player);
-            this.map.addPlayer(player);
-            this.emitter.playerJoinedMap(world, player.map, characterId, name, player.x, player.y);
+            this.playerJoinedMap(player);
         }
+    }
+
+    private playerJoinedMap(player: Player) {
+        this.map.addPlayer(player);
+        this.emitter.playerJoinedMap(player.world, this.map.constant, player.characterId, player.name, player.x, player.y);
     }
 
     async loggedOut(characterId: number, world: string) {
         let player = await this.playerRepo.findOne({characterId});
-        if (player) {
-            this.map.removePlayer(player);
-            this.emitter.playerLeftMap(world, player.map, characterId, player.name);
+        if (player && player.map === this.map.constant) {
+            this.playerLeftMap(player);
         }
 
+    }
+
+    private playerLeftMap(player: Player) {
+        this.map.removePlayer(player);
+        this.emitter.playerLeftMap(player.world, this.map.constant, player.characterId, player.name);
     }
 
     movePlayer(data: PlayerDirectionalInput) {
