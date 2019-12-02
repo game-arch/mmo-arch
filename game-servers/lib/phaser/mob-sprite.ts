@@ -7,12 +7,19 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {Directions} from "./directions";
 
 export class MobSprite extends Sprite {
-    moving: Directions;
+    stopListening      = new Subject();
+    onStartMoving      = new Subject();
+    onStopMoving       = new Subject();
+    lastVelocity       = new Vector2(0, 0);
+    stopped            = true;
+    moving: Directions = {
+        up   : false,
+        down : false,
+        left : false,
+        right: false
+    };
     body: Body;
 
-    stopListening = new Subject();
-    onStartMoving = new Subject();
-    onStopMoving  = new Subject();
 
     constructor(scene: Scene, x: number, y: number, key: string = '') {
         super(scene, x, y, key);
@@ -21,9 +28,6 @@ export class MobSprite extends Sprite {
         this.body.setSize(32, 32);
         this.body.collideWorldBounds = true;
     }
-
-    lastVelocity: Vector2 = new Vector2(0, 0);
-    stopped               = true;
 
     preUpdate(...args: any[]) {
         if (!this.moving) {
