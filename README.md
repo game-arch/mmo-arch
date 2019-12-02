@@ -32,6 +32,9 @@ constructing multiplayer games.
     - https://www.ngxs.io/
     - State Management system for Angular
     - Responsible for Authentication State only at this time
+- PM2
+    - https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
+    - Multi-process orchestration (not dockerized at the moment)
 
 ### The Idea
 
