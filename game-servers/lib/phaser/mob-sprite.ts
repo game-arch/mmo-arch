@@ -33,27 +33,15 @@ export class MobSprite extends Sprite {
             return;
         }
         let velocity = MobSprite.getVelocity(this.moving);
-        if (velocity.equals(this.lastVelocity)) {
-            return;
-        }
-        this.lastVelocity = this.body.velocity.clone();
-        if (velocity.equals(new Vector2(0, 0))) {
-            this.reportStopped();
+        if (!velocity.equals(this.lastVelocity)) {
+            this.lastVelocity = this.body.velocity.clone();
+            this.reportChangeInMovingStatus(velocity);
             this.body.setVelocity(velocity.x, velocity.y);
-            return;
         }
-        this.reportMoving();
-        if (velocity.x !== 0 && velocity.y !== 0) {
-            velocity = MobSprite.getDiagonalVelocity(velocity);
-        }
-        this.body.setVelocity(velocity.x, velocity.y);
     }
 
-    static getVelocity(value: Directions = {up: false, down: false, left: false, right: false}) {
-        return new Vector2(
-            MobSprite.SPEED * (Number(value.right) - Number(value.left)),
-            MobSprite.SPEED * (Number(value.down) - Number(value.up))
-        );
+    private reportChangeInMovingStatus(velocity) {
+        return velocity.equals(new Vector2(0, 0)) ? this.reportStopped() : this.reportMoving();
     }
 
     private reportStopped() {
@@ -70,7 +58,15 @@ export class MobSprite extends Sprite {
         }
     }
 
-    static getDiagonalVelocity(velocity: Vector2) {
-        return new Vector2(parseInt('' + (velocity.y * 0.75)), parseInt('' + (velocity.x * 0.75)));
+    static getVelocity(value: Directions = {up: false, down: false, left: false, right: false}) {
+        let velocity = new Vector2(
+            MobSprite.SPEED * (Number(value.right) - Number(value.left)),
+            MobSprite.SPEED * (Number(value.down) - Number(value.up))
+        );
+        if ((value.up || value.down) && (value.left || value.right)) {
+            velocity.x = velocity.x * 0.75;
+            velocity.y = velocity.y * 0.75;
+        }
+        return velocity;
     }
 }
