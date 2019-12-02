@@ -58,7 +58,7 @@ export class MapService {
         this.map.emitter.pipe(takeUntil(this.map.stop$))
             .pipe(throttleTime(1000, async, {leading: true}))
             .pipe(concatMap(() => fromPromise(this.map.getAllPlayers())))
-            .pipe(throttleTime(1000, async, {leading: true}))
+            .pipe(throttleTime(1000, async, {leading: true, trailing: true}))
             .subscribe((players) => {
                 this.emitter.allPlayers(WorldConstants.CONSTANT, this.map.constant, players);
             });
