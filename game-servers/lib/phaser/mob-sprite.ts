@@ -33,15 +33,14 @@ export class MobSprite extends Sprite {
             let speed             = Physics.CLIENT_SPEED_BASE * Physics.SPEED_MODIFIER;
             velocity.y            = speed * (Number(value.down) - Number(value.up));
             velocity.x            = speed * (Number(value.right) - Number(value.left));
-            if (this.lastVelocity.x !== velocity.x || this.lastVelocity.y !== velocity.y) {
-                if (velocity.x !== 0 && velocity.y !== 0) {
-                    this.updateDiagonalVelocity(velocity);
-                }
-                if (velocity.x !== 0 || velocity.y !== 0) {
-                    this.reportMoving();
-                }
-                if (velocity.x === 0 && velocity.y === 0) {
+            if (!velocity.equals(this.lastVelocity)) {
+                if (velocity.equals(new Vector2(0, 0))) {
                     this.reportStopped();
+                } else {
+                    this.reportMoving();
+                    if (velocity.x !== 0 && velocity.y !== 0) {
+                        this.updateDiagonalVelocity(velocity);
+                    }
                 }
                 this.lastVelocity = this.body.velocity.clone();
                 this.body.setVelocity(velocity.x, velocity.y);
