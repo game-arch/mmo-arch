@@ -59,14 +59,25 @@ export class MobSprite extends Sprite {
     }
 
     static getVelocity(value: Directions = {up: false, down: false, left: false, right: false}) {
-        let velocity = new Vector2(
-            MobSprite.SPEED * (Number(value.right) - Number(value.left)),
-            MobSprite.SPEED * (Number(value.down) - Number(value.up))
+        return new Vector2(
+            MobSprite.SPEED * this.getXAxis(value) * this.getXModifier(value),
+            MobSprite.SPEED * this.getYAxis(value) * this.getYModifier(value)
         );
-        if ((value.up || value.down) && (value.left || value.right)) {
-            velocity.x = velocity.x * 0.75;
-            velocity.y = velocity.y * 0.75;
-        }
-        return velocity;
+    }
+
+    private static getYModifier(value: Directions) {
+        return (value.left || value.right) ? 0.75 : 1;
+    }
+
+    private static getXModifier(value: Directions) {
+        return (value.up || value.down) ? 0.75 : 1;
+    }
+
+    private static getYAxis(value: Directions) {
+        return Number(value.down) - Number(value.up);
+    }
+
+    private static getXAxis(value: Directions) {
+        return Number(value.right) - Number(value.left);
     }
 }
