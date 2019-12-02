@@ -78,8 +78,8 @@ export class MapService {
             player.y       = newY;
             let transition = await this.transitionRepo.findOne({map: lastMap, destinationMap: map});
             if (transition) {
-                player.x = transition.x;
-                player.y = transition.y;
+                player.x = transition.destinationX;
+                player.y = transition.destinationY;
             }
             await this.playerRepo.save(player);
             this.emitter.playerChangedMaps(world, lastMap, player.map, characterId, player.name, player.x, player.y);
