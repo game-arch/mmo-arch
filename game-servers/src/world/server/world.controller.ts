@@ -4,7 +4,7 @@ import {EventPattern}                                           from "@nestjs/mi
 import {CharacterLoggedIn, CharacterLoggedOut}                  from "../../global/character/actions";
 import {PresenceOnline}                                         from "../../global/presence/actions";
 import {WorldConstants}                                         from "../constants";
-import {AllPlayers, MapOnline, PlayerEnteredMap, PlayerLeftMap} from "../map/actions";
+import {MapOnline} from "../map/actions";
 import {WorldService}                                           from "./world.service";
 
 @Controller()
@@ -22,19 +22,6 @@ export class WorldController {
     @Get('health')
     health() {
         return "OK";
-    }
-
-    @Get('connections')
-    async userCount() {
-        return Object.keys(this.service.accounts).map(key => {
-            let player = this.service.accounts[key];
-
-            return {
-                accountId: player.accountId,
-                socketId : player.socket.id,
-                character: player.character
-            }
-        });
     }
 
     @EventPattern(PresenceOnline.event)
