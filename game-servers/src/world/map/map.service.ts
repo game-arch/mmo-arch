@@ -1,19 +1,19 @@
-import {Inject, Injectable, Type}                                   from '@nestjs/common';
-import {MapConstants}                                               from "./constants";
-import {BaseScene}                                                  from "./maps/base.scene";
-import {Repository}                                                 from "typeorm";
-import {Player}                                                     from "./entities/player";
-import {InjectRepository}                                           from "@nestjs/typeorm";
-import {MapEmitter}                                                 from "./map.emitter";
-import {CharacterClient}                                            from "../../global/character/client/character.client";
-import {PlayerDirectionalInput}                                     from "./actions";
-import {concatMap, map, mergeMap, takeUntil, throttleTime, toArray} from "rxjs/operators";
-import {async}                                                      from "rxjs/internal/scheduler/async";
-import {WorldConstants}                                             from "../constants";
-import {fromPromise}                                                from "rxjs/internal-compatibility";
-import {from, interval}                                             from "rxjs";
-import {Game}                                                       from "phaser";
-import {BackendScene}                                               from "./maps/backend.scene";
+import {Inject, Injectable, Type}                                           from '@nestjs/common';
+import {MapConstants}                                                       from "./constants";
+import {BaseScene}                                                          from "./maps/base.scene";
+import {Repository}                                                         from "typeorm";
+import {Player}                                                             from "./entities/player";
+import {InjectRepository}                                                   from "@nestjs/typeorm";
+import {MapEmitter}                                                         from "./map.emitter";
+import {CharacterClient}                                                    from "../../global/character/client/character.client";
+import {PlayerDirectionalInput}                                             from "./actions";
+import {concatMap, filter, map, mergeMap, takeUntil, throttleTime, toArray} from "rxjs/operators";
+import {async}                                                              from "rxjs/internal/scheduler/async";
+import {WorldConstants}                                                     from "../constants";
+import {fromPromise}                                                        from "rxjs/internal-compatibility";
+import {from, interval}                                                     from "rxjs";
+import {Game}                                                               from "phaser";
+import {BackendScene}                                                       from "./maps/backend.scene";
 
 @Injectable()
 export class MapService {
@@ -49,12 +49,10 @@ export class MapService {
 
     start() {
         this.phaser.scene.start(this.map.constant);
-        this.map.savePlayer.pipe(takeUntil(this.map.stop$))
-            .subscribe(async player => {
-                if (player) {
-                    await this.playerRepo.save(player);
-                }
-            });
+        this.map.savePlayer
+            .pipe(takeUntil(this.map.stop$))
+            .pipe(filter(player => !!player))
+            .subscribe(async player => await this.playerRepo.save(player));
         this.map.emitter.pipe(takeUntil(this.map.stop$))
             .pipe(throttleTime(1000, async, {leading: true}))
             .pipe(concatMap(() => fromPromise(this.map.getAllPlayers())))
