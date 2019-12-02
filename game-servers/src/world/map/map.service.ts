@@ -67,7 +67,7 @@ export class MapService {
         this.phaser.scene.stop(this.map.constant);
     }
 
-    async changeMap(characterId: number, world: string, map: string, newX: number, newY: number) {
+    async changedMaps(characterId: number, world: string, map: string, newX: number, newY: number) {
         if (map === this.map.constant) {
             let player  = await this.playerRepo.findOne({characterId});
             let lastMap = player.map + '';
@@ -79,7 +79,7 @@ export class MapService {
         }
     }
 
-    async playerJoinedMap(characterId: number, name: string, world: string) {
+    async loggedIn(characterId: number, name: string, world: string) {
         let player = await this.playerRepo.findOne({characterId});
         if (!player && this.map.constant === 'tutorial') {
             player = this.playerRepo.create({characterId, world, map: 'tutorial', x: 100, y: 100});
@@ -92,7 +92,7 @@ export class MapService {
         }
     }
 
-    async playerLeftMap(characterId: number, world: string) {
+    async loggedOut(characterId: number, world: string) {
         let player = await this.playerRepo.findOne({characterId});
         if (player) {
             this.map.removePlayer(player);

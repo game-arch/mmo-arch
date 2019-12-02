@@ -28,21 +28,21 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     @EventPattern(PlayerChangedMap.event)
     async changedMap(data: PlayerChangedMap) {
         if (data.world === WorldConstants.CONSTANT) {
-            await this.service.changeMap(data.characterId, data.world, data.map, data.newX, data.newY);
+            await this.service.changedMaps(data.characterId, data.world, data.map, data.newX, data.newY);
         }
     }
 
     @EventPattern(CharacterLoggedIn.event)
     async characterLoggedIn(data: CharacterLoggedIn) {
         if (data.world === WorldConstants.CONSTANT) {
-            await this.service.playerJoinedMap(data.characterId, data.name, data.world);
+            await this.service.loggedIn(data.characterId, data.name, data.world);
         }
     }
 
     @EventPattern(CharacterLoggedOut.event)
     async characterLoggedOut(data: CharacterLoggedOut) {
         if (data.world === WorldConstants.CONSTANT) {
-            await this.service.playerLeftMap(data.characterId, data.world);
+            await this.service.loggedOut(data.characterId, data.world);
         }
     }
 
