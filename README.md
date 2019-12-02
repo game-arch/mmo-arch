@@ -28,6 +28,10 @@ constructing multiplayer games.
     - https://material.angular.io/components/categories
     - Using Angular Material for UI construction
     - Using Dependency Injection to aide in constructing larger scale projects
+- NGXS
+    - https://www.ngxs.io/
+    - State Management system for Angular
+    - Responsible for Authentication State only at this time
 
 ### The Idea
 
