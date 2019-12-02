@@ -15,6 +15,7 @@ import {from, interval}                                                     from
 import {Game}                                                               from "phaser";
 import {BackendScene}                                                       from "./maps/backend.scene";
 import {MapTransition}                                                      from "./entities/map-transition";
+import {CharacterLoggedOut}                                                 from "../../global/character/actions";
 
 @Injectable()
 export class MapService {
@@ -70,20 +71,18 @@ export class MapService {
     }
 
     async changedMaps(characterId: number, world: string, map: string, newX: number, newY: number) {
-        if (map === this.map.constant) {
-            let player     = await this.playerRepo.findOne({characterId});
-            let lastMap    = player.map + '';
-            player.map     = map;
-            player.x       = newX;
-            player.y       = newY;
-            let transition = await this.transitionRepo.findOne({map: lastMap, destinationMap: map});
-            if (transition) {
-                player.x = transition.destinationX;
-                player.y = transition.destinationY;
-            }
-            await this.playerRepo.save(player);
-            this.emitter.playerChangedMaps(world, lastMap, player.map, characterId, player.name, player.x, player.y);
+        let player     = await this.playerRepo.findOne({characterId});
+        let lastMap    = player.map + '';
+        player.map     = map;
+        player.x       = newX;
+        player.y       = newY;
+        let transition = await this.transitionRepo.findOne({map: lastMap, destinationMap: map});
+        if (transition) {
+            player.x = transition.destinationX;
+            player.y = transition.destinationY;
         }
+        await this.playerRepo.save(player);
+        this.emitter.playerChangedMaps(world, lastMap, player.map, characterId, player.name, player.x, player.y);
     }
 
     async loggedIn(characterId: number, name: string, world: string) {

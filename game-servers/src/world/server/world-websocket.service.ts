@@ -15,7 +15,7 @@ export class WorldWebsocketService extends WebsocketService {
             if (Object.keys(this.service.accounts).length >= 100) {
                 throw new Error("Server Limit Reached");
             }
-            let user = await this.service.verifyUser(this.client);
+            let user = await this.service.authenticate(this.client);
             if (this.service.accounts[user.id]) {
                 throw new ConflictException("User already logged in!");
             }

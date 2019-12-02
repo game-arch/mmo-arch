@@ -9,6 +9,8 @@ import {MicroserviceClientModule} from "../../lib/microservice-client.module";
 import {MapClientModule}          from "../map/client/map-client.module";
 import {MapController}            from "./map.controller";
 import {MapGateway}               from "./map.gateway";
+import {CharacterGateway}         from "./character.gateway";
+import {CharacterController}      from "./character.controller";
 
 @Module({
     imports    : [
@@ -18,8 +20,8 @@ import {MapGateway}               from "./map.gateway";
         PresenceClientModule,
         MapClientModule
     ],
-    controllers: [WorldController, MapController],
-    providers  : [WorldService, WorldGateway, MapGateway, Logger],
+    controllers: [WorldController, MapController, CharacterController],
+    providers  : [WorldService, WorldGateway, MapGateway, CharacterGateway, Logger],
 })
 export class WorldModule {
 }

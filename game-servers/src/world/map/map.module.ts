@@ -15,11 +15,13 @@ import {MicroserviceClientModule} from "../../lib/microservice-client.module";
 import {MapEmitter}               from "./map.emitter";
 import {CharacterClientModule}    from "../../global/character/client/character-client.module";
 import {MapTransition}            from "./entities/map-transition";
+import {AuditModule}              from "../../lib/audit/audit.module";
 
 @Module({
     imports    : [
         MicroserviceClientModule,
         CharacterClientModule,
+        AuditModule,
         TypeOrmModule.forFeature([Map, MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
         TypeOrmModule.forRoot({
             ...DATABASE_MODULE,

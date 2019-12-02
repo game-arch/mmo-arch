@@ -44,8 +44,16 @@ export class WorldService {
     }
 
     async storeCharacter(client: Socket, character: { id: number, name: string }) {
-        let player   = this.sockets[client.id];
-        let verified = await this.character.getCharacter(character.id);
+        let player = this.sockets[client.id];
+        await this.validateCharacterLogin(client, character.id);
+        this.character.characterOnline(character.id);
+        player.character              = {...character, map: ''};
+        this.characters[character.id] = player;
+        client.join('character.' + character.name);
+    }
+
+    async validateCharacterLogin(client: Socket, characterId: number) {
+        let verified = await this.character.getCharacter(characterId);
         if (verified.accountId !== this.sockets[client.id].accountId) {
             throw new Error("Character's Account ID does not match");
         }
@@ -55,14 +63,6 @@ export class WorldService {
         if (verified.status !== 'offline') {
             throw new Error('Character is already online');
         }
-        this.character.characterOnline(character.id);
-        player.character              = {
-            id  : character.id,
-            name: character.name,
-            map : ''
-        };
-        this.characters[character.id] = player;
-        client.join('character.' + character.name);
     }
 
     removeCharacter(client: Socket) {
@@ -76,7 +76,7 @@ export class WorldService {
         }
     }
 
-    async verifyUser(socket: Socket) {
+    async authenticate(socket: Socket) {
         try {
             let account: { id: number, email: string } = await this.account.getAccount(socket.handshake.query.token, true);
             return account;
@@ -95,7 +95,9 @@ export class WorldService {
 
     playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
         let character = this.sockets[client.id].character;
-        this.map.playerDirectionalInput(character.id, WorldConstants.CONSTANT, character.map, data.directions);
+        if (character) {
+            this.map.playerDirectionalInput(character.id, WorldConstants.CONSTANT, character.map, data.directions);
+        }
     }
 }
 
