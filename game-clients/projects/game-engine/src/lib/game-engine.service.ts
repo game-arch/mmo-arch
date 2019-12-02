@@ -4,10 +4,16 @@ import {Game}                               from "phaser";
 import {GAME_CONFIG}                        from "./phaser/config";
 import {SceneFactory}                       from "./phaser/scenes/scene-factory.service";
 import {from, fromEvent}                    from "rxjs";
-import {mergeMap, takeUntil}                from "rxjs/operators";
+import {filter, mergeMap, takeUntil}        from "rxjs/operators";
 import Scene = Phaser.Scene;
 import {TitleScene}                         from "./phaser/scenes/title/title.scene";
 import {TutorialScene}                      from "./phaser/scenes/tutorial/tutorial.scene";
+import {
+    AllPlayers,
+    PlayerDirectionalInput,
+    PlayerEnteredMap,
+    PlayerLeftMap
+}                                           from "../../../../../game-servers/src/world/map/actions";
 
 @Injectable()
 export class GameEngineService {
@@ -51,6 +57,23 @@ export class GameEngineService {
             .pipe(takeUntil(this.destroyed))
             .subscribe(world => {
                 if (world.socket) {
+                    fromEvent(world.socket, PlayerEnteredMap.event)
+                        .pipe(takeUntil(this.destroyed))
+                        .pipe(filter((event: PlayerEnteredMap) => event.map === this.currentSceneKey))
+                        .subscribe(event => this.game.events.emit(PlayerEnteredMap.event, event));
+                    fromEvent(world.socket, PlayerLeftMap.event)
+                        .pipe(takeUntil(this.destroyed))
+                        .pipe(filter((event: PlayerLeftMap) => event.map === this.currentSceneKey))
+                        .subscribe(event => this.game.events.emit(PlayerLeftMap.event, event));
+                    fromEvent(world.socket, AllPlayers.event)
+                        .pipe(takeUntil(this.destroyed))
+                        .subscribe(players => this.game.events.emit(AllPlayers.event, players));
+                    fromEvent(world.socket, PlayerDirectionalInput.event)
+                        .pipe(filter((event: PlayerDirectionalInput) => event.map === this.currentSceneKey))
+                        .pipe(takeUntil(this.destroyed))
+                        .subscribe((data: PlayerDirectionalInput) => {
+                            this.game.events.emit(PlayerDirectionalInput.event, data);
+                        });
                 }
             });
     }

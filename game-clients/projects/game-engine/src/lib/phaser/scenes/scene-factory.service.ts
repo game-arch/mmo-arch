@@ -19,6 +19,6 @@ export class SceneFactory {
     }
 
     tutorial() {
-        return new TutorialScene(this.connection);
+        return new TutorialScene(this.connection.world);
     }
 }

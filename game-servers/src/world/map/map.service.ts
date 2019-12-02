@@ -74,9 +74,6 @@ export class MapService {
         let player = await this.playerRepo.findOne({characterId, world});
         if (player) {
             let lastMap = player.map + '';
-            if (lastMap === this.map.constant) {
-                this.playerLeftMap(player)
-            }
             if (map === this.map.constant) {
                 player.map     = map;
                 player.x       = newX;
@@ -88,6 +85,9 @@ export class MapService {
                 }
                 await this.playerRepo.save(player);
                 this.playerJoinedMap(player);
+            }
+            if (lastMap === this.map.constant) {
+                this.playerLeftMap(player)
             }
         }
     }
