@@ -1,9 +1,9 @@
-import {WebsocketService}                                     from "../../../lib/websocket-service";
+import {WebsocketService}                                     from "../../lib/websocket-service";
 import {Server, Socket}                                       from "socket.io";
-import {WorldService}                                         from "../world.service";
+import {WorldService}                                         from "./world.service";
 import {ConflictException}                                    from "@nestjs/common";
-import {CharacterCreated, CharacterNotCreated, GetCharacters} from "../../../global/character/actions";
-import {Character}                                            from "../../../global/character/entities/character";
+import {CharacterCreated, CharacterNotCreated, GetCharacters} from "../../global/character/actions";
+import {Character}                                            from "../../global/character/entities/character";
 
 export class WorldWebsocketService extends WebsocketService {
     constructor(server: Server, client: Socket, private service: WorldService) {

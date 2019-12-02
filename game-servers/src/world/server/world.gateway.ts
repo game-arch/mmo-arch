@@ -11,18 +11,18 @@ import {ConflictException, Logger, OnApplicationShutdown} from "@nestjs/common";
 import {PresenceClient}                                   from "../../global/presence/client/presence.client";
 import {config}                                           from "../../lib/config";
 import {ClientProxy}                                      from "@nestjs/microservices";
-import {WorldConstants}                                   from "../constants";
-import {CharacterClient}                                  from "../../global/character/client/character.client";
+import {WorldConstants}        from "../constants";
+import {CharacterClient}       from "../../global/character/client/character.client";
 import {
     CreateCharacter,
     CharacterOffline,
     CharacterOnline
-}                                                         from "../../global/character/actions";
-import {from}                                             from "rxjs";
-import {WorldWebsocket}                                   from "./world-websocket";
-import {WorldWebsocketService}                            from "./tasks/world-websocket.service";
+}                              from "../../global/character/actions";
+import {from}                  from "rxjs";
+import {WorldWebsocket}        from "./world-websocket";
+import {WorldWebsocketService} from "./world-websocket.service";
 
-@WebSocketGateway({namespace: 'world'})
+@WebSocketGateway({namespace: 'world', pingInterval: 3000, pingTimeout: 10000})
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;

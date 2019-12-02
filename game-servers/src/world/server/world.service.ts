@@ -35,42 +35,45 @@ export class WorldService {
     }
 
     removePlayer(client: Socket) {
-        let player = this.sockets[client.id];
-        if (player.character !== null) {
-            this.character.characterOffline(player.character.id);
-            delete this.characters[player.character.id];
+        if (this.sockets[client.id]) {
+            let player = this.sockets[client.id];
+            this.removeCharacter(client);
+            delete this.accounts[player.accountId];
+            delete this.sockets[client.id];
         }
-        delete this.accounts[player.accountId];
-        delete this.sockets[client.id];
     }
 
     async storeCharacter(client: Socket, character: { id: number, name: string }) {
         let player   = this.sockets[client.id];
         let verified = await this.character.getCharacter(character.id);
-        if (verified.accountId === this.sockets[client.id].accountId) {
-            if (verified.world === WorldConstants.CONSTANT) {
-                this.character.characterOnline(character.id);
-                player.character              = {
-                    id  : character.id,
-                    name: character.name,
-                    map : ''
-                };
-                this.characters[character.id] = player;
-                client.join('character.' + character.name);
-                return;
-            }
-            throw new Error("Character's World does not match '" + WorldConstants.CONSTANT + "'");
+        if (verified.accountId !== this.sockets[client.id].accountId) {
+            throw new Error("Character's Account ID does not match");
         }
-        throw new Error("Character's Account ID does not match Socket's");
+        if (verified.world !== WorldConstants.CONSTANT) {
+            throw new Error("Character is on a different world");
+        }
+        if (verified.status !== 'offline') {
+            throw new Error('Character is already online');
+        }
+        this.character.characterOnline(character.id);
+        player.character              = {
+            id  : character.id,
+            name: character.name,
+            map : ''
+        };
+        this.characters[character.id] = player;
+        client.join('character.' + character.name);
     }
 
     removeCharacter(client: Socket) {
-        let player            = this.sockets[client.id];
-        let previousCharacter = player.character;
-        this.character.characterOffline(previousCharacter.id);
-        player.character = null;
-        delete this.characters[previousCharacter.id];
-        client.leave('character.' + previousCharacter.name);
+        let player = this.sockets[client.id];
+        if (player && player.character) {
+            let previousCharacter = player.character;
+            this.character.characterOffline(previousCharacter.id);
+            player.character = null;
+            delete this.characters[previousCharacter.id];
+            client.leave('character.' + previousCharacter.name);
+        }
     }
 
     async verifyUser(socket: Socket) {
