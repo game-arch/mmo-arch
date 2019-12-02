@@ -34,21 +34,6 @@ module.exports = {
             }
         },
         {
-            name: (process.env.WORLD_CONSTANT || 'maiden') + '-ai',
-            script: 'dist/src/main.js',
-            watch: ["dist/src/world/ai", "dist/src/main.js", "dist/src/constants.js", "dist/lib", "dist/src/lib"],
-            // Delay between restart
-            watch_delay: 1000,
-            watch_options: {
-                "followSymlinks": false
-            },
-            env: {
-                SERVER_TYPE: 'world/ai',
-                WORLD_CONSTANT: process.env.WORLD_CONSTANT || 'maiden',
-                WORLD_NAME: process.env.WORLD_NAME || 'Maiden'
-            }
-        },
-        {
             name: (process.env.WORLD_CONSTANT || 'maiden') + '-map-tutorial',
             script: 'dist/src/main.js',
             watch: ["dist/src/world/map", "dist/src/main.ts", "dist/src/constants.ts", "dist/src/lib", "dist/lib"],

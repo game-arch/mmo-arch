@@ -70,6 +70,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async onApplicationShutdown(signal?: string) {
         this.character.allCharactersOffline(Object.keys(this.service.characters).map(id => (new CharacterOffline(parseInt(id)))));
-        this.presence.serverOffline(this.serverId);
+        await this.presence.serverOffline(this.serverId);
     }
 }

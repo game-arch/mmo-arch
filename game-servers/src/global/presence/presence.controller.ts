@@ -22,7 +22,7 @@ export class PresenceController implements OnApplicationBootstrap {
         return await this.server.register(this.server.getHost(host), port, instanceId, constant, name);
     }
 
-    @EventPattern(ServerOffline.event)
+    @MessagePattern(ServerOffline.event)
     async serverOffline({serverId}: ServerOffline) {
         await this.server.offline(serverId);
     }
