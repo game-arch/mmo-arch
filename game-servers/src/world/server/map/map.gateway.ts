@@ -1,9 +1,9 @@
 import {SubscribeMessage, WebSocketGateway, WebSocketServer}                 from "@nestjs/websockets";
 import {Server, Socket}                                                      from "socket.io";
-import {AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerDirectionalInput} from "../map/actions";
-import {MapClient}                                                           from "../map/client/map.client";
-import {WorldService}                                                        from "./world.service";
-import {WorldConstants}                                                      from "../constants";
+import {AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerDirectionalInput} from "../../map/actions";
+import {MapClient}                                                           from "../../map/client/map.client";
+import {WorldService}                                                        from "../world.service";
+import {WorldConstants}                                                      from "../../constants";
 
 @WebSocketGateway({
     namespace   : 'world',

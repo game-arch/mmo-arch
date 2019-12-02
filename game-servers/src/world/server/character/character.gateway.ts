@@ -4,17 +4,17 @@ import {
     WebSocketServer
 }                        from "@nestjs/websockets";
 import {Server, Socket}  from "socket.io";
-import {WorldService}    from "./world.service";
+import {WorldService}    from "../world.service";
 import {Logger}          from "@nestjs/common";
-import {WorldConstants}  from "../constants";
-import {CharacterClient} from "../../global/character/client/character.client";
+import {WorldConstants}  from "../../constants";
+import {CharacterClient} from "../../../global/character/client/character.client";
 import {
     CreateCharacter,
     CharacterOffline,
-    CharacterOnline
-}                        from "../../global/character/actions";
+    CharacterOnline, GetCharacters, CharacterCreated, CharacterNotCreated
+}                        from "../../../global/character/actions";
 import {from}            from "rxjs";
-import {WorldWebsocket}  from "./world-websocket";
+import {Character}       from "../../../global/character/entities/character";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -41,10 +41,21 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CreateCharacter.event)
-    async createCharacter(client: WorldWebsocket, data: { name: string, gender: 'male' | 'female' }) {
-        return {
-            character: await client.service.createCharacter(data)
-        };
+    async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
+        try {
+            let accountId            = this.service.sockets[client.id].accountId;
+            let character: Character = await this.service.createCharacter(accountId, data.name, data.gender);
+            if (character) {
+                client.emit(GetCharacters.event, await this.service.getCharacters(accountId));
+                client.emit(CharacterCreated.event, new CharacterCreated(character.world, character.id));
+                return character;
+            }
+            client.emit(CharacterNotCreated.event);
+            return null;
+        } catch (e) {
+            client.emit(CharacterNotCreated.event, new CharacterNotCreated(e.response));
+            return null;
+        }
     }
 
     @SubscribeMessage(CharacterOnline.event)

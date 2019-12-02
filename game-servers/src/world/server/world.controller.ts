@@ -1,5 +1,5 @@
 import {Controller, Get, Logger} from '@nestjs/common';
-import {WorldGateway}            from "./world.gateway";
+import {WorldPresenceGateway}    from "./world-presence.gateway";
 import {EventPattern}            from "@nestjs/microservices";
 import {PresenceOnline}          from "../../global/presence/actions";
 import {WorldService}            from "./world.service";
@@ -11,7 +11,7 @@ export class WorldController {
     constructor(
         private logger: Logger,
         private service: WorldService,
-        private gateway: WorldGateway
+        private gateway: WorldPresenceGateway
     ) {
 
     }

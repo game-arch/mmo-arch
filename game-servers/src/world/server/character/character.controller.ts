@@ -1,9 +1,9 @@
 import {Controller, Logger}                    from '@nestjs/common';
 import {EventPattern}                          from "@nestjs/microservices";
-import {CharacterLoggedIn, CharacterLoggedOut} from "../../global/character/actions";
-import {WorldConstants}                        from "../constants";
+import {CharacterLoggedIn, CharacterLoggedOut} from "../../../global/character/actions";
+import {WorldConstants}                        from "../../constants";
 import {CharacterGateway}                      from "./character.gateway";
-import {MapOnline}                             from "../map/actions";
+import {MapOnline}                             from "../../map/actions";
 
 @Controller()
 export class CharacterController {
