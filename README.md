@@ -5,18 +5,27 @@ constructing multiplayer games.
 
 ### Technologies Used
 - Typescript for everything
+    - https://www.typescriptlang.org/docs/home.html
 - NestJS 
+    - https://docs.nestjs.com/
     - REST and Websocket MVC
 - Socket.IO 
+    - https://socket.io/docs/
     - Websocket library to communicate
 - TypeORM 
+    - https://typeorm.io/
     - Using MySQL as the driver
 - NATS 
+    - https://docs.nats.io/
     - As the microservice communication method
+    - Currently requires little-to-no knowledge of the technology outside of setting up credentials
 - Phaser 
+    - http://phaser.io/learn
     - Running on server for physics parity and validation ONLY
     - client side is not restricted
 - Angular
+    - https://angular.io/docs
+    - https://material.angular.io/components/categories
     - Using Angular Material for UI construction
     - Using Dependency Injection to aide in constructing larger scale projects
 
