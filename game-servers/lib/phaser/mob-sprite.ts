@@ -1,14 +1,16 @@
 import Scene = Phaser.Scene;
-import {Physics} from "../../src/world/map/config/physics";
+import {Physics}    from "../../src/world/map/config/physics";
 import Vector2 = Phaser.Math.Vector2;
 import Body = Phaser.Physics.Arcade.Body;
-import {Subject} from "rxjs";
+import {Subject}    from "rxjs";
 import Sprite = Phaser.GameObjects.Sprite;
+import {Directions} from "./directions";
 
 export class MobSprite extends Sprite {
 
-    moving: { up: boolean, down: boolean, left: boolean, right: boolean };
+    static readonly SPEED = Physics.SPEED_BASE * Physics.SPEED_MODIFIER;
 
+    moving: Directions;
     body: Body;
 
     stopListening = new Subject();
@@ -23,29 +25,35 @@ export class MobSprite extends Sprite {
         this.body.collideWorldBounds = true;
     }
 
-    lastVelocity: Vector2 = new Vector2();
+    lastVelocity: Vector2 = new Vector2(0, 0);
     stopped               = true;
 
     preUpdate(...args: any[]) {
-        let value = this.moving;
-        if (value) {
-            let velocity: Vector2 = new Vector2();
-            let speed             = Physics.CLIENT_SPEED_BASE * Physics.SPEED_MODIFIER;
-            velocity.y            = speed * (Number(value.down) - Number(value.up));
-            velocity.x            = speed * (Number(value.right) - Number(value.left));
-            if (!velocity.equals(this.lastVelocity)) {
-                if (velocity.equals(new Vector2(0, 0))) {
-                    this.reportStopped();
-                } else {
-                    this.reportMoving();
-                    if (velocity.x !== 0 && velocity.y !== 0) {
-                        this.updateDiagonalVelocity(velocity);
-                    }
-                }
-                this.lastVelocity = this.body.velocity.clone();
-                this.body.setVelocity(velocity.x, velocity.y);
-            }
+        if (!this.moving) {
+            return;
         }
+        let velocity = MobSprite.getVelocity(this.moving);
+        if (velocity.equals(this.lastVelocity)) {
+            return;
+        }
+        this.lastVelocity = this.body.velocity.clone();
+        if (velocity.equals(new Vector2(0, 0))) {
+            this.reportStopped();
+            this.body.setVelocity(velocity.x, velocity.y);
+            return;
+        }
+        this.reportMoving();
+        if (velocity.x !== 0 && velocity.y !== 0) {
+            velocity = MobSprite.getDiagonalVelocity(velocity);
+        }
+        this.body.setVelocity(velocity.x, velocity.y);
+    }
+
+    static getVelocity(value: Directions = {up: false, down: false, left: false, right: false}) {
+        return new Vector2(
+            MobSprite.SPEED * (Number(value.right) - Number(value.left)),
+            MobSprite.SPEED * (Number(value.down) - Number(value.up))
+        );
     }
 
     private reportStopped() {
@@ -62,8 +70,7 @@ export class MobSprite extends Sprite {
         }
     }
 
-    private updateDiagonalVelocity(velocity: Phaser.Math.Vector2) {
-        velocity.y = parseInt('' + (velocity.y * 0.75));
-        velocity.x = parseInt('' + (velocity.x * 0.75));
+    static getDiagonalVelocity(velocity: Vector2) {
+        return new Vector2(parseInt('' + (velocity.y * 0.75)), parseInt('' + (velocity.x * 0.75)));
     }
 }
