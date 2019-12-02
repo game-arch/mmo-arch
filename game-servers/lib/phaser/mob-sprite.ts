@@ -1,5 +1,5 @@
 import Scene = Phaser.Scene;
-import {Physics}    from "../../src/world/map/config/physics";
+import {Physics}    from "./physics";
 import Vector2 = Phaser.Math.Vector2;
 import Body = Phaser.Physics.Arcade.Body;
 import {Subject}    from "rxjs";
@@ -7,9 +7,6 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {Directions} from "./directions";
 
 export class MobSprite extends Sprite {
-
-    static readonly SPEED = Physics.SPEED_BASE * Physics.SPEED_MODIFIER;
-
     moving: Directions;
     body: Body;
 
@@ -32,7 +29,7 @@ export class MobSprite extends Sprite {
         if (!this.moving) {
             return;
         }
-        let velocity = MobSprite.getVelocity(this.moving);
+        let velocity = Physics.getVelocity(this.moving);
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone();
             this.reportChangeInMovingStatus(velocity);
@@ -56,28 +53,5 @@ export class MobSprite extends Sprite {
             this.onStartMoving.next();
             this.stopped = false;
         }
-    }
-
-    static getVelocity(value: Directions = {up: false, down: false, left: false, right: false}) {
-        return new Vector2(
-            MobSprite.SPEED * this.getXAxis(value) * this.getXModifier(value),
-            MobSprite.SPEED * this.getYAxis(value) * this.getYModifier(value)
-        );
-    }
-
-    private static getYModifier(value: Directions) {
-        return (value.left || value.right) ? 0.75 : 1;
-    }
-
-    private static getXModifier(value: Directions) {
-        return (value.up || value.down) ? 0.75 : 1;
-    }
-
-    private static getYAxis(value: Directions) {
-        return Number(value.down) - Number(value.up);
-    }
-
-    private static getXAxis(value: Directions) {
-        return Number(value.right) - Number(value.left);
     }
 }
