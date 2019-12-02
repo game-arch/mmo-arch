@@ -9,6 +9,11 @@ export class MapEmitter {
 
     }
 
+    playerChangedMaps(world: string, lastMap: string, nextMap: string, characterId: number, name: string, newX: number, newY: number) {
+        this.playerLeftMap(world, lastMap, characterId, name);
+        this.playerJoinedMap(world, nextMap, characterId, name, newX, newY);
+    }
+
     playerJoinedMap(world: string, map: string, characterId: number, name: string, x: number, y: number) {
         this.client.emit(PlayerEnteredMap.event, new PlayerEnteredMap(characterId, world, name, map, x, y));
     }

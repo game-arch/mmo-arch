@@ -77,8 +77,7 @@ export class MapService {
             player.x    = newX;
             player.y    = newY;
             await this.playerRepo.save(player);
-            this.emitter.playerLeftMap(world, lastMap, characterId, player.name);
-            this.emitter.playerJoinedMap(world, player.map, characterId, player.name, player.x, player.y);
+            this.emitter.playerChangedMaps(world, lastMap, player.map, characterId, player.name, player.x, player.y);
         }
     }
 
@@ -90,18 +89,16 @@ export class MapService {
         if (player) {
             player.name = name;
             await this.playerRepo.save(player);
-            this.emitter.playerJoinedMap(world, player.map, characterId, name, player.x, player.y);
             this.map.addPlayer(player);
-            this.emitter.allPlayers(world, player.map, await this.map.getAllPlayers());
+            this.emitter.playerJoinedMap(world, player.map, characterId, name, player.x, player.y);
         }
     }
 
     async playerLeftMap(characterId: number, world: string) {
         let player = await this.playerRepo.findOne({characterId});
         if (player) {
-            this.emitter.playerLeftMap(world, player.map, characterId, player.name);
             this.map.removePlayer(player);
-            this.emitter.allPlayers(world, player.map, await this.map.getAllPlayers());
+            this.emitter.playerLeftMap(world, player.map, characterId, player.name);
         }
 
     }
