@@ -1,4 +1,4 @@
-import {MapConfig} from "../config/config";
+import {MapConfig} from "../../src/world/map/config/config";
 import Scene = Phaser.Scene;
 import Body = Phaser.Physics.Arcade.Body;
 import Shape = Phaser.GameObjects.Shape;
@@ -22,26 +22,22 @@ export function loadCollisions(config: MapConfig, scene: Scene) {
         colliders.push(shape);
     }
 
-    function iterate() {
-        for (let collision of config.collisions) {
-            if (collision.shape === 'circle') {
-                let shape = scene.add.circle(collision.position[0], collision.position[1], collision.radius, 0x0000ff);
-                addCollisionShape(shape, collision);
-                (shape.body as Body).isCircle = true;
-                (shape.body as Body).radius   = collision.radius + 4;
-            }
-            if (collision.shape === 'rectangle') {
-                let shape = scene.add.rectangle(collision.position[0], collision.position[1], collision.width, collision.height, 0x0055ff);
-                addCollisionShape(shape, collision);
-            }
-            if (collision.shape === 'polygon') {
-                let shape = scene.add.polygon(collision.position[0], collision.position[1], collision.points, 0xff2200);
-                addCollisionShape(shape, collision);
-            }
+    for (let collision of config.collisions) {
+        if (collision.shape === 'circle') {
+            let shape = scene.add.circle(collision.position[0], collision.position[1], collision.radius, 0x0000ff);
+            addCollisionShape(shape, collision);
+            (shape.body as Body).isCircle = true;
+            (shape.body as Body).radius   = collision.radius + 4;
+        }
+        if (collision.shape === 'rectangle') {
+            let shape = scene.add.rectangle(collision.position[0], collision.position[1], collision.width, collision.height, 0x0055ff);
+            addCollisionShape(shape, collision);
+        }
+        if (collision.shape === 'polygon') {
+            let shape = scene.add.polygon(collision.position[0], collision.position[1], collision.points, 0xff2200);
+            addCollisionShape(shape, collision);
         }
     }
-
-    iterate();
     return {
         colliders: scene.physics.add.group(colliders, {
             visible      : true,

@@ -2,10 +2,10 @@ import {MapConfig}                    from "../config/config";
 import {Player}                       from "../entities/player";
 import {Subject}                      from "rxjs";
 import {takeUntil, tap, throttleTime} from "rxjs/operators";
-import {loadCollisions}               from "../phaser/collisions";
+import {loadCollisions}               from "../../../../lib/phaser/collisions";
 import {BaseScene}                    from "./base.scene";
 import Scene = Phaser.Scene;
-import {Mob}                          from "../phaser/mob";
+import {Mob}                          from "../../../../lib/phaser/mob";
 import {PlayerDirectionalInput}       from "../actions";
 import {async}                        from "rxjs/internal/scheduler/async";
 

@@ -1,5 +1,5 @@
 import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {Mob}                                                   from "../phaser/mob";
+import {Mob}                                                   from "../../../../lib/phaser/mob";
 
 @Entity()
 @Index('map', ['map'])

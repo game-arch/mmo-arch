@@ -1,6 +1,6 @@
 import {BaseScene}       from "../../../../../../../game-servers/src/world/map/maps/base.scene";
 import Scene = Phaser.Scene;
-import {Mob}             from "../../../../../../../game-servers/src/world/map/phaser/mob";
+import {Mob}             from "../../../../../../../game-servers/lib/phaser/mob";
 import {EventEmitter}    from "@angular/core";
 import {MapConfig}       from "../../../../../../../game-servers/src/world/map/config/config";
 import {
