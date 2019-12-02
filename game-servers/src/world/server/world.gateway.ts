@@ -19,7 +19,7 @@ import {CharacterOffline, GetCharacters}                  from "../../global/cha
     pingInterval: WorldConstants.PING_INTERVAL,
     pingTimeout : WorldConstants.PING_TIMEOUT
 })
-export class WorldPresenceGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
+export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;
     serverId = null;
