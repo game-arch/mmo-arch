@@ -3,8 +3,13 @@ import {Server, Socket}                                                      fro
 import {AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerDirectionalInput} from "../map/actions";
 import {MapClient}                                                           from "../map/client/map.client";
 import {WorldService}                                                        from "./world.service";
+import {WorldConstants}                                                      from "../constants";
 
-@WebSocketGateway({namespace: 'world', pingInterval: 5000, pingTimeout: 10000})
+@WebSocketGateway({
+    namespace   : 'world',
+    pingInterval: WorldConstants.PING_INTERVAL,
+    pingTimeout : WorldConstants.PING_TIMEOUT
+})
 export class MapGateway {
     @WebSocketServer()
     server: Server;

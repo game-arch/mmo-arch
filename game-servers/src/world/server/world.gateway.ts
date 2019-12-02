@@ -21,7 +21,11 @@ import {from}                          from "rxjs";
 import {WorldWebsocket}                from "./world-websocket";
 import {WorldWebsocketService}         from "./world-websocket.service";
 
-@WebSocketGateway({namespace: 'world', pingInterval: 5000, pingTimeout: 10000})
+@WebSocketGateway({
+    namespace   : 'world',
+    pingInterval: WorldConstants.PING_INTERVAL,
+    pingTimeout : WorldConstants.PING_TIMEOUT
+})
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;
