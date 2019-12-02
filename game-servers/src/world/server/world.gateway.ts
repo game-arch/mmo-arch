@@ -4,25 +4,24 @@ import {
     OnGatewayInit, SubscribeMessage,
     WebSocketGateway,
     WebSocketServer
-}                                                         from "@nestjs/websockets";
-import {Server, Socket}                                   from "socket.io";
-import {WorldService}                                     from "./world.service";
-import {ConflictException, Logger, OnApplicationShutdown} from "@nestjs/common";
-import {PresenceClient}                                   from "../../global/presence/client/presence.client";
-import {config}                                           from "../../lib/config";
-import {ClientProxy}                                      from "@nestjs/microservices";
-import {WorldConstants}        from "../constants";
-import {CharacterClient}       from "../../global/character/client/character.client";
+}                                      from "@nestjs/websockets";
+import {Server, Socket}                from "socket.io";
+import {WorldService}                  from "./world.service";
+import {Logger, OnApplicationShutdown} from "@nestjs/common";
+import {PresenceClient}                from "../../global/presence/client/presence.client";
+import {config}                        from "../../lib/config";
+import {WorldConstants}                from "../constants";
+import {CharacterClient}               from "../../global/character/client/character.client";
 import {
     CreateCharacter,
     CharacterOffline,
     CharacterOnline
-}                              from "../../global/character/actions";
-import {from}                  from "rxjs";
-import {WorldWebsocket}        from "./world-websocket";
-import {WorldWebsocketService} from "./world-websocket.service";
+}                                      from "../../global/character/actions";
+import {from}                          from "rxjs";
+import {WorldWebsocket}                from "./world-websocket";
+import {WorldWebsocketService}         from "./world-websocket.service";
 
-@WebSocketGateway({namespace: 'world', pingInterval: 3000, pingTimeout: 10000})
+@WebSocketGateway({namespace: 'world', pingInterval: 5000, pingTimeout: 10000})
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
     server: Server;
