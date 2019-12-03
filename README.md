@@ -46,7 +46,6 @@ The only bottle necks of communication at this point becomes the gateways and RE
 must connect to.
 
 ### Global Services
-(*) - Can be changed to be per world, but it is global for now until that level of customization is more important
 
 - Lobby (1+ instances)
     - Entry point for a user to discover world servers
