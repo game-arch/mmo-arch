@@ -1,11 +1,13 @@
 module.exports = {
     apps: [
         {
+            instances: 2,
             name: 'global-lobby',
             script: 'dist/services/lobby/main.js',
             watch: ["dist/services/lobby", "dist/lib"]
         },
         {
+            instances: 2,
             name: 'global-account',
             script: 'dist/services/account/main.js',
             watch: ["dist/services/account", "dist/lib"]
@@ -16,21 +18,37 @@ module.exports = {
             watch: ["dist/services/presence", "dist/lib"]
         },
         {
-            name: 'global-item',
+            instances: 2,
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-item',
             script: 'dist/services/item/main.js',
-            watch: ["dist/services/item", "dist/lib"]
+            watch: ["dist/services/item", "dist/lib"],
+            env: {
+                WORLD_CONSTANT: process.env.WORLD_CONSTANT,
+                WORLD_NAME: process.env.WORLD_NAME
+            }
         },
         {
-            name: 'global-quest',
+            instances: 2,
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-quest',
             script: 'dist/services/quest/main.js',
-            watch: ["dist/services/quest", "dist/lib"]
+            watch: ["dist/services/quest", "dist/lib"],
+            env: {
+                WORLD_CONSTANT: process.env.WORLD_CONSTANT,
+                WORLD_NAME: process.env.WORLD_NAME
+            }
         },
         {
-            name: 'global-chat',
+            instances: 2,
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-chat',
             script: 'dist/services/chat/main.js',
-            watch: ["dist/services/chat", "dist/lib"]
+            watch: ["dist/services/chat", "dist/lib"],
+            env: {
+                WORLD_CONSTANT: process.env.WORLD_CONSTANT,
+                WORLD_NAME: process.env.WORLD_NAME
+            }
         },
         {
+            instances: 2,
             name: (process.env.WORLD_CONSTANT || 'maiden') + '-character',
             script: 'dist/services/character/main.js',
             watch: ["dist/services/character", "dist/lib"],
@@ -50,6 +68,7 @@ module.exports = {
             }
         },
         {
+            instances: 2,
             name: (process.env.WORLD_CONSTANT || 'maiden') + '-commerce',
             script: 'dist/services/commerce/main.js',
             watch: ["dist/services/commerce", "dist/lib"],
