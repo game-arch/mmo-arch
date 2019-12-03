@@ -1,7 +1,7 @@
 import {Controller, Logger}                    from '@nestjs/common';
 import {EventPattern}                          from "@nestjs/microservices";
 import {CharacterLoggedIn, CharacterLoggedOut} from "../../character/actions";
-import {WorldConstants}                        from "../../../config/world.constants";
+import {WorldConstants}                        from "../../../lib/constants/world.constants";
 import {CharacterGateway}                      from "./character.gateway";
 import {MapOnline}                             from "../../map/actions";
 

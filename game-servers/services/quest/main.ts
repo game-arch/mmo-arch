@@ -1,9 +1,9 @@
 import {NestFactory}    from '@nestjs/core';
 import {QuestModule}    from './quest.module';
-import {createDatabase} from "../../config/db.config";
-import {environment}    from "../../config/environment";
+import {createDatabase} from "../../lib/config/db.config";
+import {environment}    from "../../lib/config/environment";
 import {Logger}         from "@nestjs/common";
-import * as path from "path";
+import * as path        from "path";
 
 require('dotenv').config({
     path: path.resolve(__dirname, '../.env')

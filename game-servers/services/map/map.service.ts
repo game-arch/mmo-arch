@@ -9,7 +9,7 @@ import {CharacterClient}                                                    from
 import {PlayerDirectionalInput}                                             from "./actions";
 import {concatMap, filter, map, mergeMap, takeUntil, throttleTime, toArray} from "rxjs/operators";
 import {async}                                                              from "rxjs/internal/scheduler/async";
-import {WorldConstants}                                                     from "../../config/world.constants";
+import {WorldConstants}                                                     from "../../lib/constants/world.constants";
 import {fromPromise}                                                        from "rxjs/internal-compatibility";
 import {from, interval}                                                     from "rxjs";
 import {Game}                                                               from "phaser";

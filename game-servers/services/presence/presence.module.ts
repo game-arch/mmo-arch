@@ -1,6 +1,6 @@
 import {HttpModule, Logger, Module} from '@nestjs/common';
 import {PresenceController}         from "./presence.controller";
-import {DB_CONFIG}                  from "../../config/db.config";
+import {DB_CONFIG}                  from "../../lib/config/db.config";
 import {RegisteredWorld}            from "./entities/registered-world";
 import {TypeOrmModule}              from "@nestjs/typeorm";
 import {ServerPresence}             from "./services/server.presence";

@@ -2,7 +2,7 @@ import {Injectable}      from '@nestjs/common';
 import {AccountClient}   from "../account/client/account.client";
 import {Socket}          from "socket.io";
 import {CharacterClient} from "../character/client/character.client";
-import {WorldConstants}  from "../../config/world.constants";
+import {WorldConstants}  from "../../lib/constants/world.constants";
 import {MapClient}       from "../map/client/map.client";
 
 export class Player {

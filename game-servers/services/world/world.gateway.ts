@@ -9,8 +9,8 @@ import {Server, Socket}                                   from "socket.io";
 import {WorldService}                                     from "./world.service";
 import {ConflictException, Logger, OnApplicationShutdown} from "@nestjs/common";
 import {PresenceClient}                                   from "../presence/client/presence.client";
-import {environment}                                      from "../../config/environment";
-import {WorldConstants}                                   from "../../config/world.constants";
+import {environment}                                      from "../../lib/config/environment";
+import {WorldConstants}                                   from "../../lib/constants/world.constants";
 import {CharacterClient}                                  from "../character/client/character.client";
 import {CharacterOffline, GetCharacters}                  from "../character/actions";
 

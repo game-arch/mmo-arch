@@ -1,9 +1,9 @@
 import {NestFactory}    from '@nestjs/core';
 import {CommerceModule} from './commerce.module';
-import {createDatabase} from "../../config/db.config";
-import {environment}    from "../../config/environment";
+import {createDatabase} from "../../lib/config/db.config";
+import {environment}    from "../../lib/config/environment";
 import {Logger}         from "@nestjs/common";
-import {WorldConstants} from "../../config/world.constants";
+import {WorldConstants} from "../../lib/constants/world.constants";
 
 
 const logger = new Logger(WorldConstants.NAME + ' Commerce');

@@ -1,5 +1,5 @@
 import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {GameCharacter}                                         from "../../../lib/entities/game-character";
+import {GameCharacter}                                         from "../../../lib/interfaces/game-character";
 
 @Entity()
 @Index('user', ['accountId', 'name'])

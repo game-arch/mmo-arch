@@ -1,5 +1,5 @@
-import {DB_CONFIG}      from "../../config/db.config";
-import {WorldConstants} from "../../config/world.constants";
+import {DB_CONFIG}      from "../../lib/config/db.config";
+import {WorldConstants} from "../../lib/constants/world.constants";
 
 module.exports = {
     ...DB_CONFIG,

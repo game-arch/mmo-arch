@@ -1,7 +1,7 @@
 import {NestFactory} from '@nestjs/core';
 import {LobbyModule} from './lobby.module';
-import {PORTS}       from "../../lib/constants/ports";
-import {environment} from "../../config/environment";
+import {PORTS}       from "../../lib/constants/ports.constants";
+import {environment} from "../../lib/config/environment";
 
 async function bootstrap() {
     const app = await NestFactory.create(LobbyModule);

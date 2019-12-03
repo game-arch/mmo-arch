@@ -1,7 +1,7 @@
 import {Controller}                                                          from "@nestjs/common";
 import {EventPattern}                                                        from "@nestjs/microservices";
 import {AllPlayers, PlayerDirectionalInput, PlayerEnteredMap, PlayerLeftMap} from "../../map/actions";
-import {WorldConstants}                                                      from "../../../config/world.constants";
+import {WorldConstants}                                                      from "../../../lib/constants/world.constants";
 import {MapGateway}                                                          from "./map.gateway";
 
 @Controller()

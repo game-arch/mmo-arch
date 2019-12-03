@@ -5,7 +5,7 @@ import {CharacterLoggedIn, CharacterLoggedOut}                   from "../charac
 import {GetAllPlayers, PlayerChangedMap, PlayerDirectionalInput} from "./actions";
 import {Request, Response}                                       from "express";
 import {MapEmitter}                                              from "./map.emitter";
-import {WorldConstants}                                          from "../../config/world.constants";
+import {WorldConstants}                                          from "../../lib/constants/world.constants";
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {

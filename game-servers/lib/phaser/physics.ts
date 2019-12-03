@@ -9,27 +9,27 @@ export class Physics {
         return new Vector2(this.getXVelocity(value), this.getYVelocity(value));
     }
 
-    private static getYVelocity(value: Directions) {
+    static getYVelocity(value: Directions) {
         return this.SPEED_BASE * this.SPEED_MODIFIER * this.getYAxis(value) * this.getYModifier(value);
     }
 
-    private static getXVelocity(value: Directions) {
+    static getXVelocity(value: Directions) {
         return this.SPEED_BASE * this.SPEED_MODIFIER * this.getXAxis(value) * this.getXModifier(value);
     }
 
-    private static getYModifier(value: Directions) {
+    static getYModifier(value: Directions) {
         return (value.left || value.right) ? 0.75 : 1;
     }
 
-    private static getXModifier(value: Directions) {
+    static getXModifier(value: Directions) {
         return (value.up || value.down) ? 0.75 : 1;
     }
 
-    private static getYAxis(value: Directions) {
+    static getYAxis(value: Directions) {
         return Number(value.down) - Number(value.up);
     }
 
-    private static getXAxis(value: Directions) {
+    static getXAxis(value: Directions) {
         return Number(value.right) - Number(value.left);
     }
 }

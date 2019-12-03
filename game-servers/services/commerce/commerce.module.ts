@@ -1,9 +1,9 @@
 import {Module}             from '@nestjs/common';
 import {CommerceController} from './commerce.controller';
 import {CommerceService}    from './commerce.service';
-import {DB_CONFIG}          from "../../config/db.config";
+import {DB_CONFIG}          from "../../lib/config/db.config";
 import {TypeOrmModule}      from "@nestjs/typeorm";
-import {WorldConstants}     from "../../config/world.constants";
+import {WorldConstants}     from "../../lib/constants/world.constants";
 
 @Module({
     imports    : [TypeOrmModule.forRoot({

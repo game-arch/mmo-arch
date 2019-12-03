@@ -1,8 +1,8 @@
 import {NestFactory}    from '@nestjs/core';
 import {AccountModule}  from './account.module';
-import {createDatabase} from "../../config/db.config";
+import {createDatabase} from "../../lib/config/db.config";
 import {Logger}         from "@nestjs/common";
-import {environment}    from "../../config/environment";
+import {environment}    from "../../lib/config/environment";
 
 const logger = new Logger('Account');
 

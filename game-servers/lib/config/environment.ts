@@ -1,10 +1,10 @@
 import {Transport}   from "@nestjs/common/enums/transport.enum";
-import {PORTS}       from "../lib/constants/ports";
+import {PORTS}       from "../constants/ports.constants";
 import {NatsOptions} from "@nestjs/microservices";
 import * as path     from "path";
 
 require('dotenv').config({
-    path: path.resolve(__dirname, '../../.env')
+    path: path.resolve(__dirname, '../../../.env')
 });
 
 export const environment = {

@@ -6,7 +6,7 @@ import {
 import {Server, Socket}  from "socket.io";
 import {WorldService}    from "../world.service";
 import {Logger}          from "@nestjs/common";
-import {WorldConstants}  from "../../../config/world.constants";
+import {WorldConstants}  from "../../../lib/constants/world.constants";
 import {CharacterClient} from "../../character/client/character.client";
 import {
     CreateCharacter,

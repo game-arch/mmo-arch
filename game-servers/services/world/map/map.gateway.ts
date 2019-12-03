@@ -3,7 +3,7 @@ import {Server, Socket}                                                      fro
 import {AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerDirectionalInput} from "../../map/actions";
 import {MapClient}                                                           from "../../map/client/map.client";
 import {WorldService}                                                        from "../world.service";
-import {WorldConstants}                                                      from "../../../config/world.constants";
+import {WorldConstants}                                                      from "../../../lib/constants/world.constants";
 
 @WebSocketGateway({
     namespace   : 'world',

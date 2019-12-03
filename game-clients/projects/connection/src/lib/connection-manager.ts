@@ -1,5 +1,5 @@
 import {Injectable}                         from '@angular/core';
-import {GameWorld}                          from "../../../../../game-servers/lib/entities/game-world";
+import {GameWorld}                          from "../../../../../game-servers/lib/interfaces/game-world";
 import {BehaviorSubject}                    from "rxjs";
 import {Connection}                         from "./connection";
 import {Actions, ofActionDispatched, Store} from "@ngxs/store";

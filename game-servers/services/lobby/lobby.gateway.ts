@@ -5,7 +5,7 @@ import {
 }                       from "@nestjs/websockets";
 import {Server, Socket} from "socket.io";
 import {LobbyService}   from "./lobby.service";
-import {GameWorld}      from "../../lib/entities/game-world";
+import {GameWorld}      from "../../lib/interfaces/game-world";
 import {Logger}         from "@nestjs/common";
 import {GetServers}     from "../presence/actions";
 

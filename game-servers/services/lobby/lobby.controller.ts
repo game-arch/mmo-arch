@@ -3,7 +3,7 @@ import {LobbyService}                            from './lobby.service';
 import {AccountClient}                           from "../account/client/account.client";
 import {Request, Response}                       from "express";
 import {EventPattern}                            from "@nestjs/microservices";
-import {GameWorld}                               from "../../lib/entities/game-world";
+import {GameWorld}                               from "../../lib/interfaces/game-world";
 import {LobbyGateway}                            from "./lobby.gateway";
 import {GetServers}                              from "../presence/actions";
 

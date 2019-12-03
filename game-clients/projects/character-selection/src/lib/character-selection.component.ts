@@ -1,6 +1,6 @@
 import {Component, OnInit}      from '@angular/core';
 import {ConnectionManager}      from "../../../connection/src/lib/connection-manager";
-import {GameCharacter}          from "../../../../../game-servers/lib/entities/game-character";
+import {GameCharacter}          from "../../../../../game-servers/lib/interfaces/game-character";
 import {MatDialog}              from "@angular/material/dialog";
 import {CharacterFormComponent} from "./character-form.component";
 import {GameEngineService}      from "../../../game-engine/src/lib/game-engine.service";

@@ -1,7 +1,7 @@
 import {NestFactory}    from '@nestjs/core';
 import {ChatModule}     from './chat.module';
-import {createDatabase} from "../../config/db.config";
-import {environment}    from "../../config/environment";
+import {createDatabase} from "../../lib/config/db.config";
+import {environment}    from "../../lib/config/environment";
 import {Logger}         from "@nestjs/common";
 
 

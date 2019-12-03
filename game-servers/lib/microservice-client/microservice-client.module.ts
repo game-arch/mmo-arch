@@ -1,6 +1,6 @@
 import {Module, OnApplicationBootstrap}  from "@nestjs/common";
 import {ClientProxy, ClientProxyFactory} from "@nestjs/microservices";
-import {environment}                     from "../../config/environment";
+import {environment}                     from "../config/environment";
 
 export const clientFactory   = () => ClientProxyFactory.create({
     transport: environment.microservice.transport,

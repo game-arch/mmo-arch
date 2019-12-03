@@ -1,9 +1,9 @@
 import {NestFactory}    from '@nestjs/core';
 import {WorldModule}    from './world.module';
-import {environment}    from "../../config/environment";
+import {environment}    from "../../lib/config/environment";
 import {Logger}         from "@nestjs/common";
-import {WorldConstants} from "../../config/world.constants";
-import * as path from "path";
+import {WorldConstants} from "../../lib/constants/world.constants";
+import * as path        from "path";
 
 require('dotenv').config({
     path: path.resolve(__dirname, '../.env')

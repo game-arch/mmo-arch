@@ -1,6 +1,6 @@
 import {Injectable}                 from "@nestjs/common";
 import {ClientProxy}                from "@nestjs/microservices";
-import {GameWorld}                  from "../../../lib/entities/game-world";
+import {GameWorld}                  from "../../../lib/interfaces/game-world";
 import {GetServers, PresenceOnline} from "../actions";
 
 @Injectable()
