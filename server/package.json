@@ -5,6 +5,10 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "prune:worlds": "node dist/lib/scripts/prune-worlds.js",
+    "prune:characters": "node dist/lib/scripts/prune-characters.js",
+    "offline:characters": "node dist/lib/scripts/mark-characters-offline.js",
+    "offline:worlds": "node dist/lib/scripts/mark-worlds-offline.js",
     "postinstall": "cp -n .sample-env .env || echo '.env already exists'",
     "build": "nest build",
     "start": "node dist/main.js",

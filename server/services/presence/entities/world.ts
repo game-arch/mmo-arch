@@ -2,7 +2,7 @@ import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 
 @Unique('instance', ['constant', 'host', 'port', 'instanceId'])
 @Entity()
-export class RegisteredWorld {
+export class World {
 
     @PrimaryGeneratedColumn()
     id: number;

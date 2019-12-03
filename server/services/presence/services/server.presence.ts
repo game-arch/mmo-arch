@@ -1,6 +1,6 @@
 import {HttpService, Injectable, Logger, OnApplicationBootstrap} from "@nestjs/common";
 import {InjectRepository}                                        from "@nestjs/typeorm";
-import {RegisteredWorld}                                         from "../entities/registered-world";
+import {World}                                                   from "../entities/world";
 import {Repository}                                              from "typeorm";
 import {PresenceEmitter}                                         from "../emitter/presence.emitter";
 import {Subject}                                                 from "rxjs";
@@ -15,8 +15,8 @@ export class ServerPresence implements OnApplicationBootstrap {
 
     constructor(
         private http: HttpService,
-        @InjectRepository(RegisteredWorld)
-        private repo: Repository<RegisteredWorld>,
+        @InjectRepository(World)
+        private repo: Repository<World>,
         private logger: Logger,
         private emitter: PresenceEmitter
     ) {
@@ -25,13 +25,13 @@ export class ServerPresence implements OnApplicationBootstrap {
     async register(host: string, port: number, instanceId: number, constant: string, name: string) {
         try {
             if (name && name !== '' && host !== '') {
-                let server: RegisteredWorld;
+                let server: World;
                 try {
                     server        = await this.repo.findOne({host, constant, port, instanceId: instanceId + 1});
                     server.status = 'online';
                 } catch (e) {
                     let count    = await this.repo.query('select distinct host, port, name from presence.registered_world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
-                    server       = this.repo.create(new RegisteredWorld(host, port, instanceId + 1, constant, name));
+                    server       = this.repo.create(new World(host, port, instanceId + 1, constant, name));
                     server.index = count.length + 1;
                 }
                 await this.repo.save(server);
@@ -73,7 +73,7 @@ export class ServerPresence implements OnApplicationBootstrap {
     }
 
     async onApplicationBootstrap() {
-        this.sendServers.pipe(throttleTime(1000, async, {leading: true, trailing: true}))
+        this.sendServers.pipe(throttleTime(1000, async, {trailing: true}))
             .pipe(mergeMap(() => fromPromise(this.getServers())))
             .subscribe((servers) => {
                 this.emitter.sendServers(servers);

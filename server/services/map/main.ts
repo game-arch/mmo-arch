@@ -6,11 +6,6 @@ import {createDatabase} from "../../lib/config/db.config";
 import {environment}    from "../../lib/config/environment";
 import {Logger}         from "@nestjs/common";
 import {WorldConstants} from "../../lib/constants/world.constants";
-import * as path        from "path";
-
-require('dotenv').config({
-    path: path.resolve(__dirname, '../.env')
-});
 
 const logger = new Logger(WorldConstants.NAME + ' Map');
 

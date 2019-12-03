@@ -3,17 +3,12 @@ import {QuestModule}    from './quest.module';
 import {createDatabase} from "../../lib/config/db.config";
 import {environment}    from "../../lib/config/environment";
 import {Logger}         from "@nestjs/common";
-import * as path        from "path";
 import {WorldConstants} from "../../lib/constants/world.constants";
 
-require('dotenv').config({
-    path: path.resolve(__dirname, '../.env')
-});
-
-const logger = new Logger('Quest');
+const logger = new Logger(WorldConstants.NAME + ' Quest');
 
 async function bootstrap() {
-    await createDatabase('quest');
+    await createDatabase(WorldConstants.DB_NAME);
     const app = await NestFactory.createMicroservice(QuestModule, {
         transport: environment.microservice.transport,
         options  : {
@@ -24,7 +19,7 @@ async function bootstrap() {
     });
     app.useLogger(logger);
     await app.listen(() => {
-        logger.log("Quest Microservice is listening ...");
+        logger.log(WorldConstants.NAME + " Item Microservice is listening ...");
     });
 }
 

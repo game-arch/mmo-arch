@@ -3,11 +3,6 @@ import {PresenceModule} from './presence.module';
 import {createDatabase} from "../../lib/config/db.config";
 import {Logger}         from "@nestjs/common";
 import {environment}    from "../../lib/config/environment";
-import * as path        from "path";
-
-require('dotenv').config({
-    path: path.resolve(__dirname, '../.env')
-});
 
 const logger = new Logger('Presence');
 

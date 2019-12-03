@@ -1,7 +1,7 @@
 import {HttpModule, Logger, Module} from '@nestjs/common';
 import {PresenceController}         from "./presence.controller";
 import {DB_CONFIG}                  from "../../lib/config/db.config";
-import {RegisteredWorld}            from "./entities/registered-world";
+import {World}                      from "./entities/world";
 import {TypeOrmModule}              from "@nestjs/typeorm";
 import {ServerPresence}             from "./services/server.presence";
 import {PresenceEmitterModule}      from "./emitter/presence-emitter.module";
@@ -10,7 +10,7 @@ import {PresenceEmitterModule}      from "./emitter/presence-emitter.module";
     imports    : [
         HttpModule,
         PresenceEmitterModule,
-        TypeOrmModule.forFeature([RegisteredWorld]),
+        TypeOrmModule.forFeature([World]),
         TypeOrmModule.forRoot({
             ...DB_CONFIG,
             type    : 'mysql',
