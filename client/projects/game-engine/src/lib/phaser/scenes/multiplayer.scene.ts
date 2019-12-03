@@ -22,10 +22,10 @@ export class MultiplayerScene extends BaseScene implements Scene {
         d: 'right'
     };
     directions   = {
-        up    : false,
-        down  : false,
-        right : false,
-        left: false
+        up   : false,
+        down : false,
+        right: false,
+        left : false
     };
 
     self: Mob;
@@ -46,6 +46,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
             let direction = this.directionMap[event.key];
             if (this.directions[direction] !== status) {
                 this.directions[direction] = status;
+                // this.self.moving           = this.directions;
                 this.sendDirectionalInput();
             }
         }
@@ -75,7 +76,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     private sendDirectionalInput() {
-        console.log(this.connection);
         this.connection.socket.emit(PlayerDirectionalInput.event, {directions: this.directions});
     }
 
@@ -88,7 +88,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         if (!player) {
             player = this.createPlayer(data);
         }
-        player.sprite.body.reset(data.x + 16, data.y + 16);
+        player.sprite.setPosition(data.x + 16, data.y + 16);
         if (data.moving) {
             player.moving = data.moving;
         }

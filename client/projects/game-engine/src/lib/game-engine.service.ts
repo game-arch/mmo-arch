@@ -69,7 +69,6 @@ export class GameEngineService {
                         .pipe(takeUntil(this.destroyed))
                         .subscribe(players => this.game.events.emit(AllPlayers.event, players));
                     fromEvent(world.socket, PlayerDirectionalInput.event)
-                        .pipe(filter((event: PlayerDirectionalInput) => event.map === this.currentSceneKey))
                         .pipe(takeUntil(this.destroyed))
                         .subscribe((data: PlayerDirectionalInput) => {
                             this.game.events.emit(PlayerDirectionalInput.event, data);
