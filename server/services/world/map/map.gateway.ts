@@ -1,5 +1,5 @@
 import {SubscribeMessage, WebSocketGateway, WebSocketServer}                 from "@nestjs/websockets";
-import {Server, Socket}                                                      from "socket.io";
+import {Namespace, Server, Socket}                                           from "socket.io";
 import {AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerDirectionalInput} from "../../map/actions";
 import {MapClient}                                                           from "../../map/client/map.client";
 import {WorldService}                                                        from "../world.service";
@@ -12,7 +12,7 @@ import {WorldConstants}                                                      fro
 })
 export class MapGateway {
     @WebSocketServer()
-    server: Server;
+    server: Namespace;
 
     constructor(
         private service: WorldService,
@@ -22,7 +22,6 @@ export class MapGateway {
     }
 
     playerJoin(data: PlayerEnteredMap) {
-        console.log(Object.keys(this.service.sockets));
         if (this.service.characters.hasOwnProperty(data.characterId)) {
             this.service.characters[data.characterId].character.map = data.map;
             this.service.characters[data.characterId].socket.join('map.' + data.map);

@@ -2,19 +2,19 @@ import {
     SubscribeMessage,
     WebSocketGateway,
     WebSocketServer
-}                        from "@nestjs/websockets";
-import {Server, Socket}  from "socket.io";
-import {WorldService}    from "../world.service";
-import {Logger}          from "@nestjs/common";
-import {WorldConstants}  from "../../../lib/constants/world.constants";
-import {CharacterClient} from "../../character/client/character.client";
+}                                  from "@nestjs/websockets";
+import {Namespace, Server, Socket} from "socket.io";
+import {WorldService}              from "../world.service";
+import {Logger}                    from "@nestjs/common";
+import {WorldConstants}            from "../../../lib/constants/world.constants";
+import {CharacterClient}           from "../../character/client/character.client";
 import {
     CreateCharacter,
     CharacterOffline,
     CharacterOnline, GetCharacters, CharacterCreated, CharacterNotCreated
-}                        from "../../character/actions";
-import {from}            from "rxjs";
-import {Character}       from "../../character/entities/character";
+}                                  from "../../character/actions";
+import {from}                      from "rxjs";
+import {Character}                 from "../../character/entities/character";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -23,8 +23,7 @@ import {Character}       from "../../character/entities/character";
 })
 export class CharacterGateway {
     @WebSocketServer()
-    server: Server;
-
+    server: Namespace;
     constructor(
         private logger: Logger,
         private service: WorldService,
@@ -75,7 +74,7 @@ export class CharacterGateway {
             await this.service.removeCharacter(client);
             return {status: 'success'};
         } catch (e) {
-            this.logger.error(e);
+            console.log(e);
             return {status: 'error'};
         }
     }

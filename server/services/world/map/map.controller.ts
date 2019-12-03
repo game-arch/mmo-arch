@@ -2,7 +2,6 @@ import {Controller}                                                          fro
 import {EventPattern}                                                        from "@nestjs/microservices";
 import {AllPlayers, PlayerDirectionalInput, PlayerEnteredMap, PlayerLeftMap} from "../../map/actions";
 import {MapGateway}                                                          from "./map.gateway";
-import {LocalMessage}                                                        from "../chat/actions";
 import {WORLD_PREFIX}                                                        from "../world.prefix";
 
 @Controller()

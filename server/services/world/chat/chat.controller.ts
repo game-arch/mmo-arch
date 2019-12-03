@@ -1,7 +1,6 @@
 import {Controller}     from '@nestjs/common';
 import {
-    EventPattern,
-    MessagePattern
+    EventPattern
 }                       from "@nestjs/microservices";
 import {
     GlobalMessage,
@@ -13,14 +12,11 @@ import {
     ZoneMessage
 }                       from "./actions";
 import {
-    CharacterLoggedIn,
-    CharacterOffline,
-    CharacterOnline
+    CharacterLoggedIn
 }                       from "../../character/actions";
 import {ChatGateway}    from "./chat.gateway";
 import {WorldConstants} from "../../../lib/constants/world.constants";
 import {WORLD_PREFIX}   from "../world.prefix";
-import {MapOnline}      from "../../map/actions";
 
 @Controller()
 export class ChatController {

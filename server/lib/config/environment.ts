@@ -12,14 +12,18 @@ export const environment = {
             pass: process.env.NATS_PASSWORD || ''
         }
     },
+    redis: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT
+    },
     jwt         : {
         secret: process.env.JWT_SECRET || 'a-random-secret'
     },
     mysql       : {
-        host    : process.env.MYSQL_HOST || 'localhost',
-        port    : parseInt(process.env.MYSQL_PORT || '3306'),
-        username: process.env.MYSQL_USERNAME || 'root',
-        password: process.env.MYSQL_PASSWORD || ''
+        host    : process.env.MYSQL_HOST,
+        port    : parseInt(process.env.MYSQL_PORT),
+        username: process.env.MYSQL_USERNAME,
+        password: process.env.MYSQL_PASSWORD
     },
     servers     : {
         world   : {

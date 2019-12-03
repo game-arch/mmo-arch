@@ -1,7 +1,7 @@
 import {SubscribeMessage, WebSocketGateway, WebSocketServer} from "@nestjs/websockets";
 import {WorldConstants}                                      from "../../../lib/constants/world.constants";
-import {Server, Socket} from "socket.io";
-import {GameCharacter}  from "../../../lib/interfaces/game-character";
+import {Namespace, Server, Socket}                           from "socket.io";
+import {GameCharacter}                                       from "../../../lib/interfaces/game-character";
 import {
     ErrorMessage,
     GlobalMessage,
@@ -10,12 +10,12 @@ import {
     RegionMessage,
     TradeMessage,
     ZoneMessage
-}                       from "./actions";
-import {MapClient}      from "../../map/client/map.client";
-import {WorldService}   from "../world.service";
-import {ClientProxy}    from "@nestjs/microservices";
-import {Inject}         from "@nestjs/common";
-import {WORLD_PREFIX}   from "../world.prefix";
+}                                                            from "./actions";
+import {MapClient}                                           from "../../map/client/map.client";
+import {WorldService}                                        from "../world.service";
+import {ClientProxy}                                         from "@nestjs/microservices";
+import {Inject}                                              from "@nestjs/common";
+import {WORLD_PREFIX}                                        from "../world.prefix";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -24,7 +24,8 @@ import {WORLD_PREFIX}   from "../world.prefix";
 })
 export class ChatGateway {
     @WebSocketServer()
-    server: Server;
+    server: Namespace;
+
 
     constructor(
         @Inject('WORLD_CLIENT') private client: ClientProxy,
