@@ -1,9 +1,17 @@
-import {GameCharacter} from "../../lib/interfaces/game-character";
+import {GameCharacter} from "../../../lib/interfaces/game-character";
 
 export class SystemMessage {
     static readonly event = 'chat.system_message';
 
     constructor(public message: string, public map?: string) {
+
+    }
+}
+
+export class ErrorMessage {
+    static readonly event = 'chat.error_message';
+
+    constructor(public message: string) {
 
     }
 }

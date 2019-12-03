@@ -26,15 +26,21 @@ export class CharacterClient {
     }
 
     characterOnline(id: number) {
-        this.client.emit(CharacterOnline.event, new CharacterOnline(id));
+        this.client.send(CharacterOnline.event, new CharacterOnline(id)).subscribe(response => {
+            console.log(response);
+        });
     }
 
     characterOffline(id: number) {
-        this.client.emit(CharacterOffline.event, new CharacterOffline(id));
+        this.client.send(CharacterOffline.event, new CharacterOffline(id)).subscribe(response => {
+            console.log('response', response);
+        });
     }
 
     allCharactersOffline(data: CharacterOffline[]) {
-        this.client.emit(AllCharactersOffline.event, new AllCharactersOffline(data));
+        this.client.send(AllCharactersOffline.event, new AllCharactersOffline(data)).subscribe(response => {
+            console.log('response', response);
+        });
     }
 
     async getCharacterName(id: number) {

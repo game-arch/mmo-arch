@@ -1,16 +1,17 @@
-import {BaseScene}       from "../../../../../../../server/services/map/maps/base.scene";
+import {BaseScene}         from "../../../../../../../server/services/map/maps/base.scene";
 import Scene = Phaser.Scene;
-import {Mob}             from "../../../../../../../server/lib/phaser/mob";
-import {EventEmitter}    from "@angular/core";
-import {MapConfig}       from "../../../../../../../server/services/map/config/config";
+import {Mob}               from "../../../../../../../server/lib/phaser/mob";
+import {EventEmitter}      from "@angular/core";
+import {MapConfig}         from "../../../../../../../server/services/map/config/config";
 import {
     AllPlayers,
     PlayerDirectionalInput,
     PlayerEnteredMap,
     PlayerLeftMap
-}                        from "../../../../../../../server/services/map/actions";
-import {from}            from "rxjs";
-import {WorldConnection} from "../../../../../connection/src/lib/world-connection";
+}                          from "../../../../../../../server/services/map/actions";
+import {from}              from "rxjs";
+import {WorldConnection}   from "../../../../../connection/src/lib/world-connection";
+import {ConnectionManager} from "../../../../../connection/src/lib/connection-manager";
 
 export class MultiplayerScene extends BaseScene implements Scene {
 
@@ -21,29 +22,30 @@ export class MultiplayerScene extends BaseScene implements Scene {
         d: 'right'
     };
     directions   = {
-        up    : false,
-        down  : false,
-        right : false,
-        bottom: false
+        up   : false,
+        down : false,
+        right: false,
+        left : false
     };
 
     self: Mob;
 
     destroyed = new EventEmitter();
 
+    get connection() {
+        return this.manager.world;
+    }
 
-    constructor(protected connection: WorldConnection, config: MapConfig) {
+    constructor(protected manager: ConnectionManager, config: MapConfig) {
         super(config);
     }
 
     toggleDirection(event: KeyboardEvent, status: boolean) {
         if (this.directionMap.hasOwnProperty(event.key)) {
             event.stopImmediatePropagation();
-            let direction = this.directionMap[event.key];
-            if (this.directions[direction] !== status) {
-                this.directions[direction] = status;
-                this.sendDirectionalInput();
-            }
+            let direction               = this.directionMap[event.key];
+            this.self.moving[direction] = status;
+            this.sendDirectionalInput();
         }
     }
 
@@ -51,7 +53,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         super.create();
         this.game.events.once('game.scene', () => this.destroyed.emit());
         this.input.keyboard.on('keydown', (event: KeyboardEvent) => this.toggleDirection(event, true));
-        this.input.keyboard.on('keyup', (event: KeyboardEvent) => this.toggleDirection(event, true));
+        this.input.keyboard.on('keyup', (event: KeyboardEvent) => this.toggleDirection(event, false));
         this.game.events.on(PlayerEnteredMap.event, (data) => {
             console.log('Player Joined', data);
         });
@@ -71,7 +73,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     private sendDirectionalInput() {
-        this.connection.socket.emit(PlayerDirectionalInput.event, {directions: this.directions});
+        this.connection.socket.emit(PlayerDirectionalInput.event, {directions: this.self.moving});
     }
 
     private removePlayer(data: PlayerLeftMap) {

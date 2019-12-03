@@ -8,6 +8,10 @@ export class Mob {
     x: number;
     y: number;
 
+    get moving() {
+        return this.sprite.moving;
+    }
+
     set moving(value: { up: boolean, down: boolean, left: boolean, right: boolean }) {
         this.sprite.moving = value;
     }

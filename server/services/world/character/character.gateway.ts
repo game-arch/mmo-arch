@@ -64,7 +64,7 @@ export class CharacterGateway {
             await this.service.storeCharacter(client, character);
             return {status: 'success'};
         } catch (e) {
-            this.logger.error(e);
+            console.log(e);
             return {status: 'error'};
         }
     }
@@ -72,7 +72,7 @@ export class CharacterGateway {
     @SubscribeMessage(CharacterOffline.event)
     async characterLeft(client: Socket) {
         try {
-            this.service.removeCharacter(client);
+            await this.service.removeCharacter(client);
             return {status: 'success'};
         } catch (e) {
             this.logger.error(e);

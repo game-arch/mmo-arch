@@ -8,6 +8,7 @@ import Scene = Phaser.Scene;
 import {Mob}                          from "../../../lib/phaser/mob";
 import {PlayerDirectionalInput}       from "../actions";
 import {async}                        from "rxjs/internal/scheduler/async";
+import {Directions}                   from "../../../lib/phaser/directions";
 
 
 export class BackendScene extends BaseScene implements Scene {
@@ -44,14 +45,14 @@ export class BackendScene extends BaseScene implements Scene {
         this.removeEntity('player', player.characterId);
     }
 
-    movePlayer(data: PlayerDirectionalInput) {
-        let player = this.entities.player[data.characterId];
+    movePlayer(characterId:number, directions:Directions) {
+        let player = this.entities.player[characterId];
         if (player) {
             player.moving = {
-                up   : !!data.directions.up,
-                down : !!data.directions.down,
-                left : !!data.directions.left,
-                right: !!data.directions.right
+                up   : !!directions.up,
+                down : !!directions.down,
+                left : !!directions.left,
+                right: !!directions.right
             }
         }
     }

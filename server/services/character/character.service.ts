@@ -46,17 +46,21 @@ export class CharacterService {
     }
 
     async characterOnline(data: CharacterOnline) {
-        let character    = await this.repo.findOne({id: data.characterId});
-        character.status = 'online';
-        await this.repo.save(character);
-        this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name);
+        let character = await this.repo.findOne({id: data.characterId});
+        if (character) {
+            character.status = 'online';
+            await this.repo.save(character);
+            this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name);
+        }
     }
 
     async characterOffline(data: CharacterOffline) {
-        let character    = await this.repo.findOne({id: data.characterId});
-        character.status = 'offline';
-        await this.repo.save(character);
-        this.emitter.characterLoggedOut(character.id, character.name, character.world);
+        let character = await this.repo.findOne({id: data.characterId});
+        if (character) {
+            character.status = 'offline';
+            await this.repo.save(character);
+            this.emitter.characterLoggedOut(character.id, character.name, character.world);
+        }
     }
 
     async allCharactersOffline(data: AllCharactersOffline) {

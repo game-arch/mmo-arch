@@ -4,18 +4,27 @@ module.exports = {
             instances: 2,
             name: 'global-lobby',
             script: 'dist/services/lobby/main.js',
-            watch: ["dist/services/lobby", "dist/lib"]
+            watch: ["dist/services/lobby", "dist/lib"],
+            watch_options: {
+                "followSymlinks": false
+            }
         },
         {
             instances: 2,
             name: 'global-account',
             script: 'dist/services/account/main.js',
-            watch: ["dist/services/account", "dist/lib"]
+            watch: ["dist/services/account", "dist/lib"],
+            watch_options: {
+                "followSymlinks": false
+            }
         },
         {
             name: 'global-presence',
             script: 'dist/services/presence/main.js',
-            watch: ["dist/services/presence", "dist/lib"]
+            watch: ["dist/services/presence", "dist/lib"],
+            watch_options: {
+                "followSymlinks": false
+            }
         },
         {
             instances: 2,
@@ -25,6 +34,9 @@ module.exports = {
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME
+            },
+            watch_options: {
+                "followSymlinks": false
             }
         },
         {
@@ -35,6 +47,9 @@ module.exports = {
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME
+            },
+            watch_options: {
+                "followSymlinks": false
             }
         },
         {
@@ -45,6 +60,9 @@ module.exports = {
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME
+            },
+            watch_options: {
+                "followSymlinks": false
             }
         },
         {
@@ -55,6 +73,9 @@ module.exports = {
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME
+            },
+            watch_options: {
+                "followSymlinks": false
             }
         },
         {
@@ -65,6 +86,9 @@ module.exports = {
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME
+            },
+            watch_options: {
+                "followSymlinks": false
             }
         },
         {
@@ -75,6 +99,9 @@ module.exports = {
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME
+            },
+            watch_options: {
+                "followSymlinks": false
             }
         },
         {
@@ -85,6 +112,9 @@ module.exports = {
                 MAP: 'tutorial',
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME
+            },
+            watch_options: {
+                "followSymlinks": false
             }
         }
     ]

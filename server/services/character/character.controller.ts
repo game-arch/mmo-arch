@@ -1,13 +1,13 @@
-import {Controller, Get}              from '@nestjs/common';
-import {CharacterService}             from './character.service';
-import {EventPattern, MessagePattern} from "@nestjs/microservices";
+import {Controller, Get}  from '@nestjs/common';
+import {CharacterService} from './character.service';
+import {MessagePattern}   from "@nestjs/microservices";
 import {
     AllCharactersOffline,
     CreateCharacter,
     GetCharacters,
     CharacterOffline,
     CharacterOnline, GetCharacter, GetCharacterName
-}                                     from "./actions";
+}                         from "./actions";
 
 @Controller()
 export class CharacterController {
@@ -17,38 +17,38 @@ export class CharacterController {
     }
 
     @MessagePattern(GetCharacters.event)
-    async getCharacters(data: GetCharacters) {
-        return await this.service.getCharactersFor(data.accountId, data.world);
+    getCharacters(data: GetCharacters) {
+        return this.service.getCharactersFor(data.accountId, data.world);
     }
 
     @MessagePattern(GetCharacter.event)
-    async getCharacter(data: GetCharacter) {
-        return await this.service.getCharacter(data.characterId);
+    getCharacter(data: GetCharacter) {
+        return this.service.getCharacter(data.characterId);
     }
 
     @MessagePattern(CreateCharacter.event)
-    async createCharacter(data: CreateCharacter) {
-        return await this.service.createCharacterFor(data.accountId, data.world, data.name, data.gender);
+    createCharacter(data: CreateCharacter) {
+        return this.service.createCharacterFor(data.accountId, data.world, data.name, data.gender);
     }
 
-    @EventPattern(CharacterOnline.event)
-    async characterOnline(data: CharacterOnline) {
-        await this.service.characterOnline(data);
+    @MessagePattern(CharacterOnline.event)
+    characterOnline(data: CharacterOnline) {
+        return this.service.characterOnline(data);
     }
 
-    @EventPattern(CharacterOffline.event)
-    async characterOffline(data: CharacterOffline) {
-        await this.service.characterOffline(data);
+    @MessagePattern(CharacterOffline.event)
+    characterOffline(data: CharacterOffline) {
+        return this.service.characterOffline(data);
     }
 
-    @EventPattern(AllCharactersOffline.event)
-    async allCharactersOffline(data: AllCharactersOffline) {
-        await this.service.allCharactersOffline(data);
+    @MessagePattern(AllCharactersOffline.event)
+    allCharactersOffline(data: AllCharactersOffline) {
+        return this.service.allCharactersOffline(data);
     }
 
     @MessagePattern(GetCharacterName.event)
-    async getCharacterName(data: GetCharacterName) {
-        return await this.service.getCharacterName(data.characterId);
+    getCharacterName(data: GetCharacterName) {
+        return this.service.getCharacterName(data.characterId);
     }
 
 }

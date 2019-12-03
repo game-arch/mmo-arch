@@ -32,10 +32,11 @@ export class WorldService {
         this.sockets[client.id]  = this.accounts[accountId];
     }
 
-    removePlayer(client: Socket) {
+    async removePlayer(client: Socket) {
         if (this.sockets[client.id]) {
+            console.log('remove player');
             let player = this.sockets[client.id];
-            this.removeCharacter(client);
+            await this.removeCharacter(client);
             delete this.accounts[player.accountId];
             delete this.sockets[client.id];
         }
@@ -44,7 +45,7 @@ export class WorldService {
     async storeCharacter(client: Socket, character: { id: number, name: string }) {
         let player = this.sockets[client.id];
         await this.validateCharacterLogin(client, character.id);
-        this.character.characterOnline(character.id);
+         this.character.characterOnline(character.id);
         player.character              = {...character, map: ''};
         this.characters[character.id] = player;
         client.join('character.' + character.name);
@@ -63,11 +64,11 @@ export class WorldService {
         }
     }
 
-    removeCharacter(client: Socket) {
+    async removeCharacter(client: Socket) {
         let player = this.sockets[client.id];
         if (player && player.character) {
             let previousCharacter = player.character;
-            this.character.characterOffline(previousCharacter.id);
+             this.character.characterOffline(previousCharacter.id);
             player.character = null;
             delete this.characters[previousCharacter.id];
             client.leave('character.' + previousCharacter.name);

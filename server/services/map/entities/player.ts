@@ -41,9 +41,6 @@ export class Player extends Mob {
 
     @PrimaryGeneratedColumn()
     id: number;
-
-    @Column()
-    world: string;
     @Column()
     characterId: number;
     @Column()

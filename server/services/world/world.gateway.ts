@@ -62,7 +62,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async handleDisconnect(client: Socket) {
         try {
-            this.service.removePlayer(client);
+            await this.service.removePlayer(client);
         } catch (e) {
             this.logger.error(e);
         }

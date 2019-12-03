@@ -11,6 +11,8 @@ import {MapController}            from "./map/map.controller";
 import {MapGateway}               from "./map/map.gateway";
 import {CharacterGateway}         from "./character/character.gateway";
 import {CharacterController}      from "./character/character.controller";
+import {ChatController}           from "./chat/chat.controller";
+import {ChatGateway}              from "./chat/chat.gateway";
 
 @Module({
     imports    : [
@@ -20,8 +22,8 @@ import {CharacterController}      from "./character/character.controller";
         PresenceClientModule,
         MapClientModule
     ],
-    controllers: [WorldController, MapController, CharacterController],
-    providers  : [WorldService, WorldGateway, MapGateway, CharacterGateway, Logger],
+    controllers: [WorldController, MapController, CharacterController, ChatController],
+    providers  : [WorldService, WorldGateway, MapGateway, CharacterGateway, ChatGateway, Logger],
 })
 export class WorldModule {
 }
