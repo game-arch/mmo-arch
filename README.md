@@ -52,7 +52,7 @@ must connect to.
     - Login/Register is exposed here
 - Presence (1 instance should only be needed)
     - World Server Discovery
-    - When a world comes online or goes offline, the presence microservice will be updated
+    - When a world comes online or goes offline, the Presence service will be updated
 - Account (1+ instances)
     - To register, login, and verify a user has access to the system
 
@@ -82,7 +82,7 @@ must connect to.
     - Handles transitions between maps based on a character's movement
     - Handles In-Range checks against other players, resources, NPCs
     - Handles optional quest progress in regions of a map
-    - A single microservice instance is used per map.
+    - A single instance is used per map.
         - If you need 10 maps, you need 10 instances with different configurations per map
         - This is due to a restriction to headless Phaser and to help keep operations on different threads when possible
 - Server (1+ instances)
