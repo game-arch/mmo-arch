@@ -22,10 +22,10 @@ export class MultiplayerScene extends BaseScene implements Scene {
         d: 'right'
     };
     directions   = {
-        up   : false,
-        down : false,
-        right: false,
-        left : false
+        up    : false,
+        down  : false,
+        right : false,
+        left: false
     };
 
     self: Mob;
@@ -43,9 +43,11 @@ export class MultiplayerScene extends BaseScene implements Scene {
     toggleDirection(event: KeyboardEvent, status: boolean) {
         if (this.directionMap.hasOwnProperty(event.key)) {
             event.stopImmediatePropagation();
-            let direction               = this.directionMap[event.key];
-            this.self.moving[direction] = status;
-            this.sendDirectionalInput();
+            let direction = this.directionMap[event.key];
+            if (this.directions[direction] !== status) {
+                this.directions[direction] = status;
+                this.sendDirectionalInput();
+            }
         }
     }
 
@@ -73,7 +75,8 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     private sendDirectionalInput() {
-        this.connection.socket.emit(PlayerDirectionalInput.event, {directions: this.self.moving});
+        console.log(this.connection);
+        this.connection.socket.emit(PlayerDirectionalInput.event, {directions: this.directions});
     }
 
     private removePlayer(data: PlayerLeftMap) {
