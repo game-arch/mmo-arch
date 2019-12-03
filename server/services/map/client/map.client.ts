@@ -8,7 +8,7 @@ import {LocalMessage}                                             from "../../wo
 @Injectable()
 export class MapClient {
 
-    constructor(@Inject('WORLD_CLIENT') private client: ClientProxy) {
+    constructor(@Inject('MAP_CLIENT') private client: ClientProxy) {
 
     }
 

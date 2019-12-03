@@ -16,6 +16,8 @@ import {WorldService}                                        from "../world.serv
 import {ClientProxy}                                         from "@nestjs/microservices";
 import {Inject}                                              from "@nestjs/common";
 import {WORLD_PREFIX}                                        from "../world.prefix";
+import {RedisNamespace}                                      from "../redis.namespace";
+import {RedisSocket}                                         from "../redis.socket";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -24,7 +26,7 @@ import {WORLD_PREFIX}                                        from "../world.pref
 })
 export class ChatGateway {
     @WebSocketServer()
-    server: Namespace;
+    server: RedisNamespace;
 
 
     constructor(
@@ -36,50 +38,56 @@ export class ChatGateway {
     }
 
     @SubscribeMessage(WORLD_PREFIX + LocalMessage.event)
-    async localMessage(client: Socket, message: string) {
+    async localMessage(client: RedisSocket, message: string) {
         let character = this.world.sockets[client.id].character;
-        if (character && character.map !== '') {
-            let position = await this.map.getPlayer(character.id, character.map);
-            this.client.emit(WORLD_PREFIX + LocalMessage.event, new LocalMessage(character, character.map, position.x, position.y, message));
+        let map       = this.world.getMapOf(client);
+        if (character && map !== '') {
+            let position = await this.map.getPlayer(character.id, map);
+            this.client.emit(WORLD_PREFIX + LocalMessage.event, new LocalMessage(character, map, position.x, position.y, message));
         }
     }
 
     @SubscribeMessage(WORLD_PREFIX + ZoneMessage.event)
-    zoneMessage(client: Socket, message: string) {
+    zoneMessage(client: RedisSocket, message: string) {
         let character = this.world.sockets[client.id].character;
-        if (character && character.map !== '') {
-            this.client.emit(WORLD_PREFIX + ZoneMessage.event, new ZoneMessage(character, character.map, message));
+        let map       = this.world.getMapOf(client);
+        if (character && map !== '') {
+            this.client.emit(WORLD_PREFIX + ZoneMessage.event, new ZoneMessage(character, map, message));
         }
     }
 
     @SubscribeMessage(WORLD_PREFIX + RegionMessage.event)
-    regionMessage(client: Socket, message: string) {
+    regionMessage(client: RedisSocket, message: string) {
         let character = this.world.sockets[client.id].character;
-        if (character && character.map !== '') {
-            this.client.emit(WORLD_PREFIX + RegionMessage.event, new ZoneMessage(character, character.map, message));
+        let map       = this.world.getMapOf(client);
+        if (character && map !== '') {
+            this.client.emit(WORLD_PREFIX + RegionMessage.event, new ZoneMessage(character, map, message));
         }
     }
 
     @SubscribeMessage(WORLD_PREFIX + TradeMessage.event)
-    tradeMessage(client: Socket, message: string) {
+    tradeMessage(client: RedisSocket, message: string) {
         let character = this.world.sockets[client.id].character;
-        if (character && character.map !== '') {
+        let map       = this.world.getMapOf(client);
+        if (character && map !== '') {
             this.client.emit(WORLD_PREFIX + TradeMessage.event, new TradeMessage(character, message));
         }
     }
 
     @SubscribeMessage(WORLD_PREFIX + GlobalMessage.event)
-    globalMessage(client: Socket, message: string) {
+    globalMessage(client: RedisSocket, message: string) {
         let character = this.world.sockets[client.id].character;
-        if (character && character.map !== '') {
+        let map       = this.world.getMapOf(client);
+        if (character && map !== '') {
             this.client.emit(WORLD_PREFIX + GlobalMessage.event, new GlobalMessage(character, message));
         }
     }
 
     @SubscribeMessage(WORLD_PREFIX + PrivateMessage.event)
-    privateMessage(client: Socket, data: { to: GameCharacter, message: string }) {
+    privateMessage(client: RedisSocket, data: { to: GameCharacter, message: string }) {
         let character = this.world.sockets[client.id].character;
-        if (character && character.map !== '') {
+        let map       = this.world.getMapOf(client);
+        if (character && map !== '') {
             let sent = false;
             this.client.emit(WORLD_PREFIX + PrivateMessage.event, new PrivateMessage(character, data.to, data.message))
                 .subscribe({

@@ -49,7 +49,10 @@ export class CharacterService {
         let character = await this.repo.findOne({id: data.characterId});
         if (character) {
             character.status = 'online';
+            character.socketId = data.socketId;
+            console.log('save character');
             await this.repo.save(character);
+            console.log('send loggedIn event');
             this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name);
         }
     }

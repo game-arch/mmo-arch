@@ -4,6 +4,7 @@ import {GameCharacter}                                         from "../../../li
 @Entity()
 @Index('user', ['accountId', 'name'])
 @Index('status', ['status'])
+@Unique('socket', ['socketId'])
 @Unique('name', ['world','name'])
 export class Character implements GameCharacter {
 
@@ -26,5 +27,7 @@ export class Character implements GameCharacter {
 
     @Column({nullable: true})
     lastOnline: Date;
+    @Column({nullable:true})
+    socketId:string;
 
 }

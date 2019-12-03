@@ -15,7 +15,7 @@ export class MapController {
 
     @EventPattern(WORLD_PREFIX + PlayerEnteredMap.event)
     async onMapJoined(data: PlayerEnteredMap) {
-        this.gateway.playerJoin(data);
+        await this.gateway.playerJoin(data);
     }
 
     @EventPattern(WORLD_PREFIX + PlayerLeftMap.event)

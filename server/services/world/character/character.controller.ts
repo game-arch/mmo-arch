@@ -23,6 +23,7 @@ export class CharacterController {
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
     onCharacterJoin(data: CharacterLoggedIn) {
+        console.log('Recieve Event');
         this.logger.log(data.name + ' is online.');
         this.gateway.server.emit(CharacterLoggedIn.event, data);
     }

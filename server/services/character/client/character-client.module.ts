@@ -1,12 +1,27 @@
-import {Module}            from "@nestjs/common";
-import {CharacterClient}   from "./character.client";
-import {WorldClientModule} from "../../../lib/world-client/world-client.module";
+import {Module}             from "@nestjs/common";
+import {CharacterClient}    from "./character.client";
+import {ClientProxyFactory} from "@nestjs/microservices";
+import {environment}        from "../../../lib/config/environment";
+import {WorldConstants}     from "../../../lib/constants/world.constants";
+
+export const clientFactory   = () => ClientProxyFactory.create({
+    transport: environment.microservice.transport,
+    options  : {
+        ...environment.microservice.options,
+        name : WorldConstants.NAME + ' Map Client',
+        queue: WorldConstants.CONSTANT + '-map'
+    }
+});
+export const CLIENT_PROVIDER = {
+    provide   : 'CHARACTER_CLIENT',
+    useFactory: clientFactory
+};
 
 @Module({
     imports  : [
-        WorldClientModule
     ],
     providers: [
+        CLIENT_PROVIDER,
         CharacterClient
     ],
     exports  : [

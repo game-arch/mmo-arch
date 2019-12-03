@@ -6,7 +6,9 @@ install:
 start:
 	cd client && make start
 	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make start
-
+stop:
+	cd client && make stop
+	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make stop
 delete:
 	cd client && make delete
 	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make delete

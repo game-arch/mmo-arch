@@ -15,6 +15,8 @@ import {
 }                                  from "../../character/actions";
 import {from}                      from "rxjs";
 import {Character}                 from "../../character/entities/character";
+import {RedisNamespace}            from "../redis.namespace";
+import {RedisSocket}               from "../redis.socket";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -23,7 +25,8 @@ import {Character}                 from "../../character/entities/character";
 })
 export class CharacterGateway {
     @WebSocketServer()
-    server: Namespace;
+    server: RedisNamespace;
+
     constructor(
         private logger: Logger,
         private service: WorldService,
@@ -35,12 +38,12 @@ export class CharacterGateway {
     async sendCharacters() {
         await from(Object.keys(this.service.characters))
             .subscribe(id => {
-                this.character.characterOnline(parseInt(id));
+                this.character.characterOnline(parseInt(id), this.service.characters[id].socket.id);
             });
     }
 
     @SubscribeMessage(CreateCharacter.event)
-    async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
+    async createCharacter(client: RedisSocket, data: { name: string, gender: 'male' | 'female' }) {
         try {
             let accountId            = this.service.sockets[client.id].accountId;
             let character: Character = await this.service.createCharacter(accountId, data.name, data.gender);
@@ -58,7 +61,7 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CharacterOnline.event)
-    async characterJoined(client: Socket, character: { id: number, name: string }) {
+    async characterJoined(client: RedisSocket, character: { id: number, name: string }) {
         try {
             await this.service.storeCharacter(client, character);
             return {status: 'success'};
@@ -69,7 +72,7 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CharacterOffline.event)
-    async characterLeft(client: Socket) {
+    async characterLeft(client: RedisSocket) {
         try {
             await this.service.removeCharacter(client);
             return {status: 'success'};

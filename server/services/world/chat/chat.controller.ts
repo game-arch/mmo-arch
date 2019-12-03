@@ -11,12 +11,8 @@ import {
     TradeMessage,
     ZoneMessage
 }                       from "./actions";
-import {
-    CharacterLoggedIn
-}                       from "../../character/actions";
 import {ChatGateway}    from "./chat.gateway";
 import {WorldConstants} from "../../../lib/constants/world.constants";
-import {WORLD_PREFIX}   from "../world.prefix";
 
 @Controller()
 export class ChatController {
@@ -25,16 +21,6 @@ export class ChatController {
     constructor(
         private gateway: ChatGateway
     ) {
-
-    }
-
-    @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
-    characterOnline(data: CharacterLoggedIn) {
-
-    }
-
-    @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
-    characterOffline(data: CharacterLoggedIn) {
 
     }
 

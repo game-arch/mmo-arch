@@ -67,7 +67,8 @@ export class CharacterOnline {
     static readonly event = 'character.online';
 
     constructor(
-        public characterId: number
+        public characterId: number,
+        public socketId:string
     ) {
 
     }

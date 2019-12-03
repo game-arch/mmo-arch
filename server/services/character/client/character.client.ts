@@ -15,7 +15,7 @@ import {LocalMessage}       from "../../world/chat/actions";
 @Injectable()
 export class CharacterClient {
 
-    constructor(@Inject('WORLD_CLIENT') private client: ClientProxy) {
+    constructor(@Inject('CHARACTER_CLIENT') private client: ClientProxy) {
 
     }
 
@@ -27,8 +27,8 @@ export class CharacterClient {
         return await this.client.send(WORLD_PREFIX + GetCharacters.event, new GetCharacters(accountId, world)).pipe(first()).toPromise();
     }
 
-    characterOnline(id: number) {
-        this.client.send(WORLD_PREFIX + CharacterOnline.event, new CharacterOnline(id)).subscribe(response => {
+    characterOnline(id: number, socketId:string) {
+        this.client.send(WORLD_PREFIX + CharacterOnline.event, new CharacterOnline(id, socketId)).subscribe(response => {
             console.log(response);
         });
     }

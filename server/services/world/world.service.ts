@@ -4,10 +4,11 @@ import {Socket}          from "socket.io";
 import {CharacterClient} from "../character/client/character.client";
 import {WorldConstants}  from "../../lib/constants/world.constants";
 import {MapClient}       from "../map/client/map.client";
+import {RedisSocket}     from "./redis.socket";
 
 export class Player {
 
-    constructor(public accountId: number, public socket: Socket, public character?: { id: number, name: string, map: string }) {
+    constructor(public accountId: number, public socket: Socket, public character?: { id: number, name: string }) {
 
     }
 }
@@ -27,12 +28,12 @@ export class WorldService {
     ) {
     }
 
-    storeUser(client: Socket, accountId: number) {
+    storeUser(client: RedisSocket, accountId: number) {
         this.accounts[accountId] = new Player(accountId, client);
         this.sockets[client.id]  = this.accounts[accountId];
     }
 
-    async removePlayer(client: Socket) {
+    async removePlayer(client: RedisSocket) {
         if (this.sockets[client.id]) {
             let player = this.sockets[client.id];
             await this.removeCharacter(client);
@@ -41,16 +42,17 @@ export class WorldService {
         }
     }
 
-    async storeCharacter(client: Socket, character: { id: number, name: string }) {
+    async storeCharacter(client: RedisSocket, character: { id: number, name: string }) {
         let player = this.sockets[client.id];
         await this.validateCharacterLogin(client, character.id);
-        this.character.characterOnline(character.id);
-        player.character              = {...character, map: ''};
+        this.character.characterOnline(character.id, client.id);
+        player.character              = character;
         this.characters[character.id] = player;
-        client.join('character.' + character.name);
+        client.adapter.add(client.id, 'character-id.' + character.id);
+        client.adapter.add(client.id, 'character-name.' + character.name);
     }
 
-    async validateCharacterLogin(client: Socket, characterId: number) {
+    async validateCharacterLogin(client: RedisSocket, characterId: number) {
         let verified = await this.character.getCharacter(characterId);
         if (verified.accountId !== this.sockets[client.id].accountId) {
             throw new Error("Character's Account ID does not match");
@@ -63,18 +65,19 @@ export class WorldService {
         }
     }
 
-    async removeCharacter(client: Socket) {
+    async removeCharacter(client: RedisSocket) {
         let player = this.sockets[client.id];
         if (player && player.character) {
             let previousCharacter = player.character;
             this.character.characterOffline(previousCharacter.id);
             player.character = null;
             delete this.characters[previousCharacter.id];
-            client.leave('character.' + previousCharacter.name);
+            client.adapter.del(client.id, 'character-id.' + previousCharacter.id);
+            client.adapter.del(client.id, 'character-name.' + previousCharacter.name);
         }
     }
 
-    async authenticate(socket: Socket) {
+    async authenticate(socket: RedisSocket) {
         try {
             let account: { id: number, email: string } = await this.account.getAccount(socket.handshake.query.token, true);
             return account;
@@ -91,11 +94,17 @@ export class WorldService {
         return await this.character.create(accountId, WorldConstants.CONSTANT, name, gender);
     }
 
-    playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+    playerDirectionalInput(client: RedisSocket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
         let character = this.sockets[client.id].character;
         if (character) {
-            this.map.playerDirectionalInput(character.id, WorldConstants.CONSTANT, character.map, data.directions);
+            let map = this.getMapOf(client);
+            this.map.playerDirectionalInput(character.id, WorldConstants.CONSTANT, map, data.directions);
         }
+    }
+
+    getMapOf(client: RedisSocket) {
+        let mapRoom = Object.keys(client.rooms).filter(name => name.indexOf('map.') === 0)[0] || '';
+        return mapRoom.substr(4, mapRoom.length);
     }
 }
 
