@@ -1,15 +1,15 @@
 install:
-	cd game-clients && npm i
-	cd game-servers && npm i
-	cd game-servers && npm run build
+	cd client && npm i
+	cd server && npm i
+	cd server && npm run build
 
 start:
-	cd game-clients && make start
-	cd game-servers && WORLD_NAME=Talos WORLD_CONSTANT=talos make start
+	cd client && make start
+	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make start
 
 delete:
-	cd game-clients && make delete
-	cd game-servers && WORLD_NAME=Talos WORLD_CONSTANT=talos make delete
+	cd client && make delete
+	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make delete
 
 fixtures:
-	cd game-servers && WORLD_NAME=Talos WORLD_CONSTANT=talos npm run fixtures:map
+	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos npm run fixtures:map
