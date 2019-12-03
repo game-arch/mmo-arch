@@ -1,10 +1,10 @@
-import {Module}                   from "@nestjs/common";
-import {PresenceEmitter}          from "./presence.emitter";
-import {MicroserviceClientModule} from "../../../lib/microservice-client/microservice-client.module";
+import {Module}            from "@nestjs/common";
+import {PresenceEmitter}   from "./presence.emitter";
+import {WorldClientModule} from "../../../lib/world-client/world-client.module";
 
 @Module({
     imports  : [
-        MicroserviceClientModule
+        WorldClientModule
     ],
     providers: [
         PresenceEmitter

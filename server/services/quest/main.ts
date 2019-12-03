@@ -4,6 +4,7 @@ import {createDatabase} from "../../lib/config/db.config";
 import {environment}    from "../../lib/config/environment";
 import {Logger}         from "@nestjs/common";
 import * as path        from "path";
+import {WorldConstants} from "../../lib/constants/world.constants";
 
 require('dotenv').config({
     path: path.resolve(__dirname, '../.env')
@@ -17,8 +18,8 @@ async function bootstrap() {
         transport: environment.microservice.transport,
         options  : {
             ...environment.microservice.options,
-            name : 'Quest',
-            queue: 'quest'
+            name : WorldConstants.NAME + ' Quest',
+            queue: WorldConstants.CONSTANT + '-quest'
         }
     });
     app.useLogger(logger);

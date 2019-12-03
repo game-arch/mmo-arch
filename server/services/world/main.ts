@@ -9,13 +9,15 @@ require('dotenv').config({
     path: path.resolve(__dirname, '../.env')
 });
 const logger = new Logger(WorldConstants.NAME + ' Server');
+
 async function bootstrap() {
     const app = await NestFactory.create(WorldModule);
     app.connectMicroservice({
         transport: environment.microservice.transport,
-        options: {
+        options  : {
             ...environment.microservice.options,
-            name: WorldConstants.NAME + ' Server'
+            name : WorldConstants.NAME + ' Server',
+            queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
         }
     });
     app.enableCors({

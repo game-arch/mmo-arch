@@ -3,6 +3,7 @@ import {EventPattern, MessagePattern}              from "@nestjs/microservices";
 import {ServerPresence}                            from "./services/server.presence";
 import {PresenceEmitter}                           from "./emitter/presence.emitter";
 import {GetServers, RegisterServer, ServerOffline} from "./actions";
+import {PlayerEnteredMap}                          from "../map/actions";
 
 @Controller()
 export class PresenceController implements OnApplicationBootstrap {
@@ -32,4 +33,8 @@ export class PresenceController implements OnApplicationBootstrap {
     }
 
 
+    @EventPattern(PlayerEnteredMap.event)
+    async onMapJoined(data: PlayerEnteredMap) {
+        console.log('This should not fire!');
+    }
 }

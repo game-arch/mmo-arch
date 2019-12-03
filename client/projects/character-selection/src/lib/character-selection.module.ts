@@ -38,8 +38,8 @@ import {GameEngineModule}       from "../../../game-engine/src/lib/game-engine.m
 export class CharacterSelectionModule {
 
     constructor(registry: MatIconRegistry, sanitizer: DomSanitizer) {
-        registry.addSvgIcon('male', sanitizer.bypassSecurityTrustResourceUrl('/game/assets/icons/human-male.svg'));
-        registry.addSvgIcon('female', sanitizer.bypassSecurityTrustResourceUrl('/game/assets/icons/human-female.svg'));
+        registry.addSvgIcon('male', sanitizer.bypassSecurityTrustResourceUrl('/assets/icons/human-male.svg'));
+        registry.addSvgIcon('female', sanitizer.bypassSecurityTrustResourceUrl('/assets/icons/human-female.svg'));
 
     }
 }

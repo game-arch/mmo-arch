@@ -21,7 +21,7 @@ async function bootstrap() {
         options  : {
             ...environment.microservice.options,
             name : WorldConstants.NAME + ' Map',
-            queue: WorldConstants.CONSTANT + '.map'
+            queue: WorldConstants.CONSTANT + '-map'
         }
     });
     app.useLogger(logger);

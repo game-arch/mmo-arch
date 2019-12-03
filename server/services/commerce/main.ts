@@ -15,7 +15,7 @@ async function bootstrap() {
         options: {
             ...environment.microservice.options,
             name: WorldConstants.NAME + ' Commerce',
-            queue: WorldConstants.CONSTANT + 'commerce'
+            queue: WorldConstants.CONSTANT + '-commerce'
         }
     });
     app.useLogger(logger);

@@ -1,12 +1,12 @@
-import {Injectable}    from "@nestjs/common";
-import {ClientProxy}   from "@nestjs/microservices";
-import {AccountEvents} from "../account.events";
-import {first, tap}    from "rxjs/operators";
+import {Inject, Injectable} from "@nestjs/common";
+import {ClientProxy}        from "@nestjs/microservices";
+import {AccountEvents}      from "../account.events";
+import {first, tap}         from "rxjs/operators";
 
 @Injectable()
 export class AccountClient {
 
-    constructor(private client: ClientProxy) {
+    constructor(@Inject('ACCOUNT_CLIENT') private client: ClientProxy) {
 
     }
 

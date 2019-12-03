@@ -91,3 +91,23 @@ must connect to.
     - Verifies character selections against the Character service
     - Propagates events to responsible services to handle micro-interactions outside of the current thread if possible
     - Handles events sent from services that are intended to report something to the end-user
+
+### Current Progress
+- Presence
+    - World Presence is handled by the Presence microservice
+    - Character Presence is handled by the Character microservice
+- Authentication
+    - Register with Email
+    - Login with Email
+- World Selection
+    - Worlds connected to the appropriate NATS server will auto-register upon running
+    - Worlds will be marked offline after the server goes down
+- Characters
+    - Character Creation (name and gender)
+    - Character Selection
+- Map
+    - 1 Map so far
+    - Player input (movement directions) are sent to server
+    - The server broadcasts the connected users on the map at a given interval (id, name, x, y, movement directions)
+    - Velocity is calculated upon an input event and upon receiving the list of players
+    - No NPCs at this time (will be implemented on the map server directly, not with another microservice)

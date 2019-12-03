@@ -55,6 +55,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             this.service.storeUser(client, user.id);
             client.emit(GetCharacters.event, await this.service.getCharacters(user.id));
         } catch (e) {
+            console.log(e);
             client.emit("connect-error", e.message);
             client.disconnect(true);
         }

@@ -4,6 +4,7 @@ import {CharacterLoggedIn, CharacterLoggedOut} from "../../character/actions";
 import {WorldConstants}                        from "../../../lib/constants/world.constants";
 import {CharacterGateway}                      from "./character.gateway";
 import {MapOnline}                             from "../../map/actions";
+import {WORLD_PREFIX}                          from "../world.prefix";
 
 @Controller()
 export class CharacterController {
@@ -16,24 +17,20 @@ export class CharacterController {
 
     }
 
-    @EventPattern(MapOnline.event)
+    @EventPattern(WORLD_PREFIX + MapOnline.event)
     async onMapOnline() {
         await this.gateway.sendCharacters();
     }
 
-    @EventPattern(CharacterLoggedIn.event)
+    @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
     onCharacterJoin(data: CharacterLoggedIn) {
-        if (data.world === WorldConstants.CONSTANT) {
-            this.logger.log(data.name + ' is online.');
-            this.gateway.server.emit(CharacterLoggedIn.event, data);
-        }
+        this.logger.log(data.name + ' is online.');
+        this.gateway.server.emit(CharacterLoggedIn.event, data);
     }
 
-    @EventPattern(CharacterLoggedOut.event)
+    @EventPattern(WORLD_PREFIX + CharacterLoggedOut.event)
     onCharacterLeave(data: CharacterLoggedOut) {
-        if (data.world === WorldConstants.CONSTANT) {
-            this.logger.log(data.name + ' is offline.');
-            this.gateway.server.emit(CharacterLoggedOut.event, data);
-        }
+        this.logger.log(data.name + ' is offline.');
+        this.gateway.server.emit(CharacterLoggedOut.event, data);
     }
 }

@@ -1,10 +1,10 @@
-import {Module}                   from "@nestjs/common";
-import {CharacterClient}          from "./character.client";
-import {MicroserviceClientModule} from "../../../lib/microservice-client/microservice-client.module";
+import {Module}            from "@nestjs/common";
+import {CharacterClient}   from "./character.client";
+import {WorldClientModule} from "../../../lib/world-client/world-client.module";
 
 @Module({
     imports  : [
-        MicroserviceClientModule
+        WorldClientModule
     ],
     providers: [
         CharacterClient

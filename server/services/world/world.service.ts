@@ -30,6 +30,7 @@ export class WorldService {
     storeUser(client: Socket, accountId: number) {
         this.accounts[accountId] = new Player(accountId, client);
         this.sockets[client.id]  = this.accounts[accountId];
+        console.log('stored user');
     }
 
     async removePlayer(client: Socket) {
@@ -49,6 +50,7 @@ export class WorldService {
         player.character              = {...character, map: ''};
         this.characters[character.id] = player;
         client.join('character.' + character.name);
+        console.log('stored character');
     }
 
     async validateCharacterLogin(client: Socket, characterId: number) {

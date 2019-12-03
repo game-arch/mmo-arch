@@ -8,6 +8,8 @@ import {
     CharacterOffline,
     CharacterOnline, GetCharacter, GetCharacterName
 }                         from "./actions";
+import {WORLD_PREFIX}     from "../world/world.prefix";
+import {LocalMessage}     from "../world/chat/actions";
 
 @Controller()
 export class CharacterController {
@@ -16,37 +18,37 @@ export class CharacterController {
 
     }
 
-    @MessagePattern(GetCharacters.event)
+    @MessagePattern(WORLD_PREFIX + GetCharacters.event)
     getCharacters(data: GetCharacters) {
         return this.service.getCharactersFor(data.accountId, data.world);
     }
 
-    @MessagePattern(GetCharacter.event)
+    @MessagePattern(WORLD_PREFIX + GetCharacter.event)
     getCharacter(data: GetCharacter) {
         return this.service.getCharacter(data.characterId);
     }
 
-    @MessagePattern(CreateCharacter.event)
+    @MessagePattern(WORLD_PREFIX + CreateCharacter.event)
     createCharacter(data: CreateCharacter) {
         return this.service.createCharacterFor(data.accountId, data.world, data.name, data.gender);
     }
 
-    @MessagePattern(CharacterOnline.event)
+    @MessagePattern(WORLD_PREFIX + CharacterOnline.event)
     characterOnline(data: CharacterOnline) {
         return this.service.characterOnline(data);
     }
 
-    @MessagePattern(CharacterOffline.event)
+    @MessagePattern(WORLD_PREFIX + CharacterOffline.event)
     characterOffline(data: CharacterOffline) {
         return this.service.characterOffline(data);
     }
 
-    @MessagePattern(AllCharactersOffline.event)
+    @MessagePattern(WORLD_PREFIX + AllCharactersOffline.event)
     allCharactersOffline(data: AllCharactersOffline) {
         return this.service.allCharactersOffline(data);
     }
 
-    @MessagePattern(GetCharacterName.event)
+    @MessagePattern(WORLD_PREFIX + GetCharacterName.event)
     getCharacterName(data: GetCharacterName) {
         return this.service.getCharacterName(data.characterId);
     }

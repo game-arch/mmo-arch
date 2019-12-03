@@ -1,12 +1,24 @@
-import {Module}                   from "@nestjs/common";
-import {PresenceClient}           from "./presence.client";
-import {MicroserviceClientModule} from "../../../lib/microservice-client/microservice-client.module";
+import {Module}             from "@nestjs/common";
+import {PresenceClient}     from "./presence.client";
+import {ClientProxyFactory} from "@nestjs/microservices";
+import {environment}        from "../../../lib/config/environment";
+
+export const clientFactory   = () => ClientProxyFactory.create({
+    transport: environment.microservice.transport,
+    options  : {
+        ...environment.microservice.options,
+        name : 'Presence Client',
+        queue: 'presence'
+    }
+});
+export const CLIENT_PROVIDER = {
+    provide   : 'PRESENCE_CLIENT',
+    useFactory: clientFactory
+};
 
 @Module({
-    imports  : [
-        MicroserviceClientModule
-    ],
     providers: [
+        CLIENT_PROVIDER,
         PresenceClient
     ],
     exports  : [

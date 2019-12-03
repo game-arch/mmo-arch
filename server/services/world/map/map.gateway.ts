@@ -22,6 +22,7 @@ export class MapGateway {
     }
 
     playerJoin(data: PlayerEnteredMap) {
+        console.log(Object.keys(this.service.sockets));
         if (this.service.characters.hasOwnProperty(data.characterId)) {
             this.service.characters[data.characterId].character.map = data.map;
             this.service.characters[data.characterId].socket.join('map.' + data.map);
