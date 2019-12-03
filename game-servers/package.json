@@ -7,8 +7,7 @@
   "scripts": {
     "postinstall": "cp -n .sample-env .env || echo '.env already exists'",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "node dist/src/main.js",
+    "start": "node dist/main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -18,7 +17,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "fixtures:map": "fixtures src/world/map/fixtures --config src/world/map/typeorm.config.ts --sync --require=ts-node/register --require=tsconfig-paths/register"
+    "fixtures:map": "fixtures services/map/fixtures --config src/world/map/typeorm.config.ts --sync --require=ts-node/register --require=tsconfig-paths/register"
   },
   "dependencies": {
     "@geckos.io/phaser-on-nodejs": "^1.0.4",
@@ -37,6 +36,7 @@
     "amqplib": "^0.5.5",
     "bcryptjs": "^2.4.3",
     "collisions": "^2.0.13",
+    "consul": "^0.36.0",
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.4",
@@ -45,6 +45,7 @@
     "p2": "^0.7.1",
     "passport-jwt": "^4.0.0",
     "phaser": "^3.21.0",
+    "public-ip": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",

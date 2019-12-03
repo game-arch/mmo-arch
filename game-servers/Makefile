@@ -1,28 +1,21 @@
-redis:
-	sudo service redis-server restart
+install:
+	cd game-servers && npm i --ignore-scripts
+	cd game-clients && npm i --ignore-scripts
+	sudo npm i -g pm2
 
 start:
 	pm2 start builders.config.js
-	pm2 start global.config.js
+	pm2 start services.config.js
 
 stop:
 	pm2 stop builders.config.js
-	pm2 stop global.config.js
+	pm2 stop services.config.js
 
 restart:
 	pm2 reload builders.config.js
-	pm2 reload global.config.js
+	pm2 reload services.config.js
 
 delete:
 	pm2 delete builders.config.js
-	pm2 delete global.config.js
+	pm2 delete services.config.js
 
-
-start-world:
-	pm2 start world.config.js
-
-stop-world:
-	pm2 stop world.config.js
-
-delete-world:
-	pm2 delete world.config.js

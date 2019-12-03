@@ -4,7 +4,7 @@ import {FormControl, FormGroup, Validators}                     from "@angular/f
 import {MatDialogRef}                                           from "@angular/material/dialog";
 import {fromEvent}                                              from "rxjs";
 import {takeUntil}                                              from "rxjs/operators";
-import {CreateCharacter, CharacterCreated, CharacterNotCreated} from "../../../../../game-servers/src/global/character/actions";
+import {CreateCharacter, CharacterCreated, CharacterNotCreated} from "../../../../../game-servers/services/character/actions";
 
 @Component({
     selector   : 'character-form',

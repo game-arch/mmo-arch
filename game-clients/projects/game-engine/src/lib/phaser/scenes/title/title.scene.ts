@@ -1,7 +1,7 @@
 import Scene = Phaser.Scene;
 import {Location}  from "@angular/common";
 import Image = Phaser.GameObjects.Image;
-import {BaseScene} from "../../../../../../../../game-servers/src/world/map/maps/base.scene";
+import {BaseScene} from "../../../../../../../../game-servers/services/map/maps/base.scene";
 
 export class TitleScene extends BaseScene {
     background: Image;

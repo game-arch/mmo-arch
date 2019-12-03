@@ -2,18 +2,18 @@ import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {ConnectionManager}                  from "../../../connection/src/lib/connection-manager";
 import {Game}                               from "phaser";
 import {GAME_CONFIG}                        from "./phaser/config";
-import {SceneFactory}                       from "./phaser/scenes/scene-factory.service";
-import {from, fromEvent}                    from "rxjs";
-import {filter, mergeMap, takeUntil}        from "rxjs/operators";
+import {SceneFactory}                from "./phaser/scenes/scene-factory.service";
+import {from, fromEvent}             from "rxjs";
+import {filter, mergeMap, takeUntil} from "rxjs/operators";
 import Scene = Phaser.Scene;
-import {TitleScene}                         from "./phaser/scenes/title/title.scene";
-import {TutorialScene}                      from "./phaser/scenes/tutorial/tutorial.scene";
+import {TitleScene}                  from "./phaser/scenes/title/title.scene";
+import {TutorialScene}               from "./phaser/scenes/tutorial/tutorial.scene";
 import {
     AllPlayers,
     PlayerDirectionalInput,
     PlayerEnteredMap,
     PlayerLeftMap
-}                                           from "../../../../../game-servers/src/world/map/actions";
+}                                    from "../../../../../game-servers/services/map/actions";
 
 @Injectable()
 export class GameEngineService {

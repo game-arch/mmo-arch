@@ -1,4 +1,4 @@
-import {TUTORIAL_CONFIG}  from "../../../../../../../../game-servers/src/world/map/config/tutorial";
+import {TUTORIAL_CONFIG}  from "../../../../../../../../game-servers/services/map/config/tutorial";
 import Scene = Phaser.Scene;
 import {MultiplayerScene} from "../multiplayer.scene";
 import {WorldConnection}  from "../../../../../../connection/src/lib/world-connection";

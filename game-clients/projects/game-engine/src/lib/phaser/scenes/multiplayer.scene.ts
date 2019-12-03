@@ -1,14 +1,14 @@
-import {BaseScene}       from "../../../../../../../game-servers/src/world/map/maps/base.scene";
+import {BaseScene}       from "../../../../../../../game-servers/services/map/maps/base.scene";
 import Scene = Phaser.Scene;
 import {Mob}             from "../../../../../../../game-servers/lib/phaser/mob";
 import {EventEmitter}    from "@angular/core";
-import {MapConfig}       from "../../../../../../../game-servers/src/world/map/config/config";
+import {MapConfig}       from "../../../../../../../game-servers/services/map/config/config";
 import {
     AllPlayers,
     PlayerDirectionalInput,
     PlayerEnteredMap,
     PlayerLeftMap
-}                        from "../../../../../../../game-servers/src/world/map/actions";
+}                        from "../../../../../../../game-servers/services/map/actions";
 import {from}            from "rxjs";
 import {WorldConnection} from "../../../../../connection/src/lib/world-connection";
 

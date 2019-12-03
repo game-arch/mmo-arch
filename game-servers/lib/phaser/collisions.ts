@@ -1,4 +1,4 @@
-import {MapConfig} from "../../src/world/map/config/config";
+import {MapConfig} from "../../services/map/config/config";
 import Scene = Phaser.Scene;
 import Body = Phaser.Physics.Arcade.Body;
 import Shape = Phaser.GameObjects.Shape;
