@@ -68,7 +68,7 @@ must connect to.
     - rewards would come in the form of currency, item ID and quantity, or EXP of some kind
 - Chat (1+ instances)
     - Handles any communication end users may want to send to other users
-    - (Other microservices will be created to handle more long-term communication in the future)
+    - (Other services will be created to handle more long-term communication in the future)
 - Character (1+ instances)
     - Handles character-to-account association
     - To create, sign in, get info on, and sign out of characters
@@ -87,7 +87,7 @@ must connect to.
         - This is due to a restriction to headless Phaser and to help keep operations on different threads when possible
 - Server (1+ instances)
     - Handles all traffic from a client Websocket connection
-    - Authenticates the socket using a JWT provided by the account microservice through the Lobby Server
-    - Verifies character selections against the Character microservice
-    - Propagates events to responsible microservices to handle micro-interactions outside of the current thread if possible
-    - Handles events sent from microservices that are intended to report something to the end-user
+    - Authenticates the socket using a JWT against the Account service
+    - Verifies character selections against the Character service
+    - Propagates events to responsible services to handle micro-interactions outside of the current thread if possible
+    - Handles events sent from services that are intended to report something to the end-user
