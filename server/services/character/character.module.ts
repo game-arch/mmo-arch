@@ -6,6 +6,7 @@ import {TypeOrmModule}            from "@nestjs/typeorm";
 import {Character}                from "./entities/character";
 import {CharacterEmitter}         from "./character.emitter";
 import {MicroserviceClientModule} from "../../lib/microservice-client/microservice-client.module";
+import {WorldConstants}           from "../../lib/constants/world.constants";
 
 @Module({
     imports    : [
@@ -14,7 +15,7 @@ import {MicroserviceClientModule} from "../../lib/microservice-client/microservi
         TypeOrmModule.forRoot({
             ...DB_CONFIG,
             type    : 'mysql',
-            database: 'character',
+            database: WorldConstants.DB_NAME,
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],

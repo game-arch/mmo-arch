@@ -7,6 +7,7 @@ import {Inventory}         from "./entities/inventory";
 import {InventoryItem}     from "./entities/inventory-item";
 import {Item}              from "./entities/item";
 import {ItemConfiguration} from "./entities/item-configuration";
+import {WorldConstants}    from "../../lib/constants/world.constants";
 
 @Module({
     imports    : [
@@ -14,7 +15,7 @@ import {ItemConfiguration} from "./entities/item-configuration";
         TypeOrmModule.forRoot({
             ...DB_CONFIG,
             type    : 'mysql',
-            database: 'item',
+            database: WorldConstants.DB_NAME,
             entities: [__dirname + '/entities/*{.js,.ts}']
         })
     ],

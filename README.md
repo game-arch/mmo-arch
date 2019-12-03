@@ -48,36 +48,35 @@ must connect to.
 ### Global Services
 (*) - Can be changed to be per world, but it is global for now until that level of customization is more important
 
-- Lobby
+- Lobby (1+ instances)
     - Entry point for a user to discover world servers
     - Login/Register is exposed here
-- Presence
+- Presence (1 instance should only be needed)
     - World Server Discovery
     - When a world comes online or goes offline, the presence microservice will be updated
-- Account
+- Account (1+ instances)
     - To register, login, and verify a user has access to the system
-- Character *
-    - Handles character-to-account association
-    - To create, sign in, and sign out of characters per world
-- Chat *
-    - Handles any communication end users may want to send to other users
-    - (Other microservices will be created to handle more long-term communication in the future)
-- Item *
-    - Handles items that would be accessible to a world and a character's inventory
-    - If an item does not exist here, it should not be respected anywhere
-    - Items can be associated with a quest once mechanics are built for it
-    - Currently global, so world instances do not have to manage this
-- Quest *
-    - Handles quest requirements and rewards
-    - requirements could be of a multitude of requirement types once defined
-    - rewards would come in the form of currency, item ID and quantity, or EXP of some kind
 
 ### World Instance Services
 
-- Commerce (any number of instances can be run)
+- Item (1+ instances)
+    - Handles items that would be accessible to a world and a character's inventory
+    - If an item does not exist here, it should not be respected anywhere
+    - Items can be associated with a quest once mechanics are built for it
+- Quest (1+ instances)
+    - Handles quest requirements and rewards
+    - requirements could be of a multitude of requirement types once defined
+    - rewards would come in the form of currency, item ID and quantity, or EXP of some kind
+- Chat (1+ instances)
+    - Handles any communication end users may want to send to other users
+    - (Other microservices will be created to handle more long-term communication in the future)
+- Character (1+ instances)
+    - Handles character-to-account association
+    - To create, sign in, get info on, and sign out of characters
+- Commerce (1+ instances)
     - Handles trade interactions
     - Handles marketplace/auction-like interactions
-- Map (single instance per map)
+- Map (1 instance per map)
     - Handles NPC position, movement, and respawn
     - Handles Resource position and respawn
     - Handles movement actions using Phaser Arcade Physics
@@ -87,7 +86,7 @@ must connect to.
     - A single microservice instance is used per map.
         - If you need 10 maps, you need 10 instances with different configurations per map
         - This is due to a restriction to headless Phaser and to help keep operations on different threads when possible
-- Server (running in cluster mode to scale vertically)
+- Server (1+ instances)
     - Handles all traffic from a client Websocket connection
     - Authenticates the socket using a JWT provided by the account microservice through the Lobby Server
     - Verifies character selections against the Character microservice

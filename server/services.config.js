@@ -16,11 +16,6 @@ module.exports = {
             watch: ["dist/services/presence", "dist/lib"]
         },
         {
-            name: 'global-character',
-            script: 'dist/services/character/main.js',
-            watch: ["dist/services/character", "dist/lib"]
-        },
-        {
             name: 'global-item',
             script: 'dist/services/item/main.js',
             watch: ["dist/services/item", "dist/lib"]
@@ -34,6 +29,15 @@ module.exports = {
             name: 'global-chat',
             script: 'dist/services/chat/main.js',
             watch: ["dist/services/chat", "dist/lib"]
+        },
+        {
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-character',
+            script: 'dist/services/character/main.js',
+            watch: ["dist/services/character", "dist/lib"],
+            env: {
+                WORLD_CONSTANT: process.env.WORLD_CONSTANT,
+                WORLD_NAME: process.env.WORLD_NAME
+            }
         },
         {
             instances: 2,
