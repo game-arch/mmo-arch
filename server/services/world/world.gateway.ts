@@ -80,7 +80,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     async onApplicationShutdown(signal?: string) {
         let connection = await createConnection({
             type    : 'sqlite',
-            database: WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db',
+            database: path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'),
             logging : false
         });
         let players    = await connection.query('select characterId from player');
