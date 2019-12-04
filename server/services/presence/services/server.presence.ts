@@ -1,15 +1,19 @@
-import {HttpService, Injectable, Logger, OnApplicationBootstrap} from "@nestjs/common";
-import {InjectRepository}                                        from "@nestjs/typeorm";
-import {World}                                                   from "../entities/world";
-import {Repository}                                              from "typeorm";
-import {PresenceEmitter}                                         from "../emitter/presence.emitter";
-import {Subject}                                                 from "rxjs";
-import {mergeMap, throttleTime}                                  from "rxjs/operators";
-import {async}                                                   from "rxjs/internal/scheduler/async";
-import {fromPromise}                                             from "rxjs/internal-compatibility";
+import {HttpService, Injectable, Logger, OnApplicationBootstrap, OnApplicationShutdown} from "@nestjs/common";
+import {InjectRepository}                                                               from "@nestjs/typeorm";
+import {World}                                                                          from "../entities/world";
+import {Repository}                                                                     from "typeorm";
+import {PresenceEmitter}                                                                from "../emitter/presence.emitter";
+import {Subject}                                                                        from "rxjs";
+import {mergeMap, throttleTime}                                                         from "rxjs/operators";
+import {async}                                                                          from "rxjs/internal/scheduler/async";
+import {fromPromise}                                                                    from "rxjs/internal-compatibility";
+import * as fs                                                                          from "fs";
+import * as path                                                                        from "path";
+import {environment}                                                                    from "../../../lib/config/environment";
+import {WorldConstants}                                                                 from "../../../lib/constants/world.constants";
 
 @Injectable()
-export class ServerPresence implements OnApplicationBootstrap {
+export class ServerPresence implements OnApplicationBootstrap, OnApplicationShutdown {
 
     sendServers = new Subject();
 
@@ -30,7 +34,7 @@ export class ServerPresence implements OnApplicationBootstrap {
                     server        = await this.repo.findOne({host, constant, port, instanceId: instanceId + 1});
                     server.status = 'online';
                 } catch (e) {
-                    let count    = await this.repo.query('select distinct host, port, name from presence.world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
+                    let count    = await this.repo.query('select distinct host, port, name from world where name = ? and NOT (host = ? AND port = ?)', [name, host, port]);
                     server       = this.repo.create(new World(host, port, instanceId + 1, constant, name));
                     server.index = count.length + 1;
                 }
@@ -78,6 +82,10 @@ export class ServerPresence implements OnApplicationBootstrap {
             .subscribe((servers) => {
                 this.emitter.sendServers(servers);
             })
+    }
+
+    onApplicationShutdown() {
+        fs.unlinkSync(path.resolve(environment.dbRoot, 'presence.db'));
     }
 
     getHost(host: string) {

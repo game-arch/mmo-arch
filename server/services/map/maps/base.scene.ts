@@ -1,11 +1,9 @@
-import {MapConfig}              from "../config/config";
-import {from, Subject}          from "rxjs";
-import {map, toArray}           from "rxjs/operators";
-import {PlayerDirectionalInput} from "../actions";
+import {MapConfig}      from "../config/config";
+import {Subject}        from "rxjs";
 import Scene = Phaser.Scene;
-import {loadCollisions}         from "../../../lib/phaser/collisions";
+import {loadCollisions} from "../../../lib/phaser/collisions";
 import Group = Phaser.Physics.Arcade.Group;
-import {Mob}                    from "../../../lib/phaser/mob";
+import {Mob}            from "../../../lib/phaser/mob";
 
 
 export class BaseScene extends Scene implements Scene {

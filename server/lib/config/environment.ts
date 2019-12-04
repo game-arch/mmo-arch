@@ -5,7 +5,7 @@ import '../scripts/load-env';
 import * as path     from "path";
 
 export const environment = {
-    root        : path.resolve(__dirname, '../../../'),
+    dbRoot      : path.resolve(__dirname, '../../../db'),
     microservice: <NatsOptions>{
         transport: Transport.NATS,
         options  : {

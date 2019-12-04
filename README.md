@@ -19,6 +19,8 @@ constructing multiplayer games.
     - https://docs.nats.io/
     - As the microservice communication method
     - Currently requires little-to-no knowledge of the technology outside of setting up credentials
+    - Using this as the communication method eliminates the need to use Socket.IO-redis
+    - Peer to Peer communication goes through the appropriate microservice (chat, map movements, etc)
 - Phaser 
     - http://phaser.io/learn
     - Running on server for physics parity and validation ONLY
@@ -28,10 +30,11 @@ constructing multiplayer games.
     - https://material.angular.io/components/categories
     - Using Angular Material for UI construction
     - Using Dependency Injection to aide in constructing larger scale projects
-- NGXS
-    - https://www.ngxs.io/
-    - State Management system for Angular
-    - Responsible for Authentication State only at this time
+- SQLite
+    - Used to persist data on a microservice.
+    - Originally was using MySQL but that may be used down the road for data backups only.
+    - SQLite provides the data architecture that MySQL provides without the network overhead
+    - DB files are stored under `server/db` for easy tracking and management
 - PM2
     - https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
     - Multi-process orchestration (not dockerized at the moment)

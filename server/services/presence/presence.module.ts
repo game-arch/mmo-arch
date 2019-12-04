@@ -1,10 +1,11 @@
 import {HttpModule, Logger, Module} from '@nestjs/common';
 import {PresenceController}         from "./presence.controller";
-import {DB_CONFIG}                  from "../../lib/config/db.config";
 import {World}                      from "./entities/world";
 import {TypeOrmModule}              from "@nestjs/typeorm";
 import {ServerPresence}             from "./services/server.presence";
 import {PresenceEmitterModule}      from "./emitter/presence-emitter.module";
+import {environment}                from "../../lib/config/environment";
+import * as path                    from "path";
 
 @Module({
     imports    : [
@@ -12,10 +13,11 @@ import {PresenceEmitterModule}      from "./emitter/presence-emitter.module";
         PresenceEmitterModule,
         TypeOrmModule.forFeature([World]),
         TypeOrmModule.forRoot({
-            ...DB_CONFIG,
-            type    : 'mysql',
-            database: 'presence',
-            entities: [__dirname + '/entities/*{.js,.ts}']
+            type       : 'sqlite',
+            database   : path.resolve(environment.dbRoot, 'presence.db'),
+            logging    : false,
+            synchronize: true,
+            entities   : [__dirname + '/entities/*{.ts,.js}'],
         })
     ],
     providers  : [Logger, ServerPresence],

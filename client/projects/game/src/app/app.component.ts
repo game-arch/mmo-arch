@@ -1,10 +1,10 @@
 import {Component}         from '@angular/core';
 import {Observable}        from "rxjs";
-import {AuthModel}         from "../../../authentication/src/lib/state/auth.model";
+import {AuthModel}         from "../lib/authentication/state/auth.model";
 import {Select, Store}     from "@ngxs/store";
-import {AuthState}         from "../../../authentication/src/lib/state/auth.state";
-import {ConnectionManager} from "../../../connection/src/lib/connection-manager";
-import {SetToken}          from "../../../authentication/src/lib/state/auth.actions";
+import {AuthState}         from "../lib/authentication/state/auth.state";
+import {ConnectionManager} from "../lib/connection/connection-manager";
+import {SetToken}          from "../lib/authentication/state/auth.actions";
 
 @Component({
     selector   : 'app-root',

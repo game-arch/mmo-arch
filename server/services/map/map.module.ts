@@ -14,6 +14,8 @@ import {MapEmitter}            from "./map.emitter";
 import {CharacterClientModule} from "../character/client/character-client.module";
 import {MapTransition}         from "./entities/map-transition";
 import {MapConstants}          from "./constants";
+import * as path               from "path";
+import {environment}           from "../../lib/config/environment";
 
 @Module({
     imports    : [
@@ -22,7 +24,7 @@ import {MapConstants}          from "./constants";
         TypeOrmModule.forFeature([MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
         TypeOrmModule.forRoot({
             type       : 'sqlite',
-            database   : WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '_' + MapConstants.MAP + '.db',
+            database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_' + MapConstants.MAP + '.db'),
             logging    : false,
             synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}'],

@@ -87,6 +87,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         this.character.allCharactersOffline(players.map(player => (new CharacterOffline(player.characterId)))).then();
         this.presence.serverOffline(this.serverId).then();
         await connection.close();
-        fs.unlinkSync(path.resolve(environment.root, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'));
+        fs.unlinkSync(path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'));
     }
 }

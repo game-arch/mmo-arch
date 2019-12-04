@@ -4,14 +4,14 @@ import {NgModule}      from '@angular/core';
 import {AppComponent}             from './app.component';
 import {BrowserAnimationsModule}  from '@angular/platform-browser/animations';
 import {HttpClientModule}         from "@angular/common/http";
-import {AuthenticationModule}     from "../../../authentication/src/lib/authentication.module";
+import {AuthenticationModule}     from "../lib/authentication/authentication.module";
 import {NgxsModule}               from "@ngxs/store";
 import {NgxsStoragePluginModule}  from "@ngxs/storage-plugin";
-import {ServerSelectionModule}    from "../../../server-selection/src/lib/server-selection.module";
-import {CharacterSelectionModule} from "../../../character-selection/src/lib/character-selection.module";
-import {ConnectionModule}         from "../../../connection/src/lib/connection.module";
+import {ServerSelectionModule}    from "../lib/server-selection/server-selection.module";
+import {CharacterSelectionModule} from "../lib/character-selection/character-selection.module";
+import {ConnectionModule}         from "../lib/connection/connection.module";
 import {MatButtonModule}          from "@angular/material/button";
-import {GameEngineModule}         from "../../../game-engine/src/lib/game-engine.module";
+import {GameEngineModule}         from "../lib/engine/game-engine.module";
 import {RouterModule}             from "@angular/router";
 
 @NgModule({
