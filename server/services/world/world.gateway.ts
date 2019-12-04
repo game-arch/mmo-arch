@@ -17,6 +17,8 @@ import {RedisNamespace}                                   from "./redis.namespac
 import {InjectRepository}                                 from "@nestjs/typeorm";
 import {Player}                                           from "./entities/player";
 import {createConnection, Repository}                     from "typeorm";
+import * as fs                                            from "fs";
+import * as path                                          from "path";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -83,9 +85,9 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             logging : false
         });
         let players    = await connection.query('select characterId from player');
-        await connection.query('DELETE FROM player');
         this.character.allCharactersOffline(players.map(player => (new CharacterOffline(player.characterId)))).then();
         this.presence.serverOffline(this.serverId).then();
         await connection.close();
+        fs.unlinkSync(path.resolve(environment.root, 'database.db' + process.env.NODE_APP_INSTANCE));
     }
 }

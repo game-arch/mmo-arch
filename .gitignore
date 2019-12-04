@@ -10,7 +10,7 @@ bazel-out
 chrome-profiler-events*.json
 speed-measure-plugin*.json
 
-
+database.*
 .env
 *.rdb
 # Logs

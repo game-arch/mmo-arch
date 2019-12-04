@@ -2,8 +2,10 @@ import {Transport}   from "@nestjs/common/enums/transport.enum";
 import {PORTS}       from "../constants/ports.constants";
 import {NatsOptions} from "@nestjs/microservices";
 import '../scripts/load-env';
+import * as path     from "path";
 
 export const environment = {
+    root        : path.resolve(__dirname, '../../../'),
     microservice: <NatsOptions>{
         transport: Transport.NATS,
         options  : {
@@ -12,7 +14,7 @@ export const environment = {
             pass: process.env.NATS_PASSWORD || ''
         }
     },
-    redis: {
+    redis       : {
         host: process.env.REDIS_HOST,
         port: parseInt(process.env.REDIS_PORT)
     },

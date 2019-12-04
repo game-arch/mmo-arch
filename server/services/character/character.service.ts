@@ -50,9 +50,7 @@ export class CharacterService {
         if (character) {
             character.status = 'online';
             character.socketId = data.socketId;
-            console.log('save character');
             await this.repo.save(character);
-            console.log('send loggedIn event');
             this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name);
         }
     }
