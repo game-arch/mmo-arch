@@ -1,6 +1,6 @@
 import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 
-@Unique('transition', ['map', 'name'])
+@Unique('mapTransition', ['map', 'name'])
 @Entity()
 export class MapTransition {
     @PrimaryGeneratedColumn()
@@ -11,8 +11,8 @@ export class MapTransition {
     destinationMap: string;
     @Column()
     name: string;
-    @Column()
+    @Column('int')
     destinationX: number;
-    @Column()
+    @Column('int')
     destinationY: number;
 }

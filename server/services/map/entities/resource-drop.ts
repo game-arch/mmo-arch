@@ -1,7 +1,6 @@
 import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {Resource}                                                         from "./resource";
 
-@Index('item', ['itemId'])
 @Unique('resourceItem', ['resource', 'itemId'])
 @Entity()
 export class ResourceDrop {

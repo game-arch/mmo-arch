@@ -1,8 +1,8 @@
 import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from "typeorm";
 
 @Entity()
-@Index('mapId', ['mapId'])
-@Index('location', ['mapId', 'x', 'y'])
+@Index('resourceMap', ['map'])
+@Index('resourceLocation', ['map', 'x', 'y'])
 export class ResourceLocation {
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,9 +10,9 @@ export class ResourceLocation {
     @Column()
     resourceId: number;
     @Column()
-    mapId: number;
-    @Column()
+    map: string;
+    @Column('int')
     x: number;
-    @Column()
+    @Column('int')
     y: number;
 }

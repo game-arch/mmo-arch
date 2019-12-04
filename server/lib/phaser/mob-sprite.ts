@@ -31,6 +31,7 @@ export class MobSprite extends Sprite {
     }
 
     preUpdate(...args: any[]) {
+        this.setPosition(Math.round(this.x), Math.round(this.y));
         if (!this.moving) {
             return;
         }

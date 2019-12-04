@@ -1,10 +1,8 @@
-import {Module}                   from '@nestjs/common';
-import {MapController}            from './map.controller';
-import {MapService}               from './map.service';
-import {DB_CONFIG}                from "../../lib/config/db.config";
-import {TypeOrmModule}            from "@nestjs/typeorm";
+import {Module}                from '@nestjs/common';
+import {MapController}         from './map.controller';
+import {MapService}            from './map.service';
+import {TypeOrmModule}         from "@nestjs/typeorm";
 import {Player}                from "./entities/player";
-import {Map}                   from "./entities/map";
 import {Resource}              from "./entities/resource";
 import {ResourceDrop}          from "./entities/resource-drop";
 import {NpcLocation}           from "./entities/npc-location";
@@ -15,17 +13,19 @@ import {WorldClientModule}     from "../../lib/world-client/world-client.module"
 import {MapEmitter}            from "./map.emitter";
 import {CharacterClientModule} from "../character/client/character-client.module";
 import {MapTransition}         from "./entities/map-transition";
+import {MapConstants}          from "./constants";
 
 @Module({
     imports    : [
         WorldClientModule,
         CharacterClientModule,
-        TypeOrmModule.forFeature([Map, MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
+        TypeOrmModule.forFeature([MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
         TypeOrmModule.forRoot({
-            ...DB_CONFIG,
-            type    : 'mysql',
-            database: WorldConstants.DB_NAME,
-            entities: [__dirname + '/entities/*{.js,.ts}']
+            type       : 'sqlite',
+            database   : WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '_' + MapConstants.MAP + '.db',
+            logging    : false,
+            synchronize: true,
+            entities   : [__dirname + '/entities/*{.ts,.js}'],
         })
     ],
     controllers: [MapController],

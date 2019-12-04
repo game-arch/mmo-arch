@@ -2,9 +2,9 @@ import {Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, Unique} from "
 import {ResourceDrop}                                                     from "./resource-drop";
 
 @Entity()
-@Index('type', ['type'])
-@Unique('constant', ['constant'])
-@Unique('name', ['name'])
+@Index('resourceType', ['type'])
+@Unique('resourceConstant', ['constant'])
+@Unique('resourceName', ['name'])
 export class Resource {
     @PrimaryGeneratedColumn()
     id: number;

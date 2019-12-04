@@ -18,11 +18,11 @@ export class Physics {
     }
 
     static getYModifier(value: Directions) {
-        return (value.left || value.right) ? 0.75 : 1;
+        return (value.left || value.right) ? 0.8 : 1;
     }
 
     static getXModifier(value: Directions) {
-        return (value.up || value.down) ? 0.75 : 1;
+        return (value.up || value.down) ? 0.8 : 1;
     }
 
     static getYAxis(value: Directions) {

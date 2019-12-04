@@ -2,40 +2,34 @@ import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {Mob}                                                   from "../../../lib/phaser/mob";
 
 @Entity()
-@Index('map', ['map'])
-@Index('location', ['map', 'x', 'y'])
-@Unique('character', ['characterId'])
+@Index('playerMap', ['map'])
+@Index('playerLocation', ['map', 'x', 'y'])
+@Unique('playerCharacter', ['characterId'])
 export class Player extends Mob {
 
     _x: number;
     _y: number;
-    @Column()
+    @Column('int')
     get y(): number {
-        if (this.sprite) {
-            return this.sprite.body.position.y;
-        }
-        return this._y;
+        return Math.floor(this.sprite ? this.sprite.y : this._y);
     }
 
     set y(value: number) {
         this._y = value;
         if (this.sprite) {
-            this.sprite.body.position.y = value;
+            this.sprite.y = value;
         }
     }
 
-    @Column()
+    @Column('int')
     get x(): number {
-        if (this.sprite) {
-            return this.sprite.body.position.x;
-        }
-        return this._x;
+        return Math.floor(this.sprite ? this.sprite.x : this._x);
     }
 
     set x(value: number) {
         this._x = value;
         if (this.sprite) {
-            this.sprite.body.position.x = value;
+            this.sprite.x = value;
         }
     }
 
@@ -50,11 +44,11 @@ export class Player extends Mob {
 
     asPayload() {
         return {
-            id: this.characterId,
-            name       : this.name,
-            x          : this.x,
-            y          : this.y,
-            moving     : this.sprite.moving
+            id    : this.characterId,
+            name  : this.name,
+            x     : this.x,
+            y     : this.y,
+            moving: this.sprite.moving
         }
     }
 }

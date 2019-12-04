@@ -6,7 +6,6 @@ import {loadCollisions}               from "../../../lib/phaser/collisions";
 import {BaseScene}                    from "./base.scene";
 import Scene = Phaser.Scene;
 import {Mob}                          from "../../../lib/phaser/mob";
-import {PlayerDirectionalInput}       from "../actions";
 import {async}                        from "rxjs/internal/scheduler/async";
 import {Directions}                   from "../../../lib/phaser/directions";
 

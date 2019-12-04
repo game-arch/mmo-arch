@@ -20,6 +20,7 @@ async function bootstrap() {
         }
     });
     app.useLogger(logger);
+    await app.enableShutdownHooks();
     await app.listen(() => {
         logger.log(WorldConstants.NAME + " Map Microservice is listening ...");
     });

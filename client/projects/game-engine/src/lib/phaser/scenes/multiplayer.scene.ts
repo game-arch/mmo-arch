@@ -90,7 +90,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         if (!player) {
             player = this.createPlayer(data);
         }
-        player.sprite.setPosition(data.x + 16, data.y + 16);
+        player.sprite.setPosition(data.x, data.y);
         if (data.moving) {
             player.moving = data.moving;
         }
