@@ -1,15 +1,16 @@
 import {ConnectionOptions, createConnection} from "typeorm";
 import {environment}                         from "./environment";
 
-export const DB_CONFIG: ConnectionOptions = {
-    type               : 'mysql',
-    host               : environment.mysql.host,
-    port               : environment.mysql.port,
-    username           : environment.mysql.username,
-    password           : environment.mysql.password,
-    database           : 'database',
-    synchronize        : true,
-    insecureAuth       : true
+export const DB_CONFIG = {
+    type        : 'mysql',
+    host        : environment.mysql.host,
+    port        : environment.mysql.port,
+    username    : environment.mysql.username,
+    password    : environment.mysql.password,
+    database    : 'database',
+    synchronize : true,
+    insecureAuth: true,
+    keepAlive   : true
 };
 
 
