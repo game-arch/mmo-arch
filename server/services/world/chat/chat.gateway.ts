@@ -15,11 +15,10 @@ import {WorldService}                                        from "../world.serv
 import {ClientProxy}                                         from "@nestjs/microservices";
 import {Inject}                                              from "@nestjs/common";
 import {WORLD_PREFIX}                                        from "../world.prefix";
-import {RedisNamespace}                                      from "../redis.namespace";
-import {RedisSocket}                                         from "../redis.socket";
 import {InjectRepository}                                    from "@nestjs/typeorm";
 import {Player}                                              from "../entities/player";
 import {Repository}                                          from "typeorm";
+import {Namespace, Socket}                                   from "socket.io";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -28,7 +27,7 @@ import {Repository}                                          from "typeorm";
 })
 export class ChatGateway {
     @WebSocketServer()
-    server: RedisNamespace;
+    server: Namespace;
 
 
     constructor(
@@ -42,7 +41,7 @@ export class ChatGateway {
     }
 
     @SubscribeMessage(WORLD_PREFIX + LocalMessage.event)
-    async localMessage(client: RedisSocket, message: string) {
+    async localMessage(client: Socket, message: string) {
         let player = await this.players.findOne({socketId: client.id});
         if (player && player.characterId !== null) {
             let map = this.world.getMapOf(client);
@@ -54,7 +53,7 @@ export class ChatGateway {
     }
 
     @SubscribeMessage(WORLD_PREFIX + ZoneMessage.event)
-    async zoneMessage(client: RedisSocket, message: string) {
+    async zoneMessage(client: Socket, message: string) {
         let player = await this.players.findOne({socketId: client.id});
         if (player && player.characterId !== null) {
             let map = this.world.getMapOf(client);
@@ -65,7 +64,7 @@ export class ChatGateway {
     }
 
     @SubscribeMessage(WORLD_PREFIX + RegionMessage.event)
-    async regionMessage(client: RedisSocket, message: string) {
+    async regionMessage(client: Socket, message: string) {
         let player = await this.players.findOne({socketId: client.id});
         if (player && player.characterId !== null) {
             let map = this.world.getMapOf(client);
@@ -76,7 +75,7 @@ export class ChatGateway {
     }
 
     @SubscribeMessage(WORLD_PREFIX + TradeMessage.event)
-    async tradeMessage(client: RedisSocket, message: string) {
+    async tradeMessage(client: Socket, message: string) {
         let player = await this.players.findOne({socketId: client.id});
         if (player && player.characterId !== null) {
             let map = this.world.getMapOf(client);
@@ -87,7 +86,7 @@ export class ChatGateway {
     }
 
     @SubscribeMessage(WORLD_PREFIX + GlobalMessage.event)
-    async globalMessage(client: RedisSocket, message: string) {
+    async globalMessage(client: Socket, message: string) {
         let player = await this.players.findOne({socketId: client.id});
         if (player && player.characterId !== null) {
             let map = this.world.getMapOf(client);
@@ -98,7 +97,7 @@ export class ChatGateway {
     }
 
     @SubscribeMessage(WORLD_PREFIX + PrivateMessage.event)
-    async privateMessage(client: RedisSocket, data: { to: GameCharacter, message: string }) {
+    async privateMessage(client: Socket, data: { to: GameCharacter, message: string }) {
         let player = await this.players.findOne({socketId: client.id});
         if (player && player.characterId !== null) {
             let map = this.world.getMapOf(client);

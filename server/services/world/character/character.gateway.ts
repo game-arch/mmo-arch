@@ -13,10 +13,7 @@ import {
     CharacterOffline,
     CharacterOnline, GetCharacters, CharacterCreated, CharacterNotCreated
 }                                  from "../../character/actions";
-import {from}                      from "rxjs";
 import {Character}                 from "../../character/entities/character";
-import {RedisNamespace}            from "../redis.namespace";
-import {RedisSocket}               from "../redis.socket";
 import {InjectRepository}          from "@nestjs/typeorm";
 import {Player}                    from "../entities/player";
 import {Repository}                from "typeorm";
@@ -28,7 +25,7 @@ import {Repository}                from "typeorm";
 })
 export class CharacterGateway {
     @WebSocketServer()
-    server: RedisNamespace;
+    server: Namespace;
 
     constructor(
         @InjectRepository(Player)
@@ -48,7 +45,7 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CreateCharacter.event)
-    async createCharacter(client: RedisSocket, data: { name: string, gender: 'male' | 'female' }) {
+    async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
         try {
             let player = await this.players.findOne({socketId: client.id});
             if (player) {
@@ -68,7 +65,7 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CharacterOnline.event)
-    async characterJoined(client: RedisSocket, character: { id: number, name: string }) {
+    async characterJoined(client: Socket, character: { id: number, name: string }) {
         try {
             await this.service.storeCharacter(client, character);
             return {status: 'success'};
@@ -79,7 +76,7 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CharacterOffline.event)
-    async characterLeft(client: RedisSocket) {
+    async characterLeft(client: Socket) {
         try {
             await this.service.removeCharacter(client);
             return {status: 'success'};

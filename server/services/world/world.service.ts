@@ -4,7 +4,6 @@ import {Socket}           from "socket.io";
 import {CharacterClient}  from "../character/client/character.client";
 import {WorldConstants}   from "../../lib/constants/world.constants";
 import {MapClient}        from "../map/client/map.client";
-import {RedisSocket}      from "./redis.socket";
 import {Repository}       from "typeorm";
 import {Player}           from "./entities/player";
 import {InjectRepository} from "@nestjs/typeorm";
@@ -22,19 +21,19 @@ export class WorldService {
     ) {
     }
 
-    async storeUser(client: RedisSocket, accountId: number) {
+    async storeUser(client: Socket, accountId: number) {
         let player       = this.players.create();
         player.accountId = accountId;
         player.socketId  = client.id;
         await this.players.save(player);
     }
 
-    async removePlayer(client: RedisSocket) {
+    async removePlayer(client: Socket) {
         await this.removeCharacter(client);
         await this.players.delete({socketId: client.id});
     }
 
-    async storeCharacter(client: RedisSocket, character: { id: number, name: string }) {
+    async storeCharacter(client: Socket, character: { id: number, name: string }) {
         let player = await this.players.findOne({socketId: client.id});
         if (player) {
             await this.validateCharacterLogin(player, character.id);
@@ -60,7 +59,7 @@ export class WorldService {
         }
     }
 
-    async removeCharacter(client: RedisSocket) {
+    async removeCharacter(client: Socket) {
         let player = await this.players.findOne({socketId: client.id});
         if (player) {
             await this.character.characterOffline(player.characterId);
@@ -72,7 +71,7 @@ export class WorldService {
         }
     }
 
-    async authenticate(socket: RedisSocket) {
+    async authenticate(socket: Socket) {
         try {
             let account: { id: number, email: string } = await this.account.getAccount(socket.handshake.query.token, true);
             return account;
@@ -89,7 +88,7 @@ export class WorldService {
         return await this.character.create(accountId, WorldConstants.CONSTANT, name, gender);
     }
 
-    async playerDirectionalInput(client: RedisSocket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+    async playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
         let player = await this.players.findOne({socketId: client.id});
         if (player && player.characterId !== null) {
             let map = this.getMapOf(client);
@@ -97,7 +96,7 @@ export class WorldService {
         }
     }
 
-    getMapOf(client: RedisSocket) {
+    getMapOf(client: Socket) {
         let mapRoom = Object.keys(client.rooms).filter(name => name.indexOf('map.') === 0)[0] || '';
         return mapRoom.substr(4, mapRoom.length);
     }

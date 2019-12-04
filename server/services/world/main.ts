@@ -3,7 +3,6 @@ import {WorldModule}    from './world.module';
 import {environment}    from "../../lib/config/environment";
 import {Logger}         from "@nestjs/common";
 import {WorldConstants} from "../../lib/constants/world.constants";
-import {RedisIoAdapter} from "./redis-io-adapter";
 
 const logger = new Logger(WorldConstants.NAME + ' Server');
 

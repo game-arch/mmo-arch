@@ -2,12 +2,10 @@ import {SubscribeMessage, WebSocketGateway, WebSocketServer}                 fro
 import {AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerDirectionalInput} from "../../map/actions";
 import {WorldService}                                                        from "../world.service";
 import {WorldConstants}                                                      from "../../../lib/constants/world.constants";
-import {RedisNamespace}   from "../redis.namespace";
-import {RedisSocket}      from "../redis.socket";
-import {Repository}       from "typeorm";
-import {Player}           from "../entities/player";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Namespace}        from "socket.io";
+import {Repository}                                                          from "typeorm";
+import {Player}                                                              from "../entities/player";
+import {InjectRepository}                                                    from "@nestjs/typeorm";
+import {Namespace, Socket}                                                   from "socket.io";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -47,7 +45,7 @@ export class MapGateway {
     }
 
     @SubscribeMessage(PlayerDirectionalInput.event)
-    async playerDirectionalInput(client: RedisSocket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+    async playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
         await this.service.playerDirectionalInput(client, data);
     }
 }

@@ -9,16 +9,15 @@ import {WorldService}                                     from "./world.service"
 import {ConflictException, Logger, OnApplicationShutdown} from "@nestjs/common";
 import {PresenceClient}                                   from "../presence/client/presence.client";
 import {environment}                                      from "../../lib/config/environment";
-import {WorldConstants}                                   from "../../lib/constants/world.constants";
-import {CharacterClient}                                  from "../character/client/character.client";
-import {CharacterOffline, GetCharacters}                  from "../character/actions";
-import {RedisSocket}                                      from "./redis.socket";
-import {RedisNamespace}                                   from "./redis.namespace";
-import {InjectRepository}                                 from "@nestjs/typeorm";
-import {Player}                                           from "./entities/player";
-import {createConnection, Repository}                     from "typeorm";
-import * as fs                                            from "fs";
-import * as path                                          from "path";
+import {WorldConstants}                  from "../../lib/constants/world.constants";
+import {CharacterClient}                 from "../character/client/character.client";
+import {CharacterOffline, GetCharacters} from "../character/actions";
+import {InjectRepository}                from "@nestjs/typeorm";
+import {Player}                          from "./entities/player";
+import {createConnection, Repository}    from "typeorm";
+import * as fs                           from "fs";
+import * as path                         from "path";
+import {Namespace, Socket}               from "socket.io";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -27,7 +26,7 @@ import * as path                                          from "path";
 })
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()
-    server: RedisNamespace;
+    server: Namespace;
     serverId = null;
 
     constructor(
@@ -41,7 +40,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     }
 
-    async afterInit(server: RedisNamespace) {
+    async afterInit(server: Namespace) {
         this.serverId = await this.presence.register(
             environment.servers.world.host,
             environment.servers.world.port,
@@ -51,7 +50,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         );
     }
 
-    async handleConnection(client: RedisSocket, ...args: any[]) {
+    async handleConnection(client: Socket, ...args: any[]) {
         try {
             if ((await this.players.count()) >= 100) {
                 throw new Error("Server Limit Reached");
@@ -70,7 +69,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         }
     }
 
-    async handleDisconnect(client: RedisSocket) {
+    async handleDisconnect(client: Socket) {
         try {
             await this.service.removePlayer(client);
         } catch (e) {
