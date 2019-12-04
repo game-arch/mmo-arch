@@ -27,22 +27,16 @@ export class CharacterClient {
         return await this.client.send(WORLD_PREFIX + GetCharacters.event, new GetCharacters(accountId, world)).pipe(first()).toPromise();
     }
 
-    characterOnline(id: number, socketId:string) {
-        this.client.send(WORLD_PREFIX + CharacterOnline.event, new CharacterOnline(id, socketId)).subscribe(response => {
-            console.log(response);
-        });
+    async characterOnline(id: number, socketId:string) {
+        this.client.send(WORLD_PREFIX + CharacterOnline.event, new CharacterOnline(id, socketId)).subscribe();
     }
 
-    characterOffline(id: number) {
-        this.client.send(WORLD_PREFIX + CharacterOffline.event, new CharacterOffline(id)).subscribe(response => {
-            console.log('response', response);
-        });
+    async characterOffline(id: number) {
+        this.client.send(WORLD_PREFIX + CharacterOffline.event, new CharacterOffline(id)).subscribe();
     }
 
-    allCharactersOffline(data: CharacterOffline[]) {
-        this.client.send(WORLD_PREFIX + AllCharactersOffline.event, new AllCharactersOffline(data)).subscribe(response => {
-            console.log('response', response);
-        });
+    async allCharactersOffline(data: CharacterOffline[]) {
+         this.client.send(WORLD_PREFIX + AllCharactersOffline.event, new AllCharactersOffline(data)).subscribe();
     }
 
     async getCharacterName(id: number) {

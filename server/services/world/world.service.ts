@@ -1,60 +1,55 @@
-import {Injectable}      from '@nestjs/common';
-import {AccountClient}   from "../account/client/account.client";
-import {Socket}          from "socket.io";
-import {CharacterClient} from "../character/client/character.client";
-import {WorldConstants}  from "../../lib/constants/world.constants";
-import {MapClient}       from "../map/client/map.client";
-import {RedisSocket}     from "./redis.socket";
+import {Injectable}       from '@nestjs/common';
+import {AccountClient}    from "../account/client/account.client";
+import {Socket}           from "socket.io";
+import {CharacterClient}  from "../character/client/character.client";
+import {WorldConstants}   from "../../lib/constants/world.constants";
+import {MapClient}        from "../map/client/map.client";
+import {RedisSocket}      from "./redis.socket";
+import {Repository}       from "typeorm";
+import {Player}           from "./entities/player";
+import {InjectRepository} from "@nestjs/typeorm";
 
-export class Player {
-
-    constructor(public accountId: number, public socket: Socket, public character?: { id: number, name: string }) {
-
-    }
-}
 
 @Injectable()
 export class WorldService {
 
-
-    accounts: { [accountId: number]: Player }     = {};
-    sockets: { [socketId: string]: Player }       = {};
-    characters: { [characterId: number]: Player } = {};
-
     constructor(
+        @InjectRepository(Player)
+        private players: Repository<Player>,
         private account: AccountClient,
         private character: CharacterClient,
         private map: MapClient
     ) {
     }
 
-    storeUser(client: RedisSocket, accountId: number) {
-        this.accounts[accountId] = new Player(accountId, client);
-        this.sockets[client.id]  = this.accounts[accountId];
+    async storeUser(client: RedisSocket, accountId: number) {
+        let player       = this.players.create();
+        player.accountId = accountId;
+        player.socketId  = client.id;
+        await this.players.save(player);
     }
 
     async removePlayer(client: RedisSocket) {
-        if (this.sockets[client.id]) {
-            let player = this.sockets[client.id];
-            await this.removeCharacter(client);
-            delete this.accounts[player.accountId];
-            delete this.sockets[client.id];
-        }
+        await this.removeCharacter(client);
+        await this.players.delete({socketId: client.id});
     }
 
     async storeCharacter(client: RedisSocket, character: { id: number, name: string }) {
-        let player = this.sockets[client.id];
-        await this.validateCharacterLogin(client, character.id);
-        this.character.characterOnline(character.id, client.id);
-        player.character              = character;
-        this.characters[character.id] = player;
-        client.adapter.add(client.id, 'character-id.' + character.id);
-        client.adapter.add(client.id, 'character-name.' + character.name);
+        let player = await this.players.findOne({socketId: client.id});
+        if (player) {
+            await this.validateCharacterLogin(player, character.id);
+            await this.character.characterOnline(character.id, client.id);
+            player.characterId   = character.id;
+            player.characterName = character.name;
+            await this.players.save(player);
+            client.adapter.add(client.id, 'character-id.' + character.id);
+            client.adapter.add(client.id, 'character-name.' + character.name);
+        }
     }
 
-    async validateCharacterLogin(client: RedisSocket, characterId: number) {
+    async validateCharacterLogin(player: Player, characterId: number) {
         let verified = await this.character.getCharacter(characterId);
-        if (verified.accountId !== this.sockets[client.id].accountId) {
+        if (verified.accountId !== player.accountId) {
             throw new Error("Character's Account ID does not match");
         }
         if (verified.world !== WorldConstants.CONSTANT) {
@@ -66,14 +61,14 @@ export class WorldService {
     }
 
     async removeCharacter(client: RedisSocket) {
-        let player = this.sockets[client.id];
-        if (player && player.character) {
-            let previousCharacter = player.character;
-            this.character.characterOffline(previousCharacter.id);
-            player.character = null;
-            delete this.characters[previousCharacter.id];
-            client.adapter.del(client.id, 'character-id.' + previousCharacter.id);
-            client.adapter.del(client.id, 'character-name.' + previousCharacter.name);
+        let player = await this.players.findOne({socketId: client.id});
+        if (player) {
+            await this.character.characterOffline(player.characterId);
+            client.adapter.del(client.id, 'character-id.' + player.characterId);
+            client.adapter.del(client.id, 'character-name.' + player.characterName);
+            player.characterId   = null;
+            player.characterName = null;
+            await this.players.save(player);
         }
     }
 
@@ -94,11 +89,11 @@ export class WorldService {
         return await this.character.create(accountId, WorldConstants.CONSTANT, name, gender);
     }
 
-    playerDirectionalInput(client: RedisSocket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
-        let character = this.sockets[client.id].character;
-        if (character) {
+    async playerDirectionalInput(client: RedisSocket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+        let player = await this.players.findOne({socketId: client.id});
+        if (player && player.characterId !== null) {
             let map = this.getMapOf(client);
-            this.map.playerDirectionalInput(character.id, WorldConstants.CONSTANT, map, data.directions);
+            this.map.playerDirectionalInput(player.characterId, WorldConstants.CONSTANT, map, data.directions);
         }
     }
 

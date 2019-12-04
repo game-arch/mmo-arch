@@ -17,6 +17,9 @@ import {from}                      from "rxjs";
 import {Character}                 from "../../character/entities/character";
 import {RedisNamespace}            from "../redis.namespace";
 import {RedisSocket}               from "../redis.socket";
+import {InjectRepository}          from "@nestjs/typeorm";
+import {Player}                    from "../entities/player";
+import {Repository}                from "typeorm";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -28,6 +31,8 @@ export class CharacterGateway {
     server: RedisNamespace;
 
     constructor(
+        @InjectRepository(Player)
+        private players: Repository<Player>,
         private logger: Logger,
         private service: WorldService,
         private character: CharacterClient
@@ -36,21 +41,23 @@ export class CharacterGateway {
     }
 
     async sendCharacters() {
-        await from(Object.keys(this.service.characters))
-            .subscribe(id => {
-                this.character.characterOnline(parseInt(id), this.service.characters[id].socket.id);
-            });
+        let players = await this.players.find();
+        for (let player of players) {
+            await this.character.characterOnline(player.accountId, player.socketId);
+        }
     }
 
     @SubscribeMessage(CreateCharacter.event)
     async createCharacter(client: RedisSocket, data: { name: string, gender: 'male' | 'female' }) {
         try {
-            let accountId            = this.service.sockets[client.id].accountId;
-            let character: Character = await this.service.createCharacter(accountId, data.name, data.gender);
-            if (character) {
-                client.emit(GetCharacters.event, await this.service.getCharacters(accountId));
-                client.emit(CharacterCreated.event, new CharacterCreated(character.world, character.id));
-                return character;
+            let player = await this.players.findOne({socketId: client.id});
+            if (player) {
+                let character: Character = await this.service.createCharacter(player.accountId, data.name, data.gender);
+                if (character) {
+                    client.emit(GetCharacters.event, await this.service.getCharacters(player.accountId));
+                    client.emit(CharacterCreated.event, new CharacterCreated(character.world, character.id));
+                    return character;
+                }
             }
             client.emit(CharacterNotCreated.event);
             return null;

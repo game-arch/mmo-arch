@@ -13,9 +13,19 @@ import {CharacterGateway}      from "./character/character.gateway";
 import {CharacterController}   from "./character/character.controller";
 import {ChatController}        from "./chat/chat.controller";
 import {ChatGateway}           from "./chat/chat.gateway";
+import {TypeOrmModule}         from "@nestjs/typeorm";
+import {Player}                from "./entities/player";
 
 @Module({
     imports    : [
+        TypeOrmModule.forRoot({
+            type       : 'sqlite',
+            database   : 'database.db' + process.env.NODE_APP_INSTANCE,
+            logging    : false,
+            synchronize: true,
+            entities   : [__dirname + '/entities/*{.ts,.js}'],
+        }),
+        TypeOrmModule.forFeature([Player]),
         WorldClientModule,
         AccountClientModule,
         CharacterClientModule,

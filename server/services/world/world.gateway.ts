@@ -5,16 +5,18 @@ import {
     WebSocketGateway,
     WebSocketServer
 }                                                         from "@nestjs/websockets";
-import {Server, Socket}                                   from "socket.io";
 import {WorldService}                                     from "./world.service";
 import {ConflictException, Logger, OnApplicationShutdown} from "@nestjs/common";
-import {PresenceClient}                  from "../presence/client/presence.client";
-import {environment}                     from "../../lib/config/environment";
-import {WorldConstants}                  from "../../lib/constants/world.constants";
-import {CharacterClient}                 from "../character/client/character.client";
-import {CharacterOffline, GetCharacters} from "../character/actions";
-import {RedisSocket}                     from "./redis.socket";
-import {RedisNamespace}                  from "./redis.namespace";
+import {PresenceClient}                                   from "../presence/client/presence.client";
+import {environment}                                      from "../../lib/config/environment";
+import {WorldConstants}                                   from "../../lib/constants/world.constants";
+import {CharacterClient}                                  from "../character/client/character.client";
+import {CharacterOffline, GetCharacters}                  from "../character/actions";
+import {RedisSocket}                                      from "./redis.socket";
+import {RedisNamespace}                                   from "./redis.namespace";
+import {InjectRepository}                                 from "@nestjs/typeorm";
+import {Player}                                           from "./entities/player";
+import {createConnection, Repository}                     from "typeorm";
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -27,6 +29,8 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     serverId = null;
 
     constructor(
+        @InjectRepository(Player)
+        private players: Repository<Player>,
         private logger: Logger,
         private service: WorldService,
         private presence: PresenceClient,
@@ -47,14 +51,15 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async handleConnection(client: RedisSocket, ...args: any[]) {
         try {
-            if (Object.keys(this.service.accounts).length >= 100) {
+            if ((await this.players.count()) >= 100) {
                 throw new Error("Server Limit Reached");
             }
-            let user = await this.service.authenticate(client);
-            if (this.service.accounts[user.id]) {
+            let user   = await this.service.authenticate(client);
+            let player = await this.players.findOne({accountId: user.id});
+            if (player) {
                 throw new ConflictException("User already logged in!");
             }
-            this.service.storeUser(client, user.id);
+            await this.service.storeUser(client, user.id);
             client.emit(GetCharacters.event, await this.service.getCharacters(user.id));
         } catch (e) {
             console.log(e);
@@ -72,7 +77,15 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async onApplicationShutdown(signal?: string) {
-        this.character.allCharactersOffline(Object.keys(this.service.characters).map(id => (new CharacterOffline(parseInt(id)))));
-        await this.presence.serverOffline(this.serverId);
+        let connection = await createConnection({
+            type    : 'sqlite',
+            database: 'database.db' + process.env.NODE_APP_INSTANCE,
+            logging : false
+        });
+        let players    = await connection.query('select characterId from player');
+        await connection.query('DELETE FROM player');
+        this.character.allCharactersOffline(players.map(player => (new CharacterOffline(player.characterId)))).then();
+        this.presence.serverOffline(this.serverId).then();
+        await connection.close();
     }
 }
