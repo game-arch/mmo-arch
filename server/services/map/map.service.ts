@@ -10,13 +10,13 @@ import {GetPlayerPosition, PlayerDirectionalInput}                          from
 import {concatMap, filter, map, mergeMap, takeUntil, throttleTime, toArray} from "rxjs/operators";
 import {async}                                                              from "rxjs/internal/scheduler/async";
 import {WorldConstants}                                                     from "../../lib/constants/world.constants";
-import {fromPromise}        from "rxjs/internal-compatibility";
-import {from, interval}     from "rxjs";
-import {Game}               from "phaser";
-import {BackendScene}       from "./maps/backend.scene";
-import {MapTransition}      from "./entities/map-transition";
-import {CharacterLoggedOut} from "../character/actions";
-import {Directions}         from "../../lib/phaser/directions";
+import {fromPromise}                                                        from "rxjs/internal-compatibility";
+import {from, interval}                                                     from "rxjs";
+import {Game}                                                               from "phaser";
+import {BackendScene}                                                       from "./maps/backend.scene";
+import {MapTransition}                                                      from "./entities/map-transition";
+import {CharacterLoggedOut}                                                 from "../character/actions";
+import {Directions}                                                         from "../../lib/phaser/directions";
 
 @Injectable()
 export class MapService {
@@ -56,13 +56,14 @@ export class MapService {
         this.map.savePlayer
             .pipe(takeUntil(this.map.stop$))
             .pipe(filter(player => !!player))
-            .subscribe(async player => await this.playerRepo.save(player));
-        this.map.emitter.pipe(takeUntil(this.map.stop$))
-            .pipe(throttleTime(1000, async, {leading: true}))
-            .pipe(concatMap(() => fromPromise(this.map.getAllPlayers())))
-            .pipe(throttleTime(1000, async, {leading: true, trailing: true}))
-            .subscribe((players) => {
-                this.emitter.allPlayers(this.map.constant, players);
+            .subscribe(async player => {
+                await this.playerRepo.save(player);
+            });
+        this.map.emitPlayer
+            .pipe(takeUntil(this.map.stop$))
+            .pipe(filter(player => !!player))
+            .subscribe(async player => {
+                this.emitter.playerUpdate(this.map.constant, player.asPayload());
             });
     }
 
@@ -123,7 +124,7 @@ export class MapService {
         this.emitter.playerLeftMap(this.map.constant, player.characterId, player.name);
     }
 
-    movePlayer(characterId: number, directions:Directions) {
+    movePlayer(characterId: number, directions: Directions) {
         if (this.map.entities.player[characterId]) {
             this.map.movePlayer(characterId, directions);
         }

@@ -50,7 +50,7 @@ export class Player extends Mob {
 
     asPayload() {
         return {
-            characterId: this.characterId,
+            id: this.characterId,
             name       : this.name,
             x          : this.x,
             y          : this.y,

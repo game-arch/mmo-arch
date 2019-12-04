@@ -33,7 +33,7 @@ export class PlayerLeftMap {
 export class AllPlayers {
     static readonly event = 'map.all_players';
 
-    constructor(public map: string, public players: { characterId: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }[]) {
+    constructor(public map: string, public players: { id: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }[]) {
 
     }
 }
@@ -49,7 +49,15 @@ export class GetAllPlayers {
 export class GetPlayerPosition {
     static readonly event = 'map.get_player_position';
 
-    constructor(public characterId:number) {
+    constructor(public characterId: number) {
+
+    }
+}
+
+export class PlayerUpdate {
+    static readonly event = 'map.player_update';
+
+    constructor(public map: string, public player: { id: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
 
     }
 }

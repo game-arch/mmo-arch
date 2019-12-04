@@ -1,8 +1,8 @@
-import {Inject, Injectable}                                     from "@nestjs/common";
-import {ClientProxy}                                            from "@nestjs/microservices";
-import {AllPlayers, MapOnline, PlayerEnteredMap, PlayerLeftMap} from "./actions";
-import {WORLD_PREFIX}                                           from "../world/world.prefix";
-import {LocalMessage}                                           from "../world/chat/actions";
+import {Inject, Injectable}                                                   from "@nestjs/common";
+import {ClientProxy}                                                          from "@nestjs/microservices";
+import {AllPlayers, MapOnline, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate} from "./actions";
+import {WORLD_PREFIX}                                                         from "../world/world.prefix";
+import {LocalMessage}                                                         from "../world/chat/actions";
 
 @Injectable()
 export class MapEmitter {
@@ -19,8 +19,12 @@ export class MapEmitter {
         this.client.emit(WORLD_PREFIX + PlayerLeftMap.event, new PlayerLeftMap(characterId, name, map));
     }
 
-    allPlayers(map: string, players: { characterId: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }[]) {
+    allPlayers(map: string, players: { id: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }[]) {
         this.client.emit(WORLD_PREFIX + AllPlayers.event, new AllPlayers(map, players));
+    }
+
+    playerUpdate(map: string, player: { id: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+        this.client.emit(WORLD_PREFIX + PlayerUpdate.event, new PlayerUpdate(map, player));
     }
 
     nowOnline() {

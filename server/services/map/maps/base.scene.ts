@@ -51,10 +51,7 @@ export class BaseScene extends Scene implements Scene {
         }
     }
 
-    async getAllPlayers() {
-        return await from(Object.keys(this.entities.player)).pipe(
-            map(key => this.entities.player[key].asPayload()),
-            toArray()
-        ).toPromise();
+    getAllPlayers() {
+        return Object.keys(this.entities.player).map(key => this.entities.player[key].asPayload());
     }
 }

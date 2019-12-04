@@ -1,8 +1,8 @@
-import {Controller}                                                          from "@nestjs/common";
-import {EventPattern}                                                        from "@nestjs/microservices";
-import {AllPlayers, PlayerDirectionalInput, PlayerEnteredMap, PlayerLeftMap} from "../../map/actions";
-import {MapGateway}                                                          from "./map.gateway";
-import {WORLD_PREFIX}                                                        from "../world.prefix";
+import {Controller}                                                                        from "@nestjs/common";
+import {EventPattern}                                                                      from "@nestjs/microservices";
+import {AllPlayers, PlayerDirectionalInput, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate} from "../../map/actions";
+import {MapGateway}                                                                        from "./map.gateway";
+import {WORLD_PREFIX}                                                                      from "../world.prefix";
 
 @Controller()
 export class MapController {
@@ -20,7 +20,7 @@ export class MapController {
 
     @EventPattern(WORLD_PREFIX + PlayerLeftMap.event)
     async onMapLeft(data: PlayerLeftMap) {
-        this.gateway.playerLeave(data);
+        await this.gateway.playerLeave(data);
     }
 
     @EventPattern(WORLD_PREFIX + AllPlayers.event)
@@ -28,8 +28,8 @@ export class MapController {
         this.gateway.allPlayers(data);
     }
 
-    @EventPattern(WORLD_PREFIX + PlayerDirectionalInput.event)
-    async playerMoved(data: PlayerDirectionalInput) {
-        this.gateway.server.to('map.' + data.map).emit(PlayerDirectionalInput.event, data);
+    @EventPattern(WORLD_PREFIX + PlayerUpdate.event)
+    playerUpdate(data: PlayerUpdate) {
+        this.gateway.server.to('map.' + data.map).emit(PlayerUpdate.event, data);
     }
 }

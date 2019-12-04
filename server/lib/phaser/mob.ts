@@ -2,6 +2,8 @@ import {MobSprite} from "./mob-sprite";
 import Scene = Phaser.Scene;
 
 export class Mob {
+    id: number;
+    name: string;
     scene: Scene;
     sprite: MobSprite;
 
@@ -24,4 +26,13 @@ export class Mob {
         this.sprite.destroy(true);
     }
 
+    asPayload() {
+        return {
+            id    : this.id,
+            name  : this.name,
+            x     : this.x,
+            y     : this.y,
+            moving: this.sprite.moving
+        }
+    }
 }

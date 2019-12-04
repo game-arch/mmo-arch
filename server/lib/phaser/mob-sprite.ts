@@ -10,6 +10,7 @@ export class MobSprite extends Sprite {
     stopListening      = new Subject();
     onStartMoving      = new Subject();
     onStopMoving       = new Subject();
+    onVelocityChange   = new Subject();
     lastVelocity       = new Vector2(0, 0);
     stopped            = true;
     moving: Directions = {
@@ -38,6 +39,7 @@ export class MobSprite extends Sprite {
             this.lastVelocity = this.body.velocity.clone();
             this.reportChangeInMovingStatus(velocity);
             this.body.setVelocity(velocity.x, velocity.y);
+            this.onVelocityChange.next();
         }
     }
 

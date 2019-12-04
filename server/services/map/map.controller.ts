@@ -19,13 +19,13 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     }
 
     @Get('players')
-    async getPlayers(@Req() request: Request, @Res() response: Response) {
-        return await this.service.map.getAllPlayers();
+     getPlayers(@Req() request: Request, @Res() response: Response) {
+        return  this.service.map.getAllPlayers();
     }
 
     @MessagePattern(WORLD_PREFIX + GetAllPlayers.event)
-    async getAllPlayers(data: GetAllPlayers) {
-        return await this.service.map.getAllPlayers();
+     getAllPlayers(data: GetAllPlayers) {
+        return  this.service.map.getAllPlayers();
     }
 
     @EventPattern(WORLD_PREFIX + PlayerChangedMap.event)

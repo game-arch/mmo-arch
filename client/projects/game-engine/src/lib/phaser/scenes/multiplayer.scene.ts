@@ -7,10 +7,9 @@ import {
     AllPlayers,
     PlayerDirectionalInput,
     PlayerEnteredMap,
-    PlayerLeftMap
+    PlayerLeftMap, PlayerUpdate
 }                          from "../../../../../../../server/services/map/actions";
 import {from}              from "rxjs";
-import {WorldConnection}   from "../../../../../connection/src/lib/world-connection";
 import {ConnectionManager} from "../../../../../connection/src/lib/connection-manager";
 
 export class MultiplayerScene extends BaseScene implements Scene {
@@ -46,7 +45,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
             let direction = this.directionMap[event.key];
             if (this.directions[direction] !== status) {
                 this.directions[direction] = status;
-                // this.self.moving           = this.directions;
                 this.sendDirectionalInput();
             }
         }
@@ -59,6 +57,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         this.input.keyboard.on('keyup', (event: KeyboardEvent) => this.toggleDirection(event, false));
         this.game.events.on(PlayerEnteredMap.event, (data) => {
             console.log('Player Joined', data);
+            this.addOrUpdatePlayer({...data, id: data.characterId});
         });
         this.game.events.on(PlayerLeftMap.event, (data) => {
             console.log('Player Left', data);
@@ -66,12 +65,15 @@ export class MultiplayerScene extends BaseScene implements Scene {
         });
         this.game.events.on(AllPlayers.event, players => {
             from(players)
-                .subscribe((player: { characterId: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) => this.addOrUpdatePlayer(player));
+                .subscribe((player: { id: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) => this.addOrUpdatePlayer(player));
         });
         this.game.events.on(PlayerDirectionalInput.event, data => {
             if (this.entities.player[data.characterId]) {
                 this.entities.player[data.characterId].moving = data.directions;
             }
+        });
+        this.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
+            this.addOrUpdatePlayer(data.player);
         });
     }
 
@@ -83,8 +85,8 @@ export class MultiplayerScene extends BaseScene implements Scene {
         this.removeEntity('player', data.characterId);
     }
 
-    private addOrUpdatePlayer(data: { characterId: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
-        let player = this.entities.player[data.characterId];
+    private addOrUpdatePlayer(data: { id: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+        let player = this.entities.player[data.id];
         if (!player) {
             player = this.createPlayer(data);
         }
@@ -94,10 +96,10 @@ export class MultiplayerScene extends BaseScene implements Scene {
         }
     }
 
-    private createPlayer(data: { characterId: number; x: number; y: number; moving?: { up: boolean; down: boolean; left: boolean; right: boolean } }) {
+    private createPlayer(data: { id: number; x: number; y: number; moving?: { up: boolean; down: boolean; left: boolean; right: boolean } }) {
         let player = new Mob();
-        this.addEntity('player', player, data.characterId);
-        if (this.connection.selectedCharacter.id === data.characterId) {
+        this.addEntity('player', player, data.id);
+        if (this.connection.selectedCharacter.id === data.id) {
             this.setSelf(player);
         }
         return player;

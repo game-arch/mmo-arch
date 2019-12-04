@@ -12,8 +12,8 @@ import {
     AllPlayers,
     PlayerDirectionalInput,
     PlayerEnteredMap,
-    PlayerLeftMap
-}                                    from "../../../../../server/services/map/actions";
+    PlayerLeftMap, PlayerUpdate
+} from "../../../../../server/services/map/actions";
 
 @Injectable()
 export class GameEngineService {
@@ -68,6 +68,9 @@ export class GameEngineService {
                     fromEvent(world.socket, AllPlayers.event)
                         .pipe(takeUntil(this.destroyed))
                         .subscribe(players => this.game.events.emit(AllPlayers.event, players));
+                    fromEvent(world.socket, PlayerUpdate.event)
+                        .pipe(takeUntil(this.destroyed))
+                        .subscribe(data => this.game.events.emit(PlayerUpdate.event, data));
                     fromEvent(world.socket, PlayerDirectionalInput.event)
                         .pipe(takeUntil(this.destroyed))
                         .subscribe((data: PlayerDirectionalInput) => {

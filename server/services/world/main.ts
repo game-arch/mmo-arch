@@ -14,7 +14,7 @@ async function bootstrap() {
         options  : {
             ...environment.microservice.options,
             name : WorldConstants.NAME + ' Server',
-            queue: WorldConstants.CONSTANT
+            queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
         }
     });
     app.enableCors({
@@ -22,7 +22,6 @@ async function bootstrap() {
         credentials: true
     });
     app.useLogger(logger);
-    app.useWebSocketAdapter(new RedisIoAdapter(app));
     await app.enableShutdownHooks();
     await app.startAllMicroservices();
     await app.listen(environment.servers.world.port);
