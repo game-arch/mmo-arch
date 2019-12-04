@@ -1,6 +1,11 @@
-import {environment} from "../environments/environment";
-import {PORTS}       from "../../../../../server/lib/constants/ports.constants";
 
 export class Hosts {
-    static readonly LOBBY = environment.server;
+    static readonly LOBBY = {
+        index: 0,
+        name: 'lobby',
+        host: 'localhost',
+        port: 3000,
+        status: 'online' as 'online'|'offline',
+        url: 'http://localhost:3000'
+    };
 }

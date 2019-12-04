@@ -1,4 +1,4 @@
-<div style="display:flex;height:100%;flex-direction:column;" *ngIf="connection.world$ | async as conn">
+<div style="display:flex;height:100%;flex-direction:column;">
     <div style="flex:1"></div>
     <div style="display:flex">
         <div style="flex:1"></div>
@@ -7,11 +7,11 @@
                 Character Selection
             </mat-card-title>
             <mat-card-subtitle>
-                World: {{conn.world.name}}
+                World: {{connection.world.world.name}}
             </mat-card-subtitle>
             <mat-card-content>
                 <mat-nav-list >
-                    <a mat-list-item *ngFor="let character of conn.characters" (click)="selected = character"
+                    <a mat-list-item *ngFor="let character of connection.world.characters" (click)="selected = character"
                        [class.active]="selected?.id === character.id">
                         <mat-icon matListIcon [svgIcon]="character.gender"></mat-icon>
                         <div matLine>{{character.name}}</div>

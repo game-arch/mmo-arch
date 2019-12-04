@@ -1,11 +1,12 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
-import {EMPTY, fromEvent, Observable}    from "rxjs";
-import {ConnectionManager}               from "../connection/connection-manager";
-import {GameWorld}                       from "../../../../../../server/lib/interfaces/game-world";
-import {map, takeUntil, tap}             from "rxjs/operators";
-import {Store}                           from "@ngxs/store";
-import {SetToken}                        from "../authentication/state/auth.actions";
-import {GetServers}                      from "../../../../../../server/services/presence/actions";
+import {EMPTY, fromEvent, Observable} from "rxjs";
+import {ConnectionManager}            from "../connection/connection-manager";
+import {GameWorld}                    from "../../../../../../server/lib/interfaces/game-world";
+import {map, takeUntil, tap}          from "rxjs/operators";
+import {Store}                        from "@ngxs/store";
+import {SetToken}                     from "../authentication/state/auth.actions";
+import {GetServers}                   from "../../../../../../server/services/presence/actions";
+import {Hosts}                        from "../hosts";
 
 @Component({
     selector   : 'server-list',
@@ -25,14 +26,14 @@ export class ServerListComponent implements OnInit {
     }
 
     ngOnInit() {
-        let connection = this.manager.connectToLobby();
+        let connection = this.manager.connectTo(Hosts.LOBBY, false);
         this.servers$  = fromEvent<GameWorld[]>(connection.socket, GetServers.event).pipe(tap(list => {
             console.log("got server list", list);
         }));
     }
 
     onConnect(world: GameWorld) {
-        let connection = this.manager.connectToWorld(world);
+        let connection = this.manager.connectTo(world, true);
         fromEvent(connection.socket, 'connect-error', {once: true})
             .subscribe((err) => {
                 console.error(err);

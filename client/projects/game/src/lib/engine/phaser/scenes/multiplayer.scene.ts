@@ -67,11 +67,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
             from(players)
                 .subscribe((player: { id: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) => this.addOrUpdatePlayer(player));
         });
-        this.game.events.on(PlayerDirectionalInput.event, data => {
-            if (this.entities.player[data.characterId]) {
-                this.entities.player[data.characterId].moving = data.directions;
-            }
-        });
         this.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
             this.addOrUpdatePlayer(data.player);
         });

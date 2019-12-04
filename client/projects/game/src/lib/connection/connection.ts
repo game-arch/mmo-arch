@@ -1,7 +1,8 @@
 import Socket = SocketIOClient.Socket;
-import * as io from "socket.io-client";
+import * as io     from "socket.io-client";
+import {GameWorld} from "../../../../../../server/lib/interfaces/game-world";
 
-export class Connection<T = { name: string }> {
+export class Connection<T = Partial<GameWorld>> {
 
     socket: Socket;
 

@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
         try {
             this.showError = false;
             let data       = this.form.getRawValue();
-            let result     = await this.http.post(Hosts.LOBBY + '/login', data).pipe(first()).toPromise();
+            let result     = await this.http.post(Hosts.LOBBY.url + '/login', data).pipe(first()).toPromise();
             this.loggedIn.emit(result);
         } catch (e) {
             if (e.status === 403) {

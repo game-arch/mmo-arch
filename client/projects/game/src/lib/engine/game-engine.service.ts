@@ -2,17 +2,17 @@ import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {ConnectionManager}                  from "../connection/connection-manager";
 import {GAME_CONFIG}                        from "./phaser/config";
 import {SceneFactory}                       from "./phaser/scenes/scene-factory.service";
-import {from, fromEvent}             from "rxjs";
-import {filter, mergeMap, takeUntil} from "rxjs/operators";
+import {from, fromEvent}                    from "rxjs";
+import {filter, mergeMap, takeUntil}        from "rxjs/operators";
 import Scene = Phaser.Scene;
-import {TitleScene}                  from "./phaser/scenes/title/title.scene";
-import {TutorialScene}               from "./phaser/scenes/tutorial/tutorial.scene";
+import {TitleScene}                         from "./phaser/scenes/title/title.scene";
+import {TutorialScene}                      from "./phaser/scenes/tutorial/tutorial.scene";
 import {
     AllPlayers,
     PlayerDirectionalInput,
     PlayerEnteredMap,
     PlayerLeftMap, PlayerUpdate
-}                                    from "../../../../../../server/services/map/actions";
+}                                           from "../../../../../../server/services/map/actions";
 import Game = Phaser.Game;
 
 @Injectable()
@@ -35,6 +35,12 @@ export class GameEngineService {
     ) {
     }
 
+    onWorldChange() {
+        return this.connection.worldChange
+                   .pipe(takeUntil(this.destroyed))
+                   .pipe(filter(world => !!world.socket));
+    }
+
     init(canvas: HTMLCanvasElement) {
         this.game            = new Game({...GAME_CONFIG, canvas});
         this.scenes.title    = this.sceneFactory.title();
@@ -53,31 +59,18 @@ export class GameEngineService {
             this.game.scene.start(scene);
             this.currentScene = this.scenes[scene];
         });
-        this.connection.world$
-            .pipe(takeUntil(this.destroyed))
-            .subscribe(world => {
-                if (world.socket) {
-                    fromEvent(world.socket, PlayerEnteredMap.event)
-                        .pipe(takeUntil(this.destroyed))
-                        .pipe(filter((event: PlayerEnteredMap) => event.map === this.currentSceneKey))
-                        .subscribe(event => this.game.events.emit(PlayerEnteredMap.event, event));
-                    fromEvent(world.socket, PlayerLeftMap.event)
-                        .pipe(takeUntil(this.destroyed))
-                        .pipe(filter((event: PlayerLeftMap) => event.map === this.currentSceneKey))
-                        .subscribe(event => this.game.events.emit(PlayerLeftMap.event, event));
-                    fromEvent(world.socket, AllPlayers.event)
-                        .pipe(takeUntil(this.destroyed))
-                        .subscribe(players => this.game.events.emit(AllPlayers.event, players));
-                    fromEvent(world.socket, PlayerUpdate.event)
-                        .pipe(takeUntil(this.destroyed))
-                        .subscribe(data => this.game.events.emit(PlayerUpdate.event, data));
-                    fromEvent(world.socket, PlayerDirectionalInput.event)
-                        .pipe(takeUntil(this.destroyed))
-                        .subscribe((data: PlayerDirectionalInput) => {
-                            this.game.events.emit(PlayerDirectionalInput.event, data);
-                        });
-                }
-            });
+        this.onWorldChange()
+            .pipe(mergeMap(world => fromEvent(world.socket, PlayerEnteredMap.event)))
+            .subscribe(event => this.game.events.emit(PlayerEnteredMap.event, event));
+        this.onWorldChange()
+            .pipe(mergeMap(world => fromEvent(world.socket, PlayerLeftMap.event)))
+            .subscribe(event => this.game.events.emit(PlayerLeftMap.event, event));
+        this.onWorldChange()
+            .pipe(mergeMap(world => fromEvent(world.socket, AllPlayers.event)))
+            .subscribe(players => this.game.events.emit(AllPlayers.event, players));
+        this.onWorldChange()
+            .pipe(mergeMap(world => fromEvent(world.socket, PlayerUpdate.event)))
+            .subscribe(data => this.game.events.emit(PlayerUpdate.event, data));
     }
 
 
