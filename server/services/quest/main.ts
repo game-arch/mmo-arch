@@ -10,7 +10,7 @@ async function bootstrap() {
     const app = await NestFactory.createMicroservice(QuestModule, {
         transport: environment.microservice.transport,
         options  : {
-            ...environment.microservice.options,
+            ...environment.microservice.global,
             name : WorldConstants.NAME + ' Quest',
             queue: WorldConstants.CONSTANT + '-quest'
         }

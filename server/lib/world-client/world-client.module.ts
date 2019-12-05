@@ -3,10 +3,10 @@ import {ClientProxy, ClientProxyFactory}        from "@nestjs/microservices";
 import {environment}                            from "../config/environment";
 import {WorldConstants}                         from "../constants/world.constants";
 
-export const clientFactory   = () => ClientProxyFactory.create({
+export const clientFactory   = () => ClientProxyFactory.create(<any>{
     transport: environment.microservice.transport,
     options  : {
-        ...environment.microservice.options,
+        ...environment.microservice.global,
         name : WorldConstants.NAME + ' Client',
         queue: WorldConstants.CONSTANT
     }

@@ -6,12 +6,17 @@ import * as path     from "path";
 
 export const environment = {
     dbRoot      : path.resolve(__dirname, '../../../db'),
-    microservice: <NatsOptions>{
+    microservice: {
         transport: Transport.NATS,
-        options  : {
+        global   : {
             url : 'nats://' + (process.env.NATS_HOST || 'localhost') + ':' + (process.env.NATS_PORT || '4222'),
             user: process.env.NATS_USER || '',
             pass: process.env.NATS_PASSWORD || ''
+        },
+        local    : {
+            url : 'nats://localhost:4223',
+            user: '',
+            pass: ''
         }
     },
     redis       : {

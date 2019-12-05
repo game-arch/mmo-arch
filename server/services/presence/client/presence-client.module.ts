@@ -3,10 +3,10 @@ import {PresenceClient}     from "./presence.client";
 import {ClientProxyFactory} from "@nestjs/microservices";
 import {environment}        from "../../../lib/config/environment";
 
-export const clientFactory   = () => ClientProxyFactory.create({
+export const clientFactory   = () => ClientProxyFactory.create(<any>{
     transport: environment.microservice.transport,
     options  : {
-        ...environment.microservice.options,
+        ...environment.microservice.global,
         name : 'Presence Client',
         queue: 'presence'
     }

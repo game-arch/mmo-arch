@@ -2,12 +2,11 @@ import {ClientProxy}                           from "@nestjs/microservices";
 import {Inject, Injectable}                    from "@nestjs/common";
 import {CharacterLoggedIn, CharacterLoggedOut} from "./actions";
 import {WORLD_PREFIX}                          from "../world/world.prefix";
-import {LocalMessage}                          from "../world/chat/actions";
 
 @Injectable()
 export class CharacterEmitter {
 
-    constructor(@Inject('WORLD_CLIENT') private client: ClientProxy) {
+    constructor(@Inject('WORLD_CLIENT') protected client: ClientProxy) {
 
     }
 

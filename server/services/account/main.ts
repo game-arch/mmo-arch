@@ -10,7 +10,7 @@ async function bootstrap() {
     const app = await NestFactory.createMicroservice(AccountModule, {
         transport: environment.microservice.transport,
         options  : {
-            ...environment.microservice.options,
+            ...environment.microservice.global,
             name : 'Account',
             queue: 'account'
         }

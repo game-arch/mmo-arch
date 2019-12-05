@@ -12,7 +12,7 @@ async function bootstrap() {
     const app = await NestFactory.createMicroservice(MapModule, {
         transport: environment.microservice.transport,
         options  : {
-            ...environment.microservice.options,
+            ...environment.microservice.local,
             name : WorldConstants.NAME + ' Map',
             queue: WorldConstants.CONSTANT + '-map'
         }

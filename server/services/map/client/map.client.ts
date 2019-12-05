@@ -3,20 +3,20 @@ import {ClientProxy}                                              from "@nestjs/
 import {GetAllPlayers, GetPlayerPosition, PlayerDirectionalInput} from "../actions";
 import {first}                                                    from "rxjs/operators";
 import {WORLD_PREFIX}                                             from "../../world/world.prefix";
-import {LocalMessage}                                             from "../../world/chat/actions";
+import {CharacterEmitter}                                         from "../../character/character.emitter";
 
 @Injectable()
-export class MapClient {
+export class MapClient extends CharacterEmitter {
 
-    constructor(@Inject('MAP_CLIENT') private client: ClientProxy) {
-
+    constructor(@Inject('MAP_CLIENT') protected client: ClientProxy) {
+        super(client);
     }
 
     async getAllPlayers(map: string) {
         return await this.client.send(WORLD_PREFIX + GetAllPlayers.event, new GetAllPlayers(map)).pipe(first()).toPromise();
     }
 
-    async getPlayer(characterId: number, map: string): Promise<{x:number,y:number}> {
+    async getPlayer(characterId: number, map: string): Promise<{ x: number, y: number }> {
         return await this.client.send(WORLD_PREFIX + GetPlayerPosition.event + '.' + map, new GetPlayerPosition(characterId)).pipe(first()).toPromise();
     }
 

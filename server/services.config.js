@@ -92,11 +92,11 @@ module.exports = {
             }
         },
         {
-            name: (process.env.WORLD_CONSTANT || 'maiden') + '-map-tutorial',
+            instances: 1,
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-map',
             script: 'dist/services/map/main.js',
             watch: ["dist/services/map", "dist/lib"],
             env: {
-                MAP: 'tutorial',
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME
             },

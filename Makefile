@@ -27,3 +27,7 @@ prune:
 offline:
 	cd server && WORLD_CONSTANT=talos npm run offline:characters
 	cd server && npm run offline:worlds
+
+nats:
+	nats-server -p 4222 &
+	nats-server -p 4223 &

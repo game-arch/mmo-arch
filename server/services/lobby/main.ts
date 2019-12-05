@@ -8,7 +8,7 @@ async function bootstrap() {
     app.connectMicroservice({
         transport: environment.microservice.transport,
         options  : {
-            ...environment.microservice.options,
+            ...environment.microservice.global,
             name: 'Lobby Server'
         }
     });

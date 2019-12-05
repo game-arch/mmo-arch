@@ -11,7 +11,7 @@ async function bootstrap() {
     const app = await NestFactory.createMicroservice(ItemModule, {
         transport: environment.microservice.transport,
         options  : {
-            ...environment.microservice.options,
+            ...environment.microservice.global,
             name : WorldConstants.NAME + ' Item',
             queue: WorldConstants.CONSTANT + '-item'
         }

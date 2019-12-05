@@ -9,7 +9,7 @@ async function bootstrap() {
     const app = await NestFactory.createMicroservice(PresenceModule, {
         transport: environment.microservice.transport,
         options  : {
-            ...environment.microservice.options,
+            ...environment.microservice.global,
             name : 'Presence',
             queue: 'presence'
         }
