@@ -1,4 +1,5 @@
 install:
+	make copy-environment
 	cd client && npm i
 	cd server && npm i
 	cd server && npm run build
