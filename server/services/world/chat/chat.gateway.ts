@@ -19,11 +19,13 @@ import {InjectRepository}                                    from "@nestjs/typeo
 import {Player}                                              from "../entities/player";
 import {Repository}                                          from "typeorm";
 import {Namespace, Socket}                                   from "socket.io";
+import * as parser                                           from "socket.io-msgpack-parser";
 
 @WebSocketGateway({
     namespace   : 'world',
     pingInterval: WorldConstants.PING_INTERVAL,
-    pingTimeout : WorldConstants.PING_TIMEOUT
+    pingTimeout : WorldConstants.PING_TIMEOUT,
+    parser
 })
 export class ChatGateway {
     @WebSocketServer()

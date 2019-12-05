@@ -8,8 +8,11 @@ import {LobbyService}   from "./lobby.service";
 import {GameWorld}      from "../../lib/interfaces/game-world";
 import {Logger}         from "@nestjs/common";
 import {GetServers}     from "../presence/actions";
+import * as parser from "socket.io-msgpack-parser";
 
-@WebSocketGateway()
+@WebSocketGateway({
+    parser
+})
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer()
     server: Server;

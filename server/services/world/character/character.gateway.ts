@@ -17,11 +17,13 @@ import {Character}                 from "../../character/entities/character";
 import {InjectRepository}          from "@nestjs/typeorm";
 import {Player}                    from "../entities/player";
 import {Repository}                from "typeorm";
+import * as parser from "socket.io-msgpack-parser";
 
 @WebSocketGateway({
     namespace   : 'world',
     pingInterval: WorldConstants.PING_INTERVAL,
-    pingTimeout : WorldConstants.PING_TIMEOUT
+    pingTimeout : WorldConstants.PING_TIMEOUT,
+    parser
 })
 export class CharacterGateway {
     @WebSocketServer()

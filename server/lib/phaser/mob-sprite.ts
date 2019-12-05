@@ -44,6 +44,7 @@ export class MobSprite extends Sprite {
         }
     }
 
+
     private reportChangeInMovingStatus(velocity) {
         return velocity.equals(new Vector2(0, 0)) ? this.reportStopped() : this.reportMoving();
     }

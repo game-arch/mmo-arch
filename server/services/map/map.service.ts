@@ -1,15 +1,16 @@
-import {Inject, Injectable} from '@nestjs/common';
-import {MapConstants}       from "./constants";
-import {Repository}         from "typeorm";
-import {Player}             from "./entities/player";
-import {InjectRepository}   from "@nestjs/typeorm";
-import {MapEmitter}         from "./map.emitter";
-import {CharacterClient}    from "../character/client/character.client";
-import {filter, takeUntil}  from "rxjs/operators";
-import {Game}               from "phaser";
-import {BackendScene}       from "./maps/backend.scene";
-import {MapTransition}      from "./entities/map-transition";
-import {Directions}         from "../../lib/phaser/directions";
+import {Inject, Injectable}                          from '@nestjs/common';
+import {MapConstants}                                from "./constants";
+import {Repository}                                  from "typeorm";
+import {Player}                                      from "./entities/player";
+import {InjectRepository}                            from "@nestjs/typeorm";
+import {MapEmitter}                                  from "./map.emitter";
+import {CharacterClient}                             from "../character/client/character.client";
+import {concatMap, filter, map, mergeMap, takeUntil} from "rxjs/operators";
+import {Game}                                        from "phaser";
+import {BackendScene}                                from "./maps/backend.scene";
+import {MapTransition}                               from "./entities/map-transition";
+import {Directions}                                  from "../../lib/phaser/directions";
+import {interval}                                    from "rxjs";
 
 @Injectable()
 export class MapService {

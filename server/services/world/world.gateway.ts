@@ -18,11 +18,13 @@ import {createConnection, Repository}    from "typeorm";
 import * as fs                           from "fs";
 import * as path                         from "path";
 import {Namespace, Socket}               from "socket.io";
+import * as parser from "socket.io-msgpack-parser";
 
 @WebSocketGateway({
     namespace   : 'world',
     pingInterval: WorldConstants.PING_INTERVAL,
-    pingTimeout : WorldConstants.PING_TIMEOUT
+    pingTimeout : WorldConstants.PING_TIMEOUT,
+    parser
 })
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
     @WebSocketServer()

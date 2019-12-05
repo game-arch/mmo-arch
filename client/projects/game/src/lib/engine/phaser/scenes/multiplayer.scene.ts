@@ -45,6 +45,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
             let direction = this.directionMap[event.key];
             if (this.directions[direction] !== status) {
                 this.directions[direction] = status;
+                // this.self.moving = this.directions;
                 this.sendDirectionalInput();
             }
         }
