@@ -3,6 +3,9 @@ install:
 	cd server && npm i
 	cd server && npm run build
 
+copy-environment:
+	cp -n ./client/projects/game/src/environments/environment.sample.ts ./client/projects/game/src/environments/environment.ts
+
 start:
 	cd client && make start
 	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make start
