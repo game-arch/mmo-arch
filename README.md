@@ -3,6 +3,8 @@
 As a hobby project, I have been putting together some technologies that may help beginner game developers with
 constructing multiplayer games.
 
+![](https://github.com/jwhenry3/game-architecture/blob/master/microservice-game-architecture.png?raw=true)
+
 ### Technologies Used
 - Typescript for everything
     - https://www.typescriptlang.org/docs/home.html
