@@ -1,13 +1,13 @@
 import {Connection, createConnection} from "typeorm";
-import {DB_CONFIG}                    from "../config/db.config";
-import {WorldConstants}               from "../constants/world.constants";
+import {environment}                  from "../config/environment";
+import * as path                      from "path";
 
 createConnection({
-    ...DB_CONFIG,
-    type    : 'mysql',
-    database: ''
+    type    : 'sqlite',
+    database: path.resolve(environment.dbRoot, 'presence.db'),
+    logging : false
 }).then(async (connection: Connection) => {
-    await connection.query('DELETE FROM ' + WorldConstants.DB_NAME + ".character");
+    await connection.query("DELETE FROM character");
     await connection.close();
     process.exit(0);
 });
