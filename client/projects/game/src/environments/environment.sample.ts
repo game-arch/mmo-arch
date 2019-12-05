@@ -4,8 +4,8 @@
 
 export const environment = {
     production: false,
-    server    : 'http://jwhenry123.ddns.net:3000',
-    host      : 'jwhenry123.ddns.net',
+    server    : 'http://localhost:3000',
+    host      : 'localhost',
     port      : 3000
 };
 

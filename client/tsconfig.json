@@ -20,7 +20,7 @@
             "scripthost"
         ],
         "types": [
-            "Phaser"
+            "phaser"
         ],
         "paths": {
             "server-list": [
