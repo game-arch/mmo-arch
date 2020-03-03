@@ -22,7 +22,7 @@
             "main": "projects/game/src/main.ts",
             "polyfills": "projects/game/src/polyfills.ts",
             "tsConfig": "projects/game/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/game/src/favicon.ico",
               "projects/game/src/assets"
@@ -44,7 +44,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
