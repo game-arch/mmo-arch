@@ -7,9 +7,9 @@ import {Mob}                                                   from "../../../li
 @Unique('playerCharacter', ['characterId'])
 export class Player extends Mob {
 
-    _x: number;
-    _y: number;
-    @Column('int')
+    _x: number = 0;
+    _y: number = 0;
+    @Column('int', {nullable: true})
     get y(): number {
         return Math.floor(this.sprite ? this.sprite.y : this._y);
     }
@@ -21,7 +21,7 @@ export class Player extends Mob {
         }
     }
 
-    @Column('int')
+    @Column('int', {nullable: true})
     get x(): number {
         return Math.floor(this.sprite ? this.sprite.x : this._x);
     }

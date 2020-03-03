@@ -16,7 +16,7 @@ export class CharacterSelectionComponent implements OnInit {
 
     constructor(
         private engine: GameEngineService,
-        private connection: ConnectionManager,
+        public connection: ConnectionManager,
         private dialog: MatDialog
     ) {
     }

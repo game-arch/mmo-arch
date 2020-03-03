@@ -29,8 +29,12 @@ export class CharacterService {
     }
 
     async createCharacterFor(accountId: number, world: string, name: string, gender: 'male' | 'female') {
+        let character = await this.repo.findOne({name, world});
+        if (character) {
+            throw new RpcException(new ConflictException("Character Name Already Taken"));
+        }
         try {
-            let character       = this.repo.create();
+            character       = this.repo.create();
             character.name      = name;
             character.world     = world;
             character.accountId = accountId;
@@ -38,7 +42,8 @@ export class CharacterService {
             await this.repo.save(character);
             return character;
         } catch (e) {
-            if (e.message.indexOf('_DUP_') !== -1) {
+            console.log(e);
+            if (e.message.indexOf('UNIQUE') !== -1) {
                 throw new RpcException(new ConflictException("Character Name Already Taken"));
             }
             throw new RpcException(new InternalServerErrorException(e.message));
