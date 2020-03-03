@@ -1,0 +1,13 @@
+<div class="zone">
+    <ngx-joystick
+        #staticJoystic
+        [options]="staticOptions"
+        (start)="onStartStatic($event)"
+        (end)="onEndStatic($event)"
+        (move)="onMoveStatic($event)"
+        (plainUp)="onPlainUpStatic($event)"
+        (plainDown)="onPlainDownStatic($event)"
+        (plainLeft)="onPlainLeftStatic($event)"
+        (plainRight)="onPlainRightStatic($event)"
+    ></ngx-joystick>
+</div>

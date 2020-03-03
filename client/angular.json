@@ -125,5 +125,8 @@
       }
     }
   },
-  "defaultProject": "game"
+  "defaultProject": "game",
+  "cli": {
+    "analytics": false
+  }
 }

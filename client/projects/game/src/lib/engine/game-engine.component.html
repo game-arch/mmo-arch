@@ -1,5 +1,13 @@
 <canvas #canvas id="game-canvas" width="800" height="600"></canvas>
-<button mat-raised-button color="accent" style="position:fixed;left:16px;bottom:16px;"
-        *ngIf="world.socket && world.selectedCharacter !== null" (click)="signOut()">
+<game-joystick
+    *ngIf="world.socket && world.selectedCharacter !== null"
+></game-joystick>
+<button
+    mat-raised-button
+    color="accent"
+    style="position:fixed;left:16px;bottom:16px;"
+    *ngIf="world.socket && world.selectedCharacter !== null"
+    (click)="signOut()"
+>
     Character Screen
 </button>
