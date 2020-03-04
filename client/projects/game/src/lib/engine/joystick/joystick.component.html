@@ -1,13 +1,8 @@
-<div class="zone">
-    <ngx-joystick
-        #staticJoystic
-        [options]="staticOptions"
-        (start)="onStartStatic($event)"
-        (end)="onEndStatic($event)"
-        (move)="onMoveStatic($event)"
-        (plainUp)="onPlainUpStatic($event)"
-        (plainDown)="onPlainDownStatic($event)"
-        (plainLeft)="onPlainLeftStatic($event)"
-        (plainRight)="onPlainRightStatic($event)"
-    ></ngx-joystick>
-</div>
+<ngx-joystick
+    #joystick
+    style="z-index:1000"
+    [options]="options"
+    (start)="onStart($event)"
+    (end)="onEnd($event)"
+    (move)="onMove($event)"
+></ngx-joystick>

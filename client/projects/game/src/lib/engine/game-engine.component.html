@@ -1,7 +1,10 @@
 <canvas #canvas id="game-canvas" width="800" height="600"></canvas>
-<game-joystick
+<joystick
+    [enabled]="true"
     *ngIf="world.socket && world.selectedCharacter !== null"
-></game-joystick>
+    [style.opacity]="world.selectedCharacter ? 1 : 0"
+    [style.pointer-events]="world.selectedCharacter ? 'all' : 'none'"
+></joystick>
 <button
     mat-raised-button
     color="accent"

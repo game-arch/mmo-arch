@@ -1,102 +1,71 @@
-import { PlayerDirectionalInput } from '../../../../../../../server/services/map/actions'
-import { Component, ViewChild } from '@angular/core'
-import { ConnectionManager } from '../../connection/connection-manager'
-import { JoystickEvent, NgxJoystickComponent } from 'ngx-joystick'
-import { JoystickManagerOptions, JoystickOutputData } from 'nipplejs'
+import { Component, EventEmitter } from '@angular/core'
+import { JoystickEvent } from 'ngx-joystick'
+import { takeUntil } from 'rxjs/operators'
+import { GameEngineService } from '../game-engine.service'
+import { interval } from 'rxjs'
 
 @Component({
-    selector: 'game-joystick',
+    selector: 'joystick',
     templateUrl: 'joystick.component.html',
+    inputs: ['enabled'],
 })
 export class JoystickComponent {
-    @ViewChild('staticJoystic', { static: true })
-    staticJoystick: NgxJoystickComponent
-
-    staticOptions: JoystickManagerOptions = {
+    enabled = false
+    options = {
         mode: 'static',
-        position: { left: '10%', top: '90%' },
-        color: 'blue',
+        position: { left: '120px', bottom: '120px' },
+        color: 'white',
     }
+    joystickThreshould = 0.3
+    moveEvents = new EventEmitter()
+    destroy = new EventEmitter()
+    stopMove = new EventEmitter()
 
-    lastDirection
+    directions
 
-    directionMap = {
-        down: 'down',
-        up: 'up',
-        left: 'left',
-        right: 'right',
-    }
-    directions = {
-        up: false,
-        down: false,
-        right: false,
-        left: false,
-    }
+    constructor(private service: GameEngineService) {}
 
-    staticOutputData: JoystickOutputData
-    directionStatic: string
-    interactingStatic: boolean
-
-    onStartStatic(event: JoystickEvent) {
-        this.interactingStatic = true
-    }
-
-    onEndStatic(event: JoystickEvent) {
-        this.interactingStatic = false
-        this.directions = {
-            up: false,
-            down: false,
-            right: false,
-            left: false,
-        }
-        this.sendDirectionalInput()
-    }
-
-    onMoveStatic(event: JoystickEvent) {
-        this.staticOutputData = event.data
-        this.directions[event.data.direction.angle] = true
-    }
-
-    onPlainUpStatic(event: JoystickEvent) {
-        this.directionStatic = 'UP'
-        this.toggleDirection(event, true)
-    }
-
-    onPlainDownStatic(event: JoystickEvent) {
-        this.directionStatic = 'DOWN'
-        this.toggleDirection(event, true)
-    }
-
-    onPlainLeftStatic(event: JoystickEvent) {
-        this.directionStatic = 'LEFT'
-        this.toggleDirection(event, true)
-    }
-
-    onPlainRightStatic(event: JoystickEvent) {
-        this.directionStatic = 'RIGHT'
-        this.toggleDirection(event, true)
-    }
-
-    toggleDirection(event: JoystickEvent, status: boolean) {
-        this.lastDirection = event.data.direction.angle
-        if (this.directionMap.hasOwnProperty(event.data.direction.angle)) {
-            let direction = this.directionMap[event.data.direction.angle]
-            if (this.directions[direction] !== status) {
-                this.directions[direction] = status
-                this.sendDirectionalInput()
-            }
-        }
-    }
-
-    private sendDirectionalInput() {
-        this.world.socket.emit(PlayerDirectionalInput.event, {
-            directions: this.directions,
+    ngAfterViewInit() {
+        this.moveEvents.pipe(takeUntil(this.destroy)).subscribe(directions => {
+            console.log('event!')
+            this.service.game.events.emit('input.joystick', directions)
         })
     }
 
-    get world() {
-        return this.connection.world
+    ngOnDestroy() {
+        this.destroy.emit()
     }
 
-    constructor(public connection: ConnectionManager) {}
+    onStart($event: JoystickEvent) {
+        this.directions = {
+            left: false,
+            right: false,
+            up: false,
+            down: false,
+        }
+        this.moveEvents.emit(this.directions)
+        interval(300)
+            .pipe(takeUntil(this.destroy), takeUntil(this.stopMove))
+            .subscribe(() => this.moveEvents.emit(this.directions))
+    }
+
+    onEnd($event: JoystickEvent) {
+        this.directions = {
+            left: false,
+            right: false,
+            up: false,
+            down: false,
+        }
+        this.moveEvents.emit(this.directions)
+        this.stopMove.emit()
+    }
+
+    onMove(event: JoystickEvent) {
+        this.directions = {
+            left: event.data.vector.x < -this.joystickThreshould,
+            right: event.data.vector.x > this.joystickThreshould,
+            up: event.data.vector.y > this.joystickThreshould,
+            down: event.data.vector.y < -this.joystickThreshould,
+        }
+    }
 }

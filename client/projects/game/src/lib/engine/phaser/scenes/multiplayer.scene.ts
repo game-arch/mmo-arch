@@ -15,6 +15,18 @@ import { ConnectionManager } from '../../../connection/connection-manager'
 
 export class MultiplayerScene extends BaseScene implements Scene {
     self: Mob
+    directionMap = {
+        s: 'down',
+        w: 'up',
+        a: 'left',
+        d: 'right',
+    }
+    directions = {
+        up: false,
+        down: false,
+        right: false,
+        left: false,
+    }
 
     destroyed = new EventEmitter()
 
@@ -26,9 +38,33 @@ export class MultiplayerScene extends BaseScene implements Scene {
         super(config)
     }
 
+    toggleDirection(event: KeyboardEvent, status: boolean) {
+        if (this.directionMap.hasOwnProperty(event.key)) {
+            event.stopImmediatePropagation()
+            let direction = this.directionMap[event.key]
+            if (this.directions[direction] !== status) {
+                this.directions[direction] = status
+                // this.self.moving = this.directions;
+                this.sendDirectionalInput()
+            }
+        }
+    }
+
     create() {
         super.create()
         this.game.events.once('game.scene', () => this.destroyed.emit())
+        this.input.keyboard.on('keydown', (event: KeyboardEvent) =>
+            this.toggleDirection(event, true)
+        )
+        this.input.keyboard.on('keyup', (event: KeyboardEvent) =>
+            this.toggleDirection(event, false)
+        )
+        this.game.events.on('input.joystick', directions => {
+            for (let dir of Object.keys(this.directions)) {
+                this.directions[dir] = directions[dir]
+            }
+            this.sendDirectionalInput()
+        })
         this.game.events.on(PlayerEnteredMap.event, data => {
             console.log('Player Joined', data)
             this.addOrUpdatePlayer({ ...data, id: data.characterId })
@@ -38,7 +74,9 @@ export class MultiplayerScene extends BaseScene implements Scene {
             this.removePlayer(data)
         })
         this.game.events.on(AllPlayers.event, players => {
-            from(players).subscribe(
+            from(
+                players
+            ).subscribe(
                 (player: {
                     id: number
                     x: number
@@ -54,6 +92,12 @@ export class MultiplayerScene extends BaseScene implements Scene {
         })
         this.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
             this.addOrUpdatePlayer(data.player)
+        })
+    }
+
+    private sendDirectionalInput() {
+        this.connection.socket.emit(PlayerDirectionalInput.event, {
+            directions: this.directions,
         })
     }
 
