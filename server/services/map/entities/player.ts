@@ -49,6 +49,6 @@ export class Player extends Mob {
             x     : this.x,
             y     : this.y,
             moving: this.sprite.moving
-        }
+        };
     }
 }
