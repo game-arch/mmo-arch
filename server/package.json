@@ -15,8 +15,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "tslint -p tsconfig.json -c tslint.json",
-    "fixtures:map": "fixtures services/map/fixtures --config src/world/map/typeorm.config.ts --sync --require=ts-node/register --require=tsconfig-paths/register"
+    "lint": "tslint -p tsconfig.json -c tslint.json"
   },
   "dependencies": {
     "@geckos.io/phaser-on-nodejs": "^1.0.4",

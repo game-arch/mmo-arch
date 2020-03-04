@@ -12,7 +12,7 @@ export class Connection<T = Partial<GameWorld>> {
             this.socket = io.connect(location + '?token=' + token, <any>{
                 transports  : ['websocket'],
                 reconnection: true,
-                parser: parser
+                parser      : parser
             });
             if (this.socket) {
                 this.socket.on('reconnect_attempt', () => {

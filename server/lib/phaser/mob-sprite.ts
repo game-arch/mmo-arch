@@ -1,10 +1,10 @@
 import Scene = Phaser.Scene;
-import {Physics}    from "./physics";
+import {Physics}           from "./physics";
 import Vector2 = Phaser.Math.Vector2;
 import Body = Phaser.Physics.Arcade.Body;
-import {Subject}    from "rxjs";
+import {Subject}           from "rxjs";
 import Sprite = Phaser.GameObjects.Sprite;
-import {Directions} from "./directions";
+import {Directions}        from "./directions";
 
 export class MobSprite extends Sprite {
     stopListening      = new Subject();

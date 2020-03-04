@@ -17,8 +17,6 @@ delete:
 	cd client && make delete
 	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make delete
 
-fixtures:
-	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos npm run fixtures:map
 
 prune:
 	cd server && npm run prune:worlds
