@@ -1,7 +1,0 @@
-entity: Resource
-items:
-  resource1:
-    id: 1
-    type: tree
-    constant: birch-tree
-    name: Birch Tree
