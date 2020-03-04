@@ -56,6 +56,12 @@ export class MultiplayerScene extends BaseScene implements Scene {
         this.game.events.once('game.scene', () => this.destroyed.emit());
         this.input.keyboard.on('keydown', (event: KeyboardEvent) => this.toggleDirection(event, true));
         this.input.keyboard.on('keyup', (event: KeyboardEvent) => this.toggleDirection(event, false));
+        this.game.events.on('input.joystick', (directions) => {
+            for (let dir of Object.keys(this.directions)) {
+                this.directions[dir] = directions[dir];
+            }
+            this.sendDirectionalInput();
+        });
         this.game.events.on(PlayerEnteredMap.event, (data) => {
             console.log('Player Joined', data);
             this.addOrUpdatePlayer({...data, id: data.characterId});

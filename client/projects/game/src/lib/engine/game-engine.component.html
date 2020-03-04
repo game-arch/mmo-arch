@@ -3,3 +3,6 @@
         *ngIf="world.socket && world.selectedCharacter !== null" (click)="signOut()">
     Character Screen
 </button>
+<joystick [enabled]="true"
+          [style.opacity]="world.selectedCharacter ? 1 : 0"
+          [style.pointer-events]="world.selectedCharacter ? 'all' : 'none'"></joystick>

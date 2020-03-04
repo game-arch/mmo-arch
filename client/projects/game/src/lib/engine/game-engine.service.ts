@@ -9,7 +9,6 @@ import {TitleScene}                         from "./phaser/scenes/title/title.sc
 import {TutorialScene}                      from "./phaser/scenes/tutorial/tutorial.scene";
 import {
     AllPlayers,
-    PlayerDirectionalInput,
     PlayerEnteredMap,
     PlayerLeftMap, PlayerUpdate
 }                                           from "../../../../../../server/services/map/actions";

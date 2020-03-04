@@ -7,16 +7,19 @@ import {ConnectionModule}    from "../connection/connection.module";
 import {GameEngineService}   from "./game-engine.service";
 import {RouterModule}        from "@angular/router";
 import {SceneFactory}        from "./phaser/scenes/scene-factory.service";
+import {NgxJoystickModule}   from "ngx-joystick";
+import {JoystickComponent}   from "./joystick.component";
 
 
 @NgModule({
-    declarations: [GameEngineComponent],
+    declarations: [GameEngineComponent, JoystickComponent],
     imports     : [
         RouterModule,
         CommonModule,
         MatButtonModule,
         MatCardModule,
-        ConnectionModule
+        ConnectionModule,
+        NgxJoystickModule
     ],
     providers   : [
         GameEngineService,

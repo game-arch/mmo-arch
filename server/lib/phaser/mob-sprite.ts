@@ -39,8 +39,8 @@ export class MobSprite extends Sprite {
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone();
             this.reportChangeInMovingStatus(velocity);
-            this.body.setVelocity(velocity.x, velocity.y);
             this.onVelocityChange.next();
+            this.body.setVelocity(velocity.x, velocity.y);
         }
     }
 

@@ -12,6 +12,7 @@ export class GameEngineComponent implements AfterViewInit, OnDestroy {
     @ViewChild('canvas', {static: true})
     canvas: ElementRef;
 
+
     get world() {
         return this.connection.world;
     }
