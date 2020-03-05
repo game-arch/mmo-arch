@@ -57,6 +57,7 @@ export class PartyService {
         if (party.members.includes(characterId) && character.status === 'online') {
             party.leader = characterId
             await this.repo.save(party)
+            this.emitter.madePartyLeader(party.id, party.leader)
             return true;
         }
         return false;

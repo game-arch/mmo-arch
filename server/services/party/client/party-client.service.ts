@@ -16,7 +16,7 @@ export class PartyClient {
 
     }
 
-    async getParty(leaderId: number): Promise<Party> {
+    async getPartyByLeader(leaderId: number): Promise<Party> {
         return await this.client.send(
             WORLD_PREFIX + GetParty.event,
             new GetParty(leaderId)

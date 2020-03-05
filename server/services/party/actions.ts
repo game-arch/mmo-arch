@@ -43,6 +43,12 @@ export class MakePartyLeader {
     constructor(public leaderId: number, public characterId: number) {
     }
 }
+export class MadePartyLeader {
+    static readonly event = 'party.made_party_leader'
+
+    constructor(public partyId: number, public characterId: number) {
+    }
+}
 
 export class PartyLeaderNotChanged {
     static readonly event = 'party.leader_not_changed'
