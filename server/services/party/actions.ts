@@ -33,7 +33,7 @@ export class GetParty {
 export class GetPartyMembers {
     static readonly event = 'party.get_all_members'
 
-    constructor(public characterName: string) {
+    constructor(public leaderId: number) {
     }
 }
 
@@ -57,7 +57,7 @@ export class PartyLeaderNotChanged {
 export class GetPartyLeader {
     static readonly event = 'party.get_leader'
 
-    constructor(public partyName: string) {
+    constructor(public partyId: number) {
     }
 }
 

@@ -90,7 +90,7 @@ export class PartyService {
         return party.members.length > 4
     }
 
-    async isInvited(party: Party, data: PartyLeaderOnline): Promise<boolean> {
-        return party.invitees.includes(data.leaderId)
+    async isInvited(party: Party, characterId:number): Promise<boolean> {
+        return party.invitees.includes(characterId)
     }
 }
