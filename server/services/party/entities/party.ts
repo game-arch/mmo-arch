@@ -1,6 +1,6 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import {Column, Entity, Index, PrimaryGeneratedColumn} from 'typeorm'
 
-@Entity()
+@Entity({name:'parties'})
 @Index('party', ['partyId', 'name'])
 export class Party {
     @PrimaryGeneratedColumn()
@@ -14,11 +14,11 @@ export class Party {
     @Column()
     partyMembers: number
 
-    @Column()
-    members: any
+    @Column('simple-array')
+    members: string[]
 
-    @Column()
-    invitees: any
+    @Column('simple-array')
+    invitees: string[]
 
     @Column()
     leader: string
