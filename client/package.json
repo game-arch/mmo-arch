@@ -26,6 +26,7 @@
     "ngx-socket-io": "^3.0.1",
     "nipplejs": "^0.8.5",
     "phaser": "^3.22.0",
+    "prettier": "^1.19.1",
     "rxjs": "~6.5.4",
     "socket.io-client": "^2.3.0",
     "socket.io-msgpack-parser": "^2.2.0",

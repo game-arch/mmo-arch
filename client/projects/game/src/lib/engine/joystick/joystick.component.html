@@ -1,0 +1,8 @@
+<ngx-joystick
+    #joystick
+    style="z-index:1000"
+    [options]="options"
+    (start)="onStart($event)"
+    (end)="onEnd($event)"
+    (move)="onMove($event)"
+></ngx-joystick>

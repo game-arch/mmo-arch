@@ -1,114 +1,142 @@
-import {BaseScene}         from "../../../../../../../../server/services/map/maps/base.scene";
-import Scene = Phaser.Scene;
-import {Mob}               from "../../../../../../../../server/lib/phaser/mob";
-import {EventEmitter}      from "@angular/core";
-import {MapConfig}         from "../../../../../../../../server/services/map/config/config";
+import { BaseScene } from '../../../../../../../../server/services/map/maps/base.scene'
+import Scene = Phaser.Scene
+import { Mob } from '../../../../../../../../server/lib/phaser/mob'
+import { EventEmitter } from '@angular/core'
+import { MapConfig } from '../../../../../../../../server/services/map/config/config'
 import {
     AllPlayers,
     PlayerDirectionalInput,
     PlayerEnteredMap,
-    PlayerLeftMap, PlayerUpdate
-}                          from "../../../../../../../../server/services/map/actions";
-import {from}              from "rxjs";
-import {ConnectionManager} from "../../../connection/connection-manager";
+    PlayerLeftMap,
+    PlayerUpdate,
+} from '../../../../../../../../server/services/map/actions'
+import { from } from 'rxjs'
+import { ConnectionManager } from '../../../connection/connection-manager'
 
 export class MultiplayerScene extends BaseScene implements Scene {
-
+    self: Mob
     directionMap = {
         s: 'down',
         w: 'up',
         a: 'left',
-        d: 'right'
-    };
-    directions   = {
-        up   : false,
-        down : false,
+        d: 'right',
+    }
+    directions = {
+        up: false,
+        down: false,
         right: false,
-        left : false
-    };
+        left: false,
+    }
 
-    self: Mob;
-
-    destroyed = new EventEmitter();
+    destroyed = new EventEmitter()
 
     get connection() {
-        return this.manager.world;
+        return this.manager.world
     }
 
     constructor(protected manager: ConnectionManager, config: MapConfig) {
-        super(config);
+        super(config)
     }
 
     toggleDirection(event: KeyboardEvent, status: boolean) {
         if (this.directionMap.hasOwnProperty(event.key)) {
-            event.stopImmediatePropagation();
-            let direction = this.directionMap[event.key];
+            event.stopImmediatePropagation()
+            let direction = this.directionMap[event.key]
             if (this.directions[direction] !== status) {
-                this.directions[direction] = status;
+                this.directions[direction] = status
                 // this.self.moving = this.directions;
-                this.sendDirectionalInput();
+                this.sendDirectionalInput()
             }
         }
     }
 
     create() {
-        super.create();
-        this.game.events.once('game.scene', () => this.destroyed.emit());
-        this.input.keyboard.on('keydown', (event: KeyboardEvent) => this.toggleDirection(event, true));
-        this.input.keyboard.on('keyup', (event: KeyboardEvent) => this.toggleDirection(event, false));
-        this.game.events.on('input.joystick', (directions) => {
+        super.create()
+        this.game.events.once('game.scene', () => this.destroyed.emit())
+        this.input.keyboard.on('keydown', (event: KeyboardEvent) =>
+            this.toggleDirection(event, true)
+        )
+        this.input.keyboard.on('keyup', (event: KeyboardEvent) =>
+            this.toggleDirection(event, false)
+        )
+        this.game.events.on('input.joystick', directions => {
             for (let dir of Object.keys(this.directions)) {
-                this.directions[dir] = directions[dir];
+                this.directions[dir] = directions[dir]
             }
-            this.sendDirectionalInput();
-        });
-        this.game.events.on(PlayerEnteredMap.event, (data) => {
-            console.log('Player Joined', data);
-            this.addOrUpdatePlayer({...data, id: data.characterId});
-        });
-        this.game.events.on(PlayerLeftMap.event, (data) => {
-            console.log('Player Left', data);
-            this.removePlayer(data);
-        });
+            this.sendDirectionalInput()
+        })
+        this.game.events.on(PlayerEnteredMap.event, data => {
+            console.log('Player Joined', data)
+            this.addOrUpdatePlayer({ ...data, id: data.characterId })
+        })
+        this.game.events.on(PlayerLeftMap.event, data => {
+            console.log('Player Left', data)
+            this.removePlayer(data)
+        })
         this.game.events.on(AllPlayers.event, players => {
-            from(players)
-                .subscribe((player: { id: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) => this.addOrUpdatePlayer(player));
-        });
+            from(
+                players
+            ).subscribe(
+                (player: {
+                    id: number
+                    x: number
+                    y: number
+                    moving?: {
+                        up: boolean
+                        down: boolean
+                        left: boolean
+                        right: boolean
+                    }
+                }) => this.addOrUpdatePlayer(player)
+            )
+        })
         this.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
-            this.addOrUpdatePlayer(data.player);
-        });
+            this.addOrUpdatePlayer(data.player)
+        })
     }
 
     private sendDirectionalInput() {
-        this.connection.socket.emit(PlayerDirectionalInput.event, {directions: this.directions});
+        this.connection.socket.emit(PlayerDirectionalInput.event, {
+            directions: this.directions,
+        })
     }
 
     private removePlayer(data: PlayerLeftMap) {
-        this.removeEntity('player', data.characterId);
+        this.removeEntity('player', data.characterId)
     }
 
-    private addOrUpdatePlayer(data: { id: number, x: number, y: number, moving?: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
-        let player = this.entities.player[data.id];
+    private addOrUpdatePlayer(data: {
+        id: number
+        x: number
+        y: number
+        moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
+    }) {
+        let player = this.entities.player[data.id]
         if (!player) {
-            player = this.createPlayer(data);
+            player = this.createPlayer(data)
         }
-        player.sprite.setPosition(data.x, data.y);
+        player.sprite.setPosition(data.x, data.y)
         if (data.moving) {
-            player.moving = data.moving;
+            player.moving = data.moving
         }
     }
 
-    private createPlayer(data: { id: number; x: number; y: number; moving?: { up: boolean; down: boolean; left: boolean; right: boolean } }) {
-        let player = new Mob();
-        this.addEntity('player', player, data.id);
+    private createPlayer(data: {
+        id: number
+        x: number
+        y: number
+        moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
+    }) {
+        let player = new Mob()
+        this.addEntity('player', player, data.id)
         if (this.connection.selectedCharacter.id === data.id) {
-            this.setSelf(player);
+            this.setSelf(player)
         }
-        return player;
+        return player
     }
 
     private setSelf(player) {
-        this.self = player;
-        this.cameras.main.startFollow(player.sprite.body, true, 0.05, 0.05);
+        this.self = player
+        this.cameras.main.startFollow(player.sprite.body, true, 0.05, 0.05)
     }
 }
