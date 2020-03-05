@@ -33,9 +33,11 @@ export class PartyGateway {
     @SubscribeMessage(CreateParty.event)
     async createParty(client: Socket, data: CreateParty) {
         try {
-            await this.client.createPary(data.partyName, data.characterId)
-            client.emit(PartyCreated.event, new PartyCreated(data.characterId))
-            client.join('party.' + data.partyName);
+            let party = await this.client.createParty(data.partyName, data.characterId)
+            if (party) {
+                client.emit(PartyCreated.event, new PartyCreated(party.id, data.characterId))
+                client.join('party.' + data.partyName)
+            }
         } catch (e) {
             client.emit(PartyNotCreated.event, new PartyNotCreated({statusCode: 409}))
         }
@@ -47,6 +49,7 @@ export class PartyGateway {
             let party = await this.client.getParty(data.leaderId)
             if (party) {
                 await this.client.makeLeader(data.leaderId, data.characterId)
+                // by sending the event like this, we avoid needing to do it from the party microservice
                 this.server.to('party.' + party.name).emit(MakePartyLeader.event, data)
             }
             client.emit(PartyLeaderNotChanged.event)

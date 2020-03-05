@@ -78,7 +78,7 @@ export class PartyService {
         data: PartyLeaderOnline,
         party: Party
     ): Promise<boolean> {
-        return this.isLeader(data.characterId, party)
+        return this.isLeader(data.leaderId, party)
     }
 
     isLeader(characterId: number, party: Party): boolean {
@@ -90,6 +90,6 @@ export class PartyService {
     }
 
     async isInvited(party: Party, data: PartyLeaderOnline): Promise<boolean> {
-        return party.invitees.includes(data.characterId)
+        return party.invitees.includes(data.leaderId)
     }
 }

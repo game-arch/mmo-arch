@@ -23,7 +23,7 @@ export class PartyClient {
         ).pipe(first()).toPromise()
     }
 
-    async createPary(partyName: string, characterId: number): Promise<boolean> {
+    async createParty(partyName: string, characterId: number): Promise<Party> {
         return await this.client.send(
             WORLD_PREFIX + CreateParty.event,
             new CreateParty(partyName, characterId)
