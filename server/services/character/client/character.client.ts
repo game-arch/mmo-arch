@@ -31,7 +31,7 @@ export class CharacterClient {
         this.client.send(WORLD_PREFIX + CharacterOnline.event, new CharacterOnline(id, socketId)).subscribe();
     }
 
-    async characterOffline(id: number) {
+    async characterOffline(id: string) {
         this.client.send(WORLD_PREFIX + CharacterOffline.event, new CharacterOffline(id)).subscribe();
     }
 

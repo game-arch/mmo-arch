@@ -19,7 +19,6 @@ export class JoystickComponent {
     joystickThreshould = 0.3
     moveEvents = new EventEmitter()
     destroy = new EventEmitter()
-    stopMove = new EventEmitter()
 
     directions
 
@@ -27,7 +26,6 @@ export class JoystickComponent {
 
     ngAfterViewInit() {
         this.moveEvents.pipe(takeUntil(this.destroy)).subscribe(directions => {
-            console.log('event!')
             this.service.game.events.emit('input.joystick', directions)
         })
     }
@@ -44,9 +42,6 @@ export class JoystickComponent {
             down: false,
         }
         this.moveEvents.emit(this.directions)
-        interval(300)
-            .pipe(takeUntil(this.destroy), takeUntil(this.stopMove))
-            .subscribe(() => this.moveEvents.emit(this.directions))
     }
 
     onEnd($event: JoystickEvent) {
@@ -57,15 +52,18 @@ export class JoystickComponent {
             down: false,
         }
         this.moveEvents.emit(this.directions)
-        this.stopMove.emit()
     }
 
     onMove(event: JoystickEvent) {
+        let lastDirection = this.directions
         this.directions = {
             left: event.data.vector.x < -this.joystickThreshould,
             right: event.data.vector.x > this.joystickThreshould,
             up: event.data.vector.y > this.joystickThreshould,
             down: event.data.vector.y < -this.joystickThreshould,
+        }
+        if (JSON.stringify(lastDirection) !== JSON.stringify(this.directions)) {
+            this.moveEvents.emit(this.directions);
         }
     }
 }

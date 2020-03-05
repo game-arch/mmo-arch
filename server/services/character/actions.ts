@@ -73,7 +73,7 @@ export class CharacterLoggedOut {
 export class CharacterOffline {
   static readonly event = 'character.offline';
 
-  constructor(public characterId: number) {}
+  constructor(public socketId: string) {}
 }
 
 export class AllCharactersOffline {

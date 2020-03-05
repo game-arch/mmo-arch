@@ -82,7 +82,7 @@ export class CharacterService {
   }
 
   async characterOffline(data: CharacterOffline) {
-    let character = await this.repo.findOne({ id: data.characterId });
+    let character = await this.repo.findOne({ socketId: data.socketId });
     if (character) {
       character.status = 'offline';
       await this.repo.save(character);
