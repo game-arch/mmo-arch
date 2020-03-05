@@ -9,15 +9,17 @@ import {WorldClientModule}     from "../../lib/world-client/world-client.module"
 import {MapClientModule}       from "../map/client/map-client.module";
 import {MapController}         from "./map/map.controller";
 import {MapGateway}            from "./map/map.gateway";
-import {CharacterGateway}      from "./character/character.gateway";
-import {CharacterController}   from "./character/character.controller";
-import {ChatController}        from "./chat/chat.controller";
-import {ChatGateway}           from "./chat/chat.gateway";
-import {TypeOrmModule}         from "@nestjs/typeorm";
-import {Player}                from "./entities/player";
-import {WorldConstants}        from "../../lib/constants/world.constants";
-import * as path               from "path";
-import {environment}           from "../../lib/config/environment";
+import {CharacterGateway}    from "./character/character.gateway";
+import {CharacterController} from "./character/character.controller";
+import {ChatController}      from "./chat/chat.controller";
+import {ChatGateway}         from "./chat/chat.gateway";
+import {TypeOrmModule}       from "@nestjs/typeorm";
+import {Player}              from "./entities/player";
+import {WorldConstants}      from "../../lib/constants/world.constants";
+import * as path             from "path";
+import {environment}         from "../../lib/config/environment";
+import {PartyController}     from "./party/party.controller";
+import {PartyGateway}        from "./party/party.gateway";
 
 @Module({
     imports    : [
@@ -35,8 +37,22 @@ import {environment}           from "../../lib/config/environment";
         PresenceClientModule,
         MapClientModule
     ],
-    controllers: [WorldController, MapController, CharacterController, ChatController],
-    providers  : [WorldService, WorldGateway, MapGateway, CharacterGateway, ChatGateway, Logger],
+    controllers: [
+        WorldController,
+        MapController,
+        CharacterController,
+        ChatController,
+        PartyController
+    ],
+    providers  : [
+        WorldService,
+        WorldGateway,
+        MapGateway,
+        CharacterGateway,
+        ChatGateway,
+        Logger,
+        PartyGateway
+    ],
 })
 export class WorldModule {
 }
