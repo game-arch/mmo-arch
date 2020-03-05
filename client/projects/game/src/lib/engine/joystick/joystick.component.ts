@@ -1,29 +1,28 @@
-import {Component, EventEmitter} from '@angular/core'
-import {JoystickEvent}           from 'ngx-joystick'
-import {takeUntil}               from 'rxjs/operators'
-import {GameEngineService}       from '../game-engine.service'
+import { Component, EventEmitter } from '@angular/core'
+import { JoystickEvent } from 'ngx-joystick'
+import { takeUntil } from 'rxjs/operators'
+import { GameEngineService } from '../game-engine.service'
+import { interval } from 'rxjs'
 
 @Component({
-    selector   : 'joystick',
+    selector: 'joystick',
     templateUrl: 'joystick.component.html',
-    inputs     : ['enabled'],
+    inputs: ['enabled'],
 })
 export class JoystickComponent {
-    enabled            = false
-    options            = {
-        mode    : 'static',
-        position: {left: '120px', bottom: '120px'},
-        color   : 'white',
+    enabled = false
+    options = {
+        mode: 'static',
+        position: { left: '120px', bottom: '120px' },
+        color: 'white',
     }
     joystickThreshould = 0.3
-    moveEvents         = new EventEmitter()
-    destroy            = new EventEmitter()
-    stopMove           = new EventEmitter()
+    moveEvents = new EventEmitter()
+    destroy = new EventEmitter()
 
     directions
 
-    constructor(private service: GameEngineService) {
-    }
+    constructor(private service: GameEngineService) {}
 
     ngAfterViewInit() {
         this.moveEvents.pipe(takeUntil(this.destroy)).subscribe(directions => {
@@ -37,32 +36,34 @@ export class JoystickComponent {
 
     onStart($event: JoystickEvent) {
         this.directions = {
-            left : false,
+            left: false,
             right: false,
-            up   : false,
-            down : false,
+            up: false,
+            down: false,
         }
         this.moveEvents.emit(this.directions)
     }
 
     onEnd($event: JoystickEvent) {
         this.directions = {
-            left : false,
+            left: false,
             right: false,
-            up   : false,
-            down : false,
+            up: false,
+            down: false,
         }
         this.moveEvents.emit(this.directions)
-        this.stopMove.emit()
     }
 
     onMove(event: JoystickEvent) {
+        let lastDirection = this.directions
         this.directions = {
-            left : event.data.vector.x < -this.joystickThreshould,
+            left: event.data.vector.x < -this.joystickThreshould,
             right: event.data.vector.x > this.joystickThreshould,
-            up   : event.data.vector.y > this.joystickThreshould,
-            down : event.data.vector.y < -this.joystickThreshould,
+            up: event.data.vector.y > this.joystickThreshould,
+            down: event.data.vector.y < -this.joystickThreshould,
         }
-        this.moveEvents.emit(this.directions)
+        if (JSON.stringify(lastDirection) !== JSON.stringify(this.directions)) {
+            this.moveEvents.emit(this.directions);
+        }
     }
 }

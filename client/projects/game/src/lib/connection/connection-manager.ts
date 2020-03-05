@@ -44,12 +44,14 @@ export class ConnectionManager {
 
     private handleConnectionTriggers() {
         this.world.socket.on('connect', () => this.disconnect('lobby'));
-        this.world.socket.on('disconnect', () => {
-            if (this.world.world) {
-                this.disconnect(this.world.world.name);
+        this.world.socket.on('disconnect', (typeOfDisconnect) => {
+            if (typeOfDisconnect === 'io client disconnect') {
+                if (this.world.world) {
+                    this.disconnect(this.world.world.name);
+                }
+                this.get('lobby').socket.connect();
+                this.handleDisconnectAll('lobby');
             }
-            this.get('lobby').socket.connect();
-            this.handleDisconnectAll('lobby');
         });
     }
 
