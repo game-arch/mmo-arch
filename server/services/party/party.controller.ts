@@ -1,8 +1,8 @@
-import { Controller } from '@nestjs/common'
-import { PartyService } from './party.service'
-import { MessagePattern } from '@nestjs/microservices'
-import { WORLD_PREFIX } from '../world/world.prefix'
-import { GetParty, CreateParty } from './actions'
+import { Controller }                           from '@nestjs/common'
+import { PartyService }                         from './party.service'
+import { MessagePattern }                       from '@nestjs/microservices'
+import { WORLD_PREFIX }                         from '../world/world.prefix'
+import {GetParty, CreateParty, MakePartyLeader} from './actions'
 
 @Controller()
 export class PartyController {
@@ -10,11 +10,17 @@ export class PartyController {
 
     @MessagePattern(WORLD_PREFIX + GetParty.event)
     getParty(data: GetParty) {
-        return this.service.getPartyName(data.partyId)
+        return this.service.getPartyByLeader(data.leaderId)
     }
 
     @MessagePattern(WORLD_PREFIX + CreateParty.event)
     createParty(data: CreateParty) {
-        return this.service.createParty(data.name, data.characterName)
+        return this.service.createParty(data.partyName, data.characterId)
     }
+
+    @MessagePattern(WORLD_PREFIX + MakePartyLeader.event)
+    makeLeader(data: MakePartyLeader) {
+        return this.service.makeLeader(data.leaderId, data.characterId)
+    }
+
 }

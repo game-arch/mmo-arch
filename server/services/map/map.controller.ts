@@ -8,10 +8,9 @@ import {MapEmitter}                                                             
 import {WorldConstants}                                                             from "../../lib/constants/world.constants";
 import {MapConstants}                                                               from "./constants";
 import {WORLD_PREFIX}                                                               from "../world/world.prefix";
-import {LocalMessage}                                                               from "../world/chat/actions";
 import {InjectRepository}                                                           from "@nestjs/typeorm";
 import {Player}                                                                     from "./entities/player";
-import {createConnection, getConnection, Repository}                                from "typeorm";
+import {getConnection, Repository}                                                  from "typeorm";
 import {from}                                                                       from "rxjs";
 import {map, toArray}                                                               from "rxjs/operators";
 
