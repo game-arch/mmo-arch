@@ -37,11 +37,13 @@ export class MobSprite extends Sprite {
         }
         let velocity = Physics.getVelocity(this.moving);
         if (!velocity.equals(this.lastVelocity)) {
-            this.lastVelocity = this.body.velocity.clone();
             this.reportChangeInMovingStatus(velocity);
             this.onVelocityChange.next();
-            this.body.setVelocity(velocity.x, velocity.y);
         }
+        this.body.setVelocity(velocity.x, velocity.y);
+    }
+    postUpdate(...args: any[]) {
+        this.lastVelocity = this.body.velocity.clone();
     }
 
 

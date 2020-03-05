@@ -67,6 +67,7 @@ export class ConnectionManager {
     disconnect(name: string) {
         let server = this.get(name);
         if (server.socket.connected) {
+            server.socket.disconnect();
             server.socket.close();
         }
         if (this.world.world && this.world.world.name === server.world.name) {
@@ -93,6 +94,7 @@ export class ConnectionManager {
         this.disconnect$.pipe(takeUntil(fromEvent(this.connections[name].socket, 'disconnect')))
             .subscribe(() => {
                 this.connections[name].socket.disconnect();
+                this.connections[name].socket.close();
                 delete this.connections[name];
                 if (this.world.world && this.world.world.name === name) {
                     this.world = new WorldConnection(null, null);

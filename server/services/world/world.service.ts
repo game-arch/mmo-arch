@@ -54,15 +54,15 @@ export class WorldService {
         if (verified.world !== WorldConstants.CONSTANT) {
             throw new Error("Character is on a different world");
         }
-        if (verified.status !== 'offline') {
-            throw new Error('Character is already online');
-        }
+        // if (verified.status !== 'offline') {
+        //     throw new Error('Character is already online');
+        // }
     }
 
     async removeCharacter(client: Socket) {
+        await this.character.characterOffline(client.id);
         let player = await this.players.findOne({socketId: client.id});
         if (player) {
-            await this.character.characterOffline(player.characterId);
             client.adapter.del(client.id, 'character-id.' + player.characterId);
             client.adapter.del(client.id, 'character-name.' + player.characterName);
             player.characterId   = null;

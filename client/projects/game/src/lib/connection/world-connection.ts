@@ -43,7 +43,7 @@ export class WorldConnection extends Connection {
                     resolve(data);
                 } else {
                     console.log("Could not sign in as " + characterName);
-                    reject();
+                    reject("Character already signed in.");
                 }
             });
         });
