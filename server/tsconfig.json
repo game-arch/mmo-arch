@@ -11,11 +11,18 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "typeRoots": ["./node_modules/phaser/types"],
+    "typeRoots": [
+      "./node_modules/phaser/types"
+    ],
     "types": [
       "node",
       "phaser"
     ]
   },
-  "include": ["./node_modules/phaser/types/*.d.ts"]
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"],
+  "include": [
+    "./lib/**/*.ts",
+    "./services/**/*.ts",
+    "./node_modules/phaser/types/*.d.ts"
+  ]
 }

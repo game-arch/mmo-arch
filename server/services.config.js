@@ -66,6 +66,19 @@ module.exports = {
             }
         },
         {
+            instances: 1,
+            name: (process.env.WORLD_CONSTANT || 'maiden') + '-party',
+            script: 'dist/services/party/main.js',
+            watch: ["dist/services/party", "dist/lib"],
+            env: {
+                WORLD_CONSTANT: process.env.WORLD_CONSTANT,
+                WORLD_NAME: process.env.WORLD_NAME
+            },
+            watch_options: {
+                "followSymlinks": false
+            }
+        },
+        {
             instances: 2,
             name: (process.env.WORLD_CONSTANT || 'maiden') + '-server',
             script: 'dist/services/world/main.js',

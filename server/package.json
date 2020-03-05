@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "author": "",
+  "main": "main.ts",
   "license": "MIT",
   "scripts": {
     "prune:worlds": "node dist/lib/scripts/prune-worlds.js",
