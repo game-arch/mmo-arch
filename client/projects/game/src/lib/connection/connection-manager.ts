@@ -1,26 +1,23 @@
-import {EventEmitter, Injectable}            from '@angular/core';
-import {GameWorld}                           from "../../../../../../server/lib/interfaces/game-world";
-import {BehaviorSubject, fromEvent, Subject} from "rxjs";
-import {Connection}                          from "./connection";
-import {Actions, ofActionDispatched, Store}  from "@ngxs/store";
-import {AuthState}                           from "../authentication/state/auth.state";
-import {Hosts}                               from "../hosts";
-import {SetToken}                            from "../authentication/state/auth.actions";
-import {filter, takeUntil}                   from "rxjs/operators";
-import {WorldConnection}                     from "./world-connection";
+import { EventEmitter, Injectable }           from "@angular/core";
+import { GameWorld }                          from "../../../../../../server/lib/interfaces/game-world";
+import { BehaviorSubject, fromEvent }         from "rxjs";
+import { Connection }                         from "./connection";
+import { Actions, ofActionDispatched, Store } from "@ngxs/store";
+import { AuthState }                          from "../authentication/state/auth.state";
+import { SetToken }                           from "../authentication/state/auth.actions";
+import { filter, takeUntil }                  from "rxjs/operators";
+import { WorldConnection }                    from "./world-connection";
 
 @Injectable()
 export class ConnectionManager {
 
-    private connections: { [name: string]: Connection } = {};
-
     world: WorldConnection = new WorldConnection(null, null);
     worldChange            = new BehaviorSubject<WorldConnection>(new WorldConnection(null, null));
-
     disconnect$ = new EventEmitter();
+    private connections: { [name: string]: Connection } = {};
 
     constructor(private store: Store, private actions: Actions) {
-        this.actions.pipe(ofActionDispatched(SetToken), filter(action => action.token === ''))
+        this.actions.pipe(ofActionDispatched(SetToken), filter(action => action.token === ""))
             .subscribe(() => {
                 this.disconnect$.emit();
             });
@@ -30,29 +27,16 @@ export class ConnectionManager {
         if (this.connections[server.name]) {
             this.disconnect(server.name);
         }
-        if (server.status === 'online') {
-            let connection = this.openConnection(server.name, server, 'http://' + server.host + ':' + server.port, isWorld);
+        if (server.status === "online") {
+            let connection = this.openConnection(server.name, server, "http://" + server.host + ":" + server.port, isWorld);
             if (isWorld) {
                 this.handleConnectionTriggers();
             } else {
-                connection.socket.on('connect-error', () => this.store.dispatch(new SetToken()));
+                connection.socket.on("connect-error", () => this.store.dispatch(new SetToken()));
             }
             return connection;
         }
         return null;
-    }
-
-    private handleConnectionTriggers() {
-        this.world.socket.on('connect', () => this.disconnect('lobby'));
-        this.world.socket.on('disconnect', (typeOfDisconnect) => {
-            if (typeOfDisconnect === 'io client disconnect') {
-                if (this.world.world) {
-                    this.disconnect(this.world.world.name);
-                }
-                this.get('lobby').socket.connect();
-                this.handleDisconnectAll('lobby');
-            }
-        });
     }
 
     isConnected(name: string) {
@@ -92,8 +76,21 @@ export class ConnectionManager {
         return this.connections[name];
     }
 
+    private handleConnectionTriggers() {
+        this.world.socket.on("connect", () => this.disconnect("lobby"));
+        this.world.socket.on("disconnect", (typeOfDisconnect) => {
+            if (typeOfDisconnect === "io client disconnect") {
+                if (this.world.world) {
+                    this.disconnect(this.world.world.name);
+                }
+                this.get("lobby").socket.connect();
+                this.handleDisconnectAll("lobby");
+            }
+        });
+    }
+
     private handleDisconnectAll(name: string) {
-        this.disconnect$.pipe(takeUntil(fromEvent(this.connections[name].socket, 'disconnect')))
+        this.disconnect$.pipe(takeUntil(fromEvent(this.connections[name].socket, "disconnect")))
             .subscribe(() => {
                 this.connections[name].socket.disconnect();
                 this.connections[name].socket.close();
@@ -102,7 +99,7 @@ export class ConnectionManager {
                     this.world = new WorldConnection(null, null);
                     this.worldChange.next(this.world);
                 }
-            })
+            });
     }
 
 }

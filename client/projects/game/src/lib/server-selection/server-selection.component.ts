@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-    selector   : 'server-selection',
-    templateUrl: 'server-selection.component.html',
+    selector   : "server-selection",
+    templateUrl: "server-selection.component.html",
     styles     : []
 })
 export class ServerSelectionComponent implements OnInit {
@@ -13,8 +13,8 @@ export class ServerSelectionComponent implements OnInit {
     ngOnInit() {
     }
 
-    onConnection(name:string) {
-        console.log('connected!', name);
+    onConnection(name: string) {
+        console.log("connected!", name);
     }
 
 }
