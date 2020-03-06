@@ -1,89 +1,102 @@
 export class CreateParty {
-    static readonly event = 'party.create'
+  static readonly event = "party.create";
 
-    constructor(public name: string, public characterName: string) {}
+  constructor(public name: string, public characterName: string) {
+  }
 }
 
 export class PartyCreated {
-    static readonly event = 'party.created'
+  static readonly event = "party.created";
 
-    constructor(public world: string, public characterId: number) {}
+  constructor(public world: string, public characterId: number) {
+  }
 }
 
 export class PartyNotCreated {
-    static readonly event = 'party.not_created'
+  static readonly event = "party.not_created";
 
-    constructor(
-        public error: {
-            statusCode: number
-        }
-    ) {}
+  constructor(
+    public error: {
+      statusCode: number
+    }
+  ) {
+  }
 }
 
 export class GetParty {
-    static readonly event = 'party.get_party'
+  static readonly event = "party.get_party";
 
-    constructor(public partyId: number) {}
+  constructor(public partyId: number) {
+  }
 }
 
 export class GetPartyMembers {
-    static readonly event = 'party.get_all_members'
+  static readonly event = "party.get_all_members";
 
-    constructor(public accountId: number, public world: string) {}
+  constructor(public accountId: number, public world: string) {
+  }
 }
 
 export class MakePartyLeader {
-    static readonly event = 'party.make_leader'
+  static readonly event = "party.make_leader";
 
-    constructor(public characterName: string) {}
+  constructor(public characterName: string) {
+  }
 }
 
 export class GetPartyLeader {
-    static readonly event = 'party.get_leader'
+  static readonly event = "party.get_leader";
 
-    constructor(public characterId: number) {}
+  constructor(public characterId: number) {
+  }
 }
 
 export class PartyLeaderOnline {
-    static readonly event = 'party.online_leader'
+  static readonly event = "party.online_leader";
 
-    constructor(public characterId: number, public socketId: string) {}
+  constructor(public characterId: number, public socketId: string) {
+  }
 }
 
 export class PartyMemberJoined {
-    static readonly event = 'party.member_joined'
+  static readonly event = "party.member_joined";
 
-    constructor(
-        public characterId: number,
-        public name: string,
-        public partyId: number
-    ) {}
+  constructor(
+    public characterId: number,
+    public name: string,
+    public partyId: number
+  ) {
+  }
 }
 
 export class GetPartyInvite {
-    static readonly event = 'party.get_invite'
+  static readonly event = "party.get_invite";
 
-    constructor(public leaderName: string) {}
+  constructor(public leaderName: string) {
+  }
 }
 
 export class PartyMemberLeft {
-    static readonly event = 'party.member_left'
+  static readonly event = "party.member_left";
 
-    constructor(
-        public characterId: number,
-        public name: string,
-        public partyId: number
-    ) {}
+  constructor(
+    public characterId: number,
+    public name: string,
+    public partyId: number
+  ) {
+  }
 }
 
 export class PartyMemberOffline {
-    static readonly event = 'party.member_offline'
+  static readonly event = "party.member_offline";
 
-    constructor(public characterId: number) {}
+  constructor(public characterId: number) {
+  }
 }
 
 export class PartyMemberKicked {
-    static readonly event = 'party.member_kicked'
+  static readonly event = "party.member_kicked";
 
-    constructor(public characterId: number, public partyId: number) {}
+  constructor(public characterId: number, public partyId: number) {
+  }
 }

@@ -1,20 +1,24 @@
-import {Component, EventEmitter}                                from "@angular/core";
-import {ConnectionManager}                                      from "../connection/connection-manager";
-import {FormControl, FormGroup, Validators}                     from "@angular/forms";
-import {MatDialogRef}                                           from "@angular/material/dialog";
-import {fromEvent}                                              from "rxjs";
-import {takeUntil}                                              from "rxjs/operators";
-import {CreateCharacter, CharacterCreated, CharacterNotCreated} from "../../../../../../server/services/character/actions";
+import { Component, EventEmitter }            from "@angular/core";
+import { ConnectionManager }                  from "../connection/connection-manager";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatDialogRef }                       from "@angular/material/dialog";
+import { fromEvent }                          from "rxjs";
+import { takeUntil }                          from "rxjs/operators";
+import {
+    CharacterCreated,
+    CharacterNotCreated,
+    CreateCharacter
+}                                             from "../../../../../../server/services/character/actions";
 
 @Component({
-    selector   : 'character-form',
-    templateUrl: 'character-form.component.html'
+    selector   : "character-form",
+    templateUrl: "character-form.component.html"
 })
 export class CharacterFormComponent {
 
     form = new FormGroup({
-        name  : new FormControl('', [Validators.required]),
-        gender: new FormControl('male', [Validators.required])
+        name  : new FormControl("", [Validators.required]),
+        gender: new FormControl("male", [Validators.required])
     });
 
     destroy = new EventEmitter();
@@ -33,7 +37,7 @@ export class CharacterFormComponent {
             .pipe(takeUntil(this.destroy))
             .subscribe((data: CharacterNotCreated) => {
                 if (data.error.statusCode === 409) {
-                    this.form.get('name').setErrors({unique: true});
+                    this.form.get("name").setErrors({ unique: true });
                 }
             });
     }

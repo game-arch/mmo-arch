@@ -1,32 +1,30 @@
-import {EventEmitter, Injectable, Injector} from '@angular/core'
-import {ConnectionManager}                  from '../connection/connection-manager'
-import {GAME_CONFIG}                        from './phaser/config'
-import {SceneFactory}                       from './phaser/scenes/scene-factory.service'
-import {from, fromEvent}                    from 'rxjs'
-import {filter, mergeMap, takeUntil, tap}   from 'rxjs/operators'
-import Scene = Phaser.Scene
-import {TitleScene}                         from './phaser/scenes/title/title.scene'
-import {TutorialScene}                      from './phaser/scenes/tutorial/tutorial.scene'
+import { EventEmitter, Injectable }         from "@angular/core";
+import { ConnectionManager }                from "../connection/connection-manager";
+import { GAME_CONFIG }                      from "./phaser/config";
+import { SceneFactory }                     from "./phaser/scenes/scene-factory.service";
+import { fromEvent }                        from "rxjs";
+import { filter, mergeMap, takeUntil, tap } from "rxjs/operators";
+import { TitleScene }                       from "./phaser/scenes/title/title.scene";
+import { TutorialScene }                    from "./phaser/scenes/tutorial/tutorial.scene";
 import {
     AllPlayers,
     PlayerEnteredMap,
     PlayerLeftMap,
-    PlayerUpdate,
-}                                           from '../../../../../../server/services/map/actions'
-import Game = Phaser.Game
+    PlayerUpdate
+}                                           from "../../../../../../server/services/map/actions";
+import Scene = Phaser.Scene;
+import Game = Phaser.Game;
 
 @Injectable()
 export class GameEngineService {
-    game: Game
-
-    private currentSceneKey = 'title'
-    private currentScene: Scene
-    private destroyed       = new EventEmitter()
-
+    game: Game;
     scenes: { title: TitleScene; tutorial: TutorialScene } = {
         title   : null,
-        tutorial: null,
-    }
+        tutorial: null
+    };
+    private currentSceneKey = "title";
+    private currentScene: Scene;
+    private destroyed       = new EventEmitter();
 
     constructor(
         public sceneFactory: SceneFactory,
@@ -37,67 +35,68 @@ export class GameEngineService {
     onWorldChange() {
         return this.connection.worldChange
                    .pipe(takeUntil(this.destroyed))
-                   .pipe(filter(world => !!world.socket))
+                   .pipe(filter(world => !!world.socket));
     }
 
     init(canvas: HTMLCanvasElement) {
-        this.game            = new Game({...GAME_CONFIG, canvas})
-        this.scenes.title    = this.sceneFactory.title()
-        this.scenes.tutorial = this.sceneFactory.tutorial()
-        this.game.scene.add('title', this.scenes.title)
-        this.game.scene.add('tutorial', this.scenes.tutorial)
-        this.game.scene.start('title')
-        fromEvent(window, 'resize')
+        this.game            = new Game({ ...GAME_CONFIG, canvas });
+        this.scenes.title    = this.sceneFactory.title();
+        this.scenes.tutorial = this.sceneFactory.tutorial();
+        this.game.scene.add("title", this.scenes.title);
+        this.game.scene.add("tutorial", this.scenes.tutorial);
+        this.game.scene.start("title");
+        fromEvent(window, "resize")
             .pipe(takeUntil(this.destroyed))
             .subscribe(() =>
                 this.game.events.emit(
-                    'resize',
+                    "resize",
                     window.innerWidth,
                     window.innerHeight
                 )
-            )
-        this.game.events.on('game.scene', scene => {
-            if (this.currentSceneKey !== '') {
-                this.game.scene.stop(this.currentSceneKey)
+            );
+        this.game.events.on("game.scene", scene => {
+            if (this.currentSceneKey !== "") {
+                this.game.scene.stop(this.currentSceneKey);
             }
-            this.currentSceneKey = scene
-            this.game.scene.start(scene)
-            this.currentScene = this.scenes[scene]
-        })
+            this.currentSceneKey = scene;
+            this.game.scene.start(scene);
+            this.currentScene = this.scenes[scene];
+        });
         this.onWorldChange()
             .pipe(
                 mergeMap(world =>
-                    fromEvent(world.socket, PlayerEnteredMap.event)
-                        .pipe(tap(event => {
+                    fromEvent(world.socket, PlayerEnteredMap.event).pipe(
+                        tap(event => {
                             this.connection.world = world;
-                        }))
+                        })
+                    )
                 )
             )
             .subscribe(event =>
                 this.game.events.emit(PlayerEnteredMap.event, event)
-            )
+            );
         this.onWorldChange()
             .pipe(
                 mergeMap(world => fromEvent(world.socket, PlayerLeftMap.event))
             )
             .subscribe(event =>
                 this.game.events.emit(PlayerLeftMap.event, event)
-            )
+            );
         this.onWorldChange()
             .pipe(mergeMap(world => fromEvent(world.socket, AllPlayers.event)))
             .subscribe(players =>
                 this.game.events.emit(AllPlayers.event, players)
-            )
+            );
         this.onWorldChange()
             .pipe(
                 mergeMap(world => fromEvent(world.socket, PlayerUpdate.event))
             )
-            .subscribe(data => this.game.events.emit(PlayerUpdate.event, data))
+            .subscribe(data => this.game.events.emit(PlayerUpdate.event, data));
     }
 
     destroy() {
-        this.game.events.emit('destroy')
-        this.game.destroy(true)
-        this.destroyed.emit()
+        this.game.events.emit("destroy");
+        this.game.destroy(true);
+        this.destroyed.emit();
     }
 }

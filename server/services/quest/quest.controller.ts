@@ -1,9 +1,9 @@
-import {Controller, Get} from '@nestjs/common';
-import {QuestService}    from './quest.service';
+import { Controller }   from "@nestjs/common";
+import { QuestService } from "./quest.service";
 
 @Controller()
 export class QuestController {
-    constructor(private readonly service: QuestService) {
-    }
+  constructor(private readonly service: QuestService) {
+  }
 
 }

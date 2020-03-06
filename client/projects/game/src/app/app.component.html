@@ -6,6 +6,6 @@
         <ng-container *ngIf="connection.world.socket">
             <character-selection *ngIf="connection.world.selectedCharacter === null"></character-selection>
         </ng-container>
-        <button mat-raised-button style="position:fixed; bottom:16px;right:16px;" (click)="logout()">Logout</button>
+        <button (click)="logout()" mat-raised-button style="position:fixed; bottom:16px;right:16px;">Logout</button>
     </ng-container>
 </ng-container>
