@@ -24,8 +24,9 @@ $app-theme: mat-dark-theme($app-primary, $app-accent, $app-warn);
 @include angular-material-theme($app-theme);
 body {
     .mat-card {
-        border: 1px solid #ccc;
-        background-color: rgba(66, 66, 66, 0.8);
+        border-radius: 12px;
+        background-color: rgba(0,0,0, 0.6);
+        backdrop-filter: blur(4px);
     }
 
 }
