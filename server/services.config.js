@@ -28,32 +28,6 @@ module.exports = {
     },
     {
       instances: 1,
-      name: (process.env.WORLD_CONSTANT || "maiden") + "-item",
-      script: "dist/services/item/main.js",
-      watch: ["dist/services/item", "dist/lib"],
-      env: {
-        WORLD_CONSTANT: process.env.WORLD_CONSTANT,
-        WORLD_NAME: process.env.WORLD_NAME
-      },
-      watch_options: {
-        "followSymlinks": false
-      }
-    },
-    {
-      instances: 1,
-      name: (process.env.WORLD_CONSTANT || "maiden") + "-quest",
-      script: "dist/services/quest/main.js",
-      watch: ["dist/services/quest", "dist/lib"],
-      env: {
-        WORLD_CONSTANT: process.env.WORLD_CONSTANT,
-        WORLD_NAME: process.env.WORLD_NAME
-      },
-      watch_options: {
-        "followSymlinks": false
-      }
-    },
-    {
-      instances: 1,
       name: (process.env.WORLD_CONSTANT || "maiden") + "-character",
       script: "dist/services/character/main.js",
       watch: ["dist/services/character", "dist/lib"],
@@ -83,19 +57,6 @@ module.exports = {
       name: (process.env.WORLD_CONSTANT || "maiden") + "-server",
       script: "dist/services/world/main.js",
       watch: ["dist/services/world", "dist/lib"],
-      env: {
-        WORLD_CONSTANT: process.env.WORLD_CONSTANT,
-        WORLD_NAME: process.env.WORLD_NAME
-      },
-      watch_options: {
-        "followSymlinks": false
-      }
-    },
-    {
-      instances: 1,
-      name: (process.env.WORLD_CONSTANT || "maiden") + "-commerce",
-      script: "dist/services/commerce/main.js",
-      watch: ["dist/services/commerce", "dist/lib"],
       env: {
         WORLD_CONSTANT: process.env.WORLD_CONSTANT,
         WORLD_NAME: process.env.WORLD_NAME

@@ -54,9 +54,9 @@ export class WorldService {
         if (verified.world !== WorldConstants.CONSTANT) {
             throw new Error("Character is on a different world");
         }
-        if (verified.status !== "offline") {
-            throw new Error("Character is already online");
-        }
+        // if (verified.status !== "offline") {
+        //     throw new Error("Character is already online");
+        // }
     }
 
     async removeCharacter(client: Socket) {

@@ -53,7 +53,9 @@ export class BackendScene extends BaseScene implements Scene {
     }
 
     removePlayer(player: Player) {
-        this.removeEntity("player", player.characterId);
+        if (player) {
+            this.removeEntity("player", player.characterId);
+        }
     }
 
     movePlayer(characterId: number, directions: Directions) {

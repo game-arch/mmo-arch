@@ -102,9 +102,10 @@ export class MapService {
     async loggedOut(characterId: number) {
         let player = await this.playerRepo.findOne({ characterId });
         if (player && player.map === this.map.constant) {
-            player = this.map.entities.player[player.id];
-            await this.playerRepo.save(this.map.entities.player[player.id]);
-            this.playerLeftMap(player);
+            if (this.map.entities.player[player.id]) {
+                await this.playerRepo.save(this.map.entities.player[player.id]);
+                this.playerLeftMap(this.map.entities.player[player.id]);
+            }
         }
 
     }
@@ -132,8 +133,10 @@ export class MapService {
     }
 
     private playerLeftMap(player: Player) {
-        this.map.removePlayer(player);
-        this.emitter.playerLeftMap(this.map.constant, player.characterId, player.name);
+        if (player) {
+            this.map.removePlayer(player);
+            this.emitter.playerLeftMap(this.map.constant, player.characterId, player.name);
+        }
     }
 
 }

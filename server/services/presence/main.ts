@@ -1,23 +1,4 @@
-import { NestFactory }    from "@nestjs/core";
-import { PresenceModule } from "./presence.module";
-import { Logger }         from "@nestjs/common";
-import { environment }    from "../../lib/config/environment";
+import { PresenceModule }     from "./presence.module";
+import { createMicroservice } from "../../lib/functions/create-microservice";
 
-const logger = new Logger("Presence");
-
-async function bootstrap() {
-    const app = await NestFactory.createMicroservice(PresenceModule, {
-        transport: environment.microservice.transport,
-        options  : {
-            ...environment.microservice.global,
-            name: "Presence"
-        }
-    });
-    app.useLogger(logger);
-    app.enableShutdownHooks();
-    await app.listen(() => {
-        logger.log("Presence Microservice is listening ...");
-    });
-}
-
-bootstrap();
+createMicroservice(PresenceModule, 'presence', 'Presence', 'global').then();

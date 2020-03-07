@@ -9,13 +9,10 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
+    "incremental": false,
     "baseUrl": "./",
-    "typeRoots": [
-      "./node_modules/phaser/types"
-    ],
     "types": [
-      "node",
-      "phaser"
+      "node"
     ]
   },
   "exclude": [

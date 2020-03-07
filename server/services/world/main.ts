@@ -13,7 +13,7 @@ async function bootstrap() {
         options  : {
             ...environment.microservice.global,
             name : WorldConstants.NAME + " Server",
-            queue: WorldConstants.CONSTANT
+            queue: WorldConstants.CONSTANT + "." + process.env.NODE_APP_INSTANCE
         }
     });
     app.enableCors({

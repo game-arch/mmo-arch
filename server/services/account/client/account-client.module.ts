@@ -1,15 +1,8 @@
-import { Module }             from "@nestjs/common";
-import { AccountClient }      from "./account.client";
-import { ClientProxyFactory } from "@nestjs/microservices";
-import { environment }        from "../../../lib/config/environment";
+import { Module }                   from "@nestjs/common";
+import { AccountClient }            from "./account.client";
+import { createMicroserviceClient } from "../../../lib/functions/create-microservice-client";
 
-export const clientFactory   = () => ClientProxyFactory.create(<any>{
-    transport: environment.microservice.transport,
-    options  : {
-        ...environment.microservice.global,
-        name: "Account Client"
-    }
-});
+export const clientFactory   = () => createMicroserviceClient("key", "Account", "global");
 export const CLIENT_PROVIDER = {
     provide   : "ACCOUNT_CLIENT",
     useFactory: clientFactory
