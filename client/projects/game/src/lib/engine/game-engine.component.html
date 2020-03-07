@@ -5,6 +5,7 @@
     [style.opacity]="world.selectedCharacter ? 1 : 0"
     [style.pointer-events]="world.selectedCharacter ? 'all' : 'none'"
 ></joystick>
+<hud></hud>
 <button
     (click)="signOut()"
     *ngIf="world.socket && world.selectedCharacter !== null"
