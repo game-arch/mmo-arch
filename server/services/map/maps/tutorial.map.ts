@@ -7,15 +7,15 @@ import Scene = Phaser.Scene;
 @Injectable()
 export class TutorialMap extends BackendScene implements Scene {
 
-  constant: string = "tutorial";
-  name: string     = "Tutorial Island";
+    constant: string = "tutorial";
+    name: string     = "Tutorial Island";
 
-  stop$ = new Subject();
+    stop$ = new Subject();
 
 
-  constructor() {
-    super(TUTORIAL_CONFIG);
-  }
+    constructor() {
+        super(TUTORIAL_CONFIG);
+    }
 
 
 }

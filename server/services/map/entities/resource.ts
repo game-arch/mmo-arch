@@ -6,15 +6,15 @@ import { ResourceDrop }                                                     from
 @Unique("resourceConstant", ["constant"])
 @Unique("resourceName", ["name"])
 export class Resource {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column()
-  type: string;
-  @Column()
-  constant: string;
-  @Column()
-  name: string;
+    @PrimaryGeneratedColumn()
+    id: number;
+    @Column()
+    type: string;
+    @Column()
+    constant: string;
+    @Column()
+    name: string;
 
-  @OneToMany(t => ResourceDrop, d => d.resource)
-  drops: ResourceDrop[];
+    @OneToMany(t => ResourceDrop, d => d.resource)
+    drops: ResourceDrop[];
 }

@@ -6,22 +6,22 @@ import { PresenceClient }                    from "../presence/client/presence.c
 @Injectable()
 export class LobbyService {
 
-  constructor(
-    private account: AccountClient,
-    private presence: PresenceClient
-  ) {
+    constructor(
+        private account: AccountClient,
+        private presence: PresenceClient
+    ) {
 
-  }
-
-  async getAccount(client: Socket) {
-    let account = await this.account.getAccount(client.handshake.query.token, false);
-    if (!account) {
-      throw new UnauthorizedException();
     }
-    return account;
-  }
 
-  async getServers() {
-    return await this.presence.getServers();
-  }
+    async getAccount(client: Socket) {
+        let account = await this.account.getAccount(client.handshake.query.token, false);
+        if (!account) {
+            throw new UnauthorizedException();
+        }
+        return account;
+    }
+
+    async getServers() {
+        return await this.presence.getServers();
+    }
 }

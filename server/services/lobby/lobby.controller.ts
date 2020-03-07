@@ -9,47 +9,47 @@ import { GetServers }                         from "../presence/actions";
 
 @Controller()
 export class LobbyController {
-  constructor(
-    private  appService: LobbyService,
-    private account: AccountClient,
-    private gateway: LobbyGateway,
-    private logger: Logger
-  ) {
-  }
-
-  @Post("register")
-  async register(@Req() request: Request, @Res() response: Response) {
-    try {
-      let token = await this.account.register(request.body.email, request.body.password);
-      response.send({ token });
-    } catch (e) {
-      this.handleError(e, response);
+    constructor(
+        private  appService: LobbyService,
+        private account: AccountClient,
+        private gateway: LobbyGateway,
+        private logger: Logger
+    ) {
     }
-  }
 
-  @Post("login")
-  async login(@Req() request: Request, @Res() response: Response) {
-    try {
-      let token = await this.account.login(request.body.email, request.body.password);
-      response.status(200);
-      response.send({ token });
-    } catch (e) {
-      this.handleError(e, response);
+    @Post("register")
+    async register(@Req() request: Request, @Res() response: Response) {
+        try {
+            let token = await this.account.register(request.body.email, request.body.password);
+            response.send({ token });
+        } catch (e) {
+            this.handleError(e, response);
+        }
     }
-  }
 
-  @EventPattern(GetServers.event)
-  serverList(servers: GameWorld[]) {
-    this.gateway.servers = servers;
-    this.gateway.server.emit(GetServers.event, servers);
-    this.logger.log("Server list updated.");
-  }
-
-  private handleError(e, response: Response) {
-    if (e.status) {
-      response.status(e.status).send(e.message);
-      return;
+    @Post("login")
+    async login(@Req() request: Request, @Res() response: Response) {
+        try {
+            let token = await this.account.login(request.body.email, request.body.password);
+            response.status(200);
+            response.send({ token });
+        } catch (e) {
+            this.handleError(e, response);
+        }
     }
-    response.status(500).send(e.message || "Internal Server Error");
-  }
+
+    @EventPattern(GetServers.event)
+    serverList(servers: GameWorld[]) {
+        this.gateway.servers = servers;
+        this.gateway.server.emit(GetServers.event, servers);
+        this.logger.log("Server list updated.");
+    }
+
+    private handleError(e, response: Response) {
+        if (e.status) {
+            response.status(e.status).send(e.message);
+            return;
+        }
+        response.status(500).send(e.message || "Internal Server Error");
+    }
 }

@@ -18,27 +18,27 @@ import * as path                 from "path";
 import { environment }           from "../../lib/config/environment";
 
 @Module({
-  imports    : [
-    WorldClientModule,
-    CharacterClientModule,
-    TypeOrmModule.forFeature([MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
-    TypeOrmModule.forRoot({
-      type       : "sqlite",
-      database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + "_" + MapConstants.MAP + ".db"),
-      logging    : false,
-      synchronize: true,
-      entities   : [__dirname + "/entities/*{.ts,.js}"]
-    })
-  ],
-  controllers: [MapController],
-  providers  : [
-    MapService,
-    MapEmitter,
-    {
-      provide : "tutorial",
-      useClass: TutorialMap
-    }
-  ]
+    imports    : [
+        WorldClientModule,
+        CharacterClientModule,
+        TypeOrmModule.forFeature([MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
+        TypeOrmModule.forRoot({
+            type       : "sqlite",
+            database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + "_" + MapConstants.MAP + ".db"),
+            logging    : false,
+            synchronize: true,
+            entities   : [__dirname + "/entities/*{.ts,.js}"]
+        })
+    ],
+    controllers: [MapController],
+    providers  : [
+        MapService,
+        MapEmitter,
+        {
+            provide : "tutorial",
+            useClass: TutorialMap
+        }
+    ]
 })
 export class MapModule {
 }

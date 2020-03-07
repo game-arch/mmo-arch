@@ -7,39 +7,20 @@ import { CharacterEmitter }                                         from "../../
 
 @Injectable()
 export class MapClient extends CharacterEmitter {
-  constructor(@Inject("MAP_CLIENT") protected client: ClientProxy) {
-    super(client);
-  }
 
-  async getAllPlayers(map: string) {
-    return await this.client
-                     .send(WORLD_PREFIX + GetAllPlayers.event, new GetAllPlayers(map))
-                     .pipe(first())
-                     .toPromise();
-  }
+    constructor(@Inject("MAP_CLIENT") protected client: ClientProxy) {
+        super(client);
+    }
 
-  async getPlayer(
-    characterId: number,
-    map: string
-  ): Promise<{ x: number; y: number }> {
-    return await this.client
-                     .send(
-                       WORLD_PREFIX + GetPlayerPosition.event + "." + map,
-                       new GetPlayerPosition(characterId)
-                     )
-                     .pipe(first())
-                     .toPromise();
-  }
+    async getAllPlayers(map: string) {
+        return await this.client.send(WORLD_PREFIX + GetAllPlayers.event, new GetAllPlayers(map)).pipe(first()).toPromise();
+    }
 
-  playerDirectionalInput(
-    characterId: number,
-    world: string,
-    map: string,
-    directions: { up: boolean; down: boolean; left: boolean; right: boolean }
-  ) {
-    this.client.emit(
-      WORLD_PREFIX + PlayerDirectionalInput.event,
-      new PlayerDirectionalInput(characterId, map, directions)
-    );
-  }
+    async getPlayer(characterId: number, map: string): Promise<{ x: number, y: number }> {
+        return await this.client.send(WORLD_PREFIX + GetPlayerPosition.event + "." + map, new GetPlayerPosition(characterId)).pipe(first()).toPromise();
+    }
+
+    playerDirectionalInput(characterId: number, world: string, map: string, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+        this.client.emit(WORLD_PREFIX + PlayerDirectionalInput.event, new PlayerDirectionalInput(characterId, map, directions));
+    }
 }

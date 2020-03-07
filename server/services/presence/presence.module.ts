@@ -8,20 +8,20 @@ import { environment }                from "../../lib/config/environment";
 import * as path                      from "path";
 
 @Module({
-  imports    : [
-    HttpModule,
-    PresenceEmitterModule,
-    TypeOrmModule.forFeature([World]),
-    TypeOrmModule.forRoot({
-      type       : "sqlite",
-      database   : path.resolve(environment.dbRoot, "presence.db"),
-      logging    : false,
-      synchronize: true,
-      entities   : [__dirname + "/entities/*{.ts,.js}"]
-    })
-  ],
-  providers  : [Logger, ServerPresence],
-  controllers: [PresenceController]
+    imports    : [
+        HttpModule,
+        PresenceEmitterModule,
+        TypeOrmModule.forFeature([World]),
+        TypeOrmModule.forRoot({
+            type       : "sqlite",
+            database   : path.resolve(environment.dbRoot, "presence.db"),
+            logging    : false,
+            synchronize: true,
+            entities   : [__dirname + "/entities/*{.ts,.js}"]
+        })
+    ],
+    providers  : [Logger, ServerPresence],
+    controllers: [PresenceController]
 })
 export class PresenceModule {
 }

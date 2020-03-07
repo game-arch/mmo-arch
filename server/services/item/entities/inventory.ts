@@ -3,10 +3,10 @@ import { InventoryItem }                                     from "./inventory-i
 
 @Entity()
 export class Inventory {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column()
-  characterId: number;
-  @OneToMany(() => InventoryItem, i => i.inventory)
-  items: InventoryItem[];
+    @PrimaryGeneratedColumn()
+    id: number;
+    @Column()
+    characterId: number;
+    @OneToMany(() => InventoryItem, i => i.inventory)
+    items: InventoryItem[];
 }

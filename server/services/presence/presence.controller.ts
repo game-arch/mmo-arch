@@ -6,28 +6,28 @@ import { GetServers, RegisterServer, ServerOffline } from "./actions";
 
 @Controller()
 export class PresenceController implements OnApplicationBootstrap {
-  constructor(
-    private server: ServerPresence,
-    private emitter: PresenceEmitter
-  ) {
-  }
+    constructor(
+        private server: ServerPresence,
+        private emitter: PresenceEmitter
+    ) {
+    }
 
-  @MessagePattern(GetServers.event)
-  async getServers() {
-    return await this.server.getServers();
-  }
+    @MessagePattern(GetServers.event)
+    async getServers() {
+        return await this.server.getServers();
+    }
 
-  @MessagePattern(RegisterServer.event)
-  async register({ constant, name, port, instanceId, host }: RegisterServer) {
-    return await this.server.register(this.server.getHost(host), port, instanceId, constant, name);
-  }
+    @MessagePattern(RegisterServer.event)
+    async register({ constant, name, port, instanceId, host }: RegisterServer) {
+        return await this.server.register(this.server.getHost(host), port, instanceId, constant, name);
+    }
 
-  @MessagePattern(ServerOffline.event)
-  async serverOffline({ serverId }: ServerOffline) {
-    await this.server.offline(serverId);
-  }
+    @MessagePattern(ServerOffline.event)
+    async serverOffline({ serverId }: ServerOffline) {
+        await this.server.offline(serverId);
+    }
 
-  async onApplicationBootstrap() {
-    this.emitter.nowOnline();
-  }
+    async onApplicationBootstrap() {
+        this.emitter.nowOnline();
+    }
 }

@@ -8,87 +8,69 @@ import { CharacterEmitter }                                            from "./c
 
 @Injectable()
 export class CharacterService {
-  constructor(
-    private emitter: CharacterEmitter,
-    @InjectRepository(Character)
-    private repo: Repository<Character>
-  ) {
-  }
+    constructor(
+        private emitter: CharacterEmitter,
+        @InjectRepository(Character)
+        private repo: Repository<Character>) {
 
-  async getCharactersFor(accountId: number, world: string) {
-    return await this.repo.find({ accountId, world });
-  }
-
-  async getCharacter(characterId: number) {
-    return await this.repo.findOne(characterId);
-  }
-
-  async getCharacterName(characterId: number) {
-    return (await this.getCharacter(characterId)).name;
-  }
-
-  async createCharacterFor(
-    accountId: number,
-    world: string,
-    name: string,
-    gender: "male" | "female"
-  ) {
-    let character = await this.repo.findOne({ name, world });
-    if (character) {
-      throw new RpcException(
-        new ConflictException("Character Name Already Taken")
-      );
     }
-    try {
-      character           = this.repo.create();
-      character.name      = name;
-      character.world     = world;
-      character.accountId = accountId;
-      character.gender    = gender;
-      await this.repo.save(character);
-      return character;
-    } catch (e) {
-      console.log(e);
-      if (e.message.indexOf("UNIQUE") !== -1) {
-        throw new RpcException(
-          new ConflictException("Character Name Already Taken")
-        );
-      }
-      throw new RpcException(new InternalServerErrorException(e.message));
-    }
-  }
 
-  async characterOnline(data: CharacterOnline) {
-    let character = await this.repo.findOne({ id: data.characterId });
-    if (character) {
-      character.status   = "online";
-      character.socketId = data.socketId;
-      await this.repo.save(character);
-      this.emitter.characterLoggedIn(
-        character.id,
-        character.gender,
-        character.world,
-        character.name
-      );
+    async getCharactersFor(accountId: number, world: string) {
+        return await this.repo.find({ accountId, world });
     }
-  }
 
-  async characterOffline(data: CharacterOffline) {
-    let character = await this.repo.findOne({ socketId: data.socketId });
-    if (character) {
-      character.status = "offline";
-      await this.repo.save(character);
-      this.emitter.characterLoggedOut(
-        character.id,
-        character.name,
-        character.world
-      );
+    async getCharacter(characterId: number) {
+        return await this.repo.findOne(characterId);
     }
-  }
 
-  async allCharactersOffline(data: AllCharactersOffline) {
-    for (let character of data.characters) {
-      await this.characterOffline(character);
+    async getCharacterName(characterId: number) {
+        return (await this.getCharacter(characterId)).name;
     }
-  }
+
+    async createCharacterFor(accountId: number, world: string, name: string, gender: "male" | "female") {
+        let character = await this.repo.findOne({ name, world });
+        if (character) {
+            throw new RpcException(new ConflictException("Character Name Already Taken"));
+        }
+        try {
+            character           = this.repo.create();
+            character.name      = name;
+            character.world     = world;
+            character.accountId = accountId;
+            character.gender    = gender;
+            await this.repo.save(character);
+            return character;
+        } catch (e) {
+            console.log(e);
+            if (e.message.indexOf("UNIQUE") !== -1) {
+                throw new RpcException(new ConflictException("Character Name Already Taken"));
+            }
+            throw new RpcException(new InternalServerErrorException(e.message));
+        }
+    }
+
+    async characterOnline(data: CharacterOnline) {
+        let character = await this.repo.findOne({ id: data.characterId });
+        if (character) {
+            character.status   = "online";
+            character.socketId = data.socketId;
+            await this.repo.save(character);
+            this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name);
+        }
+    }
+
+    async characterOffline(data: CharacterOffline) {
+        let character = await this.repo.findOne({ id: data.characterId });
+        if (character) {
+            character.status = "offline";
+            await this.repo.save(character);
+            this.emitter.characterLoggedOut(character.id, character.name, character.world);
+        }
+    }
+
+    async allCharactersOffline(data: AllCharactersOffline) {
+        for (let character of data.characters) {
+            await this.characterOffline(character);
+        }
+    }
 }

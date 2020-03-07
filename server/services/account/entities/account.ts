@@ -4,27 +4,27 @@ import * as bcrypt                                                              
 @Entity()
 @Unique("email", ["email"])
 export class Account {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  email: string;
-  @Column()
-  password: string;
+    @Column()
+    email: string;
+    @Column()
+    password: string;
 
-  @Column()
-  @CreateDateColumn()
-  createdAt: Date;
+    @Column()
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @Column()
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @Column()
+    @UpdateDateColumn()
+    updatedAt: Date;
 
-  hashPassword() {
-    this.password = bcrypt.hashSync(this.password, 8);
-  }
+    hashPassword() {
+        this.password = bcrypt.hashSync(this.password, 8);
+    }
 
-  verifyPassword(unencryptedPassword: string) {
-    return bcrypt.compareSync(unencryptedPassword, this.password);
-  }
+    verifyPassword(unencryptedPassword: string) {
+        return bcrypt.compareSync(unencryptedPassword, this.password);
+    }
 }

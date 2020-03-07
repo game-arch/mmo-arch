@@ -4,21 +4,21 @@ import { ItemConfiguration }                                             from ".
 @Entity()
 export class Item {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  type: string;
-  @Column()
-  constant: string;
-  @Column()
-  name: string;
-  @Column()
-  stackable: boolean;
-  /**
-   * JSON file path that adds properties to
-   */
-  @ManyToMany(() => ItemConfiguration, i => i.items)
-  @JoinTable()
-  configurations: ItemConfiguration[];
+    @Column()
+    type: string;
+    @Column()
+    constant: string;
+    @Column()
+    name: string;
+    @Column()
+    stackable: boolean;
+    /**
+     * JSON file path that adds properties to
+     */
+    @ManyToMany(() => ItemConfiguration, i => i.items)
+    @JoinTable()
+    configurations: ItemConfiguration[];
 }

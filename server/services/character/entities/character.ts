@@ -8,26 +8,26 @@ import { GameCharacter }                                         from "../../../
 @Unique("name", ["world", "name"])
 export class Character implements GameCharacter {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  accountId: number;
-  @Column()
-  world: string;
+    @Column()
+    accountId: number;
+    @Column()
+    world: string;
 
-  @Column()
-  name: string;
+    @Column()
+    name: string;
 
-  @Column()
-  gender: "male" | "female" = "male";
+    @Column()
+    gender: "male" | "female" = "male";
 
-  @Column()
-  status: "online" | "offline" = "offline";
+    @Column()
+    status: "online" | "offline" = "offline";
 
-  @Column({ nullable: true })
-  lastOnline: Date;
-  @Column({ nullable: true })
-  socketId: string;
+    @Column({ nullable: true })
+    lastOnline: Date;
+    @Column({ nullable: true })
+    socketId: string;
 
 }

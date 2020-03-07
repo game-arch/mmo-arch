@@ -3,15 +3,15 @@ import { Item }                                               from "./item";
 
 @Entity()
 export class ItemConfiguration {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @ManyToMany(() => Item, i => i.configurations)
-  items: Item[];
+    @ManyToMany(() => Item, i => i.configurations)
+    items: Item[];
 
-  @Column()
-  key: string;
+    @Column()
+    key: string;
 
-  @Column()
-  value: string;
+    @Column()
+    value: string;
 }

@@ -10,22 +10,19 @@ import * as path               from "path";
 import { environment }         from "../../lib/config/environment";
 
 @Module({
-  imports    : [
-    WorldClientModule,
-    TypeOrmModule.forFeature([Character]),
-    TypeOrmModule.forRoot({
-      type       : "sqlite",
-      database   : path.resolve(
-        environment.dbRoot,
-        WorldConstants.DB_NAME + "_character.db"
-      ),
-      logging    : false,
-      synchronize: true,
-      entities   : [__dirname + "/entities/*{.ts,.js}"]
-    })
-  ],
-  controllers: [CharacterController],
-  providers  : [CharacterService, CharacterEmitter]
+    imports    : [
+        WorldClientModule,
+        TypeOrmModule.forFeature([Character]),
+        TypeOrmModule.forRoot({
+            type       : "sqlite",
+            database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + "_character.db"),
+            logging    : false,
+            synchronize: true,
+            entities   : [__dirname + "/entities/*{.ts,.js}"]
+        })
+    ],
+    controllers: [CharacterController],
+    providers  : [CharacterService, CharacterEmitter]
 })
 export class CharacterModule {
 }

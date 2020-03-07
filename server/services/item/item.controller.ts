@@ -3,7 +3,7 @@ import { ItemService } from "./item.service";
 
 @Controller()
 export class ItemController {
-  constructor(private readonly service: ItemService) {
-  }
+    constructor(private readonly service: ItemService) {
+    }
 
 }

@@ -10,22 +10,22 @@ import { PartyService }      from "./party.service";
 import { PartyEmitter }      from "./party.emitter";
 
 @Module({
-  imports    : [
-    WorldClientModule,
-    TypeOrmModule.forFeature([Party]),
-    TypeOrmModule.forRoot({
-      type       : "sqlite",
-      database   : path.resolve(
-        environment.dbRoot,
-        WorldConstants.DB_NAME + "_party.db"
-      ),
-      logging    : false,
-      synchronize: true,
-      entities   : [__dirname + "/entities/*{.ts,.js}"]
-    })
-  ],
-  controllers: [PartyController],
-  providers  : [PartyService, PartyEmitter]
+    imports    : [
+        WorldClientModule,
+        TypeOrmModule.forFeature([Party]),
+        TypeOrmModule.forRoot({
+            type       : "sqlite",
+            database   : path.resolve(
+                environment.dbRoot,
+                WorldConstants.DB_NAME + "_party.db"
+            ),
+            logging    : false,
+            synchronize: true,
+            entities   : [__dirname + "/entities/*{.ts,.js}"]
+        })
+    ],
+    controllers: [PartyController],
+    providers  : [PartyService, PartyEmitter]
 })
 export class PartyModule {
 }

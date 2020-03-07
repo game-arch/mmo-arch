@@ -3,7 +3,7 @@ import { CommerceService } from "./commerce.service";
 
 @Controller()
 export class CommerceController {
-  constructor(private readonly service: CommerceService) {
-  }
+    constructor(private readonly service: CommerceService) {
+    }
 
 }

@@ -7,23 +7,23 @@ import { WorldConstants } from "../../lib/constants/world.constants";
 const logger = new Logger(WorldConstants.NAME + " Server");
 
 async function bootstrap() {
-  const app = await NestFactory.create(WorldModule);
-  app.connectMicroservice({
-    transport: environment.microservice.transport,
-    options  : {
-      ...environment.microservice.global,
-      name : WorldConstants.NAME + " Server",
-      queue: WorldConstants.CONSTANT + "." + process.env.NODE_APP_INSTANCE
-    }
-  });
-  app.enableCors({
-    origin     : true,
-    credentials: true
-  });
-  app.useLogger(logger);
-  await app.enableShutdownHooks();
-  await app.startAllMicroservices();
-  await app.listen(environment.servers.world.port);
+    const app = await NestFactory.create(WorldModule);
+    app.connectMicroservice({
+        transport: environment.microservice.transport,
+        options  : {
+            ...environment.microservice.global,
+            name : WorldConstants.NAME + " Server",
+            queue: WorldConstants.CONSTANT
+        }
+    });
+    app.enableCors({
+        origin     : true,
+        credentials: true
+    });
+    app.useLogger(logger);
+    await app.enableShutdownHooks();
+    await app.startAllMicroservices();
+    await app.listen(environment.servers.world.port);
 }
 
 bootstrap();

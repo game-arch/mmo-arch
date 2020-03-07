@@ -6,15 +6,15 @@ import { GetServers, PresenceOnline } from "../actions";
 @Injectable()
 export class PresenceEmitter {
 
-  constructor(@Inject("WORLD_CLIENT") private client: ClientProxy) {
+    constructor(@Inject("WORLD_CLIENT") private client: ClientProxy) {
 
-  }
+    }
 
-  sendServers(servers: GameWorld[]) {
-    this.client.emit(GetServers.event, servers);
-  }
+    sendServers(servers: GameWorld[]) {
+        this.client.emit(GetServers.event, servers);
+    }
 
-  nowOnline() {
-    this.client.emit(PresenceOnline.event, {});
-  }
+    nowOnline() {
+        this.client.emit(PresenceOnline.event, {});
+    }
 }

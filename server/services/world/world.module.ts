@@ -20,23 +20,23 @@ import * as path                 from "path";
 import { environment }           from "../../lib/config/environment";
 
 @Module({
-  imports    : [
-    TypeOrmModule.forRoot({
-      type       : "sqlite",
-      database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + ".db"),
-      logging    : false,
-      synchronize: true,
-      entities   : [__dirname + "/entities/*{.ts,.js}"]
-    }),
-    TypeOrmModule.forFeature([Player]),
-    WorldClientModule,
-    AccountClientModule,
-    CharacterClientModule,
-    PresenceClientModule,
-    MapClientModule
-  ],
-  controllers: [WorldController, MapController, CharacterController, ChatController],
-  providers  : [WorldService, WorldGateway, MapGateway, CharacterGateway, ChatGateway, Logger]
+    imports    : [
+        TypeOrmModule.forRoot({
+            type       : "sqlite",
+            database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + ".db"),
+            logging    : false,
+            synchronize: true,
+            entities   : [__dirname + "/entities/*{.ts,.js}"]
+        }),
+        TypeOrmModule.forFeature([Player]),
+        WorldClientModule,
+        AccountClientModule,
+        CharacterClientModule,
+        PresenceClientModule,
+        MapClientModule
+    ],
+    controllers: [WorldController, MapController, CharacterController, ChatController],
+    providers  : [WorldService, WorldGateway, MapGateway, CharacterGateway, ChatGateway, Logger]
 })
 export class WorldModule {
 }

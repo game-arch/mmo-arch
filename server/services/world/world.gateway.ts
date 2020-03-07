@@ -1,9 +1,9 @@
 import {
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  OnGatewayInit,
-  WebSocketGateway,
-  WebSocketServer
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    OnGatewayInit,
+    WebSocketGateway,
+    WebSocketServer
 }                                                           from "@nestjs/websockets";
 import { WorldService }                                     from "./world.service";
 import { ConflictException, Logger, OnApplicationShutdown } from "@nestjs/common";
@@ -21,74 +21,74 @@ import { Namespace, Socket }                                from "socket.io";
 import * as parser                                          from "socket.io-msgpack-parser";
 
 @WebSocketGateway({
-  namespace   : "world",
-  pingInterval: WorldConstants.PING_INTERVAL,
-  pingTimeout : WorldConstants.PING_TIMEOUT,
-  parser
+    namespace   : "world",
+    pingInterval: WorldConstants.PING_INTERVAL,
+    pingTimeout : WorldConstants.PING_TIMEOUT,
+    parser
 })
 export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatewayConnection, OnApplicationShutdown {
-  @WebSocketServer()
-  server: Namespace;
-  serverId = null;
+    @WebSocketServer()
+    server: Namespace;
+    serverId = null;
 
-  constructor(
-    @InjectRepository(Player)
-    private players: Repository<Player>,
-    private logger: Logger,
-    private service: WorldService,
-    private presence: PresenceClient,
-    private character: CharacterClient
-  ) {
+    constructor(
+        @InjectRepository(Player)
+        private players: Repository<Player>,
+        private logger: Logger,
+        private service: WorldService,
+        private presence: PresenceClient,
+        private character: CharacterClient
+    ) {
 
-  }
-
-  async afterInit(server: Namespace) {
-    this.serverId = await this.presence.register(
-      environment.servers.world.host,
-      environment.servers.world.port,
-      WorldConstants.CONSTANT,
-      WorldConstants.NAME,
-      parseInt(process.env.NODE_APP_INSTANCE)
-    );
-  }
-
-  async handleConnection(client: Socket, ...args: any[]) {
-    try {
-      if ((await this.players.count()) >= 100) {
-        throw new Error("Server Limit Reached");
-      }
-      let user   = await this.service.authenticate(client);
-      let player = await this.players.findOne({ accountId: user.id });
-      if (player) {
-        throw new ConflictException("User already logged in!");
-      }
-      await this.service.storeUser(client, user.id);
-      client.emit(GetCharacters.event, await this.service.getCharacters(user.id));
-    } catch (e) {
-      console.log(e);
-      client.emit("connect-error", e.message);
-      client.disconnect(true);
     }
-  }
 
-  async handleDisconnect(client: Socket) {
-    try {
-      await this.service.removePlayer(client);
-    } catch (e) {
-      this.logger.error(e);
+    async afterInit(server: Namespace) {
+        this.serverId = await this.presence.register(
+            environment.servers.world.host,
+            environment.servers.world.port,
+            WorldConstants.CONSTANT,
+            WorldConstants.NAME,
+            parseInt(process.env.NODE_APP_INSTANCE)
+        );
     }
-  }
 
-  async onApplicationShutdown(signal?: string) {
-    let connection = await createConnection({
-      type    : "sqlite",
-      database: path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + ".db"),
-      logging : false
-    });
-    let sockets    = await connection.query("select socketId from player");
-    await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))));
-    await this.presence.serverOffline(this.serverId);
-    await connection.close();
-    fs.unlinkSync(path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + ".db"));
-  }
+    async handleConnection(client: Socket, ...args: any[]) {
+        try {
+            if ((await this.players.count()) >= 100) {
+                throw new Error("Server Limit Reached");
+            }
+            let user   = await this.service.authenticate(client);
+            let player = await this.players.findOne({ accountId: user.id });
+            if (player) {
+                throw new ConflictException("User already logged in!");
+            }
+            await this.service.storeUser(client, user.id);
+            client.emit(GetCharacters.event, await this.service.getCharacters(user.id));
+        } catch (e) {
+            console.log(e);
+            client.emit("connect-error", e.message);
+            client.disconnect(true);
+        }
+    }
+
+    async handleDisconnect(client: Socket) {
+        try {
+            await this.service.removePlayer(client);
+        } catch (e) {
+            this.logger.error(e);
+        }
+    }
+
+    async onApplicationShutdown(signal?: string) {
+        let connection = await createConnection({
+            type    : "sqlite",
+            database: path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + ".db"),
+            logging : false
+        });
+        let sockets    = await connection.query("select socketId from player");
+        await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))));
+        await this.presence.serverOffline(this.serverId);
+        await connection.close();
+        fs.unlinkSync(path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + ".db"));
+    }
 }

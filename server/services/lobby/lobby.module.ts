@@ -6,16 +6,16 @@ import { AccountClientModule }  from "../account/client/account-client.module";
 import { PresenceClientModule } from "../presence/client/presence-client.module";
 
 @Module({
-  imports    : [
-    AccountClientModule,
-    PresenceClientModule
-  ],
-  controllers: [LobbyController],
-  providers  : [
-    LobbyService,
-    LobbyGateway,
-    Logger
-  ]
+    imports    : [
+        AccountClientModule,
+        PresenceClientModule
+    ],
+    controllers: [LobbyController],
+    providers  : [
+        LobbyService,
+        LobbyGateway,
+        Logger
+    ]
 })
 export class LobbyModule {
 }

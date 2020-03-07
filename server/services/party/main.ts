@@ -7,18 +7,18 @@ import { WorldConstants } from "../../lib/constants/world.constants";
 const logger = new Logger("Party");
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(PartyModule, {
-    transport: environment.microservice.transport,
-    options  : {
-      ...environment.microservice.global,
-      name : WorldConstants.NAME + " Party",
-      queue: WorldConstants.CONSTANT + "-party"
-    }
-  });
-  app.useLogger(logger);
-  await app.listen(() => {
-    logger.log("Party Microservice is listening ...");
-  });
+    const app = await NestFactory.createMicroservice(PartyModule, {
+        transport: environment.microservice.transport,
+        options  : {
+            ...environment.microservice.global,
+            name : WorldConstants.NAME + " Party",
+            queue: WorldConstants.CONSTANT + "-party"
+        }
+    });
+    app.useLogger(logger);
+    await app.listen(() => {
+        logger.log("Party Microservice is listening ...");
+    });
 }
 
 bootstrap();

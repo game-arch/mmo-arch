@@ -7,15 +7,15 @@ import * as path              from "path";
 import { environment }        from "../../lib/config/environment";
 
 @Module({
-  imports    : [TypeOrmModule.forRoot({
-    type       : "sqlite",
-    database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + "_commerce.db"),
-    logging    : false,
-    synchronize: true,
-    entities   : [__dirname + "/entities/*{.ts,.js}"]
-  })],
-  controllers: [CommerceController],
-  providers  : [CommerceService]
+    imports    : [TypeOrmModule.forRoot({
+        type       : "sqlite",
+        database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + "_commerce.db"),
+        logging    : false,
+        synchronize: true,
+        entities   : [__dirname + "/entities/*{.ts,.js}"]
+    })],
+    controllers: [CommerceController],
+    providers  : [CommerceService]
 })
 export class CommerceModule {
 }

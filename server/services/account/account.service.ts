@@ -10,49 +10,49 @@ import { SignOptions }                                          from "jsonwebtok
 export class AccountService {
 
 
-  constructor(
-    @InjectRepository(Account) private repo: Repository<Account>,
-    private jwt: JwtService
-  ) {
+    constructor(
+        @InjectRepository(Account) private repo: Repository<Account>,
+        private jwt: JwtService
+    ) {
 
-  }
-
-  async register(email: string, password: string) {
-    let exists = await this.repo.findOne({ email });
-    if (exists) {
-      throw new RpcException(new ConflictException("Email Already Taken"));
     }
-    let account      = this.repo.create();
-    account.email    = email;
-    account.password = password;
-    account.hashPassword();
-    await this.repo.save(account, { reload: true });
-    return this.jwt.sign({
-      username: email,
-      sub     : account.id
-    } as SignOptions);
-  }
 
-  async login(email: string, password: string) {
-    let account = await this.repo.findOne({ email });
-    if (!account || !account.verifyPassword(password)) {
-      throw new RpcException(new UnauthorizedException("Invalid Email or Password"));
+    async register(email: string, password: string) {
+        let exists = await this.repo.findOne({ email });
+        if (exists) {
+            throw new RpcException(new ConflictException("Email Already Taken"));
+        }
+        let account      = this.repo.create();
+        account.email    = email;
+        account.password = password;
+        account.hashPassword();
+        await this.repo.save(account, { reload: true });
+        return this.jwt.sign({
+            username: email,
+            sub     : account.id
+        } as SignOptions);
     }
-    return this.jwt.sign({
-      username: email,
-      sub     : account.id
-    } as SignOptions);
-  }
 
-  async getAccountByToken(token: string, ignoreExpiration: boolean = false) {
-    let data   = this.jwt.verify(token, { ignoreExpiration });
-    let exists = await this.repo.findOne(parseInt(data.sub));
-    if (!exists) {
-      throw new RpcException(new UnauthorizedException("Invalid or Expired Token"));
+    async login(email: string, password: string) {
+        let account = await this.repo.findOne({ email });
+        if (!account || !account.verifyPassword(password)) {
+            throw new RpcException(new UnauthorizedException("Invalid Email or Password"));
+        }
+        return this.jwt.sign({
+            username: email,
+            sub     : account.id
+        } as SignOptions);
     }
-    return {
-      id   : data.sub,
-      email: exists.email
-    };
-  }
+
+    async getAccountByToken(token: string, ignoreExpiration: boolean = false) {
+        let data   = this.jwt.verify(token, { ignoreExpiration });
+        let exists = await this.repo.findOne(parseInt(data.sub));
+        if (!exists) {
+            throw new RpcException(new UnauthorizedException("Invalid or Expired Token"));
+        }
+        return {
+            id   : data.sub,
+            email: exists.email
+        };
+    }
 }

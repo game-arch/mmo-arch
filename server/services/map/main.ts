@@ -9,19 +9,19 @@ import { WorldConstants } from "../../lib/constants/world.constants";
 const logger = new Logger(WorldConstants.NAME + " Map");
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(MapModule, {
-    transport: environment.microservice.transport,
-    options  : {
-      ...environment.microservice.local,
-      name : WorldConstants.NAME + " Map",
-      queue: WorldConstants.CONSTANT + "-map"
-    }
-  });
-  app.useLogger(logger);
-  await app.enableShutdownHooks();
-  await app.listen(() => {
-    logger.log(WorldConstants.NAME + " Map Microservice is listening ...");
-  });
+    const app = await NestFactory.createMicroservice(MapModule, {
+        transport: environment.microservice.transport,
+        options  : {
+            ...environment.microservice.local,
+            name : WorldConstants.NAME + " Map",
+            queue: WorldConstants.CONSTANT
+        }
+    });
+    app.useLogger(logger);
+    await app.enableShutdownHooks();
+    await app.listen(() => {
+        logger.log(WorldConstants.NAME + " Map Microservice is listening ...");
+    });
 }
 
 bootstrap();
