@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Player {
@@ -6,11 +6,11 @@ export class Player {
     id: number;
     @Column()
     accountId: number;
-    @Column({length: 255})
+    @Column({ length: 255 })
     socketId: string;
-    @Column({nullable: true})
+    @Column({ nullable: true })
     characterId: number;
-    @Column({length: 255, nullable: true})
+    @Column({ length: 255, nullable: true })
     characterName: string;
 
     get character() {

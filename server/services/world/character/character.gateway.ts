@@ -1,26 +1,28 @@
+import { SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import {
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer
-}                                  from "@nestjs/websockets";
-import {Namespace, Server, Socket} from "socket.io";
-import {WorldService}              from "../world.service";
-import {Logger}                    from "@nestjs/common";
-import {WorldConstants}            from "../../../lib/constants/world.constants";
-import {CharacterClient}           from "../../character/client/character.client";
+    Namespace,
+    Socket
+}                                                              from "socket.io";
+import { WorldService }                                        from "../world.service";
+import { Logger }                                              from "@nestjs/common";
+import { WorldConstants }                                      from "../../../lib/constants/world.constants";
+import { CharacterClient }                                     from "../../character/client/character.client";
 import {
-    CreateCharacter,
+    CharacterCreated,
+    CharacterNotCreated,
     CharacterOffline,
-    CharacterOnline, GetCharacters, CharacterCreated, CharacterNotCreated
-}                                  from "../../character/actions";
-import {Character}                 from "../../character/entities/character";
-import {InjectRepository}          from "@nestjs/typeorm";
-import {Player}                    from "../entities/player";
-import {Repository}                from "typeorm";
-import * as parser from "socket.io-msgpack-parser";
+    CharacterOnline,
+    CreateCharacter,
+    GetCharacters
+}                                                              from "../../character/actions";
+import { Character }                                           from "../../character/entities/character";
+import { InjectRepository }                                    from "@nestjs/typeorm";
+import { Player }                                              from "../entities/player";
+import { Repository }                                          from "typeorm";
+import * as parser                                             from "socket.io-msgpack-parser";
 
 @WebSocketGateway({
-    namespace   : 'world',
+    namespace   : "world",
     pingInterval: WorldConstants.PING_INTERVAL,
     pingTimeout : WorldConstants.PING_TIMEOUT,
     parser
@@ -47,9 +49,9 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CreateCharacter.event)
-    async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
+    async createCharacter(client: Socket, data: { name: string, gender: "male" | "female" }) {
         try {
-            let player = await this.players.findOne({socketId: client.id});
+            let player = await this.players.findOne({ socketId: client.id });
             if (player) {
                 let character: Character = await this.service.createCharacter(player.accountId, data.name, data.gender);
                 if (character) {
@@ -70,10 +72,10 @@ export class CharacterGateway {
     async characterJoined(client: Socket, character: { id: number, name: string }) {
         try {
             await this.service.storeCharacter(client, character);
-            return {status: 'success'};
+            return { status: "success" };
         } catch (e) {
             console.log(e);
-            return {status: 'error'};
+            return { status: "error" };
         }
     }
 
@@ -81,10 +83,10 @@ export class CharacterGateway {
     async characterLeft(client: Socket) {
         try {
             await this.service.removeCharacter(client);
-            return {status: 'success'};
+            return { status: "success" };
         } catch (e) {
             console.log(e);
-            return {status: 'error'};
+            return { status: "error" };
         }
     }
 }

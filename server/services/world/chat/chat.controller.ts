@@ -1,7 +1,5 @@
-import {Controller}     from '@nestjs/common';
-import {
-    EventPattern
-}                       from "@nestjs/microservices";
+import { Controller }     from "@nestjs/common";
+import { EventPattern }   from "@nestjs/microservices";
 import {
     GlobalMessage,
     LocalMessage,
@@ -10,9 +8,9 @@ import {
     SystemMessage,
     TradeMessage,
     ZoneMessage
-}                       from "./actions";
-import {ChatGateway}    from "./chat.gateway";
-import {WorldConstants} from "../../../lib/constants/world.constants";
+}                         from "./actions";
+import { ChatGateway }    from "./chat.gateway";
+import { WorldConstants } from "../../../lib/constants/world.constants";
 
 @Controller()
 export class ChatController {
@@ -24,41 +22,41 @@ export class ChatController {
 
     }
 
-    @EventPattern(WorldConstants.CONSTANT + '.' + SystemMessage.event)
+    @EventPattern(WorldConstants.CONSTANT + "." + SystemMessage.event)
     systemMessage(data: SystemMessage) {
         if (data.map) {
-            this.gateway.server.to('map.' + data.map).emit(SystemMessage.event, data);
+            this.gateway.server.to("map." + data.map).emit(SystemMessage.event, data);
             return;
         }
         this.gateway.server.emit(SystemMessage.event, data);
     }
 
-    @EventPattern(WorldConstants.CONSTANT + '.' + LocalMessage.event)
+    @EventPattern(WorldConstants.CONSTANT + "." + LocalMessage.event)
     localMessage(data: LocalMessage) {
 
     }
 
-    @EventPattern(WorldConstants.CONSTANT + '.' + RegionMessage.event)
+    @EventPattern(WorldConstants.CONSTANT + "." + RegionMessage.event)
     regionMessage(data: RegionMessage) {
 
     }
 
-    @EventPattern(WorldConstants.CONSTANT + '.' + ZoneMessage.event)
+    @EventPattern(WorldConstants.CONSTANT + "." + ZoneMessage.event)
     zoneMessage(data: ZoneMessage) {
-        this.gateway.server.to('map.' + data.map).emit(ZoneMessage.event, data);
+        this.gateway.server.to("map." + data.map).emit(ZoneMessage.event, data);
     }
 
-    @EventPattern(WorldConstants.CONSTANT + '.' + TradeMessage.event)
+    @EventPattern(WorldConstants.CONSTANT + "." + TradeMessage.event)
     tradeMessage(data: TradeMessage) {
-        this.gateway.server.to('trade').emit(TradeMessage.event, data);
+        this.gateway.server.to("trade").emit(TradeMessage.event, data);
     }
 
-    @EventPattern(WorldConstants.CONSTANT + '.' + GlobalMessage.event)
+    @EventPattern(WorldConstants.CONSTANT + "." + GlobalMessage.event)
     globalMessage(data: GlobalMessage) {
-        this.gateway.server.to('global').emit(GlobalMessage.event, data);
+        this.gateway.server.to("global").emit(GlobalMessage.event, data);
     }
 
-    @EventPattern(WorldConstants.CONSTANT + '.' + PrivateMessage.event)
+    @EventPattern(WorldConstants.CONSTANT + "." + PrivateMessage.event)
     privateMessage(data: PrivateMessage) {
     }
 

@@ -1,10 +1,10 @@
-import {NestFactory}    from '@nestjs/core';
-import {WorldModule}    from './world.module';
-import {environment}    from "../../lib/config/environment";
-import {Logger}         from "@nestjs/common";
-import {WorldConstants} from "../../lib/constants/world.constants";
+import { NestFactory }    from "@nestjs/core";
+import { WorldModule }    from "./world.module";
+import { environment }    from "../../lib/config/environment";
+import { Logger }         from "@nestjs/common";
+import { WorldConstants } from "../../lib/constants/world.constants";
 
-const logger = new Logger(WorldConstants.NAME + ' Server');
+const logger = new Logger(WorldConstants.NAME + " Server");
 
 async function bootstrap() {
     const app = await NestFactory.create(WorldModule);
@@ -12,8 +12,8 @@ async function bootstrap() {
         transport: environment.microservice.transport,
         options  : {
             ...environment.microservice.global,
-            name : WorldConstants.NAME + ' Server',
-            queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
+            name : WorldConstants.NAME + " Server",
+            queue: WorldConstants.CONSTANT + "." + process.env.NODE_APP_INSTANCE
         }
     });
     app.enableCors({

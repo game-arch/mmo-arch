@@ -1,16 +1,16 @@
-import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn} from "typeorm";
-import * as bcrypt                                                                          from "bcryptjs";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import * as bcrypt                                                                            from "bcryptjs";
 
 @Entity()
-@Unique('email', ['email'])
+@Unique("email", ["email"])
 export class Account {
     @PrimaryGeneratedColumn()
-    id:number;
+    id: number;
 
     @Column()
-    email:string;
+    email: string;
     @Column()
-    password:string;
+    password: string;
 
     @Column()
     @CreateDateColumn()

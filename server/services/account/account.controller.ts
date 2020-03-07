@@ -1,8 +1,8 @@
-import {Controller}     from '@nestjs/common';
-import {AccountService} from './account.service';
-import {MessagePattern} from "@nestjs/microservices";
-import {AccountEvents}  from "./account.events";
-import {AccountClient}  from "./client/account.client";
+import { Controller }     from "@nestjs/common";
+import { AccountService } from "./account.service";
+import { MessagePattern } from "@nestjs/microservices";
+import { AccountEvents }  from "./account.events";
+import { AccountClient }  from "./client/account.client";
 
 @Controller()
 export class AccountController {
@@ -32,7 +32,7 @@ export class AccountController {
     }
 
     @MessagePattern(AccountEvents.GET)
-    async get({token, ignoreExpiration}) {
+    async get({ token, ignoreExpiration }) {
         return await this.service.getAccountByToken(token, ignoreExpiration);
     }
 }

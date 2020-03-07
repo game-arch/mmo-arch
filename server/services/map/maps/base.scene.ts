@@ -1,9 +1,9 @@
-import {MapConfig}      from "../config/config";
-import {Subject}        from "rxjs";
+import { MapConfig }      from "../config/config";
+import { Subject }        from "rxjs";
+import { loadCollisions } from "../../../lib/phaser/collisions";
+import { Mob }            from "../../../lib/phaser/mob";
 import Scene = Phaser.Scene;
-import {loadCollisions} from "../../../lib/phaser/collisions";
 import Group = Phaser.Physics.Arcade.Group;
-import {Mob}            from "../../../lib/phaser/mob";
 
 
 export class BaseScene extends Scene implements Scene {
@@ -14,7 +14,7 @@ export class BaseScene extends Scene implements Scene {
     entities: {
         player: { [characterId: number]: Mob },
         mob: { [mobId: number]: Mob }
-    } = {player: {}, mob: {}};
+    } = { player: {}, mob: {} };
     collisionGroups: { overlaps: Group, colliders: Group };
 
     constructor(public config: MapConfig) {
@@ -33,7 +33,7 @@ export class BaseScene extends Scene implements Scene {
     }
 
 
-    addEntity(type: 'player' | 'mob', mob: Mob, id: number) {
+    addEntity(type: "player" | "mob", mob: Mob, id: number) {
         this.entities[type]     = this.entities[type] || {};
         this.entities[type][id] = mob;
         this.entities[type][id].create(this, mob.x, mob.y);
@@ -41,7 +41,7 @@ export class BaseScene extends Scene implements Scene {
         this.physics.add.overlap(mob.sprite, this.collisionGroups.overlaps);
     }
 
-    removeEntity(type: 'player' | 'mob', id: number) {
+    removeEntity(type: "player" | "mob", id: number) {
         if (this.entities[type][id]) {
             this.entities[type][id].sprite.stopListening.next();
             this.entities[type][id].destroy();

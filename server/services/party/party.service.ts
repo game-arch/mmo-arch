@@ -1,3 +1,4 @@
+
 import {
     Injectable,
     ConflictException,
@@ -30,8 +31,8 @@ export class PartyService {
         let party: Party = await this.repo.findOne({name})
         if (party) {
             throw new RpcException(
-                new ConflictException('Party Name Already Taken')
-            )
+                new ConflictException("Party Name Already Taken")
+            );
         }
         try {
             party         = this.repo.create()
@@ -41,13 +42,13 @@ export class PartyService {
             await this.repo.save(party)
             return party
         } catch (e) {
-            console.log(e)
-            if (e.message.indexOf('UNIQUE') !== -1) {
+            console.log(e);
+            if (e.message.indexOf("UNIQUE") !== -1) {
                 throw new RpcException(
-                    new ConflictException('Character Name Already Taken')
-                )
+                    new ConflictException("Character Name Already Taken")
+                );
             }
-            throw new RpcException(new InternalServerErrorException(e.message))
+            throw new RpcException(new InternalServerErrorException(e.message));
         }
     }
 
@@ -72,7 +73,7 @@ export class PartyService {
             }
         }
         // no one is online - pick the first one
-        return party.members.values().next().value
+        return party.members.values().next().value;
     }
 
     async isPartyLeader(
@@ -87,7 +88,7 @@ export class PartyService {
     }
 
     isPartyFull(party: Party): boolean {
-        return party.members.length > 4
+        return party.members.length > 4;
     }
 
     async isInvited(party: Party, characterId:number): Promise<boolean> {

@@ -1,8 +1,8 @@
-import {Controller, Get, Logger} from '@nestjs/common';
-import {WorldGateway}            from "./world.gateway";
-import {EventPattern}            from "@nestjs/microservices";
-import {PresenceOnline}          from "../presence/actions";
-import {WorldService}            from "./world.service";
+import { Controller, Get, Logger } from "@nestjs/common";
+import { WorldGateway }            from "./world.gateway";
+import { EventPattern }            from "@nestjs/microservices";
+import { PresenceOnline }          from "../presence/actions";
+import { WorldService }            from "./world.service";
 
 @Controller()
 export class WorldController {
@@ -16,7 +16,7 @@ export class WorldController {
 
     }
 
-    @Get('health')
+    @Get("health")
     health() {
         return "OK";
     }

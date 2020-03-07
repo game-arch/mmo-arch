@@ -1,7 +1,7 @@
-import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {Resource}                                                         from "./resource";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Resource }                                                  from "./resource";
 
-@Unique('resourceItem', ['resource', 'itemId'])
+@Unique("resourceItem", ["resource", "itemId"])
 @Entity()
 export class ResourceDrop {
     @PrimaryGeneratedColumn()
@@ -12,10 +12,10 @@ export class ResourceDrop {
 
     @Column()
     itemId: number;
-    @Column({default: 0})
+    @Column({ default: 0 })
     minQuantity: number;
-    @Column({default: 1})
+    @Column({ default: 1 })
     maxQuantity: number;
-    @Column('decimal', {default: 1.00})
+    @Column("decimal", { default: 1.00 })
     chance: number;
 }

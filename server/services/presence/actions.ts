@@ -1,13 +1,13 @@
 export class PresenceOnline {
-    static readonly event = 'presence.online';
+    static readonly event = "presence.online";
 }
 
 export class GetServers {
-    static readonly event = 'presence.server_list';
+    static readonly event = "presence.server_list";
 }
 
 export class RegisterServer {
-    static readonly event = 'presence.register_server';
+    static readonly event = "presence.register_server";
 
     constructor(
         public host: string,
@@ -21,7 +21,7 @@ export class RegisterServer {
 }
 
 export class ServerOffline {
-    static readonly event = 'presence.server_offline';
+    static readonly event = "presence.server_offline";
 
     constructor(
         public serverId: number

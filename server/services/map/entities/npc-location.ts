@@ -1,8 +1,8 @@
-import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-@Index('npcMap', ['map'])
-@Index('npcLocation', ['map', 'x', 'y'])
+@Index("npcMap", ["map"])
+@Index("npcLocation", ["map", "x", "y"])
 export class NpcLocation {
     @PrimaryGeneratedColumn()
     id: number;
@@ -13,8 +13,8 @@ export class NpcLocation {
     npcId: number;
     @Column()
     map: string;
-    @Column('int')
+    @Column("int")
     x: number;
-    @Column('int')
+    @Column("int")
     y: number;
 }

@@ -1,12 +1,12 @@
-import {Inject, Injectable}                        from "@nestjs/common";
-import {ClientProxy}                               from "@nestjs/microservices";
-import {first, tap}                                from "rxjs/operators";
-import {GetServers, RegisterServer, ServerOffline} from "../actions";
+import { Inject, Injectable }                        from "@nestjs/common";
+import { ClientProxy }                               from "@nestjs/microservices";
+import { first }                                     from "rxjs/operators";
+import { GetServers, RegisterServer, ServerOffline } from "../actions";
 
 @Injectable()
 export class PresenceClient {
 
-    constructor(@Inject('PRESENCE_CLIENT') private client: ClientProxy) {
+    constructor(@Inject("PRESENCE_CLIENT") private client: ClientProxy) {
 
     }
 

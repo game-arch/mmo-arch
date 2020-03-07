@@ -3,5 +3,5 @@ export interface GameWorld {
     host: string;
     port: number;
     name: string;
-    status: 'online' | 'offline';
+    status: "online" | "offline";
 }

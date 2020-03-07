@@ -1,10 +1,10 @@
-import {ConflictException, Injectable, UnauthorizedException} from "@nestjs/common";
-import {InjectRepository}                                     from "@nestjs/typeorm";
-import {Account}                                              from "./entities/account";
-import {Repository}                                           from "typeorm";
-import {RpcException}                                         from "@nestjs/microservices";
-import {JwtService}                                           from "@nestjs/jwt";
-import {SignOptions}                                          from "jsonwebtoken";
+import { ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { InjectRepository }                                     from "@nestjs/typeorm";
+import { Account }                                              from "./entities/account";
+import { Repository }                                           from "typeorm";
+import { RpcException }                                         from "@nestjs/microservices";
+import { JwtService }                                           from "@nestjs/jwt";
+import { SignOptions }                                          from "jsonwebtoken";
 
 @Injectable()
 export class AccountService {
@@ -18,7 +18,7 @@ export class AccountService {
     }
 
     async register(email: string, password: string) {
-        let exists = await this.repo.findOne({email});
+        let exists = await this.repo.findOne({ email });
         if (exists) {
             throw new RpcException(new ConflictException("Email Already Taken"));
         }
@@ -26,7 +26,7 @@ export class AccountService {
         account.email    = email;
         account.password = password;
         account.hashPassword();
-        await this.repo.save(account, {reload: true});
+        await this.repo.save(account, { reload: true });
         return this.jwt.sign({
             username: email,
             sub     : account.id
@@ -34,7 +34,7 @@ export class AccountService {
     }
 
     async login(email: string, password: string) {
-        let account = await this.repo.findOne({email});
+        let account = await this.repo.findOne({ email });
         if (!account || !account.verifyPassword(password)) {
             throw new RpcException(new UnauthorizedException("Invalid Email or Password"));
         }
@@ -45,7 +45,7 @@ export class AccountService {
     }
 
     async getAccountByToken(token: string, ignoreExpiration: boolean = false) {
-        let data   = this.jwt.verify(token, {ignoreExpiration});
+        let data   = this.jwt.verify(token, { ignoreExpiration });
         let exists = await this.repo.findOne(parseInt(data.sub));
         if (!exists) {
             throw new RpcException(new UnauthorizedException("Invalid or Expired Token"));

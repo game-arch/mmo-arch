@@ -1,13 +1,13 @@
-import {MapConfig}                                                         from "../config/config";
-import {Player}                                                            from "../entities/player";
-import {interval, merge, Subject}                                          from "rxjs";
-import {distinct, distinctUntilChanged, map, takeUntil, tap, throttleTime} from "rxjs/operators";
-import {loadCollisions}                                                    from "../../../lib/phaser/collisions";
-import {BaseScene}                                                         from "./base.scene";
+import { MapConfig }                                          from "../config/config";
+import { Player }                                             from "../entities/player";
+import { Subject }                                            from "rxjs";
+import { distinctUntilChanged, map, takeUntil, throttleTime } from "rxjs/operators";
+import { loadCollisions }                                     from "../../../lib/phaser/collisions";
+import { BaseScene }                                          from "./base.scene";
+import { Mob }                                                from "../../../lib/phaser/mob";
+import { async }                                              from "rxjs/internal/scheduler/async";
+import { Directions }                                         from "../../../lib/phaser/directions";
 import Scene = Phaser.Scene;
-import {Mob}                                                               from "../../../lib/phaser/mob";
-import {async}                                                             from "rxjs/internal/scheduler/async";
-import {Directions}                                                        from "../../../lib/phaser/directions";
 
 
 export class BackendScene extends BaseScene implements Scene {
@@ -34,10 +34,10 @@ export class BackendScene extends BaseScene implements Scene {
 
 
     addPlayer(player: Player) {
-        this.addEntity('player', player, player.characterId);
+        this.addEntity("player", player, player.characterId);
         player.sprite.onStopMoving.pipe(takeUntil(player.sprite.stopListening))
               .pipe(takeUntil(this.stop$))
-              .pipe(throttleTime(1000, async, {trailing: true, leading: true}))
+              .pipe(throttleTime(1000, async, { trailing: true, leading: true }))
               .subscribe(() => {
                   this.savePlayer.next(player);
               });
@@ -45,7 +45,7 @@ export class BackendScene extends BaseScene implements Scene {
               .pipe(takeUntil(this.stop$))
               .pipe(map(() => player))
               .pipe(distinctUntilChanged((a, b) => {
-                  return a.asPayload() === b.asPayload()
+                  return a.asPayload() === b.asPayload();
               }))
               .subscribe(() => {
                   this.emitPlayer.next(player);
@@ -53,7 +53,9 @@ export class BackendScene extends BaseScene implements Scene {
     }
 
     removePlayer(player: Player) {
-        this.removeEntity('player', player.characterId);
+        if (player) {
+            this.removeEntity("player", player.characterId);
+        }
     }
 
     movePlayer(characterId: number, directions: Directions) {

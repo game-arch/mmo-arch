@@ -1,7 +1,7 @@
-import {NestFactory} from '@nestjs/core';
-import {LobbyModule} from './lobby.module';
-import {PORTS}       from "../../lib/constants/ports.constants";
-import {environment} from "../../lib/config/environment";
+import { NestFactory } from "@nestjs/core";
+import { LobbyModule } from "./lobby.module";
+import { PORTS }       from "../../lib/constants/ports.constants";
+import { environment } from "../../lib/config/environment";
 
 async function bootstrap() {
     const app = await NestFactory.create(LobbyModule);
@@ -9,7 +9,7 @@ async function bootstrap() {
         transport: environment.microservice.transport,
         options  : {
             ...environment.microservice.global,
-            name: 'Lobby Server'
+            name: "Lobby Server"
         }
     });
     app.enableCors({

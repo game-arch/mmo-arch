@@ -1,4 +1,4 @@
-import {MobSprite} from "./mob-sprite";
+import { MobSprite } from "./mob-sprite";
 import Scene = Phaser.Scene;
 
 export class Mob {
@@ -18,7 +18,7 @@ export class Mob {
         this.sprite.moving = value;
     }
 
-    create(scene: Phaser.Scene, x: number, y: number, key: string = '') {
+    create(scene: Phaser.Scene, x: number, y: number, key: string = "") {
         this.sprite = new MobSprite(scene, x, y, key);
     }
 
@@ -33,6 +33,6 @@ export class Mob {
             x     : this.x,
             y     : this.y,
             moving: this.sprite.moving
-        }
+        };
     }
 }

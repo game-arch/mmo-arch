@@ -3,7 +3,7 @@ import RESIZE = Phaser.Scale.RESIZE;
 import CANVAS = Phaser.CANVAS;
 
 export const GAME_CONFIG: GameConfig = {
-    title  : 'My Game',
+    title  : "My Game",
     type   : CANVAS,
     scale  : {
         mode  : RESIZE,
@@ -11,7 +11,7 @@ export const GAME_CONFIG: GameConfig = {
         height: window.innerHeight
     },
     physics: {
-        default: 'arcade',
+        default: "arcade",
         arcade : {
             debug: true
         }

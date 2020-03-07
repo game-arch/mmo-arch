@@ -1,10 +1,10 @@
 import Scene = Phaser.Scene;
-import {Physics}    from "./physics";
 import Vector2 = Phaser.Math.Vector2;
 import Body = Phaser.Physics.Arcade.Body;
-import {Subject}    from "rxjs";
 import Sprite = Phaser.GameObjects.Sprite;
-import {Directions} from "./directions";
+import { Physics }    from "./physics";
+import { Subject }    from "rxjs";
+import { Directions } from "./directions";
 
 export class MobSprite extends Sprite {
     stopListening      = new Subject();
@@ -22,7 +22,7 @@ export class MobSprite extends Sprite {
     body: Body;
 
 
-    constructor(scene: Scene, x: number, y: number, key: string = '') {
+    constructor(scene: Scene, x: number, y: number, key: string = "") {
         super(scene, x, y, key);
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -35,17 +35,13 @@ export class MobSprite extends Sprite {
         if (!this.moving) {
             return;
         }
-
-        if (!this.body.velocity.equals(this.lastVelocity)) {
-            this.reportChangeInMovingStatus(this.body.velocity);
-            this.onVelocityChange.next();
-        }
         let velocity = Physics.getVelocity(this.moving);
         this.body.setVelocity(velocity.x, velocity.y);
-    }
-
-    postUpdate(...args: any[]) {
-        this.lastVelocity = this.body.velocity.clone();
+        if (!velocity.equals(this.lastVelocity)) {
+            this.lastVelocity = this.body.velocity.clone();
+            this.reportChangeInMovingStatus(velocity);
+            this.onVelocityChange.next();
+        }
     }
 
 

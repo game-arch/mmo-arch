@@ -1,11 +1,11 @@
-import {Directions} from "./directions";
+import { Directions } from "./directions";
 import Vector2 = Phaser.Math.Vector2;
 
 export class Physics {
     static readonly SPEED_BASE     = 10;
     static readonly SPEED_MODIFIER = 16;
 
-    static getVelocity(value: Directions = {up: false, down: false, left: false, right: false}) {
+    static getVelocity(value: Directions = { up: false, down: false, left: false, right: false }) {
         return new Vector2(this.getXVelocity(value), this.getYVelocity(value));
     }
 

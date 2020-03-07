@@ -1,8 +1,8 @@
-import {Injectable}        from "@angular/core";
-import {Location}          from "@angular/common";
-import {ConnectionManager} from "../../../connection/connection-manager";
-import {TitleScene}        from "./title/title.scene";
-import {TutorialScene}     from "./tutorial/tutorial.scene";
+import { Injectable }        from "@angular/core";
+import { Location }          from "@angular/common";
+import { ConnectionManager } from "../../../connection/connection-manager";
+import { TitleScene }        from "./title/title.scene";
+import { TutorialScene }     from "./tutorial/tutorial.scene";
 
 @Injectable()
 export class SceneFactory {

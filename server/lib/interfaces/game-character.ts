@@ -1,5 +1,5 @@
 export interface GameCharacter {
     id: number;
-    gender?: 'male' | 'female';
+    gender?: "male" | "female";
     name: string;
 }

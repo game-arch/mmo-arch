@@ -1,15 +1,16 @@
-import {Controller, Get}  from '@nestjs/common';
-import {CharacterService} from './character.service';
-import {MessagePattern}   from "@nestjs/microservices";
+import { Controller }       from "@nestjs/common";
+import { CharacterService } from "./character.service";
+import { MessagePattern }   from "@nestjs/microservices";
 import {
     AllCharactersOffline,
-    CreateCharacter,
-    GetCharacters,
     CharacterOffline,
-    CharacterOnline, GetCharacter, GetCharacterName
-}                         from "./actions";
-import {WORLD_PREFIX}     from "../world/world.prefix";
-import {LocalMessage}     from "../world/chat/actions";
+    CharacterOnline,
+    CreateCharacter,
+    GetCharacter,
+    GetCharacterName,
+    GetCharacters
+}                           from "./actions";
+import { WORLD_PREFIX }     from "../world/world.prefix";
 
 @Controller()
 export class CharacterController {

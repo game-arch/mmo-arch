@@ -1,13 +1,12 @@
-import {Inject, Injectable}                                                   from "@nestjs/common";
-import {ClientProxy}                                                          from "@nestjs/microservices";
-import {AllPlayers, MapOnline, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate} from "./actions";
-import {WORLD_PREFIX}                                                         from "../world/world.prefix";
-import {LocalMessage}                                                         from "../world/chat/actions";
+import { Inject, Injectable }                                                   from "@nestjs/common";
+import { ClientProxy }                                                          from "@nestjs/microservices";
+import { AllPlayers, MapOnline, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from "./actions";
+import { WORLD_PREFIX }                                                         from "../world/world.prefix";
 
 @Injectable()
 export class MapEmitter {
 
-    constructor(@Inject('WORLD_CLIENT') private client: ClientProxy) {
+    constructor(@Inject("WORLD_CLIENT") private client: ClientProxy) {
 
     }
 

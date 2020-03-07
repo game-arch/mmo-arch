@@ -1,11 +1,11 @@
-import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {GameCharacter}                                         from "../../../lib/interfaces/game-character";
+import { Column, Entity, Index, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { GameCharacter }                                         from "../../../lib/interfaces/game-character";
 
 @Entity()
-@Index('user', ['accountId', 'name'])
-@Index('status', ['status'])
-@Unique('socket', ['socketId'])
-@Unique('name', ['world','name'])
+@Index("user", ["accountId", "name"])
+@Index("status", ["status"])
+@Unique("socket", ["socketId"])
+@Unique("name", ["world", "name"])
 export class Character implements GameCharacter {
 
     @PrimaryGeneratedColumn()
@@ -14,20 +14,20 @@ export class Character implements GameCharacter {
     @Column()
     accountId: number;
     @Column()
-    world:string;
+    world: string;
 
     @Column()
     name: string;
 
     @Column()
-    gender: 'male' | 'female' = 'male';
+    gender: "male" | "female" = "male";
 
     @Column()
-    status: 'online' | 'offline' = 'offline';
+    status: "online" | "offline" = "offline";
 
-    @Column({nullable: true})
+    @Column({ nullable: true })
     lastOnline: Date;
-    @Column({nullable:true})
-    socketId:string;
+    @Column({ nullable: true })
+    socketId: string;
 
 }

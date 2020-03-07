@@ -1,18 +1,18 @@
-import {Controller, Get, OnApplicationBootstrap, OnApplicationShutdown, Req, Res}   from '@nestjs/common';
-import {MapService}                                                                 from './map.service';
-import {EventPattern, MessagePattern}                                               from "@nestjs/microservices";
-import {CharacterLoggedIn, CharacterLoggedOut}                                      from "../character/actions";
-import {GetAllPlayers, GetPlayerPosition, PlayerChangedMap, PlayerDirectionalInput} from "./actions";
-import {Request, Response}                                                          from "express";
-import {MapEmitter}                                                                 from "./map.emitter";
-import {WorldConstants}                                                             from "../../lib/constants/world.constants";
-import {MapConstants}                                                               from "./constants";
-import {WORLD_PREFIX}                                                               from "../world/world.prefix";
-import {InjectRepository}                                                           from "@nestjs/typeorm";
-import {Player}                                                                     from "./entities/player";
-import {getConnection, Repository}                                                  from "typeorm";
-import {from}                                                                       from "rxjs";
-import {map, toArray}                                                               from "rxjs/operators";
+import { Controller, Get, OnApplicationBootstrap, OnApplicationShutdown, Req, Res }   from "@nestjs/common";
+import { MapService }                                                                 from "./map.service";
+import { EventPattern, MessagePattern }                                               from "@nestjs/microservices";
+import { CharacterLoggedIn, CharacterLoggedOut }                                      from "../character/actions";
+import { GetAllPlayers, GetPlayerPosition, PlayerChangedMap, PlayerDirectionalInput } from "./actions";
+import { Request, Response }                                                          from "express";
+import { MapEmitter }                                                                 from "./map.emitter";
+import { WorldConstants }                                                             from "../../lib/constants/world.constants";
+import { MapConstants }                                                               from "./constants";
+import { WORLD_PREFIX }                                                               from "../world/world.prefix";
+import { InjectRepository }                                                           from "@nestjs/typeorm";
+import { Player }                                                                     from "./entities/player";
+import { getConnection, Repository }                                                  from "typeorm";
+import { from }                                                                       from "rxjs";
+import { map, toArray }                                                               from "rxjs/operators";
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -23,7 +23,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     ) {
     }
 
-    @Get('players')
+    @Get("players")
     getPlayers(@Req() request: Request, @Res() response: Response) {
         return this.service.map.getAllPlayers();
     }
@@ -59,7 +59,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         }
     }
 
-    @MessagePattern(WORLD_PREFIX + GetPlayerPosition.event + '.' + MapConstants.MAP)
+    @MessagePattern(WORLD_PREFIX + GetPlayerPosition.event + "." + MapConstants.MAP)
     getPlayer(data: GetPlayerPosition) {
         return this.service.getPlayerPosition(data.characterId);
     }
@@ -76,6 +76,6 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
             .pipe(map(key => this.service.map.entities.player[key]), toArray())
             .toPromise();
         await this.playerRepo.save(players);
-        console.log('Saved Players!');
+        console.log("Saved Players!");
     }
 }

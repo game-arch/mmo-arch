@@ -1,6 +1,6 @@
-import {Module}            from "@nestjs/common";
-import {PresenceEmitter}   from "./presence.emitter";
-import {WorldClientModule} from "../../../lib/world-client/world-client.module";
+import { Module }            from "@nestjs/common";
+import { PresenceEmitter }   from "./presence.emitter";
+import { WorldClientModule } from "../../../lib/world-client/world-client.module";
 
 @Module({
     imports  : [
@@ -9,7 +9,7 @@ import {WorldClientModule} from "../../../lib/world-client/world-client.module";
     providers: [
         PresenceEmitter
     ],
-    exports: [
+    exports  : [
         PresenceEmitter
     ]
 })

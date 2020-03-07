@@ -1,16 +1,15 @@
-import {Inject, Injectable}                          from '@nestjs/common';
-import {MapConstants}                                from "./constants";
-import {Repository}                                  from "typeorm";
-import {Player}                                      from "./entities/player";
-import {InjectRepository}                            from "@nestjs/typeorm";
-import {MapEmitter}                                  from "./map.emitter";
-import {CharacterClient}                             from "../character/client/character.client";
-import {concatMap, filter, map, mergeMap, takeUntil} from "rxjs/operators";
-import {Game}                                        from "phaser";
-import {BackendScene}                                from "./maps/backend.scene";
-import {MapTransition}                               from "./entities/map-transition";
-import {Directions}                                  from "../../lib/phaser/directions";
-import {interval}                                    from "rxjs";
+import { Inject, Injectable } from "@nestjs/common";
+import { MapConstants }       from "./constants";
+import { Repository }         from "typeorm";
+import { Player }             from "./entities/player";
+import { InjectRepository }   from "@nestjs/typeorm";
+import { MapEmitter }         from "./map.emitter";
+import { CharacterClient }    from "../character/client/character.client";
+import { filter, takeUntil }  from "rxjs/operators";
+import { Game }               from "phaser";
+import { BackendScene }       from "./maps/backend.scene";
+import { MapTransition }      from "./entities/map-transition";
+import { Directions }         from "../../lib/phaser/directions";
 
 @Injectable()
 export class MapService {
@@ -35,9 +34,9 @@ export class MapService {
             },
             scene  : [this.map],
             physics: {
-                default: 'arcade',
+                default: "arcade",
                 arcade : {
-                    gravity: {y: 0, x: 0}
+                    gravity: { y: 0, x: 0 }
                 }
             }
         });
@@ -67,14 +66,14 @@ export class MapService {
     }
 
     async changedMaps(characterId: number, map: string, newX: number, newY: number) {
-        let player = await this.playerRepo.findOne({characterId});
+        let player = await this.playerRepo.findOne({ characterId });
         if (player) {
-            let lastMap = player.map + '';
+            let lastMap = player.map + "";
             if (map === this.map.constant) {
                 player.map     = map;
                 player.x       = newX;
                 player.y       = newY;
-                let transition = await this.transitionRepo.findOne({map: lastMap, destinationMap: map});
+                let transition = await this.transitionRepo.findOne({ map: lastMap, destinationMap: map });
                 if (transition) {
                     player.x = transition.destinationX;
                     player.y = transition.destinationY;
@@ -83,15 +82,15 @@ export class MapService {
                 this.playerJoinedMap(player);
             }
             if (lastMap === this.map.constant) {
-                this.playerLeftMap(player)
+                this.playerLeftMap(player);
             }
         }
     }
 
     async loggedIn(characterId: number, name: string) {
-        let player = await this.playerRepo.findOne({characterId});
-        if (!player && this.map.constant === 'tutorial') {
-            player = this.playerRepo.create({characterId, map: 'tutorial', x: 100, y: 100});
+        let player = await this.playerRepo.findOne({ characterId });
+        if (!player && this.map.constant === "tutorial") {
+            player = this.playerRepo.create({ characterId, map: "tutorial", x: 100, y: 100 });
         }
         if (player && player.map === this.map.constant) {
             player.name = name;
@@ -100,24 +99,15 @@ export class MapService {
         }
     }
 
-    private playerJoinedMap(player: Player) {
-        this.map.addPlayer(player);
-        this.emitter.playerJoinedMap(this.map.constant, player.characterId, player.name, player.x, player.y);
-    }
-
     async loggedOut(characterId: number) {
-        let player = await this.playerRepo.findOne({characterId});
+        let player = await this.playerRepo.findOne({ characterId });
         if (player && player.map === this.map.constant) {
-            player = this.map.entities.player[player.id];
-            await this.playerRepo.save(this.map.entities.player[player.id]);
-            this.playerLeftMap(player);
+            if (this.map.entities.player[player.id]) {
+                await this.playerRepo.save(this.map.entities.player[player.id]);
+                this.playerLeftMap(this.map.entities.player[player.id]);
+            }
         }
 
-    }
-
-    private playerLeftMap(player: Player) {
-        this.map.removePlayer(player);
-        this.emitter.playerLeftMap(this.map.constant, player.characterId, player.name);
     }
 
     movePlayer(characterId: number, directions: Directions) {
@@ -135,6 +125,18 @@ export class MapService {
             };
         }
         return null;
+    }
+
+    private playerJoinedMap(player: Player) {
+        this.map.addPlayer(player);
+        this.emitter.playerJoinedMap(this.map.constant, player.characterId, player.name, player.x, player.y);
+    }
+
+    private playerLeftMap(player: Player) {
+        if (player) {
+            this.map.removePlayer(player);
+            this.emitter.playerLeftMap(this.map.constant, player.characterId, player.name);
+        }
     }
 
 }
