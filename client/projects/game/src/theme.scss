@@ -28,5 +28,7 @@ body {
         background-color: rgba(0,0,0, 0.6);
         backdrop-filter: blur(4px);
     }
-
+    hud .mat-card {
+        background-color: rgba(80,80,80, 0.6);
+    }
 }

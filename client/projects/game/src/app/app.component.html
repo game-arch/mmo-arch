@@ -1,4 +1,4 @@
-<game-engine></game-engine>
+<game></game>
 <ng-container *ngIf="auth$ | async as auth">
     <authentication *ngIf="auth.token === ''"></authentication>
     <ng-container *ngIf="auth.token !== ''">

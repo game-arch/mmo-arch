@@ -12,8 +12,8 @@ import {
     PlayerLeftMap,
     PlayerUpdate
 }                                           from "../../../../../../server/services/map/actions";
-import Scene = Phaser.Scene;
 import Game = Phaser.Game;
+import { MultiplayerScene }                 from "./phaser/scenes/multiplayer.scene";
 
 @Injectable()
 export class GameEngineService {
@@ -22,9 +22,9 @@ export class GameEngineService {
         title   : null,
         tutorial: null
     };
-    private currentSceneKey = "title";
-    private currentScene: Scene;
-    private destroyed       = new EventEmitter();
+    private currentSceneKey                                = "title";
+    currentScene: MultiplayerScene;
+    private destroyed                                      = new EventEmitter();
 
     constructor(
         public sceneFactory: SceneFactory,

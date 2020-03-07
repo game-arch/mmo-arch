@@ -1,7 +1,7 @@
 import { Component, EventEmitter } from "@angular/core";
 import { JoystickEvent }           from "ngx-joystick";
 import { takeUntil }               from "rxjs/operators";
-import { GameEngineService }       from "../game-engine.service";
+import { GameEngineService }       from "../../game-engine/game-engine.service";
 
 @Component({
     selector   : "joystick",

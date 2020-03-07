@@ -1,14 +1,14 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from "@angular/core";
 import { ConnectionManager }                                          from "../connection/connection-manager";
 import { CharacterOffline }                                           from "../../../../../../server/services/character/actions";
-import { GameEngineService }                                          from "./game-engine.service";
+import { GameEngineService }                                          from "../game-engine/game-engine.service";
 
 @Component({
-    selector   : "game-engine",
-    templateUrl: "game-engine.component.html",
-    styleUrls  : ["game-engine.component.scss"]
+    selector   : "game",
+    templateUrl: "game.component.html",
+    styleUrls  : ["game.component.scss"]
 })
-export class GameEngineComponent implements AfterViewInit, OnDestroy {
+export class GameComponent implements AfterViewInit, OnDestroy {
     @ViewChild("canvas", { static: true })
     canvas: ElementRef;
 

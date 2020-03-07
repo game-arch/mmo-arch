@@ -77,6 +77,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
             from(players).subscribe(
                 (player: {
                     id: number
+                    name: string
                     x: number
                     y: number
                     moving?: {
@@ -105,6 +106,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
 
     private addOrUpdatePlayer(data: {
         id: number
+        name: string
         x: number
         y: number
         moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
@@ -121,11 +123,13 @@ export class MultiplayerScene extends BaseScene implements Scene {
 
     private createPlayer(data: {
         id: number
+        name: string
         x: number
         y: number
         moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
     }) {
-        let player = new Mob();
+        console.log(data);
+        let player = new Mob(data.name);
         this.addEntity("player", player, data.id);
         if (this.connection.selectedCharacter.id === data.id) {
             this.setSelf(player);
@@ -134,6 +138,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     private setSelf(player) {
+        console.log(player);
         this.self = player;
         this.cameras.main.startFollow(player.sprite.body, true, 0.05, 0.05);
     }
