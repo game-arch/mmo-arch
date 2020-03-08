@@ -15,7 +15,7 @@ import {
 import { MultiplayerScene } from "./phaser/scenes/multiplayer.scene";
 import { WorldConnection }  from "../connection/world-connection";
 import Game = Phaser.Game;
-import { EventBus }         from "./phaser/scenes/event-bus";
+import { EventBus }         from "./phaser/event-bus";
 
 @Injectable()
 export class GameEngineService {

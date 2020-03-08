@@ -1,12 +1,12 @@
-import { GameEngineService } from "../../game-engine.service";
+import { GameEngineService } from "../game-engine.service";
 import {
     AllPlayers,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                            from "../../../../../../../../server/services/map/actions";
+}                            from "../../../../../../../server/services/map/actions";
 import { from }              from "rxjs";
-import { MultiplayerScene }  from "./multiplayer.scene";
+import { MultiplayerScene }  from "./scenes/multiplayer.scene";
 
 export class EventBus {
 
