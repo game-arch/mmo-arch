@@ -1,4 +1,3 @@
-import { JoystickModule } from './joystick/joystick.module'
 import { NgModule } from '@angular/core'
 import { GameEngineComponent } from './game-engine.component'
 import { CommonModule } from '@angular/common'
@@ -8,7 +7,6 @@ import { ConnectionModule } from '../connection/connection.module'
 import { GameEngineService } from './game-engine.service'
 import { RouterModule } from '@angular/router'
 import { SceneFactory } from './phaser/scenes/scene-factory.service'
-import { HudModule } from './hud/hud.module'
 
 @NgModule({
     declarations: [GameEngineComponent],
@@ -18,8 +16,6 @@ import { HudModule } from './hud/hud.module'
         MatButtonModule,
         MatCardModule,
         ConnectionModule,
-        JoystickModule,
-        HudModule,
     ],
     providers: [GameEngineService, SceneFactory],
     exports: [GameEngineComponent],

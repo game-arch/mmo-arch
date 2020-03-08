@@ -1,5 +1,5 @@
 import { Component, EventEmitter } from '@angular/core'
-import { GameEngineService } from '../../game-engine.service'
+import { GameEngineService } from '../../../game-engine.service'
 
 @Component({
     selector: 'health',
