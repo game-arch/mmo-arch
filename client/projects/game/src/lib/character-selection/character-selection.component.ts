@@ -3,7 +3,7 @@ import { ConnectionManager }      from "../connection/connection-manager";
 import { GameCharacter }          from "../../../../../../server/lib/interfaces/game-character";
 import { MatDialog }              from "@angular/material/dialog";
 import { CharacterFormComponent } from "./character-form.component";
-import { GameEngineService }      from "../engine/game-engine.service";
+import { GameEngineService }      from "../game-engine/game-engine.service";
 
 @Component({
     selector   : "character-selection",

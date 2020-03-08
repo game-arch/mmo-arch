@@ -1,0 +1,17 @@
+<canvas #canvas height="600" id="game-canvas" width="800"></canvas>
+<ng-container *ngIf="world.socket && world.selectedCharacter !== null">
+    <joystick
+        [enabled]="true"
+        [style.opacity]="world.selectedCharacter ? 1 : 0"
+        [style.pointer-events]="world.selectedCharacter ? 'all' : 'none'"
+    ></joystick>
+    <button
+        (click)="signOut()"
+        color="accent"
+        mat-raised-button
+        style="position:fixed;left:16px;bottom:16px;"
+    >
+        Character Screen
+    </button>
+    <hud></hud>
+</ng-container>

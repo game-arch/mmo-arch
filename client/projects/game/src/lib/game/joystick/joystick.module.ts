@@ -2,7 +2,7 @@ import { JoystickComponent } from "./joystick.component";
 import { NgModule }          from "@angular/core";
 import { CommonModule }      from "@angular/common";
 import { ConnectionModule }  from "../../connection/connection.module";
-import { SceneFactory }      from "../phaser/scenes/scene-factory.service";
+import { SceneFactory }      from "../../game-engine/phaser/scenes/scene-factory.service";
 import { NgxJoystickModule } from "ngx-joystick";
 
 @NgModule({

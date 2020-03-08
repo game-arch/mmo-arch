@@ -13,7 +13,7 @@ import { ReactiveFormsModule }            from "@angular/forms";
 import { MatFormFieldModule }             from "@angular/material/form-field";
 import { MatInputModule }                 from "@angular/material/input";
 import { MatButtonToggleModule }          from "@angular/material/button-toggle";
-import { GameEngineModule }               from "../engine/game-engine.module";
+import { GameEngineModule }               from "../game-engine/game-engine.module";
 
 
 @NgModule({
