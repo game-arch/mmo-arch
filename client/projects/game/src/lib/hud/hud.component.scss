@@ -14,26 +14,24 @@
         pointer-events: all;
     }
 
-    .row {
-        display: flex;
-        flex-direction: row;
-    }
-    .column {
-        display: flex;
-        flex-direction: column;
+    .bars {
+        width: 100%;
     }
 
     .stretch {
-        flex:1;
+        flex: 1;
     }
     .status {
-        width: 240px;
+        width: 40%;
         transform: skew(-12deg);
         .name {
-            font-size:14px;
+            font-size: 14px;
             color: #fff;
-            font-family: Roboto, "Helvetica Neue", sans-serif;
+            font-family: Roboto, 'Helvetica Neue', sans-serif;
             text-shadow: 2px 2px 4px #333333;
+        }
+        .level {
+            @extend .name;
         }
     }
 }

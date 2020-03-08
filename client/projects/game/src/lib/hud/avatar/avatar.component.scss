@@ -1,0 +1,9 @@
+.avatar-container {
+    width: 100px;
+    height: 100px;
+    & .avatar-content {
+        height: 90px;
+        border-radius: 50%;
+        background-image: url('/assets/sprites/example_avatar.jpg');
+    }
+}

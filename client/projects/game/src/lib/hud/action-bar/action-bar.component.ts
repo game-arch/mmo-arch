@@ -1,14 +1,15 @@
-import { Component }         from "@angular/core";
-import { GameEngineService } from "../../game-engine/game-engine.service";
+import { Component } from '@angular/core'
+import { GameEngineService } from '../../game-engine/game-engine.service'
 
 @Component({
-    selector   : "action-bar",
-    templateUrl: "action-bar.component.html"
+    selector: 'action-bar',
+    templateUrl: 'action-bar.component.html',
+    styleUrls: ['action-bar.component.scss'],
 })
 export class ActionBarComponent {
-    skill = "skill";
-    melee = "melee";
+    skill = 'skill'
+    melee = 'melee'
+    meleeSize = 'large'
 
-    constructor(private service: GameEngineService) {
-    }
+    constructor(private service: GameEngineService) {}
 }
