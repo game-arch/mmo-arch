@@ -1,19 +1,21 @@
-import { EventEmitter, Injectable }         from "@angular/core";
-import { ConnectionManager }                from "../connection/connection-manager";
-import { GAME_CONFIG }                      from "./phaser/config";
-import { SceneFactory }                     from "./phaser/scenes/scene-factory.service";
-import { fromEvent }                        from "rxjs";
-import { filter, mergeMap, takeUntil, tap } from "rxjs/operators";
-import { TitleScene }                       from "./phaser/scenes/title/title.scene";
-import { TutorialScene }                    from "./phaser/scenes/tutorial/tutorial.scene";
+import { EventEmitter, Injectable } from "@angular/core";
+import { ConnectionManager }        from "../connection/connection-manager";
+import { GAME_CONFIG }              from "./phaser/config";
+import { SceneFactory }             from "./phaser/scenes/scene-factory.service";
+import { fromEvent }                from "rxjs";
+import { filter, takeUntil, tap }   from "rxjs/operators";
+import { TitleScene }       from "./phaser/scenes/title/title.scene";
+import { TutorialScene }    from "./phaser/scenes/tutorial/tutorial.scene";
 import {
     AllPlayers,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                                           from "../../../../../../server/services/map/actions";
+}                           from "../../../../../../server/services/map/actions";
+import { MultiplayerScene } from "./phaser/scenes/multiplayer.scene";
+import { WorldConnection }  from "../connection/world-connection";
 import Game = Phaser.Game;
-import { MultiplayerScene }                 from "./phaser/scenes/multiplayer.scene";
+import { EventBus }         from "./phaser/scenes/event-bus";
 
 @Injectable()
 export class GameEngineService {
@@ -22,9 +24,13 @@ export class GameEngineService {
         title   : null,
         tutorial: null
     };
-    private currentSceneKey                                = "title";
+    currentSceneKey                                        = "title";
     currentScene: MultiplayerScene;
     private destroyed                                      = new EventEmitter();
+
+    worldChange = new EventEmitter();
+
+    eventBus = new EventBus(this);
 
     constructor(
         public sceneFactory: SceneFactory,
@@ -32,19 +38,25 @@ export class GameEngineService {
     ) {
     }
 
-    onWorldChange() {
-        return this.connection.worldChange
-                   .pipe(takeUntil(this.destroyed))
-                   .pipe(filter(world => !!world.socket));
-    }
-
     init(canvas: HTMLCanvasElement) {
-        this.game            = new Game({ ...GAME_CONFIG, canvas });
-        this.scenes.title    = this.sceneFactory.title();
-        this.scenes.tutorial = this.sceneFactory.tutorial();
-        this.game.scene.add("title", this.scenes.title);
-        this.game.scene.add("tutorial", this.scenes.tutorial);
-        this.game.scene.start("title");
+        this.game = new Game({ ...GAME_CONFIG, canvas });
+        this.connection.worldChange
+            .pipe(takeUntil(this.destroyed))
+            .pipe(filter(world => !!world.socket))
+            .pipe(tap(world => this.connection.world = world))
+            .subscribe(world => {
+                this.worldChange.emit();
+                this.convertEvents(world, [
+                    PlayerEnteredMap.event,
+                    PlayerLeftMap.event,
+                    AllPlayers.event,
+                    PlayerUpdate.event,
+                    PlayerEnteredMap.event
+                ]);
+            });
+        this.createScenes();
+        this.eventBus.listen();
+        this.game.events.emit('game.scene', 'title');
         fromEvent(window, "resize")
             .pipe(takeUntil(this.destroyed))
             .subscribe(() =>
@@ -54,44 +66,27 @@ export class GameEngineService {
                     window.innerHeight
                 )
             );
-        this.game.events.on("game.scene", scene => {
-            if (this.currentSceneKey !== "") {
-                this.game.scene.stop(this.currentSceneKey);
-            }
-            this.currentSceneKey = scene;
-            this.game.scene.start(scene);
-            this.currentScene = this.scenes[scene];
-        });
-        this.onWorldChange()
-            .pipe(
-                mergeMap(world =>
-                    fromEvent(world.socket, PlayerEnteredMap.event).pipe(
-                        tap(event => {
-                            this.connection.world = world;
-                        })
-                    )
-                )
-            )
-            .subscribe(event =>
-                this.game.events.emit(PlayerEnteredMap.event, event)
-            );
-        this.onWorldChange()
-            .pipe(
-                mergeMap(world => fromEvent(world.socket, PlayerLeftMap.event))
-            )
-            .subscribe(event =>
-                this.game.events.emit(PlayerLeftMap.event, event)
-            );
-        this.onWorldChange()
-            .pipe(mergeMap(world => fromEvent(world.socket, AllPlayers.event)))
-            .subscribe(players =>
-                this.game.events.emit(AllPlayers.event, players)
-            );
-        this.onWorldChange()
-            .pipe(
-                mergeMap(world => fromEvent(world.socket, PlayerUpdate.event))
-            )
-            .subscribe(data => this.game.events.emit(PlayerUpdate.event, data));
+    }
+
+    createScenes() {
+        this.scenes.title    = this.sceneFactory.title();
+        this.scenes.tutorial = this.sceneFactory.tutorial();
+        this.game.scene.add("title", this.scenes.title);
+        this.game.scene.add("tutorial", this.scenes.tutorial);
+    }
+
+    convertEvent(world: WorldConnection, eventName: string) {
+        fromEvent(world.socket, eventName)
+            .pipe(takeUntil(this.worldChange))
+            .subscribe(event => {
+                this.game.events.emit(eventName, event);
+            });
+    }
+
+    convertEvents(world: WorldConnection, eventNames: string[]) {
+        for (let eventName of eventNames) {
+            this.convertEvent(world, eventName);
+        }
     }
 
     destroy() {

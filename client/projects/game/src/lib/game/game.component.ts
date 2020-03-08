@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from "@ang
 import { ConnectionManager }                                          from "../connection/connection-manager";
 import { CharacterOffline }                                           from "../../../../../../server/services/character/actions";
 import { GameEngineService }                                          from "../game-engine/game-engine.service";
+import { EventBus }                                                   from "../game-engine/phaser/scenes/event-bus";
 
 @Component({
     selector   : "game",
@@ -14,7 +15,7 @@ export class GameComponent implements AfterViewInit, OnDestroy {
 
     constructor(
         public connection: ConnectionManager,
-        public service: GameEngineService
+        public engine: GameEngineService
     ) {
     }
 
@@ -23,15 +24,15 @@ export class GameComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.service.init(this.canvas.nativeElement);
+        this.engine.init(this.canvas.nativeElement);
     }
 
     ngOnDestroy() {
-        this.service.destroy();
+        this.engine.destroy();
     }
 
     signOut() {
-        this.service.game.events.emit("game.scene", "title");
+        this.engine.game.events.emit("game.scene", "title");
         this.world.socket.emit(
             CharacterOffline.event
         );
