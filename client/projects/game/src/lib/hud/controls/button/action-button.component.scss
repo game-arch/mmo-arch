@@ -1,1 +1,11 @@
-
+:host {
+    display:inline-block;
+    backdrop-filter: blur(4px);
+    border-radius: 100px;
+    background-color: rgba(25, 70, 200, 0.6);
+    border: 2px solid #333;
+    width: 55px;
+    height: 55px;
+    margin-left: 4px;
+    margin-right: 4px;
+}

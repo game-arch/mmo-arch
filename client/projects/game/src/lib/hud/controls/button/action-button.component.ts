@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, HostListener, Input } from "@angular/core";
 
 @Component({
     selector   : "action-button",
@@ -13,7 +13,8 @@ export class ActionButtonComponent {
         console.log(this.type);
     }
 
-    activateSkill(type) {
-        console.log(type);
+    @HostListener("click", ["$event"])
+    activateSkill(event) {
+        console.log(this.type);
     }
 }
