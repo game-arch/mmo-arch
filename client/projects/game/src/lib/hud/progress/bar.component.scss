@@ -6,6 +6,7 @@
     align-items:center;
     border: 2px solid #333;
     overflow:hidden;
+    backdrop-filter: blur(4px);
     .background {
         background-color: rgba(25, 70, 200, 0.6);
         position:absolute;
