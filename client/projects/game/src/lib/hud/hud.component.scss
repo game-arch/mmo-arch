@@ -1,0 +1,39 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 1000;
+    padding: 12px;
+
+    > * {
+        pointer-events: all;
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+    .column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stretch {
+        flex:1;
+    }
+    .status {
+        width: 240px;
+        transform: skew(-12deg);
+        .name {
+            font-size:14px;
+            color: #fff;
+            font-family: Roboto, "Helvetica Neue", sans-serif;
+            text-shadow: 2px 2px 4px #333333;
+        }
+    }
+}

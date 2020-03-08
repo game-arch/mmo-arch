@@ -3,12 +3,15 @@ import Scene = Phaser.Scene;
 
 export class Mob {
     id: number;
-    name: string;
     scene: Scene;
     sprite: MobSprite;
 
     x: number;
     y: number;
+
+    constructor(public name:string = '') {
+
+    }
 
     get moving() {
         return this.sprite.moving;

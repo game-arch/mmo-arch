@@ -57,7 +57,7 @@ export class GetPlayerPosition {
 export class PlayerUpdate {
     static readonly event = "map.player_update";
 
-    constructor(public map: string, public player: { id: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+    constructor(public map: string, public player: { id: number, name: string, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
 
     }
 }

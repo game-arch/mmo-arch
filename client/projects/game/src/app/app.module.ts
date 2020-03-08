@@ -1,23 +1,24 @@
-import { HudModule } from './../lib/engine/hud/hud.module'
-import { BrowserModule } from '@angular/platform-browser'
-import { NgModule } from '@angular/core'
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule }      from "@angular/core";
 
-import { AppComponent } from './app.component'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { HttpClientModule } from '@angular/common/http'
-import { AuthenticationModule } from '../lib/authentication/authentication.module'
-import { NgxsModule } from '@ngxs/store'
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin'
-import { ServerSelectionModule } from '../lib/server-selection/server-selection.module'
-import { CharacterSelectionModule } from '../lib/character-selection/character-selection.module'
-import { ConnectionModule } from '../lib/connection/connection.module'
-import { MatButtonModule } from '@angular/material/button'
-import { GameEngineModule } from '../lib/engine/game-engine.module'
-import { RouterModule } from '@angular/router'
+import { AppComponent }             from "./app.component";
+import { BrowserAnimationsModule }  from "@angular/platform-browser/animations";
+import { HttpClientModule }         from "@angular/common/http";
+import { AuthenticationModule }     from "../lib/authentication/authentication.module";
+import { NgxsModule }               from "@ngxs/store";
+import { NgxsStoragePluginModule }  from "@ngxs/storage-plugin";
+import { ServerSelectionModule }    from "../lib/server-selection/server-selection.module";
+import { CharacterSelectionModule } from "../lib/character-selection/character-selection.module";
+import { ConnectionModule }         from "../lib/connection/connection.module";
+import { MatButtonModule }          from "@angular/material/button";
+import { RouterModule }             from "@angular/router";
+import { GameModule }               from "../lib/game/game.module";
 
 @NgModule({
-    declarations: [AppComponent],
-    imports: [
+    declarations: [
+        AppComponent
+    ],
+    imports     : [
         RouterModule.forRoot([]),
         BrowserModule,
         HttpClientModule,
@@ -26,15 +27,15 @@ import { RouterModule } from '@angular/router'
         AuthenticationModule,
         ServerSelectionModule,
         CharacterSelectionModule,
-        GameEngineModule,
-        HudModule,
+        GameModule,
         NgxsModule.forRoot([]),
         NgxsStoragePluginModule.forRoot({
             key: ['auth'],
         }),
-        MatButtonModule,
+        MatButtonModule
     ],
-    providers: [],
-    bootstrap: [AppComponent],
+    providers   : [],
+    bootstrap   : [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}
