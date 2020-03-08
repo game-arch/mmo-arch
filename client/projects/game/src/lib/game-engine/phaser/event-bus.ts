@@ -67,7 +67,6 @@ export class EventBus {
 
     private playerPresenceEvents() {
         this.engine.game.events.on(PlayerEnteredMap.event, data => {
-            console.log("got message");
             if (this.engine.currentScene) {
                 console.log("Player Joined", data);
                 this.engine.currentScene.addOrUpdatePlayer({ ...data, id: data.characterId });
