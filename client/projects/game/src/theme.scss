@@ -31,4 +31,8 @@ body {
     hud .mat-card {
         background-color: rgba(80,80,80, 0.6);
     }
+    hud {
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 1px #000, -1px -1px 1px #000, -1px 1px 1px #000, 1px -1px 1px #000;
+    }
 }
