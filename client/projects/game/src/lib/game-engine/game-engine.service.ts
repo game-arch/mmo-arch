@@ -77,7 +77,7 @@ export class GameEngineService {
         this.scenes.preload = this.sceneFactory.preload()
         this.scenes.title = this.sceneFactory.title()
         this.scenes.tutorial = this.sceneFactory.tutorial()
-        this.game.scene.add('preload', this.scenes.title)
+        this.game.scene.add('preload', this.scenes.preload)
         this.game.scene.add('title', this.scenes.title)
         this.game.scene.add('tutorial', this.scenes.tutorial)
     }

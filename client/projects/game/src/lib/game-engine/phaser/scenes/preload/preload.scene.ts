@@ -44,14 +44,10 @@ export class PreloadScene extends BaseScene {
 
     loadSpritesheets() {
         const sheetPath = './assets/spritesheets'
-        const sheets = ['Cat', 'Dog', 'Boss']
-
         this.load.setPath(sheetPath)
 
-        for (let i = 0; i < sheets.length; i++) {
-            this.load.atlas(sheets[i], `${sheets[i]}.png`, `${sheets[i]}.json`)
-        }
-
+        this.load.atlas('Boss', '/Boss/Boss1.png', '/Boss/Boss1.json')
+        this.load.atlas('Animal', '/Animal/Animal.png', '/Animal/Animal.json')
         this.load.atlas('Enemy', '/Enemy/Enemy.png', '/Enemy/Enemy.json')
         this.load.atlas('Female', '/Female/Female.png', '/Female/Female.json')
         this.load.atlas('Male', '/Male/Male.png', '/Male/Male.json')
