@@ -36,7 +36,7 @@ body {
         text-shadow: 1px 1px 1px #000, -1px -1px 1px #000, -1px 1px 1px #000, 1px -1px 1px #000;
         ngx-joystick {
             opacity: 0.5;
-            &:hover {
+            &:hover, &:active {
                 opacity: 1;
             }
         }
