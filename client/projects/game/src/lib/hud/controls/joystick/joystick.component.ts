@@ -11,7 +11,7 @@ export class JoystickComponent {
     @Input() enabled   = false;
     options            = {
         mode    : "static",
-        position: { left: "120px", bottom: "120px" },
+        position: { left: "64px", bottom: "64px" },
         color   : "white"
     };
     joystickThreshould = 0.3;
