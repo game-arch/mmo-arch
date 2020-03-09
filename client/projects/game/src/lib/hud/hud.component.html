@@ -17,9 +17,7 @@
         <bar color="#5fd06e" percent="25" label="25/100" class="xp-bar"></bar>
     </div>
 </div>
-<div fxLayout="row" fxFlex>
-    <div style="flex:1"></div>
-    <div style="flex:1"></div>
+<div fxLayout="row" fxFlex style="flex:1;">
 </div>
 <div fxLayout="row">
     <joystick
@@ -27,7 +25,6 @@
         [style.opacity]="world.selectedCharacter ? 1 : 0"
         [style.pointer-events]="world.selectedCharacter ? 'all' : 'none'"
     ></joystick>
-    <div style="flex:1"></div>
-    <div style="flex:1"></div>
+    <div style="flex:1;pointer-events:none"></div>
     <action-bar style="z-index:1000;"></action-bar>
 </div>
