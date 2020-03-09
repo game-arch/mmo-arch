@@ -1,4 +1,3 @@
-import { JoystickModule }   from "./joystick/joystick.module";
 import { NgModule }         from "@angular/core";
 import { GameComponent }    from "./game.component";
 import { CommonModule }     from "@angular/common";
@@ -17,7 +16,6 @@ import { HudModule }        from "../hud/hud.module";
         MatButtonModule,
         MatCardModule,
         ConnectionModule,
-        JoystickModule,
         GameEngineModule,
         HudModule
     ],

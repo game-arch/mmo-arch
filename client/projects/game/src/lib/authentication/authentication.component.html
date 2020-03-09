@@ -19,8 +19,14 @@
                 </button>
             </div>
             <mat-card-content>
-                <register (registered)="onLoggedIn($event)" *ngIf="isLogin === false"></register>
-                <login (loggedIn)="onLoggedIn($event)" *ngIf="isLogin === true"></login>
+                <register
+                    (registered)="onLoggedIn($event)"
+                    *ngIf="isLogin === false"
+                ></register>
+                <login
+                    (loggedIn)="onLoggedIn($event)"
+                    *ngIf="isLogin === true"
+                ></login>
             </mat-card-content>
         </mat-card>
         <div style="flex:1"></div>
