@@ -34,5 +34,11 @@ body {
     hud {
         letter-spacing: 1px;
         text-shadow: 1px 1px 1px #000, -1px -1px 1px #000, -1px 1px 1px #000, 1px -1px 1px #000;
+        ngx-joystick {
+            opacity: 0.5;
+            &:hover {
+                opacity: 1;
+            }
+        }
     }
 }
