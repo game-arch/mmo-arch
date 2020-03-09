@@ -23,6 +23,8 @@
     }
     .status {
         width: 40%;
+        max-width: 480px;
+        min-width: 320px;
         .bars {
             margin-left:-2px;
             transform: skew(-12deg);
