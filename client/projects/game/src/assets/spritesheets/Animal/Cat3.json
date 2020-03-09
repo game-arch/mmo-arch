@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Cat3.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 96,
+				"h": 130
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Cat3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 96,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 94,
+						"h": 128
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 94,
+						"h": 128
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:880508502335c591b9b33042d954fd82:fe2198154b5456f0f97c0095b62976be:c83e9227990a9142c8056e12f3cb9b03$"
+	}
+}

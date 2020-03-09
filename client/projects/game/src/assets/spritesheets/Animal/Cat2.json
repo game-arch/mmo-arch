@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "Cat2.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 96,
+				"h": 130
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Cat2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 96,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 94,
+						"h": 128
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 94,
+						"h": 128
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:3f3fd84722d0db7ed474c32ec44a0f50:7e2fd25c3ef57423f57b6f2b11e084cd:2ee322704666d49e58afe9fbc3a9b935$"
+	}
+}
