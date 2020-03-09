@@ -13,11 +13,11 @@ export class SceneFactory {
     ) {}
 
     preload() {
-        return new PreloadScene()
+        return new PreloadScene(this.location)
     }
 
     title() {
-        return new TitleScene(this.location)
+        return new TitleScene()
     }
 
     tutorial() {

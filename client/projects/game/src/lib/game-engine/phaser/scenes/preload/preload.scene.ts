@@ -1,7 +1,8 @@
 import { BaseScene } from '../../../../../../../../../server/services/map/maps/base.scene'
+import { Location } from '@angular/common'
 
 export class PreloadScene extends BaseScene {
-    constructor() {
+    constructor(private location: Location) {
         super({
             name: 'preload',
         })
@@ -34,8 +35,15 @@ export class PreloadScene extends BaseScene {
             mask.fillRect(0, 0, bar.width * progress, bar.height)
         })
 
-        // load assets declared in the preload config
+        this.load.image(
+            'background',
+            this.asset('/assets/backgrounds/login.png')
+        )
         this.loadSpritesheets()
+    }
+
+    asset(url: string) {
+        return this.location.prepareExternalUrl(url)
     }
 
     create() {
