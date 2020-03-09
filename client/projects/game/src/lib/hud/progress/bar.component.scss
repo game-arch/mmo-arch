@@ -4,12 +4,8 @@
     position:relative;
     display:flex;
     align-items:center;
-    border: 2px solid #333;
     overflow:hidden;
-    backdrop-filter: blur(4px);
-    background-color: rgba(0,0,0, 0.2);
     .background {
-        background-color: rgba(255,255,255, 0.2);
         position:absolute;
         top:0;
         left:0;
@@ -30,7 +26,6 @@
         width:100%;
         opacity:0;
         text-align:center;
-        transform: skew(12deg);
         z-index: 100;
         font-size: 12px;
         color: #fff;

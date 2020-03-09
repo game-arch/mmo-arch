@@ -8,7 +8,11 @@
     right: 0;
     pointer-events: none;
     z-index: 1000;
-    padding: 12px;
+
+    .top-row {
+        backdrop-filter: blur(4px);
+        background-color: rgba(60,60,60, 0.8);
+    }
 
     > div > * {
         pointer-events: all;
@@ -21,55 +25,48 @@
     .stretch {
         flex: 1;
     }
+
     .status {
-        width: 40%;
-        max-width: 480px;
-        min-width: 320px;
-        .bars {
-            margin-left:-2px;
-            transform: skew(-12deg);
-            bar:last-child {
-                border-bottom-right-radius: 24px;
-            }
-        }
-        bar.xp-bar {
-            border-bottom-left-radius: 100px;
-            border-bottom-right-radius: 100px;
-            transform: skew(-12deg) scale(0.8);
-        }
+        width: 320px;
+        background-color: rgba(60,60,60,0.5);
 
         > .row {
-            align-items:flex-end;
+            align-items: flex-end;
         }
+
         .name {
-            margin-left:12px;
+            margin-left: 12px;
             font-size: 14px;
             color: #fff;
             font-family: Roboto, 'Helvetica Neue', sans-serif;
             text-shadow: 2px 2px 4px #333333;
         }
+
         .level {
             @extend .name;
         }
+
         .hp-bar, .mp-bar, .xp-bar {
             &::after {
-                transform: skew(12deg);
                 content: '';
-                position:absolute;
-                font-weight:bold;
-                left:0;
-                font-size: 12px;
+                position: absolute;
+                font-weight: bold;
+                left: 0;
                 color: #fff;
-                margin-left:12px;
+                margin-left: 12px;
                 font-family: Roboto, "Helvetica Neue", sans-serif;
+                font-size: 10px;
             }
         }
+
         .hp-bar::after {
             content: 'HP';
         }
+
         .mp-bar::after {
             content: 'MP';
         }
+
         .xp-bar::after {
             content: 'XP';
         }
