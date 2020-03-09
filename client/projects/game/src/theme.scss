@@ -39,6 +39,9 @@ body {
             &:hover, &:active {
                 opacity: 1;
             }
+            .front, .back {
+                cursor:pointer;
+            }
         }
     }
 }
