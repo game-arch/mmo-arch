@@ -8,10 +8,29 @@ export type Size = "default" | "small" | "medium" | "large"
     styleUrls  : ["action-button.component.scss"]
 })
 export class ActionButtonComponent {
-    @Input() type            = "skill";
+    get sizeClass(): "default" | "small" | "medium" | "large" {
+        return this._sizeClass;
+    }
+
+    @Input()
+    set sizeClass(value: "default" | "small" | "medium" | "large") {
+        this._sizeClass = value;
+        this.size = this.sizes[value];
+
+    }
+    @Input() type                     = "";
+
     @HostBinding('attr.size')
-    @Input() sizeClass: Size = "default";
-    @Input() color           = "#0000FF";
+    private _sizeClass: Size = "default";
+    size = 55;
+
+    sizes = {
+        'default': 55,
+        small: 32,
+        medium: 55,
+        large: 120
+    };
+    @Input() color                    = "#0000FF";
     @Input() joystick: boolean;
 
     constructor() {

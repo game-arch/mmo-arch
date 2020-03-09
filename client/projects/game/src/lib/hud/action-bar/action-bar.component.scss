@@ -1,9 +1,18 @@
+:host {
+    position: relative;
+}
 .top {
-    transform: rotate(94deg) translate(145px) rotate(0deg);
+    position:absolute;
+    bottom: 145px;
+    right: 16px;
 }
 .middle {
-    transform: rotate(135deg) translate(160px) rotate(0deg);
+    position:absolute;
+    bottom:120px;
+    right:120px;
 }
 .left {
-    transform: rotate(126deg) translate(160px) rotate(-90deg);
+    position:absolute;
+    right: 145px;
+    bottom: 16px;
 }

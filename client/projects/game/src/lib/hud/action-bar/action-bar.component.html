@@ -1,13 +1,4 @@
-<div class="top">
-    <action-button [type]="skill" matRipple></action-button>
-</div>
-<div class="middle">
-    <action-button [type]="skill" matRipple></action-button>
-</div>
-<div class="left">
-    <action-button [type]="skill" matRipple></action-button>
-</div>
-
-<div style="float:right;">
-    <action-button [sizeClass]="meleeSize" [type]="melee" matRipple></action-button>
-</div>
+<action-button [type]="skill" matRipple class="top"></action-button>
+<action-button [type]="skill" matRipple class="middle"></action-button>
+<action-button [type]="skill" matRipple class="left"></action-button>
+<action-button [sizeClass]="meleeSize" [type]="melee" matRipple></action-button>

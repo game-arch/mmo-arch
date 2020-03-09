@@ -13,6 +13,7 @@ import { ConnectionModule }         from "../lib/connection/connection.module";
 import { MatButtonModule }          from "@angular/material/button";
 import { RouterModule }             from "@angular/router";
 import { GameModule }               from "../lib/game/game.module";
+import { SvgModule }                from "../lib/svg/svg.module";
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import { GameModule }               from "../lib/game/game.module";
         RouterModule.forRoot([]),
         BrowserModule,
         HttpClientModule,
+        SvgModule,
         BrowserAnimationsModule,
         ConnectionModule,
         AuthenticationModule,

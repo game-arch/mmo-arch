@@ -11,6 +11,7 @@ import { NgxJoystickModule }  from 'ngx-joystick'
 import { SceneFactory }       from '../game-engine/phaser/scenes/scene-factory.service'
 import { BarComponent }       from './progress/bar.component'
 import { MatRippleModule }    from "@angular/material/core";
+import { SvgModule }          from "../svg/svg.module";
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import { MatRippleModule }    from "@angular/material/core";
         AvatarComponent,
     ],
     imports: [
+        SvgModule,
         MatRippleModule,
         CommonModule,
         ConnectionModule,
