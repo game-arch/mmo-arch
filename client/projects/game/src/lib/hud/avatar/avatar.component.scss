@@ -1,9 +1,16 @@
 .avatar-container {
-    width: 100px;
-    height: 100px;
+    position: relative;
+    transform: skew(-12deg);
+
     & .avatar-content {
         height: 90px;
-        border-radius: 50%;
+        width: 90px;
+        border:2px solid #333;
         background-image: url('/assets/sprites/example_avatar.jpg');
+        background-position: center;
+        background-size: cover;
+        border-bottom-left-radius: 24px;
+        border-top-right-radius: 24px;
+        border-top-left-radius: 24px;
     }
 }

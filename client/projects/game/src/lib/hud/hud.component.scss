@@ -23,8 +23,19 @@
     }
     .status {
         width: 40%;
-        transform: skew(-12deg);
+        .bars {
+            margin-left:-2px;
+            transform: skew(-12deg);
+            bar:last-child {
+                border-bottom-right-radius: 24px;
+            }
+        }
+
+        > .row {
+            align-items:flex-end;
+        }
         .name {
+            margin-left:12px;
             font-size: 14px;
             color: #fff;
             font-family: Roboto, 'Helvetica Neue', sans-serif;
