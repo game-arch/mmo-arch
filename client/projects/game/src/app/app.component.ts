@@ -5,6 +5,7 @@ import { Select, Store }     from "@ngxs/store";
 import { AuthState }         from "../lib/authentication/state/auth.state";
 import { ConnectionManager } from "../lib/connection/connection-manager";
 import { SetToken }          from "../lib/authentication/state/auth.actions";
+import { GameEngineService } from "../lib/game-engine/game-engine.service";
 
 @Component({
     selector   : "app-root",
@@ -19,12 +20,14 @@ export class AppComponent {
 
     constructor(
         private store: Store,
-        public connection: ConnectionManager
+        public connection: ConnectionManager,
+        private engine: GameEngineService
     ) {
 
     }
 
     logout() {
         this.store.dispatch(new SetToken());
+        this.engine.game.events.emit('game.scene', 'title');
     }
 }

@@ -21,6 +21,7 @@ export class WorldService {
     ) {
     }
 
+
     async storeUser(client: Socket, accountId: number) {
         let player       = this.players.create();
         player.accountId = accountId;

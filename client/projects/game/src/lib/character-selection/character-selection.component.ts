@@ -38,7 +38,7 @@ export class CharacterSelectionComponent implements OnInit {
                     this.selected.name,
                     this.selected.id
                 )
-                this.engine.game.events.emit('game.scene', 'preload')
+                this.engine.game.events.emit('game.scene', 'tutorial')
             }
         } catch (e) {
             console.log(e)

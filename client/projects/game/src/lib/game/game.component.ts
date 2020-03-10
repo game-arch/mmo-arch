@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from "@ang
 import { ConnectionManager }                                          from "../connection/connection-manager";
 import { CharacterOffline }                                           from "../../../../../../server/services/character/actions";
 import { GameEngineService }                                          from "../game-engine/game-engine.service";
-import { EventBus }                                                   from "../game-engine/phaser/event-bus";
 
 @Component({
     selector   : "game",

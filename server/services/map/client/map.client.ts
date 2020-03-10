@@ -3,13 +3,11 @@ import { ClientProxy }                                              from "@nestj
 import { GetAllPlayers, GetPlayerPosition, PlayerDirectionalInput } from "../actions";
 import { first }                                                    from "rxjs/operators";
 import { WORLD_PREFIX }                                             from "../../world/world.prefix";
-import { CharacterEmitter }                                         from "../../character/character.emitter";
 
 @Injectable()
-export class MapClient extends CharacterEmitter {
+export class MapClient {
 
-    constructor(@Inject("MAP_CLIENT") protected client: ClientProxy) {
-        super(client);
+    constructor(@Inject("MAP_CLIENT") public client: ClientProxy) {
     }
 
     async getAllPlayers(map: string) {

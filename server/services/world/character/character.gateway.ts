@@ -41,6 +41,7 @@ export class CharacterGateway {
 
     }
 
+
     async sendCharacters() {
         let players = await this.players.find();
         for (let player of players) {
