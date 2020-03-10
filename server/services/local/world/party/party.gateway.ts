@@ -1,7 +1,7 @@
 import {SubscribeMessage, WebSocketGateway, WebSocketServer}                                from "@nestjs/websockets";
 import {AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerDirectionalInput, PlayerUpdate}  from "../../map/actions";
 import {WorldService}                                                                       from "../world.service";
-import {WorldConstants}                                                                     from "../../../lib/constants/world.constants";
+import {WorldConstants}                                                                     from "../../../../lib/constants/world.constants";
 import {Repository}                                                                         from "typeorm";
 import {Player}                                                                             from "../entities/player";
 import {InjectRepository}                                                                   from "@nestjs/typeorm";
