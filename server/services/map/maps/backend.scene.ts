@@ -35,13 +35,15 @@ export class BackendScene extends BaseScene implements Scene {
 
     addPlayer(player: Player) {
         this.addEntity("player", player, player.characterId);
-        player.sprite.onStopMoving.pipe(takeUntil(player.sprite.stopListening))
+        player.sprite.onStopMoving
+              .pipe(takeUntil(player.sprite.stopListening))
               .pipe(takeUntil(this.stop$))
               .pipe(throttleTime(1000, async, { trailing: true, leading: true }))
               .subscribe(() => {
                   this.savePlayer.next(player);
               });
         player.sprite.onVelocityChange
+              .pipe(takeUntil(player.sprite.stopListening))
               .pipe(takeUntil(this.stop$))
               .pipe(map(() => player))
               .pipe(distinctUntilChanged((a, b) => {
