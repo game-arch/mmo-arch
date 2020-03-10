@@ -3,12 +3,14 @@ export interface MapConfig {
     width?: number
     height?: number
     collisions?: CollisionConfig[]
+    tilesetName?: string
+    tiles?: string
 }
 
 export interface CollisionConfig {
     mass?: number
     position: [number, number]
-    shape: "circle" | "rectangle" | "polygon"
+    shape: 'circle' | 'rectangle' | 'polygon'
     points?: [number, number][]
     radius?: number
     width?: number
