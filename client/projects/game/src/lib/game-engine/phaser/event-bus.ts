@@ -59,14 +59,14 @@ export class EventBus {
                         right: boolean
                     }
                 }) => {
-                    if (this.engine.currentScene) {
+                    if (this.engine.currentScene instanceof MultiplayerScene) {
                         this.engine.currentScene.addOrUpdatePlayer(player);
                     }
                 }
             );
         });
         this.engine.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
-            if (this.engine.currentScene) {
+            if (this.engine.currentScene instanceof MultiplayerScene) {
                 this.engine.currentScene.addOrUpdatePlayer(data.player);
             }
         });
@@ -74,7 +74,7 @@ export class EventBus {
 
     private playerPresenceEvents() {
         this.engine.game.events.on(PlayerEnteredMap.event, data => {
-            if (this.engine.currentScene) {
+            if (this.engine.currentScene instanceof MultiplayerScene) {
                 console.log("Player Joined", data);
                 this.engine.currentScene.addOrUpdatePlayer({
                     ...data,
