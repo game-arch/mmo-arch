@@ -12,6 +12,8 @@ import { SceneFactory }       from '../game-engine/phaser/scenes/scene-factory.s
 import { BarComponent }       from './progress/bar.component'
 import { MatRippleModule }    from "@angular/material/core";
 import { SvgModule }          from "../svg/svg.module";
+import { PreloaderComponent } from "./preloader.component";
+import { MatCardModule }      from "@angular/material/card";
 
 @NgModule({
     declarations: [
@@ -21,6 +23,7 @@ import { SvgModule }          from "../svg/svg.module";
         JoystickComponent,
         BarComponent,
         AvatarComponent,
+        PreloaderComponent
     ],
     imports: [
         SvgModule,
@@ -29,8 +32,9 @@ import { SvgModule }          from "../svg/svg.module";
         ConnectionModule,
         FlexLayoutModule,
         NgxJoystickModule,
+        MatCardModule
     ],
     providers: [SceneFactory],
-    exports: [HudComponent],
+    exports: [HudComponent, PreloaderComponent],
 })
 export class HudModule {}

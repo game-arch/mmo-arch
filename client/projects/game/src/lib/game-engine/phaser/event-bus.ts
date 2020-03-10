@@ -17,6 +17,13 @@ export class EventBus {
         this.playerPresenceEvents();
         this.playerUpdateEvents();
         this.joystickEvents();
+        this.engine.game.events.on("load.progress", (progress: number) => {
+            this.engine.loading = progress * 100;
+        });
+        this.engine.game.events.on("load.complete", () => {
+            this.engine.loading = 100;
+            this.engine.game.events.emit("game.scene", "title");
+        });
     }
 
     private sceneChangeEvents() {
@@ -27,8 +34,11 @@ export class EventBus {
                     this.engine.currentScene.destroy();
                 }
             }
-            this.engine.currentSceneKey = scene;
             this.engine.game.scene.start(scene);
+            if (scene === 'preload') {
+                scene = 'title';
+            }
+            this.engine.currentSceneKey = scene;
             this.engine.currentScene = this.engine.scenes[scene];
             this.keyEvents(this.engine.currentScene);
         });

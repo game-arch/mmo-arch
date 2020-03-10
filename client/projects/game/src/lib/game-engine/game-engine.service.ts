@@ -20,6 +20,7 @@ import Game = Phaser.Game;
 
 @Injectable()
 export class GameEngineService {
+    loading           = 0;
     game: Game;
     scenes: {
         preload: PreloadScene
@@ -52,7 +53,6 @@ export class GameEngineService {
             .pipe(tap(world => (this.connection.world = world)))
             .subscribe(world => {
                 this.worldChange.emit();
-                console.log("convert events");
                 this.convertEvents(world, [
                     PlayerEnteredMap.event,
                     PlayerLeftMap.event,
@@ -62,7 +62,6 @@ export class GameEngineService {
             });
         this.createScenes();
         this.eventBus.listen();
-        this.game.events.emit("game.scene", "title");
         fromEvent(window, "resize")
             .pipe(takeUntil(this.destroyed))
             .subscribe(() =>

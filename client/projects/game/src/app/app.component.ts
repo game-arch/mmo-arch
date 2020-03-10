@@ -21,7 +21,7 @@ export class AppComponent {
     constructor(
         private store: Store,
         public connection: ConnectionManager,
-        private engine: GameEngineService
+        public engine: GameEngineService
     ) {
 
     }

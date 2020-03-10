@@ -1,7 +1,10 @@
 import { BaseScene } from "../../../../../../../../../server/services/map/maps/base.scene";
 import { Location }  from "@angular/common";
+import Scene = Phaser.Scene;
 
-export class PreloadScene extends BaseScene {
+export class PreloadScene extends BaseScene implements Scene {
+    preloaded = false;
+
     constructor(private location: Location) {
         super({
             name: "preload"
@@ -9,30 +12,17 @@ export class PreloadScene extends BaseScene {
     }
 
     preload() {
-        // add the loading bar to use as a display for the loading progress of the remainder of the assets
-        const barBg = this.add.image(
-            this.sys.canvas.width / 2,
-            this.sys.canvas.height / 2,
-            "barBg"
-        );
-        const bar   = this.add.sprite(
-            this.sys.canvas.width / 2,
-            this.sys.canvas.height / 2,
-            "bar"
-        );
-
-        const mask = this.make.graphics({
-            x  : bar.x - bar.width / 2,
-            y  : bar.y - bar.height / 2,
-            add: false
-        });
-        mask.fillRect(0, 0, 0, bar.height);
-
-        bar.mask = new Phaser.Display.Masks.GeometryMask(this, mask);
-
         this.load.on("progress", (progress: number) => {
-            mask.clear();
-            mask.fillRect(0, 0, bar.width * progress, bar.height);
+            if (progress < 1) {
+                this.game.events.emit("load.progress", progress);
+            }
+        });
+        this.load.on("complete", () => {
+            this.game.events.emit("load.progress", .999);
+            setTimeout(() => {
+                this.game.events.emit("load.progress", 1);
+                this.game.events.emit("load.complete");
+            }, 1000);
         });
 
         this.load.image(
@@ -47,7 +37,6 @@ export class PreloadScene extends BaseScene {
     }
 
     create() {
-        this.scene.start("title");
     }
 
     loadSpritesheets() {
