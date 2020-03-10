@@ -35,11 +35,11 @@ export class EventBus {
                 }
             }
             this.engine.game.scene.start(scene);
-            if (scene === 'preload') {
-                scene = 'title';
+            if (scene === "preload") {
+                scene = "title";
             }
             this.engine.currentSceneKey = scene;
-            this.engine.currentScene = this.engine.scenes[scene];
+            this.engine.currentScene    = this.engine.scenes[scene];
             this.keyEvents(this.engine.currentScene);
         });
     }
@@ -83,7 +83,7 @@ export class EventBus {
             }
         });
         this.engine.game.events.on(PlayerLeftMap.event, data => {
-            if (this.engine.currentScene) {
+            if (this.engine.currentScene instanceof MultiplayerScene) {
                 console.log("Player Left", data);
                 this.engine.currentScene.removePlayer(data);
             }
