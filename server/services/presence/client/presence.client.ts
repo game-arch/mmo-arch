@@ -6,7 +6,7 @@ import { GetServers, RegisterServer, ServerOffline } from "../actions";
 @Injectable()
 export class PresenceClient {
 
-    constructor(@Inject("PRESENCE_CLIENT") private client: ClientProxy) {
+    constructor(@Inject("GLOBAL_CLIENT") private client: ClientProxy) {
 
     }
 

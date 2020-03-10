@@ -7,7 +7,7 @@ import { WORLD_PREFIX }                                             from "../../
 @Injectable()
 export class MapClient {
 
-    constructor(@Inject("MAP_CLIENT") public client: ClientProxy) {
+    constructor(@Inject("LOCAL_CLIENT") public client: ClientProxy) {
     }
 
     async getAllPlayers(map: string) {
