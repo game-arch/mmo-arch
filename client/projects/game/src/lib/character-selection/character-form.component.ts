@@ -8,7 +8,7 @@ import {
     CharacterCreated,
     CharacterNotCreated,
     CreateCharacter
-}                                             from "../../../../../../server/services/character/actions";
+}                                             from "../../../../../../server/services/local/character/actions";
 
 @Component({
     selector   : "character-form",

@@ -1,4 +1,4 @@
-import { BaseScene } from "../../../../../../../../../server/services/map/maps/base.scene";
+import { BaseScene } from "../../../../../../../../../server/services/local/map/maps/base.scene";
 import { Location }  from "@angular/common";
 import Scene = Phaser.Scene;
 

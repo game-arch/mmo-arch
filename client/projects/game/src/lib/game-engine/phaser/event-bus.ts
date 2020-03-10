@@ -4,7 +4,7 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                            from "../../../../../../../server/services/map/actions";
+}                            from "../../../../../../../server/services/local/map/actions";
 import { from }              from "rxjs";
 import { MultiplayerScene }  from "./scenes/multiplayer.scene";
 

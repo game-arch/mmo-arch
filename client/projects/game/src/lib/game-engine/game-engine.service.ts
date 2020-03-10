@@ -1,21 +1,21 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { ConnectionManager }        from "../connection/connection-manager";
 import { GAME_CONFIG }              from "./phaser/config";
-import { SceneFactory }             from "./phaser/scenes/scene-factory.service";
-import { fromEvent }                from "rxjs";
-import { filter, takeUntil, tap }   from "rxjs/operators";
-import { TitleScene }               from "./phaser/scenes/title/title.scene";
-import { PreloadScene }             from "./phaser/scenes/preload/preload.scene";
-import { TutorialScene }            from "./phaser/scenes/tutorial/tutorial.scene";
+import { SceneFactory }           from "./phaser/scenes/scene-factory.service";
+import { fromEvent }              from "rxjs";
+import { filter, takeUntil, tap } from "rxjs/operators";
+import { TitleScene }             from "./phaser/scenes/title/title.scene";
+import { PreloadScene }           from "./phaser/scenes/preload/preload.scene";
+import { TutorialScene }          from "./phaser/scenes/tutorial/tutorial.scene";
 import {
     AllPlayers,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                                   from "../../../../../../server/services/map/actions";
-import { MultiplayerScene }         from "./phaser/scenes/multiplayer.scene";
-import { WorldConnection }          from "../connection/world-connection";
-import { EventBus }                 from "./phaser/event-bus";
+}                                 from "../../../../../../server/services/local/map/actions";
+import { MultiplayerScene }       from "./phaser/scenes/multiplayer.scene";
+import { WorldConnection }        from "../connection/world-connection";
+import { EventBus }               from "./phaser/event-bus";
 import Game = Phaser.Game;
 
 @Injectable()

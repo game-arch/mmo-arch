@@ -1,12 +1,12 @@
 import { Component, EventEmitter, OnInit } from "@angular/core";
-import { fromEvent, Observable }           from "rxjs";
-import { ConnectionManager }               from "../connection/connection-manager";
-import { GameWorld }                       from "../../../../../../server/lib/interfaces/game-world";
-import { map, takeUntil, tap }             from "rxjs/operators";
-import { Store }                           from "@ngxs/store";
-import { SetToken }                        from "../authentication/state/auth.actions";
-import { GetServers }                      from "../../../../../../server/services/presence/actions";
-import { Hosts }                           from "../hosts";
+import { fromEvent, Observable } from "rxjs";
+import { ConnectionManager }     from "../connection/connection-manager";
+import { GameWorld }             from "../../../../../../server/lib/interfaces/game-world";
+import { map, takeUntil, tap }   from "rxjs/operators";
+import { Store }                 from "@ngxs/store";
+import { SetToken }              from "../authentication/state/auth.actions";
+import { GetServers }            from "../../../../../../server/services/global/presence/actions";
+import { Hosts }                 from "../hosts";
 
 @Component({
     selector   : "server-list",

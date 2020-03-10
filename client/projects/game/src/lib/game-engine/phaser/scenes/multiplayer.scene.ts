@@ -1,7 +1,7 @@
-import { BaseScene }                             from "../../../../../../../../server/services/map/maps/base.scene";
+import { BaseScene }                             from "../../../../../../../../server/services/local/map/maps/base.scene";
 import { Mob }                                   from "../../../../../../../../server/lib/phaser/mob";
-import { MapConfig }                             from "../../../../../../../../server/services/map/config/config";
-import { PlayerDirectionalInput, PlayerLeftMap } from "../../../../../../../../server/services/map/actions";
+import { MapConfig }                             from "../../../../../../../../server/services/local/map/config/config";
+import { PlayerDirectionalInput, PlayerLeftMap } from "../../../../../../../../server/services/local/map/actions";
 import { ConnectionManager }                     from "../../../connection/connection-manager";
 import Scene = Phaser.Scene;
 

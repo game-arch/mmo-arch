@@ -1,7 +1,7 @@
 import Image = Phaser.GameObjects.Image;
-import { BaseScene } from "../../../../../../../../../server/services/map/maps/base.scene";
+import { BaseScene } from "../../../../../../../../../server/services/local/map/maps/base.scene";
 
-export class TitleScene implements BaseScene {
+export class TitleScene extends BaseScene {
     background: Image;
 
     constructor() {
