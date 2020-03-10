@@ -1,16 +1,11 @@
-import { Module }                   from "@nestjs/common";
-import { AccountClient }            from "./account.client";
-import { createMicroserviceClient } from "../../../lib/functions/create-microservice-client";
+import { Module }        from "@nestjs/common";
+import { AccountClient } from "./account.client";
+import { ClientModule }  from "../../../lib/client/client.module";
 
-export const clientFactory   = () => createMicroserviceClient("key", "Account", "global");
-export const CLIENT_PROVIDER = {
-    provide   : "ACCOUNT_CLIENT",
-    useFactory: clientFactory
-};
 
 @Module({
+    imports  : [ClientModule],
     providers: [
-        CLIENT_PROVIDER,
         AccountClient
     ],
     exports  : [

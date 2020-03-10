@@ -6,7 +6,7 @@ import { first }              from "rxjs/operators";
 @Injectable()
 export class AccountClient {
 
-    constructor(@Inject("ACCOUNT_CLIENT") private client: ClientProxy) {
+    constructor(@Inject("GLOBAL_CLIENT") private client: ClientProxy) {
 
     }
 

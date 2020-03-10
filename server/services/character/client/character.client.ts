@@ -16,7 +16,7 @@ import { WORLD_PREFIX }       from "../../world/world.prefix";
 @Injectable()
 export class CharacterClient {
 
-    constructor(@Inject("CHARACTER_CLIENT") private client: ClientProxy) {
+    constructor(@Inject("LOCAL_CLIENT") private client: ClientProxy) {
 
     }
 
