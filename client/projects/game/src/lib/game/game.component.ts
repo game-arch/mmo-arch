@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from "@angular/core";
 import { ConnectionManager }                                          from "../connection/connection-manager";
-import { CharacterOffline }                                           from "../../../../../../server/services/character/actions";
+import { CharacterOffline }                                           from "../../../../../../server/services/local/character/actions";
 import { GameEngineService }                                          from "../game-engine/game-engine.service";
 
 @Component({

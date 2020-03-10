@@ -4,7 +4,7 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                            from "../../../../../../../server/services/map/actions";
+}                            from "../../../../../../../server/services/local/map/actions";
 import { from }              from "rxjs";
 import { MultiplayerScene }  from "./scenes/multiplayer.scene";
 
@@ -35,11 +35,11 @@ export class EventBus {
                 }
             }
             this.engine.game.scene.start(scene);
-            if (scene === 'preload') {
-                scene = 'title';
+            if (scene === "preload") {
+                scene = "title";
             }
             this.engine.currentSceneKey = scene;
-            this.engine.currentScene = this.engine.scenes[scene];
+            this.engine.currentScene    = this.engine.scenes[scene];
             this.keyEvents(this.engine.currentScene);
         });
     }
@@ -59,14 +59,14 @@ export class EventBus {
                         right: boolean
                     }
                 }) => {
-                    if (this.engine.currentScene) {
+                    if (this.engine.currentScene instanceof MultiplayerScene) {
                         this.engine.currentScene.addOrUpdatePlayer(player);
                     }
                 }
             );
         });
         this.engine.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
-            if (this.engine.currentScene) {
+            if (this.engine.currentScene instanceof MultiplayerScene) {
                 this.engine.currentScene.addOrUpdatePlayer(data.player);
             }
         });
@@ -74,7 +74,7 @@ export class EventBus {
 
     private playerPresenceEvents() {
         this.engine.game.events.on(PlayerEnteredMap.event, data => {
-            if (this.engine.currentScene) {
+            if (this.engine.currentScene instanceof MultiplayerScene) {
                 console.log("Player Joined", data);
                 this.engine.currentScene.addOrUpdatePlayer({
                     ...data,
@@ -83,7 +83,7 @@ export class EventBus {
             }
         });
         this.engine.game.events.on(PlayerLeftMap.event, data => {
-            if (this.engine.currentScene) {
+            if (this.engine.currentScene instanceof MultiplayerScene) {
                 console.log("Player Left", data);
                 this.engine.currentScene.removePlayer(data);
             }

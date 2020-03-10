@@ -1,6 +1,6 @@
 import { Connection }                     from "./connection";
 import { GameWorld }                      from "../../../../../../server/lib/interfaces/game-world";
-import { CharacterOnline, GetCharacters } from "../../../../../../server/services/character/actions";
+import { CharacterOnline, GetCharacters } from "../../../../../../server/services/local/character/actions";
 import { GameCharacter }                  from "../../../../../../server/lib/interfaces/game-character";
 
 export class WorldConnection extends Connection {
