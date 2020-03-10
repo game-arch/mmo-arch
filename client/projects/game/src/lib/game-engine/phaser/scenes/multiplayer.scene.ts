@@ -1,12 +1,8 @@
-import { BaseScene }         from "../../../../../../../../server/services/map/maps/base.scene";
-import { Mob }               from "../../../../../../../../server/lib/phaser/mob";
-import { EventEmitter }      from "@angular/core";
-import { MapConfig }         from "../../../../../../../../server/services/map/config/config";
-import {
-    PlayerDirectionalInput,
-    PlayerLeftMap
-}                            from "../../../../../../../../server/services/map/actions";
-import { ConnectionManager } from "../../../connection/connection-manager";
+import { BaseScene }                             from "../../../../../../../../server/services/map/maps/base.scene";
+import { Mob }                                   from "../../../../../../../../server/lib/phaser/mob";
+import { MapConfig }                             from "../../../../../../../../server/services/map/config/config";
+import { PlayerDirectionalInput, PlayerLeftMap } from "../../../../../../../../server/services/map/actions";
+import { ConnectionManager }                     from "../../../connection/connection-manager";
 import Scene = Phaser.Scene;
 
 export class MultiplayerScene extends BaseScene implements Scene {
@@ -23,8 +19,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
         right: false,
         left : false
     };
-
-    destroyed = new EventEmitter();
 
     constructor(protected manager: ConnectionManager, config: MapConfig) {
         super(config);
@@ -46,17 +40,17 @@ export class MultiplayerScene extends BaseScene implements Scene {
         }
     }
 
-     sendDirectionalInput() {
+    sendDirectionalInput() {
         this.connection.socket.emit(PlayerDirectionalInput.event, {
             directions: this.directions
         });
     }
 
-     removePlayer(data: PlayerLeftMap) {
+    removePlayer(data: PlayerLeftMap) {
         this.removeEntity("player", data.characterId);
     }
 
-     addOrUpdatePlayer(data: {
+    addOrUpdatePlayer(data: {
         id: number
         name: string
         x: number
@@ -73,7 +67,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         }
     }
 
-     createPlayer(data: {
+    createPlayer(data: {
         id: number
         name: string
         x: number
@@ -88,8 +82,19 @@ export class MultiplayerScene extends BaseScene implements Scene {
         return player;
     }
 
-     setSelf(player) {
+    setSelf(player) {
         this.self = player;
         this.cameras.main.startFollow(player.sprite.body, true, 0.05, 0.05);
+    }
+
+    destroy() {
+        this.directions = {
+            up   : false,
+            down : false,
+            right: false,
+            left : false
+        };
+        this.self       = null;
+        this.entities   = { player: {}, mob: {} };
     }
 }

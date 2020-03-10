@@ -1,18 +1,17 @@
-import { Component, EventEmitter } from "@angular/core";
-import { JoystickEvent }           from "ngx-joystick";
-import { takeUntil }               from "rxjs/operators";
-import { GameEngineService }       from "../../game-engine/game-engine.service";
+import { Component, EventEmitter, Input } from "@angular/core";
+import { JoystickEvent }                  from "ngx-joystick";
+import { takeUntil }                      from "rxjs/operators";
+import { GameEngineService }              from "../../../game-engine/game-engine.service";
 
 @Component({
     selector   : "joystick",
-    templateUrl: "joystick.component.html",
-    inputs     : ["enabled"]
+    templateUrl: "joystick.component.html"
 })
 export class JoystickComponent {
-    enabled            = false;
+    @Input() enabled   = false;
     options            = {
         mode    : "static",
-        position: { left: "120px", bottom: "120px" },
+        position: { left: "64px", bottom: "64px" },
         color   : "white"
     };
     joystickThreshould = 0.3;

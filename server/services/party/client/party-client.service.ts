@@ -3,15 +3,13 @@ import {ClientProxy}                                           from "@nestjs/mic
 import {WORLD_PREFIX}                                          from "../../world/world.prefix";
 import {CreateParty, GetParty, InviteToParty, MakePartyLeader} from "../actions";
 import {first}                                                 from "rxjs/operators";
-import {PartyEmitter}                                          from "../party.emitter";
 import {Party}                                                 from "../entities/party";
 
 @Injectable()
 export class PartyClient {
 
     constructor(
-        @Inject('PARTY_CLIENT') private client: ClientProxy,
-        private emitter: PartyEmitter
+        @Inject('PARTY_CLIENT') private client: ClientProxy
     ) {
 
     }

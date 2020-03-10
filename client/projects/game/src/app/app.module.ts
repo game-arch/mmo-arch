@@ -13,15 +13,18 @@ import { ConnectionModule }         from "../lib/connection/connection.module";
 import { MatButtonModule }          from "@angular/material/button";
 import { RouterModule }             from "@angular/router";
 import { GameModule }               from "../lib/game/game.module";
+import { SvgModule }                from "../lib/svg/svg.module";
+import { HudModule }                from "../lib/hud/hud.module";
 
 @NgModule({
     declarations: [
         AppComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forRoot([]),
         BrowserModule,
         HttpClientModule,
+        SvgModule,
         BrowserAnimationsModule,
         ConnectionModule,
         AuthenticationModule,
@@ -30,11 +33,10 @@ import { GameModule }               from "../lib/game/game.module";
         GameModule,
         NgxsModule.forRoot([]),
         NgxsStoragePluginModule.forRoot({
-            key: [
-                "auth"
-            ]
+            key: ["auth"]
         }),
-        MatButtonModule
+        MatButtonModule,
+        HudModule
     ],
     providers   : [],
     bootstrap   : [AppComponent]

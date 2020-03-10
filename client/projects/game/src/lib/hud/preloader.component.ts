@@ -2,10 +2,10 @@ import { Component }         from "@angular/core";
 import { GameEngineService } from "../game-engine/game-engine.service";
 
 @Component({
-    selector   : "status",
-    templateUrl: "status.component.html"
+    selector: 'preloader',
+    templateUrl: 'preloader.component.html'
 })
-export class StatusComponent {
+export class PreloaderComponent {
 
     constructor(public engine: GameEngineService) {
 

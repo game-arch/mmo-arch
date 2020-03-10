@@ -1,1 +1,30 @@
-<status></status>
+<div fxLayout="row" class="top-row">
+    <div fxLayout="column" class="status">
+        <div fxLayout="row" class="row">
+            <div fxLayout="column">
+                <avatar></avatar>
+            </div>
+            <div class="bars">
+                <div fxLayout="row">
+                    <div class="name">{{ engine.currentScene?.self?.name }}</div>
+                    <div style="flex:1"></div>
+                    <div class="level">LVL 99</div>
+                </div>
+                <bar color="#ff5035" percent="99" label="99/100" class="hp-bar"></bar>
+                <bar color="#00adff" percent="50" label="25/100" class="mp-bar"></bar>
+            </div>
+        </div>
+        <bar color="#5fd06e" percent="25" label="25/100" class="xp-bar"></bar>
+    </div>
+</div>
+<div fxLayout="row" fxFlex style="flex:1;">
+</div>
+<div fxLayout="row">
+    <joystick
+        [enabled]="true"
+        [style.opacity]="world.selectedCharacter ? 1 : 0"
+        [style.pointer-events]="world.selectedCharacter ? 'all' : 'none'"
+    ></joystick>
+    <div style="flex:1;pointer-events:none"></div>
+    <action-bar style="z-index:1000;"></action-bar>
+</div>

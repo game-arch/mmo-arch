@@ -9,7 +9,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "incremental": false,
+    "incremental": true,
     "baseUrl": "./",
     "types": [
       "node"

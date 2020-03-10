@@ -11,15 +11,16 @@ import { MapController }         from "./map/map.controller";
 import { MapGateway }            from "./map/map.gateway";
 import { CharacterGateway }      from "./character/character.gateway";
 import { CharacterController }   from "./character/character.controller";
-import { ChatController }        from "./chat/chat.controller";
-import { ChatGateway }           from "./chat/chat.gateway";
-import { TypeOrmModule }         from "@nestjs/typeorm";
-import { Player }                from "./entities/player";
-import { WorldConstants }        from "../../lib/constants/world.constants";
-import * as path                 from "path";
-import { environment }           from "../../lib/config/environment";
-import { PartyController }       from "./party/party.controller";
-import { PartyGateway }          from "./party/party.gateway";
+import { ChatController }    from "./chat/chat.controller";
+import { ChatGateway }       from "./chat/chat.gateway";
+import { TypeOrmModule }     from "@nestjs/typeorm";
+import { Player }            from "./entities/player";
+import { WorldConstants }    from "../../lib/constants/world.constants";
+import * as path             from "path";
+import { environment }       from "../../lib/config/environment";
+import { PartyController }   from "./party/party.controller";
+import { PartyGateway }      from "./party/party.gateway";
+import { PartyClientModule } from "../party/client/party-client.module";
 
 @Module({
     imports    : [
@@ -35,7 +36,8 @@ import { PartyGateway }          from "./party/party.gateway";
         AccountClientModule,
         CharacterClientModule,
         PresenceClientModule,
-        MapClientModule
+        MapClientModule,
+        PartyClientModule
     ],
     controllers: [
         WorldController,

@@ -9,10 +9,7 @@ import { from }              from "rxjs";
 import { MultiplayerScene }  from "./scenes/multiplayer.scene";
 
 export class EventBus {
-
-
     constructor(private engine: GameEngineService) {
-
     }
 
     listen() {
@@ -20,18 +17,28 @@ export class EventBus {
         this.playerPresenceEvents();
         this.playerUpdateEvents();
         this.joystickEvents();
+        this.engine.game.events.on("load.progress", (progress: number) => {
+            this.engine.loading = progress * 100;
+        });
+        this.engine.game.events.on("load.complete", () => {
+            this.engine.loading = 100;
+            this.engine.game.events.emit("game.scene", "title");
+        });
     }
 
     private sceneChangeEvents() {
         this.engine.game.events.on("game.scene", scene => {
             if (this.engine.currentScene) {
-                if (this.engine.currentScene.destroyed) {
-                    this.engine.currentScene.destroyed.emit();
-                }
                 this.engine.game.scene.stop(this.engine.currentSceneKey);
+                if (this.engine.currentScene.destroy) {
+                    this.engine.currentScene.destroy();
+                }
+            }
+            this.engine.game.scene.start(scene);
+            if (scene === 'preload') {
+                scene = 'title';
             }
             this.engine.currentSceneKey = scene;
-            this.engine.game.scene.start(scene);
             this.engine.currentScene = this.engine.scenes[scene];
             this.keyEvents(this.engine.currentScene);
         });
@@ -69,7 +76,10 @@ export class EventBus {
         this.engine.game.events.on(PlayerEnteredMap.event, data => {
             if (this.engine.currentScene) {
                 console.log("Player Joined", data);
-                this.engine.currentScene.addOrUpdatePlayer({ ...data, id: data.characterId });
+                this.engine.currentScene.addOrUpdatePlayer({
+                    ...data,
+                    id: data.characterId
+                });
             }
         });
         this.engine.game.events.on(PlayerLeftMap.event, data => {
@@ -94,7 +104,9 @@ export class EventBus {
     private joystickEvents() {
         this.engine.game.events.on("input.joystick", directions => {
             if (this.engine.currentScene instanceof MultiplayerScene) {
-                for (let dir of Object.keys(this.engine.currentScene.directions)) {
+                for (let dir of Object.keys(
+                    this.engine.currentScene.directions
+                )) {
                     this.engine.currentScene.directions[dir] = directions[dir];
                 }
                 this.engine.currentScene.sendDirectionalInput();

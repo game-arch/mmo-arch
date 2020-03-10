@@ -11,7 +11,6 @@ import { GameEngineService }      from "../game-engine/game-engine.service";
     styleUrls  : ["character-selection.component.scss"]
 })
 export class CharacterSelectionComponent implements OnInit {
-
     selected: GameCharacter = null;
 
     constructor(
@@ -37,7 +36,10 @@ export class CharacterSelectionComponent implements OnInit {
     async join() {
         try {
             if (this.connection.world) {
-                await this.connection.world.selectCharacter(this.selected.name, this.selected.id);
+                await this.connection.world.selectCharacter(
+                    this.selected.name,
+                    this.selected.id
+                );
                 this.engine.game.events.emit("game.scene", "tutorial");
             }
         } catch (e) {
