@@ -4,10 +4,10 @@
 
 export const environment = {
     production: false,
-    server    : "http://localhost:3000",
-    host      : "localhost",
-    port      : 3000
-};
+    server    : 'http://localhost:3000',
+    host      : 'localhost',
+    port      : 3000,
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

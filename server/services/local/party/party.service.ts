@@ -1,16 +1,11 @@
-
-import {
-    Injectable,
-    ConflictException,
-    InternalServerErrorException,
-}                                           from '@nestjs/common'
-import {InjectRepository}                   from '@nestjs/typeorm'
-import {RpcException}                       from '@nestjs/microservices'
-import {Party}                              from './entities/party'
-import {Repository}                         from 'typeorm'
-import {PartyEmitter}                       from './party.emitter'
-import {MakePartyLeader, PartyLeaderOnline} from './actions'
-import {CharacterClient}                    from "../character/client/character.client";
+import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common'
+import { InjectRepository }                                             from '@nestjs/typeorm'
+import { RpcException }                                                 from '@nestjs/microservices'
+import { Party }                                                        from './entities/party'
+import { Repository }                                                   from 'typeorm'
+import { PartyEmitter }                                                 from './party.emitter'
+import { PartyLeaderOnline }                                            from './actions'
+import { CharacterClient }                                              from '../character/client/character.client'
 
 @Injectable()
 export class PartyService {
@@ -18,21 +13,21 @@ export class PartyService {
         private emitter: PartyEmitter,
         @InjectRepository(Party)
         private repo: Repository<Party>,
-        private character: CharacterClient
+        private character: CharacterClient,
     ) {
     }
 
 
     async getPartyByLeader(leaderId: number) {
-        return this.repo.findOne({leader: leaderId})
+        return this.repo.findOne({ leader: leaderId })
     }
 
     async createParty(name: string, characterId: number) {
-        let party: Party = await this.repo.findOne({name})
+        let party: Party = await this.repo.findOne({ name })
         if (party) {
             throw new RpcException(
-                new ConflictException("Party Name Already Taken")
-            );
+                new ConflictException('Party Name Already Taken'),
+            )
         }
         try {
             party         = this.repo.create()
@@ -42,26 +37,26 @@ export class PartyService {
             await this.repo.save(party)
             return party
         } catch (e) {
-            console.log(e);
-            if (e.message.indexOf("UNIQUE") !== -1) {
+            console.log(e)
+            if (e.message.indexOf('UNIQUE') !== -1) {
                 throw new RpcException(
-                    new ConflictException("Character Name Already Taken")
-                );
+                    new ConflictException('Character Name Already Taken'),
+                )
             }
-            throw new RpcException(new InternalServerErrorException(e.message));
+            throw new RpcException(new InternalServerErrorException(e.message))
         }
     }
 
-    async makeLeader(leaderId:number, characterId:number) {
-        const party = await this.repo.findOne({leader: leaderId})
+    async makeLeader(leaderId: number, characterId: number) {
+        const party     = await this.repo.findOne({ leader: leaderId })
         const character = await this.character.getCharacter(characterId)
         if (party.members.includes(characterId) && character.status === 'online') {
             party.leader = characterId
             await this.repo.save(party)
             this.emitter.madePartyLeader(party.id, party.leader)
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
     async pickLeader(party: Party): Promise<number> {
@@ -73,12 +68,12 @@ export class PartyService {
             }
         }
         // no one is online - pick the first one
-        return party.members.values().next().value;
+        return party.members.values().next().value
     }
 
     async isPartyLeader(
         data: PartyLeaderOnline,
-        party: Party
+        party: Party,
     ): Promise<boolean> {
         return this.isLeader(data.leaderId, party)
     }
@@ -88,10 +83,10 @@ export class PartyService {
     }
 
     isPartyFull(party: Party): boolean {
-        return party.members.length > 4;
+        return party.members.length > 4
     }
 
-    async isInvited(party: Party, characterId:number): Promise<boolean> {
+    async isInvited(party: Party, characterId: number): Promise<boolean> {
         return party.invitees.includes(characterId)
     }
 }

@@ -1,27 +1,27 @@
-import { Component, EventEmitter }            from "@angular/core";
-import { ConnectionManager }                  from "../connection/connection-manager";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef }                       from "@angular/material/dialog";
-import { fromEvent }                          from "rxjs";
-import { takeUntil }                          from "rxjs/operators";
+import { Component, EventEmitter }            from '@angular/core'
+import { ConnectionManager }                  from '../connection/connection-manager'
+import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { MatDialogRef }                       from '@angular/material/dialog'
+import { fromEvent }                          from 'rxjs'
+import { takeUntil }                          from 'rxjs/operators'
 import {
     CharacterCreated,
     CharacterNotCreated,
-    CreateCharacter
-}                                             from "../../../../../../server/services/local/character/actions";
+    CreateCharacter,
+}                                             from '../../../../../../server/services/local/character/actions'
 
 @Component({
-    selector   : "character-form",
-    templateUrl: "character-form.component.html"
+    selector   : 'character-form',
+    templateUrl: 'character-form.component.html',
 })
 export class CharacterFormComponent {
 
     form = new FormGroup({
-        name  : new FormControl("", [Validators.required]),
-        gender: new FormControl("male", [Validators.required])
-    });
+        name  : new FormControl('', [Validators.required]),
+        gender: new FormControl('male', [Validators.required]),
+    })
 
-    destroy = new EventEmitter();
+    destroy = new EventEmitter()
 
     constructor(private ref: MatDialogRef<CharacterFormComponent>, private connection: ConnectionManager) {
 
@@ -31,22 +31,22 @@ export class CharacterFormComponent {
         fromEvent(this.connection.world.socket, CharacterCreated.event)
             .pipe(takeUntil(this.destroy))
             .subscribe(() => {
-                this.ref.close();
-            });
+                this.ref.close()
+            })
         fromEvent(this.connection.world.socket, CharacterNotCreated.event)
             .pipe(takeUntil(this.destroy))
             .subscribe((data: CharacterNotCreated) => {
                 if (data.error.statusCode === 409) {
-                    this.form.get("name").setErrors({ unique: true });
+                    this.form.get('name').setErrors({ unique: true })
                 }
-            });
+            })
     }
 
     submit() {
-        this.connection.world.socket.emit(CreateCharacter.event, this.form.getRawValue());
+        this.connection.world.socket.emit(CreateCharacter.event, this.form.getRawValue())
     }
 
     ngOnDestroy() {
-        this.destroy.emit();
+        this.destroy.emit()
     }
 }

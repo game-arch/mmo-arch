@@ -1,15 +1,15 @@
-import { Module }          from "@nestjs/common";
-import { CharacterClient } from "./character.client";
-import { ClientModule }    from "../../../../lib/client/client.module";
+import { Module }          from '@nestjs/common'
+import { CharacterClient } from './character.client'
+import { ClientModule }    from '../../../../lib/client/client.module'
 
 @Module({
     imports  : [ClientModule],
     providers: [
-        CharacterClient
+        CharacterClient,
     ],
     exports  : [
-        CharacterClient
-    ]
+        CharacterClient,
+    ],
 })
 export class CharacterClientModule {
 

@@ -1,12 +1,12 @@
-import { Inject, Injectable }                        from "@nestjs/common";
-import { ClientProxy }                               from "@nestjs/microservices";
-import { first }                                     from "rxjs/operators";
-import { GetServers, RegisterServer, ServerOffline } from "../actions";
+import { Inject, Injectable }                        from '@nestjs/common'
+import { ClientProxy }                               from '@nestjs/microservices'
+import { first }                                     from 'rxjs/operators'
+import { GetServers, RegisterServer, ServerOffline } from '../actions'
 
 @Injectable()
 export class PresenceClient {
 
-    constructor(@Inject("GLOBAL_CLIENT") private client: ClientProxy) {
+    constructor(@Inject('GLOBAL_CLIENT') private client: ClientProxy) {
 
     }
 
@@ -16,15 +16,15 @@ export class PresenceClient {
             port,
             constant,
             name,
-            instanceId
-        )).pipe(first()).toPromise();
+            instanceId,
+        )).pipe(first()).toPromise()
     }
 
     async getServers() {
-        return await this.client.send(GetServers.event, {}).pipe(first()).toPromise();
+        return await this.client.send(GetServers.event, {}).pipe(first()).toPromise()
     }
 
     async serverOffline(serverId: number) {
-        return await this.client.send(ServerOffline.event, new ServerOffline(serverId)).pipe(first()).toPromise();
+        return await this.client.send(ServerOffline.event, new ServerOffline(serverId)).pipe(first()).toPromise()
     }
 }

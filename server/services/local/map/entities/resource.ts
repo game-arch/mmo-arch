@@ -1,20 +1,20 @@
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
-import { ResourceDrop }                                                     from "./resource-drop";
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm'
+import { ResourceDrop }                                                     from './resource-drop'
 
 @Entity()
-@Index("resourceType", ["type"])
-@Unique("resourceConstant", ["constant"])
-@Unique("resourceName", ["name"])
+@Index('resourceType', ['type'])
+@Unique('resourceConstant', ['constant'])
+@Unique('resourceName', ['name'])
 export class Resource {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
     @Column()
-    type: string;
+    type: string
     @Column()
-    constant: string;
+    constant: string
     @Column()
-    name: string;
+    name: string
 
     @OneToMany(t => ResourceDrop, d => d.resource)
-    drops: ResourceDrop[];
+    drops: ResourceDrop[]
 }

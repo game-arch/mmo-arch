@@ -1,31 +1,31 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm'
 
-@Unique("instance", ["constant", "host", "port", "instanceId"])
+@Unique('instance', ['constant', 'host', 'port', 'instanceId'])
 @Entity()
 export class World {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
     @Column({ default: null })
-    instanceId: number;
+    instanceId: number
     @Column({ default: 1 })
-    index: number;
+    index: number
     @Column()
-    host: string;
-    @Column("int")
-    port: number;
+    host: string
+    @Column('int')
+    port: number
     @Column({ nullable: false })
-    constant: string;
+    constant: string
     @Column({ nullable: false })
-    name: string;
+    name: string
     @Column({ nullable: false })
-    status: "online" | "offline" = "online";
+    status: 'online' | 'offline' = 'online'
 
     constructor(host: string, port: number, instanceId: number, constant: string, name: string) {
-        this.host       = host;
-        this.port       = port;
-        this.instanceId = instanceId;
-        this.constant   = constant;
-        this.name       = name;
+        this.host       = host
+        this.port       = port
+        this.instanceId = instanceId
+        this.constant   = constant
+        this.name       = name
     }
 }

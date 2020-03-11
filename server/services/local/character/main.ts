@@ -1,4 +1,4 @@
-import { CharacterModule }    from "./character.module";
-import { createMicroservice } from "../../../lib/functions/create-microservice";
+import { CharacterModule }    from './character.module'
+import { createMicroservice } from '../../../lib/functions/create-microservice'
 
-createMicroservice(CharacterModule, "character", "Character", "local").then();
+createMicroservice(CharacterModule, 'character', 'Character', 'local').then()

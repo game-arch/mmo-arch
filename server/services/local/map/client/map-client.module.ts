@@ -1,15 +1,15 @@
-import { Module }       from "@nestjs/common";
-import { MapClient }    from "./map.client";
-import { ClientModule } from "../../../../lib/client/client.module";
+import { Module }       from '@nestjs/common'
+import { MapClient }    from './map.client'
+import { ClientModule } from '../../../../lib/client/client.module'
 
 @Module({
     imports  : [ClientModule],
     providers: [
-        MapClient
+        MapClient,
     ],
     exports  : [
-        MapClient
-    ]
+        MapClient,
+    ],
 })
 export class MapClientModule {
 

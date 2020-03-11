@@ -9,7 +9,8 @@ export class Mob {
     x: number
     y: number
 
-    constructor(public name: string = '') {}
+    constructor(public name: string = '') {
+    }
 
     get moving() {
         return this.sprite.moving
@@ -34,10 +35,10 @@ export class Mob {
 
     asPayload() {
         return {
-            id: this.id,
-            name: this.name,
-            x: this.x,
-            y: this.y,
+            id    : this.id,
+            name  : this.name,
+            x     : this.x,
+            y     : this.y,
             moving: this.sprite.moving,
         }
     }

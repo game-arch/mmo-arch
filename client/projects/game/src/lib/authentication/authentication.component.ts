@@ -1,15 +1,15 @@
-import { Component, OnInit } from "@angular/core";
-import { Store }             from "@ngxs/store";
-import { SetToken }          from "./state/auth.actions";
+import { Component, OnInit } from '@angular/core'
+import { Store }             from '@ngxs/store'
+import { SetToken }          from './state/auth.actions'
 
 @Component({
-    selector   : "authentication",
-    templateUrl: "authentication.component.html",
-    styles     : []
+    selector   : 'authentication',
+    templateUrl: 'authentication.component.html',
+    styles     : [],
 })
 export class AuthenticationComponent implements OnInit {
 
-    isLogin = true;
+    isLogin = true
 
     constructor(private store: Store) {
     }
@@ -18,7 +18,7 @@ export class AuthenticationComponent implements OnInit {
     }
 
     onLoggedIn({ token }: { token: string }) {
-        console.log("Logged in!", token);
-        this.store.dispatch(new SetToken(token));
+        console.log('Logged in!', token)
+        this.store.dispatch(new SetToken(token))
     }
 }

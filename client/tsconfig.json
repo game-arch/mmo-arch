@@ -71,5 +71,6 @@
     "angularCompilerOptions": {
         "fullTemplateTypeCheck": true,
         "strictInjectionParameters": true
-    }
+    },
+    "exclude": ["../server/node_modules"]
 }

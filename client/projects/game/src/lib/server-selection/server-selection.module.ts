@@ -1,8 +1,8 @@
-import { NgModule }                 from "@angular/core";
-import { ServerSelectionComponent } from "./server-selection.component";
-import { MatCardModule }            from "@angular/material/card";
-import { ServerListModule }         from "./server-list.module";
-import { NgxsModule }               from "@ngxs/store";
+import { NgModule }                 from '@angular/core'
+import { ServerSelectionComponent } from './server-selection.component'
+import { MatCardModule }            from '@angular/material/card'
+import { ServerListModule }         from './server-list.module'
+import { NgxsModule }               from '@ngxs/store'
 
 
 @NgModule({
@@ -10,9 +10,9 @@ import { NgxsModule }               from "@ngxs/store";
     imports     : [
         MatCardModule,
         ServerListModule,
-        NgxsModule
+        NgxsModule,
     ],
-    exports     : [ServerSelectionComponent]
+    exports     : [ServerSelectionComponent],
 })
 export class ServerSelectionModule {
 }

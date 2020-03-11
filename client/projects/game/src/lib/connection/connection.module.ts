@@ -1,11 +1,11 @@
-import { NgModule }          from "@angular/core";
-import { ConnectionManager } from "./connection-manager";
+import { NgModule }          from '@angular/core'
+import { ConnectionManager } from './connection-manager'
 
 @NgModule({
     imports  : [],
     providers: [
-        ConnectionManager
-    ]
+        ConnectionManager,
+    ],
 })
 export class ConnectionModule {
 }
