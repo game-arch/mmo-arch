@@ -29,5 +29,6 @@ export class AppComponent {
     logout() {
         this.store.dispatch(new SetToken())
         this.engine.game.events.emit('game.scene', 'title')
+        this.connection.world.socket.disconnect();
     }
 }

@@ -32,7 +32,7 @@ export class GameComponent implements AfterViewInit, OnDestroy {
 
     signOut() {
         this.engine.game.events.emit('game.scene', 'title')
-        this.world.socket.disconnect()
+        this.world.socket.emit(CharacterOffline.event);
         this.world.selectedCharacter = null
     }
 }
