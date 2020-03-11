@@ -1,11 +1,11 @@
-import { NgModule }   from "@angular/core";
-import { NgxsModule } from "@ngxs/store";
-import { AuthState }  from "./auth.state";
+import { NgModule }   from '@angular/core'
+import { NgxsModule } from '@ngxs/store'
+import { AuthState }  from './auth.state'
 
 @NgModule({
     imports: [
-        NgxsModule.forFeature([AuthState])
-    ]
+        NgxsModule.forFeature([AuthState]),
+    ],
 })
 export class AuthenticationStateModule {
 

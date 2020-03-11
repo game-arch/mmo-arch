@@ -1,22 +1,22 @@
-import { PreloadScene } from "./scenes/preload/preload.scene";
-import GameConfig = Phaser.Types.Core.GameConfig;
-import RESIZE = Phaser.Scale.RESIZE;
-import CANVAS = Phaser.CANVAS;
+import { PreloadScene } from './scenes/preload/preload.scene'
+import GameConfig = Phaser.Types.Core.GameConfig
+import RESIZE = Phaser.Scale.RESIZE
+import CANVAS = Phaser.CANVAS
 
 export const GAME_CONFIG: GameConfig = {
-    title          : "My Game",
+    title          : 'My Game',
     type           : CANVAS,
-    backgroundColor: "#555",
+    backgroundColor: '#555',
     scale          : {
         mode  : RESIZE,
         width : window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
     },
     scene          : [PreloadScene],
     physics        : {
-        default: "arcade",
+        default: 'arcade',
         arcade : {
-            debug: true
-        }
-    }
-};
+            debug: true,
+        },
+    },
+}

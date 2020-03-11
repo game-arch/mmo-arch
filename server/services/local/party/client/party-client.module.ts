@@ -1,8 +1,8 @@
-import {Module}             from "@nestjs/common";
-import {PartyClient}        from "./party-client.service";
-import {ClientProxyFactory} from "@nestjs/microservices";
-import {environment}        from "../../../../lib/config/environment";
-import {WorldConstants}     from "../../../../lib/constants/world.constants";
+import { Module }             from '@nestjs/common'
+import { PartyClient }        from './party-client.service'
+import { ClientProxyFactory } from '@nestjs/microservices'
+import { environment }        from '../../../../lib/config/environment'
+import { WorldConstants }     from '../../../../lib/constants/world.constants'
 
 export const clientFactory   = () => ClientProxyFactory.create(<any>{
     transport: environment.microservice.transport,
@@ -11,11 +11,11 @@ export const clientFactory   = () => ClientProxyFactory.create(<any>{
         name : WorldConstants.NAME + ' Party Client',
         queue: WorldConstants.CONSTANT + '-party'
     }
-});
+})
 export const CLIENT_PROVIDER = {
     provide   : 'PARTY_CLIENT',
     useFactory: clientFactory
-};
+}
 
 @Module({
     providers: [

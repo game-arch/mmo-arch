@@ -1,52 +1,52 @@
-import { Component, EventEmitter, OnInit } from "@angular/core";
-import { fromEvent, Observable } from "rxjs";
-import { ConnectionManager }     from "../connection/connection-manager";
-import { GameWorld }             from "../../../../../../server/lib/interfaces/game-world";
-import { map, takeUntil, tap }   from "rxjs/operators";
-import { Store }                 from "@ngxs/store";
-import { SetToken }              from "../authentication/state/auth.actions";
-import { GetServers }            from "../../../../../../server/services/global/presence/actions";
-import { Hosts }                 from "../hosts";
+import { Component, EventEmitter, OnInit } from '@angular/core'
+import { fromEvent, Observable }           from 'rxjs'
+import { ConnectionManager }               from '../connection/connection-manager'
+import { GameWorld }                       from '../../../../../../server/lib/interfaces/game-world'
+import { map, takeUntil, tap }             from 'rxjs/operators'
+import { Store }                           from '@ngxs/store'
+import { SetToken }                        from '../authentication/state/auth.actions'
+import { GetServers }                      from '../../../../../../server/services/global/presence/actions'
+import { Hosts }                           from '../hosts'
 
 @Component({
-    selector   : "server-list",
-    templateUrl: "server-list.component.html",
+    selector   : 'server-list',
+    templateUrl: 'server-list.component.html',
     styles     : [],
-    outputs    : ["connected"]
+    outputs    : ['connected'],
 })
 export class ServerListComponent implements OnInit {
 
-    servers$: Observable<GameWorld[]>;
+    servers$: Observable<GameWorld[]>
 
-    destroy = new EventEmitter();
+    destroy = new EventEmitter()
 
-    connected = new EventEmitter<string>();
+    connected = new EventEmitter<string>()
 
     constructor(private store: Store, public manager: ConnectionManager) {
     }
 
     ngOnInit() {
-        let connection = this.manager.connectTo(Hosts.LOBBY, false);
+        let connection = this.manager.connectTo(Hosts.LOBBY, false)
         this.servers$  = fromEvent<GameWorld[]>(connection.socket, GetServers.event).pipe(tap(list => {
-            console.log("got server list", list);
-        }));
+            console.log('got server list', list)
+        }))
     }
 
     onConnect(world: GameWorld) {
-        let connection = this.manager.connectTo(world, true);
-        fromEvent(connection.socket, "connect-error", { once: true })
+        let connection = this.manager.connectTo(world, true)
+        fromEvent(connection.socket, 'connect-error', { once: true })
             .subscribe((err) => {
-                console.error(err);
-                this.store.dispatch(new SetToken());
-            });
-        fromEvent(connection.socket, "connect", { once: true })
+                console.error(err)
+                this.store.dispatch(new SetToken())
+            })
+        fromEvent(connection.socket, 'connect', { once: true })
             .pipe(takeUntil(this.destroy))
             .pipe(map(() => world.name))
-            .subscribe(name => this.connected.emit(name));
+            .subscribe(name => this.connected.emit(name))
     }
 
     ngOnDestroy() {
-        this.destroy.emit();
+        this.destroy.emit()
     }
 
 }

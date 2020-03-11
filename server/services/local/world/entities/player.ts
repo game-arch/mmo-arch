@@ -1,25 +1,25 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 export class Player {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
     @Column()
-    accountId: number;
+    accountId: number
     @Column({ length: 255 })
-    socketId: string;
+    socketId: string
     @Column({ nullable: true })
-    characterId: number;
+    characterId: number
     @Column({ length: 255, nullable: true })
-    characterName: string;
+    characterName: string
 
     get character() {
         if (this.characterId !== null) {
             return {
                 id  : this.characterId,
                 name: this.characterName
-            };
+            }
         }
-        return null;
+        return null
     }
 }

@@ -1,9 +1,9 @@
-import { NgModule }            from "@angular/core";
-import { ServerListComponent } from "./server-list.component";
-import { MatListModule }       from "@angular/material/list";
-import { CommonModule }        from "@angular/common";
-import { ConnectionModule }    from "../connection/connection.module";
-import { MatIconModule }       from "@angular/material/icon";
+import { NgModule }            from '@angular/core'
+import { ServerListComponent } from './server-list.component'
+import { MatListModule }       from '@angular/material/list'
+import { CommonModule }        from '@angular/common'
+import { ConnectionModule }    from '../connection/connection.module'
+import { MatIconModule }       from '@angular/material/icon'
 
 
 @NgModule({
@@ -12,9 +12,9 @@ import { MatIconModule }       from "@angular/material/icon";
         MatListModule,
         CommonModule,
         ConnectionModule,
-        MatIconModule
+        MatIconModule,
     ],
-    exports     : [ServerListComponent]
+    exports     : [ServerListComponent],
 })
 export class ServerListModule {
 }

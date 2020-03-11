@@ -1,8 +1,8 @@
-import { Component }         from "@angular/core";
-import { GameEngineService } from "../game-engine/game-engine.service";
+import { Component }         from '@angular/core'
+import { GameEngineService } from '../game-engine/game-engine.service'
 
 @Component({
-    selector: 'preloader',
+    selector   : 'preloader',
     templateUrl: 'preloader.component.html'
 })
 export class PreloaderComponent {

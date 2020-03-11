@@ -1,7 +1,7 @@
 export class SetToken {
-    static readonly type = "[Auth] Set Token";
+    static readonly type = '[Auth] Set Token'
 
-    constructor(public token: string = "") {
+    constructor(public token: string = '') {
 
     }
 }

@@ -1,22 +1,22 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity({ name: "parties" })
-@Index("party", ["name"])
+@Entity({ name: 'parties' })
+@Index('party', ['name'])
 export class Party {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
     @Column()
-    name: string;
-
-    @Column()
-    partyMembers: number;
-
-    @Column("simple-array")
-    members: number[];
-
-    @Column("simple-array")
-    invitees: number[];
+    name: string
 
     @Column()
-    leader: number;
+    partyMembers: number
+
+    @Column('simple-array')
+    members: number[]
+
+    @Column('simple-array')
+    invitees: number[]
+
+    @Column()
+    leader: number
 }

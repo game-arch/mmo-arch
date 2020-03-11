@@ -1,8 +1,8 @@
-import { Controller }     from "@nestjs/common";
-import { AccountService } from "./account.service";
-import { MessagePattern } from "@nestjs/microservices";
-import { AccountEvents }  from "./account.events";
-import { AccountClient }  from "./client/account.client";
+import { Controller }     from '@nestjs/common'
+import { AccountService } from './account.service'
+import { MessagePattern } from '@nestjs/microservices'
+import { AccountEvents }  from './account.events'
+import { AccountClient }  from './client/account.client'
 
 @Controller()
 export class AccountController {
@@ -14,25 +14,25 @@ export class AccountController {
 
     @MessagePattern(AccountEvents.REGISTER)
     async register(data: { email: string, password: string }) {
-        return await this.service.register(data.email, data.password);
+        return await this.service.register(data.email, data.password)
     }
 
 
     @MessagePattern(AccountEvents.LOGIN)
     async login(data: { email: string, password: string }) {
-        let response = await this.service.login(data.email, data.password);
-        let user     = await this.service.getAccountByToken(response);
-        this.client.updated(user.id, data.email);
-        return response;
+        let response = await this.service.login(data.email, data.password)
+        let user     = await this.service.getAccountByToken(response)
+        this.client.updated(user.id, data.email)
+        return response
     }
 
     @MessagePattern(AccountEvents.VERIFY)
     async verify(data: string) {
-        return await this.service.getAccountByToken(data);
+        return await this.service.getAccountByToken(data)
     }
 
     @MessagePattern(AccountEvents.GET)
     async get({ token, ignoreExpiration }) {
-        return await this.service.getAccountByToken(token, ignoreExpiration);
+        return await this.service.getAccountByToken(token, ignoreExpiration)
     }
 }

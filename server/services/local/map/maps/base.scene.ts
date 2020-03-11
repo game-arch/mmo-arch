@@ -1,7 +1,7 @@
-import { MapConfig } from '../config/config'
-import { Subject } from 'rxjs'
+import { MapConfig }      from '../config/config'
+import { Subject }        from 'rxjs'
 import { loadCollisions } from '../../../../lib/phaser/collisions'
-import { Mob } from '../../../../lib/phaser/mob'
+import { Mob }            from '../../../../lib/phaser/mob'
 import Scene = Phaser.Scene
 import Group = Phaser.Physics.Arcade.Group
 
@@ -26,13 +26,13 @@ export class BaseScene extends Scene implements Scene {
 
     constructor(public config: MapConfig) {
         super({
-            key: config.name,
+            key: config.name
         })
     }
 
     create() {
         this.physics.world.TILE_BIAS = 40
-        this.collisionGroups = loadCollisions(this.config, this)
+        this.collisionGroups         = loadCollisions(this.config, this)
     }
 
     update(time: number, delta: number) {
@@ -67,7 +67,7 @@ export class BaseScene extends Scene implements Scene {
     }
 
     addEntity(type: 'player' | 'mob', mob: Mob, id: number) {
-        this.entities[type] = this.entities[type] || {}
+        this.entities[type]     = this.entities[type] || {}
         this.entities[type][id] = mob
         this.entities[type][id].create(this, mob.x, mob.y)
         this.physics.add.collider(mob.sprite, this.collisionGroups.colliders)

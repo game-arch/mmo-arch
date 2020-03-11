@@ -1,3 +1,3 @@
-import { WorldConstants } from "../../../lib/constants/world.constants";
+import { WorldConstants } from '../../../lib/constants/world.constants'
 
-export const WORLD_PREFIX = WorldConstants.CONSTANT + ".";
+export const WORLD_PREFIX = WorldConstants.CONSTANT + '.'

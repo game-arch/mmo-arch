@@ -1,19 +1,19 @@
-import { MapConfig } from "./config";
+import { MapConfig } from './config'
 
 export const TUTORIAL_CONFIG: MapConfig = {
-    name      : "tutorial",
+    name      : 'tutorial',
     width     : 1024,
     height    : 768,
     collisions: [
         {
             solid   : true,
-            shape   : "rectangle",
+            shape   : 'rectangle',
             position: [320, 500],
             radius  : 100
         },
         {
             solid   : true,
-            shape   : "polygon",
+            shape   : 'polygon',
             position: [600, 320],
             points  : [
                 [-50, -50],
@@ -24,39 +24,39 @@ export const TUTORIAL_CONFIG: MapConfig = {
         },
         {
             solid   : true,
-            shape   : "rectangle",
+            shape   : 'rectangle',
             position: [0, 0],
             width   : 1024,
             height  : 32
         },
         {
             solid   : true,
-            shape   : "rectangle",
+            shape   : 'rectangle',
             position: [0, 0],
             width   : 32,
             height  : 768
         },
         {
             solid   : true,
-            shape   : "rectangle",
+            shape   : 'rectangle',
             position: [0, 768 - 32],
             width   : 1024,
             height  : 32
         },
         {
             solid   : true,
-            shape   : "rectangle",
+            shape   : 'rectangle',
             position: [1024 - 32, 0],
             width   : 32,
             height  : 768
         },
         {
             solid       : false,
-            transitionTo: "other",
-            shape       : "rectangle",
+            transitionTo: 'other',
+            shape       : 'rectangle',
             position    : [0, 120],
             width       : 64,
             height      : 120
         }
     ]
-};
+}

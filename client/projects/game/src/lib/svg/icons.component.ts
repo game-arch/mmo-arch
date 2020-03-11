@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core'
 
 @Component({
-    selector: 'icons',
+    selector   : 'icons',
     templateUrl: 'icons.component.html'
 })
 export class IconsComponent {

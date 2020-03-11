@@ -1,9 +1,9 @@
-import {Controller}      from "@nestjs/common";
-import {PartyGateway}    from "./party.gateway";
-import {EventPattern}    from "@nestjs/microservices";
-import {WORLD_PREFIX}    from "../world.prefix";
-import {MadePartyLeader} from "../../party/actions";
-import {PartyClient}     from "../../party/client/party-client.service";
+import { Controller }      from '@nestjs/common'
+import { PartyGateway }    from './party.gateway'
+import { EventPattern }    from '@nestjs/microservices'
+import { WORLD_PREFIX }    from '../world.prefix'
+import { MadePartyLeader } from '../../party/actions'
+import { PartyClient }     from '../../party/client/party-client.service'
 
 @Controller()
 export class PartyController {
@@ -19,7 +19,7 @@ export class PartyController {
     async onMadePartyLeader(data: MadePartyLeader) {
         let party = await this.client.getPartyByLeader(data.characterId)
         if (party) {
-            this.gateway.server.to('party.' + party.name).emit(MadePartyLeader.event, data);
+            this.gateway.server.to('party.' + party.name).emit(MadePartyLeader.event, data)
         }
     }
 }

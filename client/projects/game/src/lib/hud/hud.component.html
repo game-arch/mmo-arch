@@ -1,6 +1,6 @@
-<div fxLayout="row" class="top-row">
-    <div fxLayout="column" class="status">
-        <div fxLayout="row" class="row">
+<div class="top-row" fxLayout="row">
+    <div class="status" fxLayout="column">
+        <div class="row" fxLayout="row">
             <div fxLayout="column">
                 <avatar></avatar>
             </div>
@@ -10,14 +10,14 @@
                     <div style="flex:1"></div>
                     <div class="level">LVL 99</div>
                 </div>
-                <bar color="#ff5035" percent="99" label="99/100" class="hp-bar"></bar>
-                <bar color="#00adff" percent="50" label="25/100" class="mp-bar"></bar>
+                <bar class="hp-bar" color="#ff5035" label="99/100" percent="99"></bar>
+                <bar class="mp-bar" color="#00adff" label="25/100" percent="50"></bar>
             </div>
         </div>
-        <bar color="#5fd06e" percent="25" label="25/100" class="xp-bar"></bar>
+        <bar class="xp-bar" color="#5fd06e" label="25/100" percent="25"></bar>
     </div>
 </div>
-<div fxLayout="row" fxFlex style="flex:1;">
+<div fxFlex fxLayout="row" style="flex:1;">
 </div>
 <div fxLayout="row">
     <joystick

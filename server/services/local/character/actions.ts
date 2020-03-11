@@ -1,18 +1,20 @@
+import { GameCharacter } from '../../../lib/interfaces/game-character'
+
 export class CreateCharacter {
-    static readonly event = "character.create";
+    static readonly event = 'character.create'
 
     constructor(
         public accountId: number,
         public world: string,
         public name: string,
-        public gender: "male" | "female"
+        public gender: 'male' | 'female'
     ) {
 
     }
 }
 
 export class CharacterCreated {
-    static readonly event = "character.created";
+    static readonly event = 'character.created'
 
     constructor(
         public world: string,
@@ -23,7 +25,7 @@ export class CharacterCreated {
 }
 
 export class CharacterNotCreated {
-    static readonly event = "character.not_created";
+    static readonly event = 'character.not_created'
 
     constructor(public error: {
         statusCode: number
@@ -33,7 +35,7 @@ export class CharacterNotCreated {
 }
 
 export class GetCharacters {
-    static readonly event = "character.get_all";
+    static readonly event = 'character.get_all'
 
     constructor(
         public accountId: number,
@@ -44,7 +46,7 @@ export class GetCharacters {
 }
 
 export class GetCharacter {
-    static readonly event = "character.get";
+    static readonly event = 'character.get'
 
     constructor(
         public characterId: number
@@ -54,7 +56,7 @@ export class GetCharacter {
 }
 
 export class GetCharacterName {
-    static readonly event = "character.get_name";
+    static readonly event = 'character.get_name'
 
     constructor(
         public characterId: number
@@ -64,7 +66,7 @@ export class GetCharacterName {
 }
 
 export class CharacterOnline {
-    static readonly event = "character.online";
+    static readonly event = 'character.online'
 
     constructor(
         public characterId: number,
@@ -75,20 +77,30 @@ export class CharacterOnline {
 }
 
 export class CharacterLoggedIn {
-    static readonly event = "character.logged_in";
+    static readonly event = 'character.logged_in'
 
     constructor(
         public characterId: number,
         public name: string,
         public world: string,
-        public gender: "male" | "female"
+        public gender: 'male' | 'female'
+    ) {
+
+    }
+}
+
+export class CharacterDetails {
+    static readonly event = 'character.details'
+
+    constructor(
+        public character: GameCharacter
     ) {
 
     }
 }
 
 export class CharacterLoggedOut {
-    static readonly event = "character.logged_out";
+    static readonly event = 'character.logged_out'
 
     constructor(
         public characterId: number,
@@ -100,7 +112,7 @@ export class CharacterLoggedOut {
 }
 
 export class CharacterOffline {
-    static readonly event = "character.offline";
+    static readonly event = 'character.offline'
 
     constructor(
         public characterId: number
@@ -111,7 +123,7 @@ export class CharacterOffline {
 
 export class AllCharactersOffline {
 
-    static readonly event = "character.all_offline";
+    static readonly event = 'character.all_offline'
 
     constructor(
         public characters: CharacterOffline[]

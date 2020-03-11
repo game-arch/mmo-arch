@@ -1,30 +1,30 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
-import * as bcrypt                                                                            from "bcryptjs";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm'
+import * as bcrypt                                                                            from 'bcryptjs'
 
 @Entity()
-@Unique("email", ["email"])
+@Unique('email', ['email'])
 export class Account {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
 
     @Column()
-    email: string;
+    email: string
     @Column()
-    password: string;
+    password: string
 
     @Column()
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt: Date
 
     @Column()
     @UpdateDateColumn()
-    updatedAt: Date;
+    updatedAt: Date
 
     hashPassword() {
-        this.password = bcrypt.hashSync(this.password, 8);
+        this.password = bcrypt.hashSync(this.password, 8)
     }
 
     verifyPassword(unencryptedPassword: string) {
-        return bcrypt.compareSync(unencryptedPassword, this.password);
+        return bcrypt.compareSync(unencryptedPassword, this.password)
     }
 }
