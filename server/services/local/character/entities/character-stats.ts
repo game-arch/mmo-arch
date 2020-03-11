@@ -1,4 +1,3 @@
-import { Character }                                                    from './character'
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
@@ -9,9 +8,9 @@ export class CharacterStats {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne(t => Character, c => c.stats)
-    @JoinColumn({ name: 'characterId' })
-    character: Character
+    @OneToOne('Character', 'stats')
+    @JoinColumn({ name: 'characterId', referencedColumnName: 'id' })
+    character: any
 
     @Column()
     level: number        = 1

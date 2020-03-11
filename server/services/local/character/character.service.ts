@@ -23,7 +23,7 @@ export class CharacterService {
     }
 
     async getCharacter(characterId: number) {
-        return (await this.repo.findOne(characterId)).toJSON()
+        return (await this.repo.findOne(characterId, {relations: ['stats', 'parameters', 'equipmentSets']})).toJSON()
     }
 
     async getCharacterName(characterId: number) {
@@ -43,7 +43,7 @@ export class CharacterService {
             character.gender    = gender
             this.newCharacterStats(character)
             this.newCharacterParameters(character)
-            character.activeEquipmentSet = this.newEquipmentSet(character)
+            this.newEquipmentSet(character)
             await this.repo.save(character)
             return character.toJSON()
         } catch (e) {
@@ -57,7 +57,7 @@ export class CharacterService {
 
 
     async characterOnline(data: CharacterOnline) {
-        let character = await this.repo.findOne({ id: data.characterId })
+        let character = await this.repo.findOne({ id: data.characterId }, {relations: ['stats', 'parameters', 'equipmentSets']})
         if (character) {
             character.status   = 'online'
             character.socketId = data.socketId
@@ -68,7 +68,7 @@ export class CharacterService {
                 this.newCharacterParameters(character)
             }
             if (!character.equipmentSets || !character.equipmentSets.length) {
-                character.activeEquipmentSet = this.newEquipmentSet(character)
+                this.newEquipmentSet(character)
             }
             await this.repo.save(character)
             this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name)

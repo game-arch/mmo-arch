@@ -1,5 +1,4 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Character }                                                     from './character'
 
 @Entity()
 export class CharacterEquipment {
@@ -7,35 +6,38 @@ export class CharacterEquipment {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(t => Character, c => c.equipmentSets)
-    @JoinColumn({ name: 'characterId' })
-    character: Character
+    @Column()
+    active: boolean = false
 
-    @Column()
+    @ManyToOne('Character', 'equipmentSets')
+    @JoinColumn({ name: 'characterId' })
+    character: any
+
+    @Column({ nullable: true })
     mainHand: number = null
-    @Column()
+    @Column({ nullable: true })
     subHand: number  = null
 
-    @Column()
+    @Column({ nullable: true })
     head: number  = null
-    @Column()
+    @Column({ nullable: true })
     chest: number = null
-    @Column()
+    @Column({ nullable: true })
     arms: number  = null
-    @Column()
+    @Column({ nullable: true })
     legs: number  = null
-    @Column()
+    @Column({ nullable: true })
     feet: number  = null
 
-    @Column()
+    @Column({ nullable: true })
     leftRing: number  = null
-    @Column()
+    @Column({ nullable: true })
     rightRing: number = null
-    @Column()
+    @Column({ nullable: true })
     neck: number      = null
-    @Column()
+    @Column({ nullable: true })
     waist: number     = null
-    @Column()
+    @Column({ nullable: true })
     back: number      = null
 
     toJSON() {

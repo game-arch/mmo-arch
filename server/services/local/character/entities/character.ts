@@ -34,24 +34,19 @@ export class Character implements GameCharacter {
     @Column({ nullable: true })
     socketId: string
 
-    @OneToOne(t => CharacterStats, s => s.character)
-    stats: CharacterStats
+    @OneToOne('CharacterStats', 'character', {cascade: true})
+    stats: any
 
-    @OneToOne(t => CharacterParameters, s => s.character)
-    parameters: CharacterParameters
+    @OneToOne('CharacterParameters', 'character', {cascade: true})
+    parameters: any
 
-    @OneToMany(t => CharacterEquipment, s => s.character)
-    equipmentSets: CharacterEquipment[]
-
-    @OneToOne(t => CharacterEquipment)
-    @JoinColumn({ name: 'activeEquipmentSetId' })
-    activeEquipmentSet: CharacterEquipment
+    @OneToMany('CharacterEquipment', 'character', {cascade: true})
+    equipmentSets: any[]
 
     toJSON() {
         return {
             ...this,
             equipmentSets     : (this.equipmentSets || []).map(set => set.toJSON()),
-            activeEquipmentSet: this.activeEquipmentSet ? this.activeEquipmentSet.toJSON() : null,
             stats             : this.stats ? this.stats.toJSON() : null,
             parameters        : this.parameters ? this.parameters.toJSON() : null
         }

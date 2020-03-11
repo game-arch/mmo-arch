@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Character }                                                    from './character'
+
 
 @Entity()
 export class CharacterParameters {
@@ -7,9 +7,9 @@ export class CharacterParameters {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne(t => Character, c => c.parameters)
+    @OneToOne('Character', 'parameters')
     @JoinColumn({ name: 'characterId' })
-    character: Character
+    character: any
 
 
     @Column()
