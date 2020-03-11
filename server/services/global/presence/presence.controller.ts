@@ -1,5 +1,5 @@
 import { Controller, OnApplicationBootstrap }        from '@nestjs/common'
-import { MessagePattern }                            from '@nestjs/microservices'
+import { EventPattern, MessagePattern }              from '@nestjs/microservices'
 import { ServerPresence }                            from './services/server.presence'
 import { PresenceEmitter }                           from './emitter/presence.emitter'
 import { GetServers, RegisterServer, ServerOffline } from './actions'
@@ -22,7 +22,7 @@ export class PresenceController implements OnApplicationBootstrap {
         return await this.server.register(this.server.getHost(host), port, instanceId, constant, name)
     }
 
-    @MessagePattern(ServerOffline.event)
+    @EventPattern(ServerOffline.event)
     async serverOffline({ serverId }: ServerOffline) {
         await this.server.offline(serverId)
     }

@@ -86,9 +86,8 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             logging : false
         })
         let sockets    = await connection.query('select socketId from player')
-        await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))))
-        await this.presence.serverOffline(this.serverId)
-        await connection.close()
         fs.unlinkSync(path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'))
+        await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))))
+        this.presence.serverOffline(this.serverId)
     }
 }

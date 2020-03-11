@@ -40,7 +40,7 @@ export class MapGateway {
     async playerLeave(data: PlayerLeftMap) {
         this.server.to('map.' + data.map).emit(PlayerLeftMap.event, data)
         let player = await this.players.findOne({ characterId: data.characterId })
-        if (player) {
+        if (player && this.server.sockets[player.socketId]) {
             this.server.sockets[player.socketId].leave('map.' + data.map)
         }
     }

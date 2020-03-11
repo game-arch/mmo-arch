@@ -24,7 +24,7 @@ export class PresenceClient {
         return await this.client.send(GetServers.event, {}).pipe(first()).toPromise()
     }
 
-    async serverOffline(serverId: number) {
-        return await this.client.send(ServerOffline.event, new ServerOffline(serverId)).pipe(first()).toPromise()
+    serverOffline(serverId: number) {
+        this.client.emit(ServerOffline.event, new ServerOffline(serverId))
     }
 }

@@ -26,9 +26,9 @@ export class MapService {
 
         this.phaser = new Game({
             type   : Phaser.HEADLESS,
-            width  : 1024,
-            height : 768,
-            banner : true,
+            width  : 200,
+            height : 200,
+            banner : false,
             audio  : {
                 noAudio: true
             },
