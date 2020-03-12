@@ -36,3 +36,10 @@ services:
     environment:
       - SERVER_PATH=local/party
       - NATS_PORT=4223
+  world-item:
+    image: server_builder:latest
+    env_file:
+      - .env
+    environment:
+      - SERVER_PATH=local/item
+      - NATS_PORT=4223
