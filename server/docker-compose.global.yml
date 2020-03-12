@@ -1,0 +1,32 @@
+version: '3'
+services:
+  global-nats:
+    image: nats:alpine
+    ports:
+      - 4222:4222
+      - 8222:8222
+      - 6222:6222
+  account:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PATH=global/account
+      - NATS_HOST=localhost
+      - NATS_PORT=4222
+  lobby:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PATH=global/lobby
+      - NATS_HOST=localhost
+      - NATS_PORT=4222
+  presence:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PATH=global/presence
+      - NATS_HOST=localhost
+      - NATS_PORT=4222

@@ -22,6 +22,7 @@
     "**/*spec.ts"
   ],
   "include": [
+    "./src/main.ts",
     "./lib/**/*.ts",
     "./services/**/*.ts",
     "./node_modules/phaser/types/*.d.ts"

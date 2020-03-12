@@ -26,4 +26,4 @@ async function bootstrap() {
     await app.listen(environment.servers.world.port)
 }
 
-bootstrap()
+bootstrap().catch(e => console.error(e))

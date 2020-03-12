@@ -20,8 +20,8 @@ export class PresenceClient {
         )).pipe(first()).toPromise()
     }
 
-    async getServers() {
-        return await this.client.send(GetServers.event, {}).pipe(first()).toPromise()
+     getServers() {
+        this.client.emit(GetServers.event, {})
     }
 
     serverOffline(serverId: number) {

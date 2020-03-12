@@ -1,11 +1,11 @@
-import { Controller, Logger, Post, Req, Res } from '@nestjs/common'
-import { LobbyService }                       from './lobby.service'
-import { AccountClient }                      from '../account/client/account.client'
-import { Request, Response }                  from 'express'
-import { EventPattern }                       from '@nestjs/microservices'
-import { GameWorld }                          from '../../../lib/interfaces/game-world'
-import { LobbyGateway }                       from './lobby.gateway'
-import { GetServers }                         from '../presence/actions'
+import {Controller, Logger, Post, Req, Res} from '@nestjs/common'
+import {LobbyService}                       from './lobby.service'
+import {AccountClient}                      from '../account/client/account.client'
+import {Request, Response}                  from 'express'
+import {EventPattern}                       from '@nestjs/microservices'
+import {GameWorld}                          from '../../../lib/interfaces/game-world'
+import {LobbyGateway}                       from './lobby.gateway'
+import {GetServers}                         from '../presence/actions'
 
 @Controller()
 export class LobbyController {
@@ -21,7 +21,7 @@ export class LobbyController {
     async register(@Req() request: Request, @Res() response: Response) {
         try {
             let token = await this.account.register(request.body.email, request.body.password)
-            response.send({ token })
+            response.send({token})
         } catch (e) {
             this.handleError(e, response)
         }
@@ -32,7 +32,7 @@ export class LobbyController {
         try {
             let token = await this.account.login(request.body.email, request.body.password)
             response.status(200)
-            response.send({ token })
+            response.send({token})
         } catch (e) {
             this.handleError(e, response)
         }
@@ -40,9 +40,13 @@ export class LobbyController {
 
     @EventPattern(GetServers.event)
     serverList(servers: GameWorld[]) {
-        this.gateway.servers = servers
-        this.gateway.server.emit(GetServers.event, servers)
-        this.logger.log('Server list updated.')
+        try {
+            this.gateway.servers = servers
+            this.gateway.server.emit(GetServers.event, servers)
+            this.logger.log('Server list updated.')
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     private handleError(e, response: Response) {

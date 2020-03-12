@@ -4,13 +4,13 @@ import {
     OnGatewayInit,
     WebSocketGateway,
     WebSocketServer
-}                         from '@nestjs/websockets'
-import { Server, Socket } from 'socket.io'
-import { LobbyService }   from './lobby.service'
-import { GameWorld }      from '../../../lib/interfaces/game-world'
-import { Logger }         from '@nestjs/common'
-import { GetServers }     from '../presence/actions'
-import * as parser        from 'socket.io-msgpack-parser'
+}                       from '@nestjs/websockets'
+import {Server, Socket} from 'socket.io'
+import {LobbyService}   from './lobby.service'
+import {GameWorld}      from '../../../lib/interfaces/game-world'
+import {Logger}         from '@nestjs/common'
+import {GetServers}     from '../presence/actions'
+import * as parser      from 'socket.io-msgpack-parser'
 
 @WebSocketGateway({
     parser
@@ -43,14 +43,17 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect, O
     }
 
     async handleDisconnect(client: Socket) {
-        if (this.accounts.hasOwnProperty(client.id)) {
-            this.logger.log(this.accounts[client.id].email + ' disconnected.')
-            delete this.accounts[client.id]
+        try {
+            if (this.accounts.hasOwnProperty(client.id)) {
+                this.logger.log(this.accounts[client.id].email + ' disconnected.')
+                delete this.accounts[client.id]
+            }
+        } catch (e) {
+            console.error(e)
         }
     }
 
     async afterInit(server: Server) {
-        this.servers = await this.service.getServers()
-        this.server.emit(GetServers.event, this.servers)
+        this.service.getServers()
     }
 }

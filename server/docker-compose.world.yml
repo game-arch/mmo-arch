@@ -1,0 +1,36 @@
+version: '3'
+services:
+  world-nats:
+    image: nats:alpine
+    ports:
+      - 4223:4222
+      - 8223:8222
+      - 6223:6222
+  world-gateway:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PATH=local/world
+      - WORLD_HOST=localhost
+      - WORLD_PORT=3001
+    ports:
+      - 3001:3001
+  world-map:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PATH=local/map
+  world-character:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PATH=local/character
+  world-party:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PATH=local/party
