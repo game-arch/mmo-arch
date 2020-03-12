@@ -7,26 +7,20 @@ services:
       - 8222:8222
       - 6222:6222
   account:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: server_builder:latest
+    env_file:
+      - .env
     environment:
       - SERVER_PATH=global/account
-      - NATS_HOST=localhost
-      - NATS_PORT=4222
   lobby:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: server_builder:latest
+    env_file:
+      - .env
     environment:
       - SERVER_PATH=global/lobby
-      - NATS_HOST=localhost
-      - NATS_PORT=4222
   presence:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: server_builder:latest
+    env_file:
+      - .env
     environment:
       - SERVER_PATH=global/presence
-      - NATS_HOST=localhost
-      - NATS_PORT=4222

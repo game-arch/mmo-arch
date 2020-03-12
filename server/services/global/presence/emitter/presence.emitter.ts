@@ -11,7 +11,7 @@ export class PresenceEmitter {
     }
 
     sendServers(servers: GameWorld[]) {
-        this.client.emit(GetServers.event, servers)
+        this.client.emit(GetServers.event + '.response', servers)
     }
 
     nowOnline() {

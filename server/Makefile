@@ -19,6 +19,15 @@ delete:
 	pm2 delete builders.config.js
 	pm2 delete services.config.js
 
-docker:
-	docker-compose -f docker-compose.global.yml build
-	docker-compose -f docker-compose.world.yml build
+build:
+	docker-compose -f docker-compose.build.yml build --no-cache
+
+global-up:
+	docker-compose -f docker-compose.global.yml up
+global-down:
+	docker-compose -f docker-compose.global.yml down
+
+world-up:
+	docker-compose -f docker-compose.world.yml up
+world-down:
+	docker-compose -f docker-compose.world.yml down

@@ -38,7 +38,7 @@ export class LobbyController {
         }
     }
 
-    @EventPattern(GetServers.event)
+    @EventPattern(GetServers.event + '.response')
     serverList(servers: GameWorld[]) {
         try {
             this.gateway.servers = servers

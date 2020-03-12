@@ -7,30 +7,32 @@ services:
       - 8223:8222
       - 6223:6222
   world-gateway:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: server_builder:latest
+    env_file:
+      - .env
     environment:
       - SERVER_PATH=local/world
-      - WORLD_HOST=localhost
-      - WORLD_PORT=3001
+      - NATS_PORT=4223
     ports:
       - 3001:3001
   world-map:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: server_builder:latest
+    env_file:
+      - .env
     environment:
       - SERVER_PATH=local/map
+      - NATS_PORT=4223
   world-character:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: server_builder:latest
+    env_file:
+      - .env
     environment:
       - SERVER_PATH=local/character
+      - NATS_PORT=4223
   world-party:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: server_builder:latest
+    env_file:
+      - .env
     environment:
       - SERVER_PATH=local/party
+      - NATS_PORT=4223
