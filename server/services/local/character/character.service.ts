@@ -1,13 +1,13 @@
 import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common'
 import { InjectRepository }                                            from '@nestjs/typeorm'
 import { Character }                                                   from './entities/character'
-import { Repository }                                                  from 'typeorm'
-import { RpcException }                                                from '@nestjs/microservices'
-import { AllCharactersOffline, CharacterOffline, CharacterOnline }     from './actions'
-import { CharacterEmitter }                                            from './character.emitter'
-import { CharacterStats }                                              from './entities/character-stats'
-import { CharacterEquipment }                                          from './entities/character-equipment'
-import { CharacterParameters }                                         from './entities/character-parameters'
+import { Repository }                                              from 'typeorm'
+import { RpcException }                                            from '@nestjs/microservices'
+import { AllCharactersOffline, CharacterOffline, CharacterOnline } from './actions'
+import { CharacterEmitter }                                        from './character.emitter'
+import { CharacterStats }                                          from './entities/character-stats'
+import { EquipmentSet }                                            from '../item/entities/equipment-set'
+import { CharacterParameters }                                     from './entities/character-parameters'
 
 @Injectable()
 export class CharacterService {
@@ -23,7 +23,7 @@ export class CharacterService {
     }
 
     async getCharacter(characterId: number) {
-        return (await this.repo.findOne(characterId, {relations: ['stats', 'parameters', 'equipmentSets']})).toJSON()
+        return (await this.repo.findOne(characterId, { relations: ['stats', 'parameters'] })).toJSON()
     }
 
     async getCharacterName(characterId: number) {
@@ -43,7 +43,6 @@ export class CharacterService {
             character.gender    = gender
             this.newCharacterStats(character)
             this.newCharacterParameters(character)
-            this.newEquipmentSet(character)
             await this.repo.save(character)
             return character.toJSON()
         } catch (e) {
@@ -57,7 +56,7 @@ export class CharacterService {
 
 
     async characterOnline(data: CharacterOnline) {
-        let character = await this.repo.findOne({ id: data.characterId }, {relations: ['stats', 'parameters', 'equipmentSets']})
+        let character = await this.repo.findOne({ id: data.characterId }, { relations: ['stats', 'parameters'] })
         if (character) {
             character.status   = 'online'
             character.socketId = data.socketId
@@ -66,9 +65,6 @@ export class CharacterService {
             }
             if (!character.parameters) {
                 this.newCharacterParameters(character)
-            }
-            if (!character.equipmentSets || !character.equipmentSets.length) {
-                this.newEquipmentSet(character)
             }
             await this.repo.save(character)
             this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name)
@@ -107,13 +103,5 @@ export class CharacterService {
     private newCharacterParameters(character) {
         character.parameters           = new CharacterParameters()
         character.parameters.character = character
-    }
-
-    private newEquipmentSet(character) {
-        character.equipmentSets = character.equipmentSets || []
-        let equipment           = new CharacterEquipment()
-        character.equipmentSets.push(equipment)
-        equipment.character = character
-        return equipment
     }
 }

@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
-export class CharacterEquipment {
+@Index(['characterId'])
+export class EquipmentSet {
 
     @PrimaryGeneratedColumn()
     id: number
@@ -9,9 +10,8 @@ export class CharacterEquipment {
     @Column()
     active: boolean = false
 
-    @ManyToOne('Character', 'equipmentSets')
-    @JoinColumn({ name: 'characterId' })
-    character: any
+    @Column()
+    characterId: number
 
     @Column({ nullable: true })
     mainHand: number = null
@@ -39,12 +39,4 @@ export class CharacterEquipment {
     waist: number     = null
     @Column({ nullable: true })
     back: number      = null
-
-    toJSON() {
-        let obj = {
-            ...this
-        }
-        delete obj.character
-        return obj
-    }
 }

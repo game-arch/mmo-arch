@@ -1,7 +1,6 @@
-import { Column, Entity, Index, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
+import { Column, Entity, Index, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 import { GameCharacter }                                                                          from '../../../../lib/interfaces/game-character'
 import { CharacterStats }                                                                         from './character-stats'
-import { CharacterEquipment }                                                                     from './character-equipment'
 import { CharacterParameters }                                                                    from './character-parameters'
 
 @Entity()
@@ -40,13 +39,9 @@ export class Character implements GameCharacter {
     @OneToOne('CharacterParameters', 'character', {cascade: true})
     parameters: any
 
-    @OneToMany('CharacterEquipment', 'character', {cascade: true})
-    equipmentSets: any[]
-
     toJSON() {
         return {
             ...this,
-            equipmentSets     : (this.equipmentSets || []).map(set => set.toJSON()),
             stats             : this.stats ? this.stats.toJSON() : null,
             parameters        : this.parameters ? this.parameters.toJSON() : null
         }
