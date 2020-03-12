@@ -1,0 +1,38 @@
+version: '3'
+services:
+  world-nats:
+    image: nats:alpine
+    ports:
+      - 4223:4222
+      - 8223:8222
+      - 6223:6222
+  world-gateway:
+    image: server_builder:latest
+    env_file:
+      - .env
+    environment:
+      - SERVER_PATH=local/world
+      - NATS_PORT=4223
+    ports:
+      - 3001:3001
+  world-map:
+    image: server_builder:latest
+    env_file:
+      - .env
+    environment:
+      - SERVER_PATH=local/map
+      - NATS_PORT=4223
+  world-character:
+    image: server_builder:latest
+    env_file:
+      - .env
+    environment:
+      - SERVER_PATH=local/character
+      - NATS_PORT=4223
+  world-party:
+    image: server_builder:latest
+    env_file:
+      - .env
+    environment:
+      - SERVER_PATH=local/party
+      - NATS_PORT=4223

@@ -20,4 +20,4 @@ async function bootstrap() {
     await app.listen(PORTS.LOBBY)
 }
 
-bootstrap()
+bootstrap().catch(e => console.error(e))

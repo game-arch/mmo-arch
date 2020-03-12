@@ -10,3 +10,7 @@ restart:
 
 delete:
 	pm2 delete ecosystem.config.js
+
+build:
+	npm run build
+	docker-compose build

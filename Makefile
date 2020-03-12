@@ -29,3 +29,14 @@ offline:
 nats:
 	nats-server -p 4222 &
 	nats-server -p 4223 &
+
+build:
+	cd client && make build
+	cd server && make build
+
+docker-client:
+	cd client && docker-compose up
+docker-global:
+	cd server && make global-up
+docker-world:
+	cd server && make world-up

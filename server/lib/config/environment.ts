@@ -14,7 +14,7 @@ export const environment = {
             queue: 'global',
         },
         local    : {
-            url : 'nats://localhost:4223',
+            url  : 'nats://' + (process.env.NATS_HOST || 'localhost') + ':' + (process.env.NATS_PORT || '4223'),
             user: '',
             pass: '',
         },
