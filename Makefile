@@ -29,3 +29,7 @@ offline:
 nats:
 	nats-server -p 4222 &
 	nats-server -p 4223 &
+
+docker-build-client:
+	cd client && npm run build
+	cd client && docker-compose build
