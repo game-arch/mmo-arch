@@ -33,17 +33,11 @@ export class Character implements GameCharacter {
     @Column({ nullable: true })
     socketId: string
 
-    @OneToOne('CharacterStats', 'character', {cascade: true})
-    stats: any
+    @OneToOne('CharacterStats', 'character', { cascade: true })
+    @JoinColumn()
+    stats: CharacterStats
 
-    @OneToOne('CharacterParameters', 'character', {cascade: true})
-    parameters: any
-
-    toJSON() {
-        return {
-            ...this,
-            stats             : this.stats ? this.stats.toJSON() : null,
-            parameters        : this.parameters ? this.parameters.toJSON() : null
-        }
-    }
+    @OneToOne('CharacterParameters', 'character', { cascade: true })
+    @JoinColumn()
+    parameters: CharacterParameters
 }

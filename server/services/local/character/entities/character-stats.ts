@@ -8,10 +8,6 @@ export class CharacterStats {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne('Character')
-    @JoinColumn()
-    character: any
-
     @Column()
     level: number        = 1
     @Column()
@@ -31,11 +27,4 @@ export class CharacterStats {
     @Column()
     available: number    = CharacterStats.DEFAULT_AVAILABLE
 
-    toJSON() {
-        let obj = {
-            ...this
-        }
-        delete obj.character
-        return obj
-    }
 }

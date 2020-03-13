@@ -19,11 +19,11 @@ export class CharacterService {
     }
 
     async getCharactersFor(accountId: number, world: string) {
-        return (await this.repo.find({ accountId, world })).map(character => character.toJSON())
+        return (await this.repo.find({ accountId, world })).map(character => character)
     }
 
     async getCharacter(characterId: number) {
-        return (await this.repo.findOne(characterId, { relations: ['stats', 'parameters'] })).toJSON()
+        return (await this.repo.findOne(characterId, { relations: ['stats', 'parameters'] }))
     }
 
     async getCharacterName(characterId: number) {
@@ -44,7 +44,7 @@ export class CharacterService {
             this.newCharacterStats(character)
             this.newCharacterParameters(character)
             await this.repo.save(character)
-            return character.toJSON()
+            return character
         } catch (e) {
             console.log(e)
             if (e.message.indexOf('UNIQUE') !== -1) {
@@ -60,12 +60,12 @@ export class CharacterService {
         if (character) {
             character.status   = 'online'
             character.socketId = data.socketId
-            if (!character.stats) {
-                this.newCharacterStats(character)
-            }
-            if (!character.parameters) {
-                this.newCharacterParameters(character)
-            }
+            // if (!character.stats) {
+            //     this.newCharacterStats(character)
+            // }
+            // if (!character.parameters) {
+            //     this.newCharacterParameters(character)
+            // }
             await this.repo.save(character)
             this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name)
             this.emitter.characterDetails(character)
@@ -73,11 +73,7 @@ export class CharacterService {
     }
 
     async characterDetails(characterId: number) {
-        let character = await this.repo.findOne({ id: characterId })
-        if (character) {
-            return character.toJSON()
-        }
-        return null
+        return await this.repo.findOne({ id: characterId })
     }
 
     async characterOffline(data: CharacterOffline) {
@@ -97,11 +93,9 @@ export class CharacterService {
 
     private newCharacterStats(character) {
         character.stats           = new CharacterStats()
-        character.stats.character = character
     }
 
     private newCharacterParameters(character) {
         character.parameters           = new CharacterParameters()
-        character.parameters.character = character
     }
 }

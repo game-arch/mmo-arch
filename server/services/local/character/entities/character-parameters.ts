@@ -7,10 +7,6 @@ export class CharacterParameters {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne('Character')
-    @JoinColumn()
-    character: any
-
 
     @Column()
     health: number = 100
@@ -35,11 +31,4 @@ export class CharacterParameters {
     @Column()
     magicEvasion: number  = 1
 
-    toJSON() {
-        let obj = {
-            ...this
-        }
-        delete obj.character
-        return obj
-    }
 }
