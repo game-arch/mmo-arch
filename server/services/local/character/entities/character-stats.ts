@@ -8,8 +8,8 @@ export class CharacterStats {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne('Character', 'stats')
-    @JoinColumn({ name: 'characterId', referencedColumnName: 'id' })
+    @OneToOne('Character')
+    @JoinColumn()
     character: any
 
     @Column()

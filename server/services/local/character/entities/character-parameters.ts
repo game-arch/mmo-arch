@@ -7,8 +7,8 @@ export class CharacterParameters {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne('Character', 'parameters')
-    @JoinColumn({ name: 'characterId' })
+    @OneToOne('Character')
+    @JoinColumn()
     character: any
 
 

@@ -1,7 +1,7 @@
-import { Column, Entity, Index, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { GameCharacter }                                                                          from '../../../../lib/interfaces/game-character'
-import { CharacterStats }                                                                         from './character-stats'
-import { CharacterParameters }                                                                    from './character-parameters'
+import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
+import { GameCharacter }                                                               from '../../../../lib/interfaces/game-character'
+import { CharacterStats }                                                              from './character-stats'
+import { CharacterParameters }                                                         from './character-parameters'
 
 @Entity()
 @Index('user', ['accountId', 'name'])

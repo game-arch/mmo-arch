@@ -5,12 +5,13 @@ import { WorldClientModule }     from '../../../lib/world-client/world-client.mo
 import { CharacterClientModule } from '../character/client/character-client.module'
 import * as path                 from 'path'
 import { environment }           from '../../../lib/config/environment'
+import { EquipmentSet }          from './entities/equipment-set'
 
 @Module({
     imports    : [
         WorldClientModule,
         CharacterClientModule,
-        TypeOrmModule.forFeature([]),
+        TypeOrmModule.forFeature([EquipmentSet]),
         TypeOrmModule.forRoot({
             type       : 'sqlite',
             database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_item.db'),
