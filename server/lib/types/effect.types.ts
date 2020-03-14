@@ -42,7 +42,7 @@ export enum EffectTypes {
     CLOTH                = 'cloth',
     HEAVY                = 'heavy',
 
-    // Elemental property
+    // Elemental property (when adding damage to a weapon, it changes the attributes of the attack)
     FIRE_DAMAGE          = 'fire-damage',
     EARTH_DAMAGE         = 'earth-damage',
     WATER_DAMAGE         = 'water-damage',
@@ -60,5 +60,13 @@ export enum EffectTypes {
     DARKNESS_RESISTANCE  = 'darkness-resistance',
     LIGHT_RESISTANCE     = 'light-resistance',
 
+    // BUFFS and AILMENTS
+    ATTACK_SPEED         = 'attack-speed',
+    CAST_SPEED           = 'cast-speed',
+    SKILL_COOL_DOWN      = 'skill-cool-down',
+    // When a skill or weapon is used with this, it will heal the user of it
+    HEALTH_RECOVERED     = 'health-recovered',
+    MANA_RECOVERED       = 'mana-recovered',
+    
 
 }
