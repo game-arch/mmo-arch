@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { ItemTypes }                              from '../../../../lib/types/item.types'
-import { EquipmentTypes }                         from '../../../../lib/types/equipment.types'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { ItemTypes }                                         from '../../../../lib/types/item.types'
+import { EquipmentTypes }                                    from '../../../../lib/types/equipment.types'
+import { ItemEffect }                                        from './item-effect'
 
 @Entity()
 export class Item {
@@ -17,5 +18,7 @@ export class Item {
     @Column()
     name: string
 
+    @OneToMany('ItemEffect', 'item')
+    effects: ItemEffect[]
 
 }
