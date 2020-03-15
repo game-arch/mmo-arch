@@ -1,0 +1,40 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "es2017",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "incremental": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "lib": [
+            "es2015",
+            "es2018",
+            "dom",
+            "scripthost"
+        ],
+        "types": [
+            "node",
+            "phaser"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "test",
+        "dist",
+        "**/*spec.ts"
+    ],
+    "include": [
+        "./shared/**/*.ts",
+        "./nest/**/*.ts",
+        "./node_modules/phaser/types/*.d.ts"
+    ]
+}
