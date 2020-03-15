@@ -7,8 +7,8 @@ import Scene = Phaser.Scene
 @Injectable()
 export class TutorialMap extends BackendScene implements Scene {
 
-    constant: string = 'tutorial'
-    name: string     = 'Tutorial Island'
+    constant = 'tutorial'
+    name     = 'Tutorial Island'
 
     stop$ = new Subject()
 

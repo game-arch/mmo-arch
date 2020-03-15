@@ -30,7 +30,7 @@ export class PartyGateway {
     @SubscribeMessage(CreateParty.event)
     async createParty(client: Socket, data: CreateParty) {
         try {
-            let party = await this.client.createParty(data.partyName, data.characterId)
+            const party = await this.client.createParty(data.partyName, data.characterId)
             if (party) {
                 client.emit(PartyCreated.event, new PartyCreated(party.id, data.characterId))
                 client.join('party.' + data.partyName)
@@ -43,7 +43,7 @@ export class PartyGateway {
     @SubscribeMessage(MakePartyLeader.event)
     async makeLeader(client: Socket, data: MakePartyLeader) {
         try {
-            let party = await this.client.getPartyByLeader(data.leaderId)
+            const party = await this.client.getPartyByLeader(data.leaderId)
             if (party) {
                 await this.client.makeLeader(data.leaderId, data.characterId)
                 return

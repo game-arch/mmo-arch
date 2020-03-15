@@ -61,7 +61,7 @@ export class BackendScene extends BaseScene implements Scene {
     }
 
     movePlayer(characterId: number, directions: Directions) {
-        let player = this.entities.player[characterId]
+        const player = this.entities.player[characterId]
         if (player) {
             player.moving = {
                 up   : !!directions.up,

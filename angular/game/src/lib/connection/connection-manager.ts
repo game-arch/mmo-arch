@@ -28,7 +28,7 @@ export class ConnectionManager {
             this.disconnect(server.name)
         }
         if (server.status === 'online') {
-            let connection = this.openConnection(server.name, server, 'http://' + server.host + ':' + server.port, isWorld)
+            const connection = this.openConnection(server.name, server, 'http://' + server.host + ':' + server.port, isWorld)
             if (isWorld) {
                 this.handleConnectionTriggers()
             } else {
@@ -51,7 +51,7 @@ export class ConnectionManager {
     }
 
     disconnect(name: string) {
-        let server = this.get(name)
+        const server = this.get(name)
         if (server.socket.connected) {
             server.socket.disconnect()
             server.socket.close()
@@ -63,9 +63,9 @@ export class ConnectionManager {
     }
 
     openConnection(name: string, server: Partial<GameWorld>, location: string, isWorld: boolean = false) {
-        let token = this.store.selectSnapshot(AuthState).token
+        const token = this.store.selectSnapshot(AuthState).token
         if (isWorld) {
-            let worldConnection    = new WorldConnection(server as GameWorld, location, token)
+            const worldConnection    = new WorldConnection(server as GameWorld, location, token)
             this.connections[name] = worldConnection
             this.world             = worldConnection
             this.worldChange.next(this.world)

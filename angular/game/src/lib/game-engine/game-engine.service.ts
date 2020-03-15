@@ -89,7 +89,7 @@ export class GameEngineService {
     }
 
     convertEvents(world: WorldConnection, eventNames: string[]) {
-        for (let eventName of eventNames) {
+        for (const eventName of eventNames) {
             this.convertEvent(world, eventName)
         }
     }

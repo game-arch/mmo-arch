@@ -14,7 +14,7 @@ export class LobbyService {
     }
 
     async getAccount(client: Socket) {
-        let account = await this.account.getAccount(client.handshake.query.token, false)
+        const account = await this.account.getAccount(client.handshake.query.token, false)
         if (!account) {
             throw new UnauthorizedException()
         }

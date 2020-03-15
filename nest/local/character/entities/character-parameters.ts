@@ -9,26 +9,26 @@ export class CharacterParameters {
 
 
     @Column()
-    health: number = 100
+    health = 100
     @Column()
-    mana: number   = 100
+    mana   = 100
 
     @Column()
-    physicalDamage: number   = 1
+    physicalDamage   = 1
     @Column()
-    physicalDefense: number  = 1
+    physicalDefense  = 1
     @Column()
-    physicalAccuracy: number = 1
+    physicalAccuracy = 1
     @Column()
-    physicalEvasion: number  = 1
+    physicalEvasion  = 1
 
     @Column()
-    magicDamage: number   = 1
+    magicDamage   = 1
     @Column()
-    magicDefense: number  = 1
+    magicDefense  = 1
     @Column()
-    magicAccuracy: number = 1
+    magicAccuracy = 1
     @Column()
-    magicEvasion: number  = 1
+    magicEvasion  = 1
 
 }

@@ -2,22 +2,22 @@ import { Module }             from '@nestjs/common'
 import { ClientProxyFactory } from '@nestjs/microservices'
 import { environment }        from '../config/environment'
 
-export const localClientFactory  = () => ClientProxyFactory.create(<any>{
+export const localClientFactory  = () => ClientProxyFactory.create({
     transport: environment.microservice.transport,
     options  : {
         ...environment.microservice.local,
     },
-})
+} as any)
 export const LOCAL_PROVIDER      = {
     provide   : 'LOCAL_CLIENT',
     useFactory: localClientFactory,
 }
-export const globalClientFactory = () => ClientProxyFactory.create(<any>{
+export const globalClientFactory = () => ClientProxyFactory.create({
     transport: environment.microservice.transport,
     options  : {
         ...environment.microservice.global,
     },
-})
+} as any)
 
 export const GLOBAL_PROVIDER = {
     provide   : 'GLOBAL_CLIENT',

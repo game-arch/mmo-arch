@@ -7,7 +7,6 @@ COPY package-lock.json .
 RUN npm i
 
 COPY nest-cli.json .
-COPY tsconfig.build.json .
 COPY tsconfig.json .
 COPY tslint.json .
 COPY server/lib ./lib/

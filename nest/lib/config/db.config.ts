@@ -16,7 +16,7 @@ export const DB_CONFIG = {
 
 export async function createDatabase(name: string, close: boolean = true) {
     try {
-        let connection = await createConnection({
+        const connection = await createConnection({
             ...DB_CONFIG,
             type    : 'mysql',
             database: '',

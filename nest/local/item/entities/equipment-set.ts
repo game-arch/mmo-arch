@@ -9,7 +9,7 @@ export class EquipmentSet {
     id: number
 
     @Column()
-    active: boolean = false
+    active = false
 
     @Column()
     characterId: number

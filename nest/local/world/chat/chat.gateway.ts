@@ -47,11 +47,11 @@ export class ChatGateway {
 
     @SubscribeMessage(WORLD_PREFIX + LocalMessage.event)
     async localMessage(client: Socket, message: string) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player && player.characterId !== null) {
-            let map = this.world.getMapOf(client)
+            const map = this.world.getMapOf(client)
             if (map !== '') {
-                let position = await this.map.getPlayer(player.characterId, map)
+                const position = await this.map.getPlayer(player.characterId, map)
                 this.client.emit(WORLD_PREFIX + LocalMessage.event, new LocalMessage(player.character, map, position.x, position.y, message))
             }
         }
@@ -59,9 +59,9 @@ export class ChatGateway {
 
     @SubscribeMessage(WORLD_PREFIX + ZoneMessage.event)
     async zoneMessage(client: Socket, message: string) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player && player.characterId !== null) {
-            let map = this.world.getMapOf(client)
+            const map = this.world.getMapOf(client)
             if (map !== '') {
                 this.client.emit(WORLD_PREFIX + ZoneMessage.event, new ZoneMessage(player.character, map, message))
             }
@@ -70,9 +70,9 @@ export class ChatGateway {
 
     @SubscribeMessage(WORLD_PREFIX + RegionMessage.event)
     async regionMessage(client: Socket, message: string) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player && player.characterId !== null) {
-            let map = this.world.getMapOf(client)
+            const map = this.world.getMapOf(client)
             if (map !== '') {
                 this.client.emit(WORLD_PREFIX + RegionMessage.event, new ZoneMessage(player.character, map, message))
             }
@@ -81,9 +81,9 @@ export class ChatGateway {
 
     @SubscribeMessage(WORLD_PREFIX + TradeMessage.event)
     async tradeMessage(client: Socket, message: string) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player && player.characterId !== null) {
-            let map = this.world.getMapOf(client)
+            const map = this.world.getMapOf(client)
             if (map !== '') {
                 this.client.emit(WORLD_PREFIX + TradeMessage.event, new TradeMessage(player.character, message))
             }
@@ -92,9 +92,9 @@ export class ChatGateway {
 
     @SubscribeMessage(WORLD_PREFIX + GlobalMessage.event)
     async globalMessage(client: Socket, message: string) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player && player.characterId !== null) {
-            let map = this.world.getMapOf(client)
+            const map = this.world.getMapOf(client)
             if (map !== '') {
                 this.client.emit(WORLD_PREFIX + GlobalMessage.event, new GlobalMessage(player.character, message))
             }
@@ -103,9 +103,9 @@ export class ChatGateway {
 
     @SubscribeMessage(WORLD_PREFIX + PrivateMessage.event)
     async privateMessage(client: Socket, data: { to: GameCharacter, message: string }) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player && player.characterId !== null) {
-            let map = this.world.getMapOf(client)
+            const map = this.world.getMapOf(client)
             if (map !== '') {
                 let sent = false
                 this.client.emit(WORLD_PREFIX + PrivateMessage.event, new PrivateMessage(player.character, data.to, data.message))

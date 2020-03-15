@@ -61,7 +61,7 @@ export class PartyService {
 
     async pickLeader(party: Party): Promise<number> {
         // get the first member in party that is online
-        for (let member of party.members) {
+        for (const member of party.members) {
             const character = await this.character.getCharacter(member)
             if (character.status === 'online') {
                 return member

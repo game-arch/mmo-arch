@@ -56,7 +56,7 @@ export class CharacterService {
 
 
     async characterOnline(data: CharacterOnline) {
-        let character = await this.repo.findOne({ id: data.characterId }, { relations: ['stats', 'parameters'] })
+        const character = await this.repo.findOne({ id: data.characterId }, { relations: ['stats', 'parameters'] })
         if (character) {
             character.status   = 'online'
             character.socketId = data.socketId
@@ -77,7 +77,7 @@ export class CharacterService {
     }
 
     async characterOffline(data: CharacterOffline) {
-        let character = await this.repo.findOne({ id: data.characterId })
+        const character = await this.repo.findOne({ id: data.characterId })
         if (character) {
             character.status = 'offline'
             await this.repo.save(character)
@@ -86,7 +86,7 @@ export class CharacterService {
     }
 
     async allCharactersOffline(data: AllCharactersOffline) {
-        for (let character of data.characters) {
+        for (const character of data.characters) {
             await this.characterOffline(character)
         }
     }

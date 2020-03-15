@@ -12,7 +12,7 @@ import { Hosts }                           from '../hosts'
     selector   : 'server-list',
     templateUrl: 'server-list.component.html',
     styles     : [],
-    outputs    : ['connected'],
+    outputs    : ['connected']
 })
 export class ServerListComponent implements OnInit {
 
@@ -26,14 +26,14 @@ export class ServerListComponent implements OnInit {
     }
 
     ngOnInit() {
-        let connection = this.manager.connectTo(Hosts.LOBBY, false)
-        this.servers$  = fromEvent<GameWorld[]>(connection.socket, GetServers.event).pipe(tap(list => {
+        const connection = this.manager.connectTo(Hosts.LOBBY, false)
+        this.servers$    = fromEvent<GameWorld[]>(connection.socket, GetServers.event).pipe(tap(list => {
             console.log('got server list', list)
         }))
     }
 
     onConnect(world: GameWorld) {
-        let connection = this.manager.connectTo(world, true)
+        const connection = this.manager.connectTo(world, true)
         fromEvent(connection.socket, 'connect-error', { once: true })
             .subscribe((err) => {
                 console.error(err)

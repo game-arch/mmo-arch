@@ -67,7 +67,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     async onApplicationShutdown(signal?: string) {
         this.service.stop()
         await getConnection().connect()
-        let players = await from(Object.keys(this.service.map.entities.player))
+        const players = await from(Object.keys(this.service.map.entities.player))
             .pipe(map(key => this.service.map.entities.player[key]), toArray())
             .toPromise()
         await this.playerRepo.save(players)

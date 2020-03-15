@@ -17,7 +17,7 @@ export class PartyController {
 
     @EventPattern(WORLD_PREFIX + MadePartyLeader.event)
     async onMadePartyLeader(data: MadePartyLeader) {
-        let party = await this.client.getPartyByLeader(data.characterId)
+        const party = await this.client.getPartyByLeader(data.characterId)
         if (party) {
             this.gateway.server.to('party.' + party.name).emit(MadePartyLeader.event, data)
         }

@@ -33,7 +33,7 @@ export class ServerPresence implements OnApplicationBootstrap, OnApplicationShut
                     server        = await this.repo.findOne({ host, constant, port, instanceId: instanceId + 1 })
                     server.status = 'online'
                 } catch (e) {
-                    let count    = await this.repo.query('select distinct host, port, name from world where name = ? and NOT (host = ? AND port = ?)', [name, host, port])
+                    const count    = await this.repo.query('select distinct host, port, name from world where name = ? and NOT (host = ? AND port = ?)', [name, host, port])
                     server       = this.repo.create(new World(host, port, instanceId + 1, constant, name))
                     server.index = count.length + 1
                 }
@@ -62,7 +62,7 @@ export class ServerPresence implements OnApplicationBootstrap, OnApplicationShut
     }
 
     async getServers() {
-        let builder = this.repo.createQueryBuilder('world')
+        const builder = this.repo.createQueryBuilder('world')
                           .select('world.name, world.index, MAX(world.host) host, MAX(world.port) port, MAX(world.status) status')
                           .groupBy('world.name, world.index')
                           .orderBy('5', 'DESC')

@@ -11,7 +11,7 @@ export class ActionButtonComponent {
     @Input() type  = ''
     size           = 55
     sizes          = {
-        'default': 55,
+        default: 55,
         small    : 32,
         medium   : 55,
         large    : 120

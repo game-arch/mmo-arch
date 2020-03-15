@@ -54,7 +54,7 @@ export class JoystickComponent {
     }
 
     onMove(event: JoystickEvent) {
-        let lastDirection = this.directions
+        const lastDirection = this.directions
         this.directions   = {
             left : event.data.vector.x < -this.joystickThreshould,
             right: event.data.vector.x > this.joystickThreshould,

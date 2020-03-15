@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { MapConstants }       from './constants'
-import { Repository }        from 'typeorm'
-import { Player }            from './entities/player'
-import { InjectRepository }  from '@nestjs/typeorm'
-import { MapEmitter }        from './map.emitter'
-import { CharacterClient }   from '../character/client/character.client'
-import { filter, takeUntil } from 'rxjs/operators'
-import { Game }              from 'phaser'
-import { BackendScene }      from './maps/backend.scene'
-import { MapTransition }     from './entities/map-transition'
-import { Directions }        from '../../../shared/phaser/directions'
+import { Repository }         from 'typeorm'
+import { Player }             from './entities/player'
+import { InjectRepository }   from '@nestjs/typeorm'
+import { MapEmitter }         from './map.emitter'
+import { CharacterClient }    from '../character/client/character.client'
+import { filter, takeUntil }  from 'rxjs/operators'
+import { Game }               from 'phaser'
+import { BackendScene }       from './maps/backend.scene'
+import { MapTransition }      from './entities/map-transition'
+import { Directions }         from '../../../shared/phaser/directions'
 
 @Injectable()
 export class MapService {
@@ -66,14 +66,14 @@ export class MapService {
     }
 
     async changedMaps(characterId: number, map: string, newX: number, newY: number) {
-        let player = await this.playerRepo.findOne({ characterId })
+        const player = await this.playerRepo.findOne({ characterId })
         if (player) {
-            let lastMap = player.map + ''
+            const lastMap = player.map + ''
             if (map === this.map.constant) {
-                player.map     = map
-                player.x       = newX
-                player.y       = newY
-                let transition = await this.transitionRepo.findOne({ map: lastMap, destinationMap: map })
+                player.map       = map
+                player.x         = newX
+                player.y         = newY
+                const transition = await this.transitionRepo.findOne({ map: lastMap, destinationMap: map })
                 if (transition) {
                     player.x = transition.destinationX
                     player.y = transition.destinationY
@@ -100,7 +100,7 @@ export class MapService {
     }
 
     async loggedOut(characterId: number) {
-        let player = await this.playerRepo.findOne({ characterId })
+        const player = await this.playerRepo.findOne({ characterId })
         if (player && player.map === this.map.constant) {
             if (this.map.entities.player[player.id]) {
                 await this.playerRepo.save(this.map.entities.player[player.id])
@@ -117,7 +117,7 @@ export class MapService {
     }
 
     getPlayerPosition(characterId: number) {
-        let player = this.map.entities.player[characterId]
+        const player = this.map.entities.player[characterId]
         if (player) {
             return {
                 x: player.x,

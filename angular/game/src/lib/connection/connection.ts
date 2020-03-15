@@ -9,14 +9,14 @@ export class Connection<T = Partial<GameWorld>> {
 
     constructor(public world?: T, public location?: string, public token ?: string) {
         if (location) {
-            this.socket = io.connect(location + '?token=' + token, <any>{
+            this.socket = io.connect(location + '?token=' + token, {
                 transports  : ['websocket'],
                 reconnection: true,
-                parser      : parser
-            })
+                parser
+            } as any)
             if (this.socket) {
                 this.socket.on('reconnect_attempt', () => {
-                    this.socket['io'].opts.transports = ['websocket']
+                    this.socket.io.opts.transports = ['websocket']
                 })
             }
         }

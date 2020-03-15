@@ -23,7 +23,7 @@ export class WorldService {
 
 
     async storeUser(client: Socket, accountId: number) {
-        let player       = this.players.create()
+        const player       = this.players.create()
         player.accountId = accountId
         player.socketId  = client.id
         await this.players.save(player)
@@ -35,7 +35,7 @@ export class WorldService {
     }
 
     async storeCharacter(client: Socket, character: { id: number, name: string }) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player) {
             await this.validateCharacterLogin(player, character.id)
             await this.character.characterOnline(character.id, client.id)
@@ -48,7 +48,7 @@ export class WorldService {
     }
 
     async validateCharacterLogin(player: Player, characterId: number) {
-        let verified = await this.character.getCharacter(characterId)
+        const verified = await this.character.getCharacter(characterId)
         if (verified.accountId !== player.accountId) {
             throw new Error('Character\'s Account ID does not match')
         }
@@ -61,7 +61,7 @@ export class WorldService {
     }
 
     async removeCharacter(client: Socket) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player) {
             await this.character.characterOffline(player.characterId)
             client.adapter.del(client.id, 'character-id.' + player.characterId)
@@ -74,7 +74,7 @@ export class WorldService {
 
     async authenticate(socket: Socket) {
         try {
-            let account: { id: number, email: string } = await this.account.getAccount(socket.handshake.query.token, true)
+            const account: { id: number, email: string } = await this.account.getAccount(socket.handshake.query.token, true)
             return account
         } catch (e) {
             throw new Error('Session Expired')
@@ -90,15 +90,15 @@ export class WorldService {
     }
 
     async playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
-        let player = await this.players.findOne({ socketId: client.id })
+        const player = await this.players.findOne({ socketId: client.id })
         if (player && player.characterId !== null) {
-            let map = this.getMapOf(client)
+            const map = this.getMapOf(client)
             this.map.playerDirectionalInput(player.characterId, WorldConstants.CONSTANT, map, data.directions)
         }
     }
 
     getMapOf(client: Socket) {
-        let mapRoom = Object.keys(client.rooms).filter(name => name.indexOf('map.') === 0)[0] || ''
+        const mapRoom = Object.keys(client.rooms).filter(name => name.indexOf('map.') === 0)[0] || ''
         return mapRoom.substr(4, mapRoom.length)
     }
 }

@@ -20,8 +20,8 @@ export class AccountController {
 
     @MessagePattern(AccountEvents.LOGIN)
     async login(data: { email: string, password: string }) {
-        let response = await this.service.login(data.email, data.password)
-        let user     = await this.service.getAccountByToken(response)
+        const response = await this.service.login(data.email, data.password)
+        const user     = await this.service.getAccountByToken(response)
         this.client.updated(user.id, data.email)
         return response
     }

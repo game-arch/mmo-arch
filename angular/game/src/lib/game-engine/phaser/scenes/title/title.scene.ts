@@ -10,8 +10,8 @@ export class TitleScene extends BaseScene {
 
     create() {
         this.background = this.add.image(0, 0, 'background')
-        let width       = this.game.scale.width
-        let height      = this.game.scale.height
+        const width       = this.game.scale.width
+        const height      = this.game.scale.height
         this.background.setDisplaySize(width, height)
         this.background.setPosition(width / 2, height / 2)
         this.game.events.on('resize', (width, height) =>

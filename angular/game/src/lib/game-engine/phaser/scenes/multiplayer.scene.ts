@@ -31,7 +31,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
     toggleDirection(event: KeyboardEvent, status: boolean) {
         if (this.directionMap.hasOwnProperty(event.key)) {
             event.stopImmediatePropagation()
-            let direction = this.directionMap[event.key]
+            const direction = this.directionMap[event.key]
             if (this.directions[direction] !== status) {
                 this.directions[direction] = status
                 // this.self.moving = this.directions;
@@ -74,7 +74,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         y: number
         moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
     }) {
-        let player = new Mob(data.name)
+        const player = new Mob(data.name)
         this.addEntity('player', player, data.id)
         if (this.connection.selectedCharacter.id === data.id) {
             this.setSelf(player)

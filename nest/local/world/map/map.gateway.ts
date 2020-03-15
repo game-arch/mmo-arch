@@ -29,7 +29,7 @@ export class MapGateway {
     }
 
     async playerJoin(data: PlayerEnteredMap) {
-        let player = await this.players.findOne({ characterId: data.characterId })
+        const player = await this.players.findOne({ characterId: data.characterId })
         if (player && this.server.sockets[player.socketId]) {
             this.server.sockets[player.socketId].join('map.' + data.map)
             this.server.sockets[player.socketId].emit(AllPlayers.event, await this.map.getAllPlayers(data.map))
@@ -39,7 +39,7 @@ export class MapGateway {
 
     async playerLeave(data: PlayerLeftMap) {
         this.server.to('map.' + data.map).emit(PlayerLeftMap.event, data)
-        let player = await this.players.findOne({ characterId: data.characterId })
+        const player = await this.players.findOne({ characterId: data.characterId })
         if (player && this.server.sockets[player.socketId]) {
             this.server.sockets[player.socketId].leave('map.' + data.map)
         }

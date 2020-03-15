@@ -57,8 +57,8 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
             if ((await this.players.count()) >= 100) {
                 throw new Error('Server Limit Reached')
             }
-            let user   = await this.service.authenticate(client)
-            let player = await this.players.findOne({ accountId: user.id })
+            const user   = await this.service.authenticate(client)
+            const player = await this.players.findOne({ accountId: user.id })
             if (player) {
                 throw new ConflictException('User already logged in!')
             }
@@ -80,12 +80,12 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async onApplicationShutdown(signal?: string) {
-        let connection = await createConnection({
+        const connection = await createConnection({
             type    : 'sqlite',
             database: path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'),
             logging : false
         })
-        let sockets    = await connection.query('select socketId from player')
+        const sockets    = await connection.query('select socketId from player')
         fs.unlinkSync(path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'))
         await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))))
         this.presence.serverOffline(this.serverId)

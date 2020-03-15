@@ -16,7 +16,7 @@ export class Player extends Mob {
     @Column()
     name: string
 
-    _x: number = 0
+    _x = 0
 
     @Column('int', { nullable: true })
     get x(): number {
@@ -30,7 +30,7 @@ export class Player extends Mob {
         }
     }
 
-    _y: number = 0
+    _y = 0
 
     @Column('int', { nullable: true })
     get y(): number {

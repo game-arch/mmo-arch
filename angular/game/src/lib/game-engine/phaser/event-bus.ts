@@ -104,7 +104,7 @@ export class EventBus {
     private joystickEvents() {
         this.engine.game.events.on('input.joystick', directions => {
             if (this.engine.currentScene instanceof MultiplayerScene) {
-                for (let dir of Object.keys(
+                for (const dir of Object.keys(
                     this.engine.currentScene.directions,
                 )) {
                     this.engine.currentScene.directions[dir] = directions[dir]

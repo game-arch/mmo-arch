@@ -28,8 +28,8 @@ export class RegisterComponent implements OnInit {
 
     async register() {
         try {
-            let data   = this.form.getRawValue()
-            let result = await this.http.post(Hosts.LOBBY.url + '/register', data).pipe(first()).toPromise()
+            const data   = this.form.getRawValue()
+            const result = await this.http.post(Hosts.LOBBY.url + '/register', data).pipe(first()).toPromise()
             this.registered.emit(result)
         } catch (e) {
             if (e.status === 409) {

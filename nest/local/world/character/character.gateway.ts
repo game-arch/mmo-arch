@@ -41,8 +41,8 @@ export class CharacterGateway {
 
 
     async sendCharacters() {
-        let players = await this.players.find()
-        for (let player of players) {
+        const players = await this.players.find()
+        for (const player of players) {
             await this.character.characterOnline(player.accountId, player.socketId)
         }
     }
@@ -50,9 +50,9 @@ export class CharacterGateway {
     @SubscribeMessage(CreateCharacter.event)
     async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
         try {
-            let player = await this.players.findOne({ socketId: client.id })
+            const player = await this.players.findOne({ socketId: client.id })
             if (player) {
-                let character: Character = await this.service.createCharacter(player.accountId, data.name, data.gender)
+                const character: Character = await this.service.createCharacter(player.accountId, data.name, data.gender)
                 if (character) {
                     client.emit(GetCharacters.event, await this.service.getCharacters(player.accountId))
                     client.emit(CharacterCreated.event, new CharacterCreated(character.world, character.id))
