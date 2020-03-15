@@ -36,7 +36,6 @@ export class CharacterController {
 
     @MessagePattern(WORLD_PREFIX + CharacterOnline.event)
     characterOnline(data: CharacterOnline) {
-        console.log('character online')
         return this.service.characterOnline(data)
     }
 

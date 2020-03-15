@@ -11,6 +11,14 @@ async function bootstrap() {
     app.connectMicroservice({
         transport: environment.microservice.transport,
         options  : {
+            ...environment.microservice.global,
+            name : WorldConstants.NAME + ' Server',
+            queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
+        }
+    })
+    app.connectMicroservice({
+        transport: environment.microservice.transport,
+        options  : {
             ...environment.microservice.local,
             name : WorldConstants.NAME + ' Server',
             queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
