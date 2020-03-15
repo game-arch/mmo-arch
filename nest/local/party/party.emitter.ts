@@ -5,7 +5,7 @@ import { WORLD_PREFIX }       from '../world/world.prefix'
 
 @Injectable()
 export class PartyEmitter {
-    constructor(@Inject('WORLD_CLIENT') protected client: ClientProxy) {
+    constructor(@Inject('LOCAL_CLIENT') protected client: ClientProxy) {
     }
 
     madePartyLeader(partyId: number, characterId: number) {

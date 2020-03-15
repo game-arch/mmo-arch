@@ -128,8 +128,11 @@ export class MapService {
     }
 
     private playerJoinedMap(player: Player) {
+        console.log('player joined')
         this.map.addPlayer(player)
+        console.log('send player joined')
         this.emitter.playerJoinedMap(this.map.constant, player.characterId, player.name, player.x, player.y)
+        console.log('sent player join')
     }
 
     private playerLeftMap(player: Player) {

@@ -20,9 +20,4 @@ export class WorldController {
     health() {
         return 'OK'
     }
-
-    @EventPattern(PresenceOnline.event)
-    async onPresenceOnline() {
-        await this.gateway.afterInit(this.gateway.server)
-    }
 }

@@ -5,7 +5,6 @@ import { CharacterLoggedIn, CharacterLoggedOut }                                
 import { GetAllPlayers, GetPlayerPosition, PlayerChangedMap, PlayerDirectionalInput } from './actions'
 import { Request, Response }                                                          from 'express'
 import { MapEmitter }                                                                 from './map.emitter'
-import { WorldConstants }                                                             from '../../lib/constants/world.constants'
 import { MapConstants }                                                               from './constants'
 import { WORLD_PREFIX }                                                               from '../world/world.prefix'
 import { InjectRepository }                                                           from '@nestjs/typeorm'
@@ -40,16 +39,12 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
     async characterLoggedIn(data: CharacterLoggedIn) {
-        if (data.world === WorldConstants.CONSTANT) {
-            await this.service.loggedIn(data.characterId, data.name)
-        }
+        await this.service.loggedIn(data.characterId, data.name)
     }
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedOut.event)
     async characterLoggedOut(data: CharacterLoggedOut) {
-        if (data.world === WorldConstants.CONSTANT) {
-            await this.service.loggedOut(data.characterId)
-        }
+        await this.service.loggedOut(data.characterId)
     }
 
     @EventPattern(WORLD_PREFIX + PlayerDirectionalInput.event)

@@ -9,17 +9,17 @@ import { NpcLocation }           from './entities/npc-location'
 import { ResourceLocation }      from './entities/resource-location'
 import { WorldConstants }        from '../../lib/constants/world.constants'
 import { TutorialMap }           from './maps/tutorial.map'
-import { WorldClientModule }     from '../../lib/world-client/world-client.module'
 import { MapEmitter }            from './map.emitter'
 import { CharacterClientModule } from '../character/client/character-client.module'
 import { MapTransition }         from './entities/map-transition'
 import { MapConstants }          from './constants'
 import * as path                 from 'path'
 import { environment }           from '../../lib/config/environment'
+import { ClientModule }          from '../../lib/client/client.module'
 
 @Module({
     imports    : [
-        WorldClientModule,
+        ClientModule,
         CharacterClientModule,
         TypeOrmModule.forFeature([MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
         TypeOrmModule.forRoot({

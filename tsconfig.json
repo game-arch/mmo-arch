@@ -32,7 +32,7 @@
         "**/*spec.ts"
     ],
     "include": [
-        "./nest/server.ts",
+        "./shared/**/*.ts",
         "./nest/**/*.ts",
         "./node_modules/phaser/types/*.d.ts"
     ]

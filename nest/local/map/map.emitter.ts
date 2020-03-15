@@ -6,7 +6,7 @@ import { WORLD_PREFIX }                                                         
 @Injectable()
 export class MapEmitter {
 
-    constructor(@Inject('WORLD_CLIENT') private client: ClientProxy) {
+    constructor(@Inject('LOCAL_CLIENT') private client: ClientProxy) {
 
     }
 

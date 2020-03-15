@@ -7,7 +7,7 @@ import { Character }                                               from './entit
 @Injectable()
 export class CharacterEmitter {
     constructor(
-        @Inject('WORLD_CLIENT') protected client: ClientProxy
+        @Inject('LOCAL_CLIENT') protected client: ClientProxy
     ) {
     }
 
