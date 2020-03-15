@@ -6,7 +6,6 @@ import { RpcException }                                                from '@ne
 import { AllCharactersOffline, CharacterOffline, CharacterOnline }     from './actions'
 import { CharacterEmitter }                                            from './character.emitter'
 import { CharacterStats }                                              from './entities/character-stats'
-import { EquipmentSet }                                                from '../item/entities/equipment-set'
 import { CharacterParameters }                                         from './entities/character-parameters'
 
 @Injectable()

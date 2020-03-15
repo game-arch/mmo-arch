@@ -1,8 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Item }                                                          from './item'
+import { EffectTypes }                                                   from '../../../../shared/types/effect.types'
+import { Effect }                                                        from '../../../../shared/interfaces/effect'
 
 @Entity()
-export class ItemEffect {
+export class ItemEffect implements Effect {
 
     @PrimaryGeneratedColumn()
     id: number
@@ -12,7 +14,7 @@ export class ItemEffect {
     item: Item
 
     @Column()
-    effect: string
+    type: EffectTypes
 
     @Column()
     potency: number

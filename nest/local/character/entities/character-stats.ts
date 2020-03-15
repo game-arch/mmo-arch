@@ -1,15 +1,15 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Stats }                                  from '../../../../shared/interfaces/stats'
 
 @Entity()
-export class CharacterStats {
+export class CharacterStats extends Stats {
 
-    static DEFAULT_STAT      = 5
     static DEFAULT_AVAILABLE = 10
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
-    level:number        = 1
+    level: number        = 1
     @Column()
     strength: number     = CharacterStats.DEFAULT_STAT
     @Column()
