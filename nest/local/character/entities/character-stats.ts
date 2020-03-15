@@ -9,7 +9,7 @@ export class CharacterStats {
     id: number
 
     @Column()
-    level        = 1
+    level:number        = 1
     @Column()
     strength: number     = CharacterStats.DEFAULT_STAT
     @Column()

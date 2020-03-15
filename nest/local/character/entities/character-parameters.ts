@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 
 @Entity()
@@ -9,26 +9,26 @@ export class CharacterParameters {
 
 
     @Column()
-    health = 100
+    health: number = 100
     @Column()
-    mana   = 100
+    mana: number   = 100
 
     @Column()
-    physicalDamage   = 1
+    physicalDamage: number   = 1
     @Column()
-    physicalDefense  = 1
+    physicalDefense: number  = 1
     @Column()
-    physicalAccuracy = 1
+    physicalAccuracy: number = 1
     @Column()
-    physicalEvasion  = 1
+    physicalEvasion: number  = 1
 
     @Column()
-    magicDamage   = 1
+    magicDamage: number   = 1
     @Column()
-    magicDefense  = 1
+    magicDefense: number  = 1
     @Column()
-    magicAccuracy = 1
+    magicAccuracy: number = 1
     @Column()
-    magicEvasion  = 1
+    magicEvasion: number  = 1
 
 }
