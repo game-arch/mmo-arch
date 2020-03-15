@@ -65,7 +65,7 @@ docker-global:
 	make global-up
 docker-world:
 	make world-up
-	
+
 start-talos:
 	WORLD_NAME=Talos WORLD_CONSTANT=talos make start
 stop-talos:
