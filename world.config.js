@@ -33,7 +33,8 @@ module.exports = {
             watch: ['dist/nest/local/world', 'dist/nest/lib'],
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
-                WORLD_NAME: process.env.WORLD_NAME
+                WORLD_NAME: process.env.WORLD_NAME,
+                WORLD_PORT: process.env.WORLD_PORT
             },
             watch_options: {
                 'followSymlinks': false
@@ -59,7 +60,7 @@ module.exports = {
             watch: ['dist/nest/local/item', 'dist/nest/lib'],
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
-                WORLD_NAME: process.env.WORLD_NAME
+                WORLD_NAME: process.env.WORLD_NAME,
             },
             watch_options: {
                 'followSymlinks': false

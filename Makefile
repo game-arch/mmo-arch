@@ -67,14 +67,14 @@ docker-world:
 	make world-up
 
 start-maiden:
-	pm2 start world.config.js --kill-timeout 5000
+	WORLD_PORT=3006 pm2 start world.config.js --kill-timeout 5000
 stop-maiden:
 	pm2 stop world.config.js
 delete-maiden:
 	pm2 delete world.config.js
 
 start-talos:
-	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 start world.config.js --kill-timeout 5000
+	WORLD_NAME=Talos WORLD_CONSTANT=talos WORLD_PORT=3006 pm2 start world.config.js --kill-timeout 5000
 stop-talos:
 	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 stop world.config.js
 delete-talos:

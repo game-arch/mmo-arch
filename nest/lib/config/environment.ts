@@ -35,7 +35,7 @@ export const environment = {
     servers     : {
         world   : {
             host: process.env.WORLD_HOST || 'localhost',
-            port: 3005 || (parseInt(process.env.WORLD_PORT || ('' + PORTS.WORLD))),
+            port: (parseInt(process.env.WORLD_PORT || ('' + PORTS.WORLD))) || 3005,
         },
         presence: {
             host: process.env.PRESENCE_HOST || 'localhost',
