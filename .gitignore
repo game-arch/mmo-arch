@@ -10,7 +10,7 @@ bazel-out
 chrome-profiler-events*.json
 speed-measure-plugin*.json
 
-client/projects/game/src/environments/environment.ts
+back/client/projects/game/src/environments/environment.ts
 database.*
 *.db
 .env

@@ -1,42 +1,74 @@
 install:
 	make copy-environment
-	cd client && npm i
-	cd server && npm i
-	cd server && npm run build
+	npm i --ignore-scripts
+	sudo npm i -g pm2
+	npm run build:server
 
 copy-environment:
 	cp -n ./client/projects/game/src/environments/environment.sample.ts ./client/projects/game/src/environments/environment.ts
 
 start:
-	cd client && make start
-	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make start
+	pm2 start client.config.js
+	pm2 start builders.config.js --kill-timeout 5000
+	pm2 start services.config.js --kill-timeout 5000
+
 stop:
-	cd client && make stop
-	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make stop
+	pm2 stop client.config.js
+	pm2 stop builders.config.js
+	pm2 stop services.config.js
+
+restart:
+	pm2 reload client.config.js
+	pm2 reload builders.config.js --kill-timeout 5000
+	pm2 reload services.config.js --kill-timeout 5000
+
 delete:
-	cd client && make delete
-	cd server && WORLD_NAME=Talos WORLD_CONSTANT=talos make delete
+	pm2 delete client.config.js
+	pm2 delete builders.config.js
+	pm2 delete services.config.js
+
+build:
+	npm run build:client
+	docker-compose build
+	docker-compose -f docker-compose.build.yml build --no-cache
+
+global-up:
+	docker-compose -f docker-compose.global.yml up
+global-down:
+	docker-compose -f docker-compose.global.yml down
+
+world-up:
+	docker-compose -f docker-compose.world.yml up
+world-down:
+	docker-compose -f docker-compose.world.yml down
 
 
 prune:
-	cd server && npm run prune:worlds
-	cd server && WORLD_CONSTANT=talos npm run prune:characters
+	npm run prune:worlds
+	WORLD_CONSTANT=talos npm run prune:characters
 
 offline:
-	cd server && WORLD_CONSTANT=talos npm run offline:characters
-	cd server && npm run offline:worlds
+	WORLD_CONSTANT=talos npm run offline:characters
+	npm run offline:worlds
+
+build-client:
+	npm run build
+	docker-compose build
 
 nats:
 	nats-server -p 4222 &
 	nats-server -p 4223 &
 
-build:
-	cd client && make build
-	cd server && make build
-
 docker-client:
-	cd client && docker-compose up
+	docker-compose -f docker-compose.client.yml up
 docker-global:
-	cd server && make global-up
+	make global-up
 docker-world:
-	cd server && make world-up
+	make world-up
+	
+start-talos:
+	WORLD_NAME=Talos WORLD_CONSTANT=talos make start
+stop-talos:
+	WORLD_NAME=Talos WORLD_CONSTANT=talos make stop
+delete-talos:
+	WORLD_NAME=Talos WORLD_CONSTANT=talos make delete
