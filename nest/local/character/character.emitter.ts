@@ -3,11 +3,12 @@ import { Inject, Injectable }                                      from '@nestjs
 import { CharacterDetails, CharacterLoggedIn, CharacterLoggedOut } from './actions'
 import { WORLD_PREFIX }                                            from '../world/world.prefix'
 import { Character }                                               from './entities/character'
+import { LOCAL_CLIENT }                                            from '../../client/client.module'
 
 @Injectable()
 export class CharacterEmitter {
     constructor(
-        @Inject('LOCAL_CLIENT') protected client: ClientProxy
+        @Inject(LOCAL_CLIENT) protected client: ClientProxy
     ) {
     }
 

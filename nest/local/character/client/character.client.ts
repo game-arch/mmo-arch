@@ -12,11 +12,12 @@ import {
     GetCharacters
 }                             from '../actions'
 import { WORLD_PREFIX }       from '../../world/world.prefix'
+import { LOCAL_CLIENT }       from '../../../client/client.module'
 
 @Injectable()
 export class CharacterClient {
 
-    constructor(@Inject('LOCAL_CLIENT') private client: ClientProxy) {
+    constructor(@Inject(LOCAL_CLIENT) private client: ClientProxy) {
 
     }
 

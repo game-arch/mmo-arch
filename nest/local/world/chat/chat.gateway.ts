@@ -23,6 +23,7 @@ import {
     Socket
 }                                                              from 'socket.io'
 import * as parser                                             from 'socket.io-msgpack-parser'
+import { LOCAL_CLIENT }                                        from '../../../client/client.module'
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -38,7 +39,7 @@ export class ChatGateway {
     constructor(
         @InjectRepository(Player)
         private players: Repository<Player>,
-        @Inject('LOCAL_CLIENT') private client: ClientProxy,
+        @Inject(LOCAL_CLIENT) private client: ClientProxy,
         private world: WorldService,
         private map: MapClient
     ) {

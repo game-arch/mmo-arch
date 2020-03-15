@@ -2,10 +2,11 @@ import { ClientProxy }        from '@nestjs/microservices'
 import { Inject, Injectable } from '@nestjs/common'
 import { MadePartyLeader }    from './actions'
 import { WORLD_PREFIX }       from '../world/world.prefix'
+import { LOCAL_CLIENT }       from '../../client/client.module'
 
 @Injectable()
 export class PartyEmitter {
-    constructor(@Inject('LOCAL_CLIENT') protected client: ClientProxy) {
+    constructor(@Inject(LOCAL_CLIENT) protected client: ClientProxy) {
     }
 
     madePartyLeader(partyId: number, characterId: number) {

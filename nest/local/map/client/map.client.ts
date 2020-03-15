@@ -3,12 +3,13 @@ import { ClientProxy }                                              from '@nestj
 import { GetAllPlayers, GetPlayerPosition, PlayerDirectionalInput } from '../actions'
 import { first }                                                    from 'rxjs/operators'
 import { WORLD_PREFIX }                                             from '../../world/world.prefix'
+import { LOCAL_CLIENT }                                             from '../../../client/client.module'
 
 
 @Injectable()
 export class MapClient {
 
-    constructor(@Inject('LOCAL_CLIENT') public client: ClientProxy) {
+    constructor(@Inject(LOCAL_CLIENT) public client: ClientProxy) {
     }
 
     async getAllPlayers(map: string) {
