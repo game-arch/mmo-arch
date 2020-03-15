@@ -36,7 +36,7 @@ constructing multiplayer games.
     - Used to persist data on a microservice.
     - Originally was using MySQL but that may be used down the road for data backups only.
     - SQLite provides the data architecture that MySQL provides without the network overhead
-    - DB files are stored under `server/db` for easy tracking and management
+    - DB files are stored under `db` for easy tracking and management
 - PM2
     - https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/
     - Multi-process orchestration (not dockerized at the moment)
@@ -71,15 +71,9 @@ must connect to.
     - Handles quest requirements and rewards
     - requirements could be of a multitude of requirement types once defined
     - rewards would come in the form of currency, item ID and quantity, or EXP of some kind
-- Chat (1+ instances)
-    - Handles any communication end users may want to send to other users
-    - (Other services will be created to handle more long-term communication in the future)
 - Character (1+ instances)
     - Handles character-to-account association
     - To create, sign in, get info on, and sign out of characters
-- Commerce (1+ instances)
-    - Handles trade interactions
-    - Handles marketplace/auction-like interactions
 - Map (1 instance per map)
     - Handles NPC position, movement, and respawn
     - Handles Resource position and respawn
