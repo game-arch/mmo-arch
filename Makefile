@@ -10,22 +10,22 @@ copy-environment:
 start:
 	pm2 start client.config.js
 	pm2 start builders.config.js --kill-timeout 5000
-	pm2 start services.config.js --kill-timeout 5000
+	pm2 start global.config.js --kill-timeout 5000
 
 stop:
 	pm2 stop client.config.js
 	pm2 stop builders.config.js
-	pm2 stop services.config.js
+	pm2 stop global.config.js
 
 restart:
 	pm2 reload client.config.js
 	pm2 reload builders.config.js --kill-timeout 5000
-	pm2 reload services.config.js --kill-timeout 5000
+	pm2 reload global.config.js --kill-timeout 5000
 
 delete:
 	pm2 delete client.config.js
 	pm2 delete builders.config.js
-	pm2 delete services.config.js
+	pm2 delete global.config.js
 
 build:
 	npm run build:client
@@ -66,9 +66,16 @@ docker-global:
 docker-world:
 	make world-up
 
+start-maiden:
+	pm2 start world.config.js --kill-timeout 5000
+stop-maiden:
+	pm2 stop world.config.js
+delete-maiden:
+	pm2 delete world.config.js
+
 start-talos:
-	WORLD_NAME=Talos WORLD_CONSTANT=talos make start
+	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 start world.config.js --kill-timeout 5000
 stop-talos:
-	WORLD_NAME=Talos WORLD_CONSTANT=talos make stop
+	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 stop world.config.js
 delete-talos:
-	WORLD_NAME=Talos WORLD_CONSTANT=talos make delete
+	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 delete world.config.js
