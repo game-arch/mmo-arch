@@ -10,7 +10,7 @@ import { environment }         from '../../lib/config/environment'
 import { MapClientModule }     from '../map/client/map-client.module'
 import { CharacterStats }      from './entities/character-stats'
 import { CharacterParameters } from './entities/character-parameters'
-import { ClientModule }        from '../../lib/client/client.module'
+import { ClientModule }        from '../../client/client.module'
 
 
 @Module({

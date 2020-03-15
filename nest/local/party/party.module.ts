@@ -8,7 +8,7 @@ import { PartyController }       from './party.controller'
 import { PartyService }          from './party.service'
 import { PartyEmitter }          from './party.emitter'
 import { CharacterClientModule } from '../character/client/character-client.module'
-import { ClientModule }          from '../../lib/client/client.module'
+import { ClientModule }          from '../../client/client.module'
 
 @Module({
     imports    : [

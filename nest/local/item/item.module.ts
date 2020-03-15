@@ -7,7 +7,7 @@ import { environment }           from '../../lib/config/environment'
 import { EquipmentSet }          from './entities/equipment-set'
 import { ItemEffect }            from './entities/item-effect'
 import { Item }                  from './entities/item'
-import { ClientModule }          from '../../lib/client/client.module'
+import { ClientModule }          from '../../client/client.module'
 
 @Module({
     imports    : [

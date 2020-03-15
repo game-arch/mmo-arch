@@ -20,7 +20,7 @@ import { environment }       from '../../lib/config/environment'
 import { PartyController }   from './party/party.controller'
 import { PartyGateway }      from './party/party.gateway'
 import { PartyClientModule } from '../party/client/party-client.module'
-import { ClientModule }      from '../../lib/client/client.module'
+import { ClientModule }      from '../../client/client.module'
 
 @Module({
     imports    : [

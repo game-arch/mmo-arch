@@ -1,6 +1,6 @@
 import { Module }        from '@nestjs/common'
 import { AccountClient } from './account.client'
-import { ClientModule }  from '../../../lib/client/client.module'
+import { ClientModule }  from '../../../client/client.module'
 
 
 @Module({

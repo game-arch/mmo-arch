@@ -15,7 +15,7 @@ import { MapTransition }         from './entities/map-transition'
 import { MapConstants }          from './constants'
 import * as path                 from 'path'
 import { environment }           from '../../lib/config/environment'
-import { ClientModule }          from '../../lib/client/client.module'
+import { ClientModule }          from '../../client/client.module'
 
 @Module({
     imports    : [
