@@ -1,0 +1,146 @@
+{
+    "textures": [
+        {
+            "image": "Animal.png",
+            "format": "RGBA8888",
+            "size": {
+                "w": 98,
+                "h": 783
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "Dog1.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 98,
+                        "h": 130
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Dog2.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 98,
+                        "h": 130
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 131,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Dog3.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 98,
+                        "h": 130
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 261,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Cat1.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 130
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 94,
+                        "h": 129
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 391,
+                        "w": 94,
+                        "h": 129
+                    }
+                },
+                {
+                    "filename": "Cat2.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 130
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 94,
+                        "h": 129
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 522,
+                        "w": 94,
+                        "h": 129
+                    }
+                },
+                {
+                    "filename": "Cat3.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 130
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 94,
+                        "h": 129
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 653,
+                        "w": 94,
+                        "h": 129
+                    }
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "3.0",
+        "smartupdate": "$TexturePacker:SmartUpdate:ef9c3ed2e1abe630c1171145d7fc97d5:9277a4ec1e05e61d993942e284a81bdb:21d04c2076e13d54f5e657197e083090$"
+    }
+}

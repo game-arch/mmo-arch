@@ -1,0 +1,41 @@
+{
+    "textures": [
+        {
+            "image": "Boss1.png",
+            "format": "RGBA8888",
+            "size": {
+                "w": 290,
+                "h": 371
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "Boss1.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 288,
+                        "h": 384
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 14,
+                        "w": 288,
+                        "h": 369
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 288,
+                        "h": 369
+                    }
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "3.0",
+        "smartupdate": "$TexturePacker:SmartUpdate:64d3607ddc075700fcb6242141c90bcf:ec86f1a8d62fc9a1b0c9b89369f2b391:068d63727fc2323209e8645e9858901f$"
+    }
+}

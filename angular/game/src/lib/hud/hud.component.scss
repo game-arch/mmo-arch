@@ -1,0 +1,74 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 1000;
+
+    .top-row {
+        backdrop-filter: blur(4px);
+        background-color: rgba(60, 60, 60, 0.8);
+    }
+
+    > div > * {
+        pointer-events: all;
+    }
+
+    .bars {
+        width: 100%;
+    }
+
+    .stretch {
+        flex: 1;
+    }
+
+    .status {
+        width: 320px;
+        background-color: rgba(60, 60, 60, 0.5);
+
+        > .row {
+            align-items: flex-end;
+        }
+
+        .name {
+            margin-left: 12px;
+            font-size: 14px;
+            color: #fff;
+            font-family: Roboto, 'Helvetica Neue', sans-serif;
+            text-shadow: 2px 2px 4px #333333;
+        }
+
+        .level {
+            @extend .name;
+        }
+
+        .hp-bar, .mp-bar, .xp-bar {
+            &::after {
+                content: '';
+                position: absolute;
+                font-weight: bold;
+                left: 0;
+                color: #fff;
+                margin-left: 12px;
+                font-family: Roboto, "Helvetica Neue", sans-serif;
+                font-size: 10px;
+            }
+        }
+
+        .hp-bar::after {
+            content: 'HP';
+        }
+
+        .mp-bar::after {
+            content: 'MP';
+        }
+
+        .xp-bar::after {
+            content: 'XP';
+        }
+    }
+}

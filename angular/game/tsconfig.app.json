@@ -1,0 +1,25 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "importHelpers": true,
+        "outDir": "../../out-tsc/app",
+        "types": [
+            "phaser"
+        ]
+    },
+    "angularCompilerOptions": {
+        "fullTemplateTypeCheck": true,
+        "strictInjectionParameters": true
+    },
+    "files": [
+        "src/main.ts",
+        "src/polyfills.ts"
+    ],
+    "include": [
+        "node_modules/phaser/**/*.d.ts"
+    ],
+    "exclude": [
+        "src/test.ts",
+        "src/**/*.spec.ts"
+    ]
+}

@@ -1,0 +1,1931 @@
+{
+    "textures": [
+        {
+            "image": "Female.png",
+            "format": "RGBA8888",
+            "size": {
+                "w": 1245,
+                "h": 910
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "Female10.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female11.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 131,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female12.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 261,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female21.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 391,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female22.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 521,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female23.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 651,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female24.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 781,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female25.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female26.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 131,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female27.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 261,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female28.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 391,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female5.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 521,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female6.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 651,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female7.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 781,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female8.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female89.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 131,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female9.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 261,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female17.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 391,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female18.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 521,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female19.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 651,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female20.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 781,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female29.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 294,
+                        "y": 391,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female30.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 295,
+                        "y": 1,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female31.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 295,
+                        "y": 131,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female32.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 295,
+                        "y": 261,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female45.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 294,
+                        "y": 521,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female46.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 294,
+                        "y": 651,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female47.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 294,
+                        "y": 781,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female48.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 391,
+                        "y": 391,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female49.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 392,
+                        "y": 1,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female50.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 392,
+                        "y": 131,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female51.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 392,
+                        "y": 261,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female52.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 391,
+                        "y": 521,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female69.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 391,
+                        "y": 651,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female70.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 391,
+                        "y": 781,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female71.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 488,
+                        "y": 391,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female72.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 489,
+                        "y": 1,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female85.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 489,
+                        "y": 131,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female86.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 489,
+                        "y": 261,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female87.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 488,
+                        "y": 521,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female88.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 488,
+                        "y": 651,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female90.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 488,
+                        "y": 781,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female1.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 391,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female13.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 586,
+                        "y": 1,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female14.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 586,
+                        "y": 131,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female15.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 586,
+                        "y": 261,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female16.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 521,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female2.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 651,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female3.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 585,
+                        "y": 781,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female33.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 680,
+                        "y": 391,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female34.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 681,
+                        "y": 1,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female35.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 681,
+                        "y": 131,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female36.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 681,
+                        "y": 261,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female37.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 680,
+                        "y": 521,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female38.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 680,
+                        "y": 651,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female39.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 680,
+                        "y": 781,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female4.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 775,
+                        "y": 391,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female40.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 776,
+                        "y": 1,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female91.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 776,
+                        "y": 131,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female57.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 776,
+                        "y": 261,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female58.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 869,
+                        "y": 261,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female59.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 871,
+                        "y": 1,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female60.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 871,
+                        "y": 131,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female61.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 775,
+                        "y": 521,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female62.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 775,
+                        "y": 651,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female63.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 775,
+                        "y": 781,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female64.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 868,
+                        "y": 521,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female41.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 870,
+                        "y": 391,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female42.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 868,
+                        "y": 651,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female43.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 868,
+                        "y": 781,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female44.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 959,
+                        "y": 651,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female53.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 959,
+                        "y": 781,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female54.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 961,
+                        "y": 391,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female55.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 962,
+                        "y": 261,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female56.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 961,
+                        "y": 521,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female65.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 964,
+                        "y": 1,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female66.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 964,
+                        "y": 131,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female67.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1050,
+                        "y": 651,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female68.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1050,
+                        "y": 781,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Female73.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 2,
+                        "w": 91,
+                        "h": 126
+                    },
+                    "frame": {
+                        "x": 1052,
+                        "y": 391,
+                        "w": 91,
+                        "h": 126
+                    }
+                },
+                {
+                    "filename": "Female74.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 2,
+                        "w": 91,
+                        "h": 126
+                    },
+                    "frame": {
+                        "x": 1053,
+                        "y": 261,
+                        "w": 91,
+                        "h": 126
+                    }
+                },
+                {
+                    "filename": "Female75.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 2,
+                        "w": 91,
+                        "h": 126
+                    },
+                    "frame": {
+                        "x": 1052,
+                        "y": 519,
+                        "w": 91,
+                        "h": 126
+                    }
+                },
+                {
+                    "filename": "Female76.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 2,
+                        "w": 91,
+                        "h": 126
+                    },
+                    "frame": {
+                        "x": 1055,
+                        "y": 1,
+                        "w": 91,
+                        "h": 126
+                    }
+                },
+                {
+                    "filename": "Female77.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 3,
+                        "w": 96,
+                        "h": 125
+                    },
+                    "frame": {
+                        "x": 1055,
+                        "y": 129,
+                        "w": 96,
+                        "h": 125
+                    }
+                },
+                {
+                    "filename": "Female78.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 3,
+                        "w": 96,
+                        "h": 125
+                    },
+                    "frame": {
+                        "x": 1148,
+                        "y": 1,
+                        "w": 96,
+                        "h": 125
+                    }
+                },
+                {
+                    "filename": "Female79.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 3,
+                        "w": 96,
+                        "h": 125
+                    },
+                    "frame": {
+                        "x": 1141,
+                        "y": 647,
+                        "w": 96,
+                        "h": 125
+                    }
+                },
+                {
+                    "filename": "Female80.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 3,
+                        "w": 96,
+                        "h": 125
+                    },
+                    "frame": {
+                        "x": 1141,
+                        "y": 774,
+                        "w": 96,
+                        "h": 125
+                    }
+                },
+                {
+                    "filename": "Female81.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 3,
+                        "w": 89,
+                        "h": 125
+                    },
+                    "frame": {
+                        "x": 1145,
+                        "y": 389,
+                        "w": 89,
+                        "h": 125
+                    }
+                },
+                {
+                    "filename": "Female82.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 3,
+                        "w": 89,
+                        "h": 125
+                    },
+                    "frame": {
+                        "x": 1145,
+                        "y": 516,
+                        "w": 89,
+                        "h": 125
+                    }
+                },
+                {
+                    "filename": "Female83.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 3,
+                        "w": 89,
+                        "h": 125
+                    },
+                    "frame": {
+                        "x": 1146,
+                        "y": 256,
+                        "w": 89,
+                        "h": 125
+                    }
+                },
+                {
+                    "filename": "Female84.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 3,
+                        "w": 89,
+                        "h": 125
+                    },
+                    "frame": {
+                        "x": 1153,
+                        "y": 128,
+                        "w": 89,
+                        "h": 125
+                    }
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "3.0",
+        "smartupdate": "$TexturePacker:SmartUpdate:1acac0271682fc5cee690a197ad8d99d:19ece928107e7247e21df668b069c802:2a6bb2b33c218df8eb0f6760d22dc84a$"
+    }
+}

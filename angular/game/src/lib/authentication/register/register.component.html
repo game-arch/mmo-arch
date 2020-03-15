@@ -1,0 +1,32 @@
+<form (submit)="register().then()" [formGroup]="form" autocomplete="off">
+    <div style="padding: 0 16px;">
+        <mat-form-field appearance="outline" color="accent" style="width:100%">
+            <mat-label>Email Address</mat-label>
+            <input autocomplete="off" formControlName="email" matInput type="email"/>
+            <mat-error *ngIf="form.get('email').hasError('required')">Required</mat-error>
+            <mat-error *ngIf="form.get('email').hasError('email')">Not an Email</mat-error>
+            <mat-error *ngIf="form.get('email').hasError('taken')">Already Taken</mat-error>
+        </mat-form-field>
+        <br/>
+        <mat-form-field appearance="outline" color="accent" style="width:100%">
+            <mat-label>Password</mat-label>
+            <input autocomplete="off" formControlName="password" matInput type="password"/>
+            <mat-error *ngIf="form.get('password').hasError('required')">Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" color="accent" style="width:100%">
+            <mat-label>Confirm Password</mat-label>
+            <input autocomplete="off" formControlName="confirmPassword" matInput type="password"/>
+            <mat-error *ngIf="form.get('confirmPassword').hasError('required')">Required</mat-error>
+            <mat-error *ngIf="form.get('confirmPassword').hasError('match')">Passwords Do Not Match</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div dir="rtl" style="padding: 16px;">
+        <button [disabled]="form.invalid" color="primary" dir="ltr" mat-raised-button type="submit">
+            <mat-icon>account_circle</mat-icon>
+            <span>
+                Register
+            </span>
+        </button>
+    </div>
+</form>

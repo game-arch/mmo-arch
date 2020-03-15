@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>
+    Create a New Character
+</h2>
+<div mat-dialog-content>
+    <form (submit)="submit()" [formGroup]="form">
+        <mat-form-field appearance="outline" style="width:100%">
+            <mat-label>Character Name</mat-label>
+            <input formControlName="name" matInput type="text"/>
+            <mat-error *ngIf="form.get('name').hasError('required')">Required</mat-error>
+            <mat-error *ngIf="form.get('name').hasError('unique')">Name Taken</mat-error>
+        </mat-form-field>
+        <br/><br/>
+        <mat-button-toggle-group formControlName="gender">
+            <mat-button-toggle value="male">
+                <mat-icon svgIcon="male"></mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="female">
+                <mat-icon svgIcon="female"></mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </form>
+    <br/><br/>
+</div>
+<div mat-dialog-actions>
+    <button (click)="submit()" [disabled]="form.invalid" color="primary" mat-raised-button type="submit">
+        Save
+    </button>
+    <button mat-button type="button">
+        Cancel
+    </button>
+</div>

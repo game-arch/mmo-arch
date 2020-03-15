@@ -1,0 +1,36 @@
+:host {
+    display: inline-block;
+    backdrop-filter: blur(4px);
+    border: 2px solid #333;
+    border-radius: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 80px;
+    height: 80px;
+    margin-left: 4px;
+    margin-right: 4px;
+    opacity: 0.5;
+    cursor: pointer;
+
+    box-shadow: inset -4px -4px 10px 4px rgba(255, 255, 255, 0.4), inset 4px 4px 10px 4px rgba(0, 0, 0, 0.4);
+
+    &[size="large"] {
+        width: 120px;
+        height: 120px;
+    }
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    > div {
+        padding: 16%;
+        width: 100%;
+        height: 100%;
+    }
+
+    icon svg {
+        margin: auto;
+        width: 100%;
+        height: 100%;
+    }
+}

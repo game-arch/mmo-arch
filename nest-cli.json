@@ -1,0 +1,5 @@
+{
+    "collection": "@nestjs/schematics",
+    "sourceRoot": "nest",
+    "entryFile": "server"
+}

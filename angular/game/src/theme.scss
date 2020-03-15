@@ -1,0 +1,57 @@
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$app-primary: mat-palette($mat-blue);
+$app-accent: mat-palette($mat-blue, 200, 100, 400);
+
+// The warn palette is optional (defaults to red).
+$app-warn: mat-palette($mat-red, 300, 200, 400);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$app-theme: mat-dark-theme($app-primary, $app-accent, $app-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($app-theme);
+body {
+    .mat-card {
+        border-radius: 12px;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+    }
+
+    hud .mat-card {
+        background-color: rgba(80, 80, 80, 0.6);
+    }
+
+    hud {
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 1px #000, -1px -1px 1px #000, -1px 1px 1px #000, 1px -1px 1px #000;
+
+        ngx-joystick {
+            .front, .back {
+                border: 2px solid #333;
+                cursor: pointer;
+            }
+
+            .back {
+                box-shadow: inset -4px -4px 10px 4px #ccc, inset 4px 4px 10px 4px #555;
+            }
+
+            .front {
+                background: rgb(119, 119, 119) !important;
+                background: radial-gradient(circle, rgba(119, 119, 119, 1) 0%, rgba(51, 51, 51, 1) 80%, rgba(255, 255, 255, 1) 100%) !important;
+                box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.8);
+            }
+        }
+    }
+}

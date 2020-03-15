@@ -16,7 +16,7 @@ constructing multiplayer games.
     - Websocket library to communicate
 - TypeORM 
     - https://typeorm.io/
-    - Using MySQL as the driver
+    - Using SQLite as the driver
 - NATS 
     - https://docs.nats.io/
     - As the microservice communication method

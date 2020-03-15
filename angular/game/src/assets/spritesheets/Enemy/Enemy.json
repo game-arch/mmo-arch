@@ -1,0 +1,776 @@
+{
+    "textures": [
+        {
+            "image": "Enemy.png",
+            "format": "RGBA8888",
+            "size": {
+                "w": 486,
+                "h": 1030
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "Enemy1.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy21.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 131,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy22.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy23.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 261,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy24.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 131,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy25.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy26.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 391,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy27.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 261,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy28.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 131,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy29.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 295,
+                        "y": 1,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy30.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 521,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy31.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 391,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy32.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 261,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy33.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 295,
+                        "y": 131,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy34.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 651,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy35.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 521,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy36.png",
+                    "rotated": false,
+                    "trimmed": false,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 96,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 391,
+                        "w": 96,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy15.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 295,
+                        "y": 261,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy7.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 392,
+                        "y": 261,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy16.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 781,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy17.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 99,
+                        "y": 651,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy18.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 197,
+                        "y": 521,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy19.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 295,
+                        "y": 391,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy13.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 2,
+                        "y": 2,
+                        "w": 93,
+                        "h": 126
+                    },
+                    "frame": {
+                        "x": 392,
+                        "y": 391,
+                        "w": 93,
+                        "h": 126
+                    }
+                },
+                {
+                    "filename": "Enemy20.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 98,
+                        "y": 781,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy8.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 196,
+                        "y": 651,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy10.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 127
+                    },
+                    "frame": {
+                        "x": 294,
+                        "y": 521,
+                        "w": 95,
+                        "h": 127
+                    }
+                },
+                {
+                    "filename": "Enemy11.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 127
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 781,
+                        "w": 95,
+                        "h": 127
+                    }
+                },
+                {
+                    "filename": "Enemy3.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 0,
+                        "w": 91,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 393,
+                        "y": 1,
+                        "w": 91,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy2.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 393,
+                        "y": 131,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Enemy12.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 127
+                    },
+                    "frame": {
+                        "x": 293,
+                        "y": 651,
+                        "w": 95,
+                        "h": 127
+                    }
+                },
+                {
+                    "filename": "Enemy9.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 95,
+                        "h": 127
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 650,
+                        "w": 95,
+                        "h": 127
+                    }
+                },
+                {
+                    "filename": "Enemy4.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 2,
+                        "w": 95,
+                        "h": 126
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 779,
+                        "w": 95,
+                        "h": 126
+                    }
+                },
+                {
+                    "filename": "Enemy5.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 2,
+                        "w": 95,
+                        "h": 126
+                    },
+                    "frame": {
+                        "x": 293,
+                        "y": 780,
+                        "w": 95,
+                        "h": 126
+                    }
+                },
+                {
+                    "filename": "Enemy14.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 3,
+                        "y": 6,
+                        "w": 91,
+                        "h": 122
+                    },
+                    "frame": {
+                        "x": 390,
+                        "y": 907,
+                        "w": 91,
+                        "h": 122
+                    }
+                },
+                {
+                    "filename": "Enemy6.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 6,
+                        "y": 6,
+                        "w": 85,
+                        "h": 122
+                    },
+                    "frame": {
+                        "x": 391,
+                        "y": 521,
+                        "w": 85,
+                        "h": 122
+                    }
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "3.0",
+        "smartupdate": "$TexturePacker:SmartUpdate:6f78c951a81861c6eba2425ca913c000:bd953d3612ce11a39a5604bf0c2ec98c:0ce9253a0c20247e55acb034fb17a84c$"
+    }
+}

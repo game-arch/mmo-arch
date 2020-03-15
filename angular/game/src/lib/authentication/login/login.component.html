@@ -1,0 +1,22 @@
+<form (submit)="login().then()" [formGroup]="form" autocomplete="off">
+    <mat-error *ngIf="showError">Invalid Email or Password</mat-error>
+    <div style="padding: 0 16px;">
+        <mat-form-field appearance="outline" color="accent" style="width:100%">
+            <mat-label>Email Address</mat-label>
+            <input autocomplete="off" formControlName="email" id="email" matInput type="email"/>
+        </mat-form-field>
+        <br/>
+        <mat-form-field appearance="outline" color="accent" style="width:100%">
+            <mat-label>Password</mat-label>
+            <input autocomplete="off" formControlName="password" id="password" matInput type="password"/>
+        </mat-form-field>
+    </div>
+    <div dir="rtl" style="padding: 16px;">
+        <button [disabled]="form.invalid" color="primary" dir="ltr" mat-raised-button>
+            <mat-icon>account_circle</mat-icon>
+            <span>
+                Login
+            </span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,12 @@
+.avatar-container {
+    position: relative;
+
+    & .avatar-content {
+        height: 56px;
+        width: 56px;
+        border: 1px solid #333;
+        background-image: url('/assets/sprites/example_avatar.jpg');
+        background-position: center;
+        background-size: cover;
+    }
+}

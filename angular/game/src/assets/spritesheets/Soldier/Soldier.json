@@ -1,0 +1,608 @@
+{
+    "textures": [
+        {
+            "image": "Soldier.png",
+            "format": "RGBA8888",
+            "size": {
+                "w": 382,
+                "h": 910
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "Soldier10.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 1,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier11.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 98,
+                        "y": 1,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier12.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 1,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier1.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 292,
+                        "y": 1,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier13.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 131,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier14.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 98,
+                        "y": 131,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier15.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 131,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier2.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 292,
+                        "y": 131,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier16.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 261,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier9.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 95,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 98,
+                        "y": 261,
+                        "w": 95,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier17.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 195,
+                        "y": 261,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier3.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 290,
+                        "y": 261,
+                        "w": 89,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier18.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 391,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier19.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 96,
+                        "y": 391,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier20.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 191,
+                        "y": 391,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier21.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 286,
+                        "y": 391,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier22.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 521,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier23.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 651,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier24.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 1,
+                        "y": 781,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier25.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 96,
+                        "y": 521,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier26.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 191,
+                        "y": 521,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier27.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 286,
+                        "y": 521,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier28.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 1,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 96,
+                        "y": 651,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier5.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 96,
+                        "y": 781,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier6.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 191,
+                        "y": 651,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier7.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 191,
+                        "y": 781,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier8.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 93,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 286,
+                        "y": 651,
+                        "w": 93,
+                        "h": 128
+                    }
+                },
+                {
+                    "filename": "Soldier4.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 89,
+                        "h": 128
+                    },
+                    "frame": {
+                        "x": 286,
+                        "y": 781,
+                        "w": 89,
+                        "h": 128
+                    }
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "3.0",
+        "smartupdate": "$TexturePacker:SmartUpdate:9e8b1c0e6c4c7eedf7c1e3d4d00668e9:041be22cac1132727e55dd1612257dbc:3ae99d907284a21357cb6b430f890586$"
+    }
+}
