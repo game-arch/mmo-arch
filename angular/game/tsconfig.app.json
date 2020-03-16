@@ -5,6 +5,12 @@
         "outDir": "../../out-tsc/app",
         "types": [
             "phaser"
+        ],
+        "lib": [
+            "es2015",
+            "es2018",
+            "dom",
+            "scripthost"
         ]
     },
     "angularCompilerOptions": {

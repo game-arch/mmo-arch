@@ -69,3 +69,54 @@ export class PlayerDirectionalInput {
 
     }
 }
+
+// NPC Events
+
+export class GetAllNpcs {
+    static readonly event = 'map.get_all_npcs'
+
+    constructor(public map: string) {
+
+    }
+}
+
+export class AllNpcs {
+    static readonly event = 'map.all_npcs'
+
+    constructor(public map: string, public npcs: { id: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }[]) {
+
+    }
+}
+
+export class NewNpcSpawn {
+    static readonly event = 'map.new_npc_spawn'
+
+    constructor(public npcId: number, public map: string, public name: string, public x: number, public y: number) {
+
+    }
+}
+
+export class NpcDirectionalInput {
+    static readonly event = 'map.npc_directional_input'
+
+    constructor(public npcId: number, public map: string, public direction: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+
+    }
+}
+
+
+export class NpcUpdate {
+    static readonly event = 'map.npc_update'
+
+    constructor(public map: string, public npc: { id: number, name: string, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+
+    }
+}
+
+export class NpcDespawn {
+    static readonly event = 'map.npc_despawn'
+
+    constructor(public map: string, public npcId: number) {
+
+    }
+}

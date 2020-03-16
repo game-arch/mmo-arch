@@ -7,9 +7,13 @@ export interface Npc {
 
     name: string
 
+    spawn: {x:number, y:number}
+
+    path: { x: number, y: number }[]
+
     types: NpcTypes[]
 
-    stats: Stats
+    stats?: Stats
 
     effects: Effect[]
 }

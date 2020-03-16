@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { AiEmitter }  from './ai.emitter'
 
 @Injectable()
-export class NpcMovementService {
+export class NpcService {
 
     constructor(private emitter: AiEmitter) {
 
