@@ -1,8 +1,8 @@
 version: '3'
 services:
-  client:
-    build:
-      context: ""
-      dockerfile: client.Dockerfile
-    ports:
-      - 8080:80
+    client:
+        build:
+            context: ""
+            dockerfile: client.Dockerfile
+        ports:
+            - 8080:80
