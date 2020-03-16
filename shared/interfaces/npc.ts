@@ -1,13 +1,18 @@
-import { NpcTypes } from '../types/npc.types'
-import { Effect }   from './effect'
-import { Stats }    from './stats'
+import {NpcTypes} from '../types/npc.types'
+import {Effect}   from './effect'
+import {Stats}    from './stats'
 
 export interface Npc {
     id: number
 
     name: string
 
-    spawn: {x:number, y:number}
+    alive: boolean
+
+    respawn: number
+
+    position: { x: number, y: number }
+    spawn: { x: number, y: number }
 
     path: { x: number, y: number }[]
 
