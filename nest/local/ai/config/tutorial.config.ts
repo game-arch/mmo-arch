@@ -3,20 +3,20 @@ import {Npc}      from "../../../../shared/interfaces/npc";
 
 export const TUTORIAL_NPC_CONFIG: Npc[] = [
     {
-        id            : 1,
-        name          : 'Test Mob',
-        types         : [NpcTypes.MOVABLE],
-        alive         : true,
-        respawn       : 5 * 1000,
-        position      : {
+        id      : 1,
+        name    : 'Test Mob',
+        types   : [NpcTypes.MOVABLE],
+        alive   : true,
+        respawn : 5 * 1000,
+        position: {
             x: 100,
             y: 100
         },
-        spawn         : {
+        spawn   : {
             x: 100,
             y: 100
         },
-        path          : [
+        path    : [
             {
                 x: 100,
                 y: 100
@@ -34,8 +34,6 @@ export const TUTORIAL_NPC_CONFIG: Npc[] = [
                 y: 200
             }
         ],
-        effects       : [],
-        followsPlayers: false,
-        radius        : 0
+        effects : []
     }
 ]

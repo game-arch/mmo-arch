@@ -1,4 +1,5 @@
 export interface MapConfig {
+    constant:string
     name: string
     width?: number
     height?: number
@@ -19,5 +20,6 @@ export interface CollisionConfig {
     originY?: number
     rotation?: number
     solid?: boolean
+    transitionId?:string
     transitionTo?: string
 }

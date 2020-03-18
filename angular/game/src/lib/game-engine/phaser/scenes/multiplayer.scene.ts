@@ -1,6 +1,6 @@
 import { BaseScene }                             from '../../../../../../../nest/local/map/maps/base.scene'
 import { Mob }                                   from '../../../../../../../shared/phaser/mob'
-import { MapConfig }                             from '../../../../../../../nest/local/map/config/config'
+import { MapConfig }                             from '../../../../../../../shared/interfaces/map-config'
 import { PlayerDirectionalInput, PlayerLeftMap } from '../../../../../../../nest/local/map/actions'
 import { ConnectionManager }                     from '../../../connection/connection-manager'
 import Scene = Phaser.Scene
@@ -63,7 +63,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         }
         player.sprite.setPosition(data.x, data.y)
         if (data.moving) {
-            player.moving = data.moving
+            player.sprite.moving = data.moving
         }
     }
 

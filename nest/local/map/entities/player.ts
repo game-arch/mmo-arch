@@ -1,16 +1,14 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { Mob }                                                   from '../../../../shared/phaser/mob'
+import {Column, Entity, Index, PrimaryColumn, PrimaryGeneratedColumn, Unique} from 'typeorm'
+import {Mob}                                                                  from '../../../../shared/phaser/mob'
 
 @Entity()
 @Index('playerMap', ['map'])
 @Index('playerLocation', ['map', 'x', 'y'])
-@Unique('playerCharacter', ['characterId'])
+@Unique('playerCharacter', ['id'])
 export class Player extends Mob {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id: number
-    @Column()
-    characterId: number
     @Column()
     map: string
     @Column()
@@ -18,7 +16,7 @@ export class Player extends Mob {
 
     _x = 0
 
-    @Column('int', { nullable: true })
+    @Column('int', {nullable: true})
     get x(): number {
         return Math.floor(this.sprite ? this.sprite.x : this._x)
     }
@@ -32,7 +30,7 @@ export class Player extends Mob {
 
     _y = 0
 
-    @Column('int', { nullable: true })
+    @Column('int', {nullable: true})
     get y(): number {
         return Math.floor(this.sprite ? this.sprite.y : this._y)
     }
@@ -46,7 +44,7 @@ export class Player extends Mob {
 
     asPayload() {
         return {
-            id    : this.characterId,
+            id    : this.id,
             name  : this.name,
             x     : this.x,
             y     : this.y,

@@ -1,9 +1,10 @@
-import { MapConfig }      from '../config/config'
-import { Subject }        from 'rxjs'
-import { loadCollisions } from '../../../../shared/phaser/collisions'
-import { Mob }            from '../../../../shared/phaser/mob'
+import {MapConfig}      from '../../../../shared/interfaces/map-config'
+import {from, Subject}  from 'rxjs'
+import {loadCollisions} from '../../../../shared/phaser/collisions'
+import {Mob}            from '../../../../shared/phaser/mob'
 import Scene = Phaser.Scene
 import Group = Phaser.Physics.Arcade.Group
+import {MapShape}       from "../../../../shared/interfaces/map-shape";
 
 export class BaseScene extends Scene implements Scene {
     constant: string
@@ -13,8 +14,11 @@ export class BaseScene extends Scene implements Scene {
     entities: {
         player: { [characterId: number]: Mob }
         mob: { [mobId: number]: Mob }
-    } = { player: {}, mob: {} }
-    collisionGroups: { overlaps: Group; colliders: Group }
+    } = {player: {}, mob: {}}
+    collisionGroups: { overlaps: MapShape[]; colliders: MapShape[] }
+
+    onTransition = (player: Mob, toMap: string, toId: string) => {
+    }
 
     layers: {
         terrain: Phaser.Tilemaps.StaticTilemapLayer
@@ -26,13 +30,25 @@ export class BaseScene extends Scene implements Scene {
 
     constructor(public config: MapConfig) {
         super({
-            key: config.name
-        })
+            key: config.constant
+        });
+        this.constant = config.constant;
+        this.name     = config.name;
     }
 
     create() {
         this.physics.world.TILE_BIAS = 40
         this.collisionGroups         = loadCollisions(this.config, this)
+        this.physics.add.group(this.collisionGroups.colliders, {
+            visible      : true,
+            frameQuantity: 30,
+            immovable    : true,
+        })
+        this.physics.add.group(this.collisionGroups.overlaps, {
+            visible      : true,
+            frameQuantity: 30,
+            immovable    : true,
+        })
     }
 
     update(time: number, delta: number) {
@@ -71,13 +87,21 @@ export class BaseScene extends Scene implements Scene {
         this.entities[type][id] = mob
         this.entities[type][id].create(this, mob.x, mob.y)
         this.physics.add.collider(mob.sprite, this.collisionGroups.colliders)
-        this.physics.add.overlap(mob.sprite, this.collisionGroups.overlaps)
+        if (type === 'player') {
+            from(this.collisionGroups.overlaps)
+                .subscribe(shape => {
+                    if (shape.config.transitionTo) {
+                        this.physics.add.overlap(mob.sprite, shape, () => {
+                            this.onTransition(mob, shape.config.transitionTo.split('.')[0], shape.config.transitionTo)
+                        })
+                    }
+                })
+        }
     }
 
     removeEntity(type: 'player' | 'mob', id: number) {
         if (this.entities[type][id]) {
-            this.entities[type][id].sprite.stopListening.next()
-            this.entities[type][id].destroy()
+            this.entities[type][id].sprite.destroy()
             delete this.entities[type][id]
         }
     }

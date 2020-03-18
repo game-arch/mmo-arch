@@ -2,15 +2,11 @@ import Scene = Phaser.Scene
 import Vector2 = Phaser.Math.Vector2
 import Body = Phaser.Physics.Arcade.Body
 import Sprite = Phaser.GameObjects.Sprite
-import { Physics }    from './physics'
-import { Subject }    from 'rxjs'
-import { Directions } from './directions'
+import {Physics}    from './physics'
+import {Subject}    from 'rxjs'
+import {Directions} from './directions'
 
 export class MobSprite extends Sprite {
-    stopListening      = new Subject()
-    onStartMoving      = new Subject()
-    onStopMoving       = new Subject()
-    onVelocityChange   = new Subject()
     lastVelocity       = new Vector2(0, 0)
     stopped            = true
     moving: Directions = {
@@ -21,6 +17,12 @@ export class MobSprite extends Sprite {
     }
     body: Body
 
+    onVelocityChange = () => {
+    }
+    onStopMoving     = () => {
+    }
+    onStartMoving    = () => {
+    }
 
     constructor(scene: Scene, x: number, y: number, key: string = '') {
         super(scene, x, y, key)
@@ -31,7 +33,11 @@ export class MobSprite extends Sprite {
     }
 
     preUpdate(...args: any[]) {
-        this.setPosition(Math.round(this.x), Math.round(this.y))
+        let adjustmentX = Math.round(this.x)
+        let adjustmentY = Math.round(this.y)
+        if (this.x !== adjustmentX || this.y !== adjustmentY) {
+            this.setPosition(adjustmentX, adjustmentY)
+        }
         if (!this.moving) {
             return
         }
@@ -39,26 +45,24 @@ export class MobSprite extends Sprite {
         this.body.setVelocity(velocity.x, velocity.y)
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone()
-            this.reportChangeInMovingStatus(velocity)
-            this.onVelocityChange.next()
+            this.onVelocityChange()
+            if (velocity.equals(new Vector2(0, 0))) {
+                return this.reportStopped()
+            }
+            return this.reportMoving()
         }
-    }
-
-
-    private reportChangeInMovingStatus(velocity) {
-        return velocity.equals(new Vector2(0, 0)) ? this.reportStopped() : this.reportMoving()
     }
 
     private reportStopped() {
         if (!this.stopped) {
-            this.onStopMoving.next()
+            this.onStopMoving()
             this.stopped = true
         }
     }
 
     private reportMoving() {
         if (this.stopped) {
-            this.onStartMoving.next()
+            this.onStartMoving()
             this.stopped = false
         }
     }

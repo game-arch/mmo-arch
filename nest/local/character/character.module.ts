@@ -8,8 +8,6 @@ import { WorldConstants }      from '../../lib/constants/world.constants'
 import * as path               from 'path'
 import { environment }         from '../../lib/config/environment'
 import { MapClientModule }     from '../map/client/map-client.module'
-import { CharacterStats }      from './entities/character-stats'
-import { CharacterParameters } from './entities/character-parameters'
 import { ClientModule }        from '../../client/client.module'
 
 
@@ -17,7 +15,7 @@ import { ClientModule }        from '../../client/client.module'
     imports    : [
         ClientModule,
         MapClientModule,
-        TypeOrmModule.forFeature([Character, CharacterStats, CharacterParameters]),
+        TypeOrmModule.forFeature([Character]),
         TypeOrmModule.forRoot({
             type       : 'sqlite',
             database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_character.db'),

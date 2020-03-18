@@ -15,11 +15,20 @@ services:
             - NATS_PORT=4223
         ports:
             - 3001:3001
-    world-map:
+    world-tutorial:
         image: server_builder:latest
         env_file:
             - .env
         environment:
+            - MAP_CONSTANT=tutorial
+            - SERVER_PATH=local/map
+            - NATS_PORT=4223
+    world-tutorial-2:
+        image: server_builder:latest
+        env_file:
+            - .env
+        environment:
+            - MAP_CONSTANT=tutorial-2
             - SERVER_PATH=local/map
             - NATS_PORT=4223
     world-character:
