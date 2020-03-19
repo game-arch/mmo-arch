@@ -6,9 +6,10 @@ import {InjectRepository}   from '@nestjs/typeorm'
 import {MapEmitter}         from './map.emitter'
 import {CharacterClient}    from '../character/client/character.client'
 import {Game}               from 'phaser'
-import {BackendScene}       from './maps/backend.scene'
 import {MapTransition}      from './entities/map-transition'
 import {Directions}         from '../../../shared/phaser/directions'
+import {BaseScene}          from "../../../shared/phaser/base.scene";
+import {Mob}                from "../../../shared/phaser/mob";
 
 @Injectable()
 export class MapService {
@@ -18,7 +19,7 @@ export class MapService {
     constructor(
         private emitter: MapEmitter,
         private character: CharacterClient,
-        @Inject(MapConstants.MAP) public map: BackendScene,
+        @Inject(MapConstants.MAP) public map: BaseScene,
         @InjectRepository(MapTransition) private transitionRepo: Repository<MapTransition>,
         @InjectRepository(Player) private playerRepo: Repository<Player>
     ) {
@@ -45,8 +46,11 @@ export class MapService {
 
     start() {
         this.phaser.scene.start(this.map.constant)
-        this.map.savePlayer = async (player) => await this.playerRepo.save(player)
-        this.map.emitPlayer = (player) => this.emitter.playerUpdate(this.map.constant, player.asPayload())
+        this.map.savePlayer   = async (player) => await this.playerRepo.save(player)
+        this.map.emitMob      = (player) => this.emitter.playerUpdate(this.map.constant, player.asPayload())
+        this.map.onTransition = (mob: Mob, toMap: string, toId: string) => {
+            console.log(mob.name, 'Should move to', toMap, toId)
+        }
     }
 
     stop() {
@@ -91,17 +95,15 @@ export class MapService {
         const player = await this.playerRepo.findOne(characterId)
         if (player && player.map === this.map.constant) {
             if (this.map.entities.player[player.id]) {
-                await this.playerRepo.save(this.map.entities.player[player.id])
-                this.playerLeftMap(this.map.entities.player[player.id])
+                await this.playerRepo.save(this.map.entities.player[player.id] as Player)
+                this.playerLeftMap(this.map.entities.player[player.id] as Player)
             }
         }
 
     }
 
-    movePlayer(characterId: number, directions: Directions) {
-        if (this.map.entities.player[characterId]) {
-            this.map.movePlayer(characterId, directions)
-        }
+    movePlayer(id: number, directions: Directions) {
+        this.map.moveEntity('player', id, directions)
     }
 
     getPlayerPosition(characterId: number) {
@@ -116,13 +118,13 @@ export class MapService {
     }
 
     private playerJoinedMap(player: Player) {
-        this.map.addPlayer(player)
+        this.map.addEntity('player', player)
         this.emitter.playerJoinedMap(this.map.constant, player.id, player.name, player.x, player.y)
     }
 
     private playerLeftMap(player: Player) {
         if (player) {
-            this.map.removePlayer(player)
+            this.map.removeEntity('player', player.id)
             this.emitter.playerLeftMap(this.map.constant, player.id, player.name)
         }
     }

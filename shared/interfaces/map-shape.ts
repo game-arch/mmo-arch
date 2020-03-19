@@ -1,6 +1,7 @@
 
 import Shape = Phaser.GameObjects.Shape
-import {CollisionConfig} from "./map-config";
+import {CollisionConfig, TransitionConfig} from "./map-config";
 export interface MapShape extends Shape {
-    config?: CollisionConfig
+    collision?: CollisionConfig
+    transition?:TransitionConfig
 }

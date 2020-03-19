@@ -1,7 +1,7 @@
-import {CollisionConfig, MapConfig} from '../interfaces/map-config'
+import {CollisionConfig, MapConfig, TransitionConfig} from '../interfaces/map-config'
 import Scene = Phaser.Scene
 import Body = Phaser.Physics.Arcade.Body
-import {MapShape}                   from "../interfaces/map-shape";
+import {MapShape}                                     from "../interfaces/map-shape";
 
 export function loadCollisions(config: MapConfig, scene: Scene) {
     scene.physics.world.setBounds(0, 0, config.width, config.height)
@@ -9,18 +9,25 @@ export function loadCollisions(config: MapConfig, scene: Scene) {
     let overlaps  = []
 
     function addCollisionShape(shape: MapShape, collision: CollisionConfig) {
-        if (Boolean(collision.transitionTo)) {
+        if (Boolean(collision)) {
             shape.fillColor = 0xaaaaaa
         }
-        shape.config = collision
+        shape.collision = collision
         shape.setOrigin(0, 0)
         scene.physics.add.existing(shape);
         (shape.body as Body).immovable = true
-        if (collision.transitionTo) {
-            overlaps.push(shape)
-            return
-        }
         colliders.push(shape)
+    }
+
+    function addTransitionShape(shape: MapShape, transition: TransitionConfig) {
+        if (Boolean(transition)) {
+            shape.fillColor = 0xaaaaaa
+        }
+        shape.transition = transition
+        shape.setOrigin(0, 0)
+        scene.physics.add.existing(shape);
+        (shape.body as Body).immovable = true
+        overlaps.push(shape)
     }
 
     for (let collision of config.collisions) {
@@ -38,6 +45,10 @@ export function loadCollisions(config: MapConfig, scene: Scene) {
             let shape: MapShape = scene.add.polygon(collision.position[0], collision.position[1], collision.points, 0xff2200)
             addCollisionShape(shape, collision)
         }
+    }
+    for (let transition of config.transitions) {
+        let shape: MapShape = scene.add.rectangle(transition.position[0], transition.position[1], transition.width, transition.height, 0x0055ff)
+        addTransitionShape(shape, transition)
     }
     return {
         colliders,

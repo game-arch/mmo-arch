@@ -1,4 +1,4 @@
-import { BaseScene }                             from '../../../../../../../nest/local/map/maps/base.scene'
+import { BaseScene }                             from '../../../../../../../shared/phaser/base.scene'
 import { Mob }                                   from '../../../../../../../shared/phaser/mob'
 import { MapConfig }                             from '../../../../../../../shared/interfaces/map-config'
 import { PlayerDirectionalInput, PlayerLeftMap } from '../../../../../../../nest/local/map/actions'
@@ -75,7 +75,8 @@ export class MultiplayerScene extends BaseScene implements Scene {
         moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
     }) {
         const player = new Mob(data.name)
-        this.addEntity('player', player, data.id)
+        player.id = data.id
+        this.addEntity('player', player)
         if (this.connection.selectedCharacter.id === data.id) {
             this.setSelf(player)
         }

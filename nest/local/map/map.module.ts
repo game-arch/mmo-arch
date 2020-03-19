@@ -15,9 +15,9 @@ import {MapConstants}          from './constants'
 import * as path               from 'path'
 import {environment}           from '../../lib/config/environment'
 import {ClientModule}          from '../../client/client.module'
-import {BackendScene}          from "./maps/backend.scene";
-import {TUTORIAL_CONFIG}       from "./config/tutorial";
-import {TUTORIAL_2_CONFIG}     from "./config/tutorial-2";
+import {TUTORIAL_CONFIG}       from "../../../shared/maps/tutorial";
+import {TUTORIAL_2_CONFIG}     from "../../../shared/maps/tutorial-2";
+import {BaseScene}             from "../../../shared/phaser/base.scene";
 
 @Module({
     imports    : [
@@ -38,11 +38,11 @@ import {TUTORIAL_2_CONFIG}     from "./config/tutorial-2";
         MapEmitter,
         {
             provide   : 'tutorial',
-            useFactory: () => new BackendScene(TUTORIAL_CONFIG)
+            useFactory: () => new BaseScene(TUTORIAL_CONFIG)
         },
         {
             provide   : 'tutorial-2',
-            useFactory: () => new BackendScene(TUTORIAL_2_CONFIG)
+            useFactory: () => new BaseScene(TUTORIAL_2_CONFIG)
         }
     ]
 })

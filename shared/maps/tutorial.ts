@@ -1,11 +1,11 @@
-import {MapConfig} from '../../../../shared/interfaces/map-config'
+import {MapConfig} from '../interfaces/map-config'
 
 export const TUTORIAL_CONFIG: MapConfig = {
-    constant  : 'tutorial',
-    name      : 'Tutorial Island',
-    width     : 1024,
-    height    : 768,
-    collisions: [
+    constant          : 'tutorial',
+    name              : 'Tutorial Island',
+    width             : 1024,
+    height            : 768,
+    collisions        : [
         {
             solid   : true,
             shape   : 'rectangle',
@@ -50,23 +50,19 @@ export const TUTORIAL_CONFIG: MapConfig = {
             position: [1024 - 32, 0],
             width   : 32,
             height  : 768
-        },
-        {
-            solid       : false,
-            transitionId: 'tutorial.exit',
-            transitionTo: 'tutorial-2.enter',
-            shape       : 'rectangle',
-            position    : [0, 120],
-            width       : 64,
-            height      : 120
-        },
-        {
-            solid       : false,
-            transitionId: 'tutorial.enter',
-            shape       : 'rectangle',
-            position    : [64, 120],
-            width       : 64,
-            height      : 120
         }
-    ]
+    ],
+    transitions       : [
+        {
+            landingMap: 'tutorial-2',
+            landingId : 'enter',
+            position  : [0, 120],
+            width     : 64,
+            height    : 120
+        }
+    ],
+    transitionLandings: {
+        enter: [72, 200]
+    }
+
 }

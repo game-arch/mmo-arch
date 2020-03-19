@@ -1,4 +1,4 @@
-import { TUTORIAL_CONFIG }   from '../../../../../../../../nest/local/map/config/tutorial'
+import { TUTORIAL_CONFIG }   from '../../../../../../../../shared/maps/tutorial'
 import { MultiplayerScene }  from '../multiplayer.scene'
 import { ConnectionManager } from '../../../../connection/connection-manager'
 import Scene = Phaser.Scene

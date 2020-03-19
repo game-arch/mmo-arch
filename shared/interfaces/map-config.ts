@@ -1,25 +1,33 @@
+export type VectorArray = [number, number]
+
 export interface MapConfig {
-    constant:string
+    constant: string
     name: string
     width?: number
     height?: number
     collisions?: CollisionConfig[]
+    transitions?: TransitionConfig[]
+    transitionLandings?: { [id: string]: VectorArray }
     tilesetName?: string
     tiles?: string
 }
 
 export interface CollisionConfig {
     mass?: number
-    position: [number, number]
+    position: VectorArray
     shape: 'circle' | 'rectangle' | 'polygon'
-    points?: [number, number][]
+    points?: VectorArray[]
     radius?: number
     width?: number
     height?: number
-    originX?: number
-    originY?: number
     rotation?: number
     solid?: boolean
-    transitionId?:string
-    transitionTo?: string
+}
+
+export interface TransitionConfig {
+    position: VectorArray
+    width: number
+    height: number
+    landingMap: string
+    landingId: string
 }

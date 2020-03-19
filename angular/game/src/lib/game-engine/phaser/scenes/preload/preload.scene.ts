@@ -1,13 +1,15 @@
-import { BaseScene } from '../../../../../../../../nest/local/map/maps/base.scene'
-import { Location }  from '@angular/common'
+import {Location} from '@angular/common'
 import Scene = Phaser.Scene
 
-export class PreloadScene extends BaseScene implements Scene {
+export class PreloadScene extends Scene {
+    name = 'preload'
+
+
     preloaded = false
 
     constructor(private location: Location) {
         super({
-            name: 'preload'
+            key: 'preload'
         })
     }
 
@@ -37,6 +39,9 @@ export class PreloadScene extends BaseScene implements Scene {
     }
 
     create() {
+    }
+
+    update(time: number, delta: number): void {
     }
 
     loadSpritesheets() {
