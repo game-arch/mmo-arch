@@ -5,7 +5,7 @@ install:
 	npm run build:server
 
 copy-environment:
-	cp -n ./angular/projects/game/src/environments/environment.sample.ts ./angular/projects/game/src/environments/environment.ts
+	cp -n ./angular/game/src/environments/environment.sample.ts ./angular/game/src/environments/environment.ts
 
 start:
 	pm2 start client.config.js
