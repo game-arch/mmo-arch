@@ -1,57 +1,60 @@
-import {CollisionConfig, MapConfig, TransitionConfig} from '../interfaces/map-config'
+import { MapConfig }         from '../interfaces/map-config'
+import { MapShape }          from '../interfaces/map-shape'
+import { MapCollisionLayer } from './map-collision.layer'
 import Scene = Phaser.Scene
 import Body = Phaser.Physics.Arcade.Body
-import {MapShape}                                     from "../interfaces/map-shape";
 
-export function loadCollisions(config: MapConfig, scene: Scene) {
+export async function loadCollisions(config: MapConfig, scene: Scene): Promise<{ [id: string]: MapCollisionLayer }> {
     scene.physics.world.setBounds(0, 0, config.width, config.height)
-    let colliders = []
-    let overlaps  = []
+    let layers: { [id: string]: MapCollisionLayer } = {
+        mobs: new MapCollisionLayer({
+            players: scene.physics.add.group([], {
+                visible      : true,
+                frameQuantity: 30
+            }),
+            npcs   : scene.physics.add.group([], {
+                visible      : true,
+                frameQuantity: 30
+            })
+        })
+    }
 
-    function addCollisionShape(shape: MapShape, collision: CollisionConfig) {
-        if (Boolean(collision)) {
-            shape.fillColor = 0xaaaaaa
-        }
-        shape.collision = collision
+    function addShapeToScene(shape: MapShape) {
+        shape.fillColor = 0xaaaaaa
         shape.setOrigin(0, 0)
         scene.physics.add.existing(shape);
         (shape.body as Body).immovable = true
-        colliders.push(shape)
     }
 
-    function addTransitionShape(shape: MapShape, transition: TransitionConfig) {
-        if (Boolean(transition)) {
-            shape.fillColor = 0xaaaaaa
-        }
-        shape.transition = transition
-        shape.setOrigin(0, 0)
-        scene.physics.add.existing(shape);
-        (shape.body as Body).immovable = true
-        overlaps.push(shape)
-    }
 
-    for (let collision of config.collisions) {
-        if (collision.shape === 'circle') {
-            let shape: MapShape = scene.add.circle(collision.position[0], collision.position[1], collision.radius, 0x0000ff)
-            addCollisionShape(shape, collision);
-            (shape.body as Body).isCircle = true;
-            (shape.body as Body).radius   = collision.radius + 4
+    for (let layer of Object.keys(config.layers)) {
+        layers[layer] = new MapCollisionLayer({})
+        for (let group of Object.keys(config.layers[layer].collisions || {})) {
+            let collisions = []
+            for (let collision of config.layers[layer].collisions[group]) {
+                let shape: MapShape = scene.add.rectangle(collision.position[0], collision.position[1], collision.width, collision.height, 0x0055ff)
+                if (collision.shape === 'circle') {
+                    shape                  = scene.add.circle(collision.position[0], collision.position[1], collision.radius, 0x0000ff)
+                    shape.body['isCircle'] = true
+                    shape.body['radius']   = collision.radius + 4
+                }
+                shape.collision = collision
+                await addShapeToScene(shape)
+                collisions.push(shape)
+            }
+            layers[layer].collisions[group] = scene.physics.add.group(collisions, {
+                visible  : true,
+                immovable: true
+            })
+            scene.physics.add.collider(layers.mobs.players, layers[layer].collisions[group])
+            scene.physics.add.collider(layers.mobs.npcs, layers[layer].collisions[group])
         }
-        if (collision.shape === 'rectangle') {
-            let shape: MapShape = scene.add.rectangle(collision.position[0], collision.position[1], collision.width, collision.height, 0x0055ff)
-            addCollisionShape(shape, collision)
-        }
-        if (collision.shape === 'polygon') {
-            let shape: MapShape = scene.add.polygon(collision.position[0], collision.position[1], collision.points, 0xff2200)
-            addCollisionShape(shape, collision)
+        for (let key of Object.keys(config.layers[layer].exits || {})) {
+            let transition      = config.layers[layer].exits[key]
+            let shape: MapShape = scene.add.rectangle(transition.position[0], transition.position[1], transition.width, transition.height, 0x0055ff)
+            await addShapeToScene(shape)
+            layers[layer].exits[key] = shape
         }
     }
-    for (let transition of config.transitions) {
-        let shape: MapShape = scene.add.rectangle(transition.position[0], transition.position[1], transition.width, transition.height, 0x0055ff)
-        addTransitionShape(shape, transition)
-    }
-    return {
-        colliders,
-        overlaps,
-    }
+    return layers
 }

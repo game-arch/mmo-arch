@@ -5,11 +5,16 @@ export interface MapConfig {
     name: string
     width?: number
     height?: number
-    collisions?: CollisionConfig[]
-    transitions?: TransitionConfig[]
-    transitionLandings?: { [id: string]: VectorArray }
+    layers: { [key: string]: LayerConfig }
     tilesetName?: string
     tiles?: string
+}
+
+export interface LayerConfig {
+    exits?: { [id: string]: TransitionConfig }
+    entrances?: { [id: string]: VectorArray }
+    collisions?: { [id: string]: CollisionConfig[] }
+
 }
 
 export interface CollisionConfig {

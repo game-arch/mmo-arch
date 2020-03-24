@@ -1,11 +1,11 @@
-import {MapConfig}      from '../interfaces/map-config'
-import {from}           from 'rxjs'
-import {loadCollisions} from './collisions'
-import {Mob}            from './mob'
+import { MapConfig }             from '../interfaces/map-config'
+import { loadCollisions }        from './collisions'
+import { Mob }                   from './mob'
+import { Directions }            from './directions'
+import { MapCollisionLayer }     from './map-collision.layer'
+import { filter, map, mergeMap } from 'rxjs/operators'
+import { from }                  from 'rxjs'
 import Scene = Phaser.Scene
-import {MapShape}       from "../interfaces/map-shape";
-import Group = Phaser.GameObjects.Group;
-import {Directions}     from "./directions";
 
 export class BaseScene extends Scene implements Scene {
     constant: string
@@ -14,12 +14,9 @@ export class BaseScene extends Scene implements Scene {
     entities: {
         player: { [characterId: number]: Mob }
         mob: { [mobId: number]: Mob }
-    } = {player: {}, mob: {}}
-    collisionGroups: {
-        players: Group,
-        overlaps: MapShape[];
-        colliders: MapShape[]
-    }
+    } = { player: {}, mob: {} }
+
+    layers: { [id: string]: MapCollisionLayer } = {}
 
     savePlayer   = (player: Mob) => {
     }
@@ -31,31 +28,15 @@ export class BaseScene extends Scene implements Scene {
     constructor(public config: MapConfig) {
         super({
             key: config.constant
-        });
-        this.constant = config.constant;
-        this.name     = config.name;
+        })
+        this.constant = config.constant
+        this.name     = config.name
     }
 
-    create() {
+    async create() {
         this.physics.world.TILE_BIAS = 40
         if (this.config) {
-            this.collisionGroups = {
-                ...loadCollisions(this.config, this),
-                players: this.physics.add.group([], {
-                    visible      : true,
-                    frameQuantity: 30
-                })
-            };
-
-            this.physics.add.collider(this.collisionGroups.players, this.collisionGroups.colliders)
-            this.physics.add.group(this.collisionGroups.colliders, {
-                visible  : true,
-                immovable: true,
-            })
-            this.physics.add.group(this.collisionGroups.overlaps, {
-                visible  : true,
-                immovable: true,
-            })
+            this.layers = await loadCollisions(this.config, this)
         }
     }
 
@@ -64,31 +45,34 @@ export class BaseScene extends Scene implements Scene {
         this.entities[type]     = this.entities[type] || {}
         this.entities[type][id] = mob
         this.entities[type][id].create(this, mob.x, mob.y)
-        this.collisionGroups.players.add(mob.sprite)
+        this.layers.mobs[type === 'player' ? 'players' : 'npcs'].add(mob.sprite)
         mob.sprite.onVelocityChange = () => this.emitMob(mob)
         if (type === 'player') {
             mob.sprite.onStopMoving = () => this.savePlayer(mob)
-            from(this.collisionGroups.overlaps)
-                .subscribe(shape => {
-                    if (shape.transition) {
-                        let overlapped = false
-                        this.physics.add.overlap(mob.sprite, shape, () => {
-                            if (!overlapped) {
-                                this.onTransition(mob, shape.transition.landingMap, shape.transition.landingId)
-                                overlapped = true
-                                setTimeout(() => {
-                                    overlapped = false
-                                }, 1000)
-                            }
-                        })
-                    }
+            from(Object.keys(this.config.layers))
+                .pipe(filter(layer => !!this.config.layers[layer].exits))
+                .pipe(mergeMap(layer => from(Object.keys(this.config.layers[layer].exits)).pipe(map(key => ({
+                    shape     : this.layers[layer].exits[key],
+                    transition: this.config.layers[layer].exits[key]
+                })))))
+                .subscribe(({ shape, transition }) => {
+                    let overlapped = false
+                    this.physics.add.overlap(mob.sprite, shape, () => {
+                        if (!overlapped) {
+                            this.onTransition(mob, transition.landingMap, transition.landingId)
+                            overlapped = true
+                            setTimeout(() => {
+                                overlapped = false
+                            }, 1000)
+                        }
+                    })
                 })
         }
     }
 
     removeEntity(type: 'player' | 'mob', id: number) {
         if (this.entities[type][id]) {
-            this.collisionGroups.players.remove(this.entities[type][id].sprite)
+            this.layers.mobs[type === 'player' ? 'players' : 'npcs'].remove(this.entities[type][id].sprite)
             this.entities[type][id].sprite.destroy()
             delete this.entities[type][id]
         }

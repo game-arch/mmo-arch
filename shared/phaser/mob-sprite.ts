@@ -3,7 +3,6 @@ import Vector2 = Phaser.Math.Vector2
 import Body = Phaser.Physics.Arcade.Body
 import Sprite = Phaser.GameObjects.Sprite
 import {Physics}    from './physics'
-import {Subject}    from 'rxjs'
 import {Directions} from './directions'
 
 export class MobSprite extends Sprite {

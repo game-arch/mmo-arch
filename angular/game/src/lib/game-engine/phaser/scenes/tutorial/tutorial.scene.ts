@@ -11,7 +11,4 @@ export class TutorialScene extends MultiplayerScene implements Scene {
     update(time: number, delta: number) {
     }
 
-    create() {
-        super.create()
-    }
 }

@@ -32,7 +32,7 @@ export class MapService {
             audio  : {
                 noAudio: true
             },
-            scene  : [this.map],
+            scene  : this.map,
             physics: {
                 default: 'arcade',
                 arcade : {
@@ -45,7 +45,6 @@ export class MapService {
 
 
     start() {
-        this.phaser.scene.start(this.map.constant)
         this.map.savePlayer   = async (player) => await this.playerRepo.save(player)
         this.map.emitMob      = (player) => this.emitter.playerUpdate(this.map.constant, player.asPayload())
         this.map.onTransition = (mob: Mob, toMap: string, toId: string) => {
