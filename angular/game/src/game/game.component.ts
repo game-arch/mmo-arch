@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core'
-import { ConnectionManager }                                          from '../connection/connection-manager'
-import { CharacterOffline }                                           from '../../../../../nest/local/character/actions'
-import { GameEngineService }                                          from '../game-engine/game-engine.service'
+import { ConnectionManager }                                          from '../lib/connection/connection-manager'
+import { CharacterOffline }                                           from '../../../../nest/local/character/actions'
+import { GameEngineService }                                          from '../lib/game-engine/game-engine.service'
 
 @Component({
     selector   : 'game',
@@ -32,7 +32,7 @@ export class GameComponent implements AfterViewInit, OnDestroy {
 
     signOut() {
         this.engine.game.events.emit('game.scene', 'title')
-        this.world.socket.emit(CharacterOffline.event);
+        this.world.socket.emit(CharacterOffline.event)
         this.world.selectedCharacter = null
     }
 }
