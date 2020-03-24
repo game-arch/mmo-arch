@@ -47,7 +47,7 @@ export class PreloadScene extends Scene {
     loadSpritesheets() {
         const sheetPath = './assets/spritesheets'
         this.load.setPath(sheetPath)
-
+        this.load.atlas('Template', '/template.png', '/template.json')
         this.load.atlas('Boss', '/Boss/Boss1.png', '/Boss/Boss1.json')
         this.load.atlas('Animal', '/Animal/Animal.png', '/Animal/Animal.json')
         this.load.atlas('Enemy', '/Enemy/Enemy.png', '/Enemy/Enemy.json')

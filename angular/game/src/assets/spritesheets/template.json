@@ -1,0 +1,36 @@
+{
+    "textures": [
+        {
+            "image": "template.png",
+            "format": "RGBA8888",
+            "size": {
+                "w": 832,
+                "h": 1344
+            },
+            "scale": 1,
+            "frames": [
+                {
+                    "filename": "template.png",
+                    "rotated": false,
+                    "trimmed": true,
+                    "sourceSize": {
+                        "w": 96,
+                        "h": 128
+                    },
+                    "spriteSourceSize": {
+                        "x": 0,
+                        "y": 512,
+                        "w": 576,
+                        "h": 256
+                    },
+                    "frame": {
+                        "x": 0,
+                        "y": 512,
+                        "w": 576,
+                        "h": 256
+                    }
+                }
+            ]
+        }
+    ]
+}

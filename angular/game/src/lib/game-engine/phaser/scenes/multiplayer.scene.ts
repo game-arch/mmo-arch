@@ -24,6 +24,11 @@ export class MultiplayerScene extends BaseScene implements Scene {
         super(config)
     }
 
+    create() {
+        super.create()
+        console.log('created')
+        console.log(this.layers)
+    }
     get connection() {
         return this.manager.world
     }
@@ -49,13 +54,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         this.removeEntity('player', data.characterId)
     }
 
-    addOrUpdatePlayer(data: {
-        id: number
-        name: string
-        x: number
-        y: number
-        moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
-    }) {
+    addOrUpdatePlayer(data: Mob) {
         let player       = this.players[data.id] || this.createPlayer(data)
         let playerSprite = this.playerSprites[player.id]
         playerSprite.setPosition(data.x, data.y)
@@ -64,13 +63,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         }
     }
 
-    createPlayer(player: {
-        id: number
-        name: string
-        x: number
-        y: number
-        moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
-    }) {
+    createPlayer(player: Mob) {
         let mob = new Mob(player.name)
         mob.id  = player.id
         mob.x   = player.x
@@ -89,12 +82,13 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     destroy() {
-        this.directions    = {
+        this.directions = {
             up   : false,
             down : false,
             right: false,
             left : false
         }
+        Object.keys(this.playerSprites).map(id => this.playerSprites[id].destroy(true))
         this.self          = null
         this.players       = {}
         this.mobs          = {}

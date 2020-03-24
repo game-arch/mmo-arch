@@ -25,15 +25,11 @@ export class MapController {
 
     @EventPattern(WORLD_PREFIX + AllPlayers.event)
     onAllPlayers(data: AllPlayers) {
-        const payload = { ...data }
-        delete payload.map
-        this.gateway.allPlayers(payload)
+        this.gateway.allPlayers(data)
     }
 
     @EventPattern(WORLD_PREFIX + PlayerUpdate.event)
     playerUpdate(data: PlayerUpdate) {
-        const payload = { ...data }
-        delete payload.map
-        this.gateway.server.to('map.' + data.map).emit(PlayerUpdate.event, payload)
+        this.gateway.server.to('map.' + data.map).emit(PlayerUpdate.event, data)
     }
 }

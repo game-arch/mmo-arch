@@ -4,20 +4,8 @@ import { MapCollisionLayer } from './map-collision.layer'
 import Scene = Phaser.Scene
 import Body = Phaser.Physics.Arcade.Body
 
-export async function loadCollisions(config: MapConfig, scene: Scene): Promise<{ [id: string]: MapCollisionLayer }> {
+export function loadCollisions(layers: { [id: string]: MapCollisionLayer }, config: MapConfig, scene: Scene): { [id: string]: MapCollisionLayer } {
     scene.physics.world.setBounds(0, 0, config.width, config.height)
-    let layers: { [id: string]: MapCollisionLayer } = {
-        mobs: new MapCollisionLayer({
-            players: scene.physics.add.group([], {
-                visible      : true,
-                frameQuantity: 30
-            }),
-            npcs   : scene.physics.add.group([], {
-                visible      : true,
-                frameQuantity: 30
-            })
-        })
-    }
 
     function addShapeToScene(shape: MapShape) {
         shape.fillColor = 0xaaaaaa
@@ -39,7 +27,7 @@ export async function loadCollisions(config: MapConfig, scene: Scene): Promise<{
                     shape.body['radius']   = collision.radius + 4
                 }
                 shape.collision = collision
-                await addShapeToScene(shape)
+                addShapeToScene(shape)
                 collisions.push(shape)
             }
             layers[layer].collisions[group] = scene.physics.add.group(collisions, {
@@ -52,7 +40,7 @@ export async function loadCollisions(config: MapConfig, scene: Scene): Promise<{
         for (let key of Object.keys(config.layers[layer].exits || {})) {
             let transition      = config.layers[layer].exits[key]
             let shape: MapShape = scene.add.rectangle(transition.position[0], transition.position[1], transition.width, transition.height, 0x0055ff)
-            await addShapeToScene(shape)
+            addShapeToScene(shape)
             layers[layer].exits[key] = shape
         }
     }

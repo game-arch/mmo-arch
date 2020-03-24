@@ -1,11 +1,9 @@
-import { MapConfig }             from '../interfaces/map-config'
-import { loadCollisions }        from './collisions'
-import { Mob }                   from './mob'
-import { Directions }            from './directions'
-import { MapCollisionLayer }     from './map-collision.layer'
-import { filter, map, mergeMap } from 'rxjs/operators'
-import { from }                  from 'rxjs'
-import { MobSprite }             from './mob-sprite'
+import { MapConfig }         from '../interfaces/map-config'
+import { loadCollisions }    from './collisions'
+import { Mob }               from './mob'
+import { Directions }        from './directions'
+import { MapCollisionLayer } from './map-collision.layer'
+import { MobSprite }         from './mob-sprite'
 import Scene = Phaser.Scene
 
 export class BaseScene extends Scene implements Scene {
@@ -33,28 +31,40 @@ export class BaseScene extends Scene implements Scene {
         this.name     = config.name
     }
 
-    async create() {
+    create() {
         this.physics.world.TILE_BIAS = 40
-        if (this.config) {
-            this.layers = await loadCollisions(this.config, this)
-            from(Object.keys(this.config.layers))
-                .pipe(filter(layer => !!this.config.layers[layer].exits))
-                .pipe(mergeMap(layer => from(Object.keys(this.config.layers[layer].exits)).pipe(map(key => ({
-                    shape     : this.layers[layer].exits[key],
-                    transition: this.config.layers[layer].exits[key]
-                })))))
-                .subscribe(({ shape, transition }) => {
-                    let overlapped = false
-                    this.physics.add.overlap(this.layers.mobs.players, shape, (obj1, obj2) => {
-                        if (!overlapped) {
-                            this.onTransition(obj2 as MobSprite, transition.landingMap, transition.landingId)
-                            overlapped = true
-                            setTimeout(() => {
-                                overlapped = false
-                            }, 1000)
-                        }
-                    })
+        this.layers                  = {
+            mobs: new MapCollisionLayer({
+                players: this.physics.add.group([], {
+                    visible      : true,
+                    frameQuantity: 30
+                }),
+                npcs   : this.physics.add.group([], {
+                    visible      : true,
+                    frameQuantity: 30
                 })
+            })
+        }
+        if (this.config) {
+            this.layers = loadCollisions(this.layers, this.config, this)
+            for (let layer of Object.keys(this.config.layers)) {
+                if (!!this.config.layers[layer].exits) {
+                    for (let key of Object.keys(this.config.layers[layer].exits)) {
+                        let shape      = this.layers[layer].exits[key]
+                        let transition = this.config.layers[layer].exits[key]
+                        let overlapped = false
+                        this.physics.add.overlap(this.layers.mobs.players, shape, (obj1, obj2) => {
+                            if (!overlapped) {
+                                this.onTransition(obj2 as MobSprite, transition.landingMap, transition.landingId)
+                                overlapped = true
+                                setTimeout(() => {
+                                    overlapped = false
+                                }, 1000)
+                            }
+                        })
+                    }
+                }
+            }
         }
     }
 

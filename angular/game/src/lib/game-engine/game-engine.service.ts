@@ -1,21 +1,17 @@
-import { EventEmitter, Injectable } from '@angular/core'
-import { ConnectionManager }        from '../connection/connection-manager'
-import { GAME_CONFIG }              from './phaser/config'
-import { SceneFactory }           from './phaser/scenes/scene-factory.service'
-import { fromEvent }              from 'rxjs'
-import { filter, takeUntil, tap } from 'rxjs/operators'
-import { TitleScene }             from './phaser/scenes/title/title.scene'
-import { PreloadScene }           from './phaser/scenes/preload/preload.scene'
-import { TutorialScene }          from './phaser/scenes/tutorial/tutorial.scene'
-import {
-    AllPlayers,
-    PlayerEnteredMap,
-    PlayerLeftMap,
-    PlayerUpdate,
-}                                 from '../../../../../nest/local/map/actions'
-import { MultiplayerScene }       from './phaser/scenes/multiplayer.scene'
-import { WorldConnection }        from '../connection/world-connection'
-import { EventBus }               from './phaser/event-bus'
+import { EventEmitter, Injectable }                                  from '@angular/core'
+import { ConnectionManager }                                         from '../connection/connection-manager'
+import { GAME_CONFIG }                                               from './phaser/config'
+import { SceneFactory }                                              from './phaser/scenes/scene-factory.service'
+import { fromEvent }                                                 from 'rxjs'
+import { filter, takeUntil, tap }                                    from 'rxjs/operators'
+import { TitleScene }                                                from './phaser/scenes/title/title.scene'
+import { PreloadScene }                                              from './phaser/scenes/preload/preload.scene'
+import { TutorialScene }                                             from './phaser/scenes/tutorial/tutorial.scene'
+import { AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../../../../nest/local/map/actions'
+import { MultiplayerScene }                                          from './phaser/scenes/multiplayer.scene'
+import { WorldConnection }                                           from '../connection/world-connection'
+import { EventBus }                                                  from './phaser/event-bus'
+import { Tutorial2Scene }                                            from './phaser/scenes/tutorial/tutorial2.scene'
 import Game = Phaser.Game
 
 @Injectable()
@@ -25,21 +21,23 @@ export class GameEngineService {
     scenes: {
         preload: PreloadScene
         title: TitleScene
-        tutorial: TutorialScene
+        tutorial: TutorialScene,
+        'tutorial-2': Tutorial2Scene
     }                 = {
-        preload : null,
-        title   : null,
-        tutorial: null,
+        preload     : null,
+        title       : null,
+        tutorial    : null,
+        'tutorial-2': null
     }
     currentSceneKey   = 'preload'
     currentScene: MultiplayerScene
-    worldChange = new EventEmitter()
-    eventBus = new EventBus(this)
+    worldChange       = new EventEmitter()
+    eventBus          = new EventBus(this)
     private destroyed = new EventEmitter()
 
     constructor(
         public sceneFactory: SceneFactory,
-        public connection: ConnectionManager,
+        public connection: ConnectionManager
     ) {
     }
 
@@ -55,7 +53,7 @@ export class GameEngineService {
                     PlayerEnteredMap.event,
                     PlayerLeftMap.event,
                     AllPlayers.event,
-                    PlayerUpdate.event,
+                    PlayerUpdate.event
                 ])
             })
         this.createScenes()
@@ -66,18 +64,20 @@ export class GameEngineService {
                 this.game.events.emit(
                     'resize',
                     window.innerWidth,
-                    window.innerHeight,
-                ),
+                    window.innerHeight
+                )
             )
     }
 
     createScenes() {
-        this.scenes.preload  = this.sceneFactory.preload()
-        this.scenes.title    = this.sceneFactory.title()
-        this.scenes.tutorial = this.sceneFactory.tutorial()
+        this.scenes.preload       = this.sceneFactory.preload()
+        this.scenes.title         = this.sceneFactory.title()
+        this.scenes.tutorial      = this.sceneFactory.tutorial()
+        this.scenes['tutorial-2'] = this.sceneFactory.tutorial2()
         this.game.scene.add('preload', this.scenes.preload)
         this.game.scene.add('title', this.scenes.title)
         this.game.scene.add('tutorial', this.scenes.tutorial)
+        this.game.scene.add('tutorial-2', this.scenes['tutorial-2'])
     }
 
     convertEvent(world: WorldConnection, eventName: string) {

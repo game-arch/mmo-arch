@@ -32,7 +32,7 @@ export class MapGateway {
         const player = await this.players.findOne({ characterId: data.characterId })
         if (player && this.server.sockets[player.socketId]) {
             this.server.sockets[player.socketId].join('map.' + data.map)
-            this.server.sockets[player.socketId].emit(AllPlayers.event, await this.map.getAllPlayers(data.map))
+            this.server.sockets[player.socketId].emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map)))
         }
         this.server.to('map.' + data.map).emit(PlayerEnteredMap.event, data)
     }
@@ -46,7 +46,7 @@ export class MapGateway {
     }
 
     allPlayers(data: AllPlayers) {
-        this.server.to('map.' + data.map).emit(AllPlayers.event, data.players)
+        this.server.to('map.' + data.map).emit(AllPlayers.event, data)
     }
 
     @SubscribeMessage(PlayerDirectionalInput.event)

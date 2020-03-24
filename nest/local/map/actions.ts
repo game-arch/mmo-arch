@@ -1,3 +1,5 @@
+import { Mob } from '../../../shared/phaser/mob'
+
 export class MapOnline {
     static readonly event = 'map.online'
 
@@ -33,7 +35,7 @@ export class PlayerLeftMap {
 export class AllPlayers {
     static readonly event = 'map.all_players'
 
-    constructor(public map: string, public players: { id: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }[]) {
+    constructor(public map: string, public players: Mob[]) {
 
     }
 }
