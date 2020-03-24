@@ -34,7 +34,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
             const direction = this.directionMap[event.key]
             if (this.directions[direction] !== status) {
                 this.directions[direction] = status
-                // this.self.moving = this.directions;
                 this.sendDirectionalInput()
             }
         }
@@ -57,45 +56,49 @@ export class MultiplayerScene extends BaseScene implements Scene {
         y: number
         moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
     }) {
-        let player = this.entities.player[data.id]
-        if (!player) {
-            player = this.createPlayer(data)
-        }
-        player.sprite.setPosition(data.x, data.y)
+        let player       = this.players[data.id] || this.createPlayer(data)
+        let playerSprite = this.playerSprites[player.id]
+        playerSprite.setPosition(data.x, data.y)
         if (data.moving) {
-            player.sprite.moving = data.moving
+            playerSprite.moving = data.moving
         }
     }
 
-    createPlayer(data: {
+    createPlayer(player: {
         id: number
         name: string
         x: number
         y: number
         moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
     }) {
-        const player = new Mob(data.name)
-        player.id = data.id
-        this.addEntity('player', player)
-        if (this.connection.selectedCharacter.id === data.id) {
-            this.setSelf(player)
+        let mob = new Mob(player.name)
+        mob.id  = player.id
+        mob.x   = player.x
+        mob.y   = player.y
+        this.addEntity('player', mob)
+        this.playerSprites[player.id].moving = player.moving || this.playerSprites[player.id].moving
+        if (this.connection.selectedCharacter.id === player.id) {
+            this.setSelf(mob)
         }
-        return player
+        return mob
     }
 
-    setSelf(player) {
+    setSelf(player: Mob) {
         this.self = player
-        this.cameras.main.startFollow(player.sprite.body, true, 0.05, 0.05)
+        this.cameras.main.startFollow(this.playerSprites[player.id].body, true, 0.05, 0.05)
     }
 
     destroy() {
-        this.directions = {
+        this.directions    = {
             up   : false,
             down : false,
             right: false,
             left : false
         }
-        this.self       = null
-        this.entities   = { player: {}, mob: {} }
+        this.self          = null
+        this.players       = {}
+        this.mobs          = {}
+        this.playerSprites = {}
+        this.mobSprites    = {}
     }
 }

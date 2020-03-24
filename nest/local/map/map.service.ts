@@ -1,15 +1,15 @@
-import {Inject, Injectable} from '@nestjs/common'
-import {MapConstants}       from './constants'
-import {Repository}         from 'typeorm'
-import {Player}             from './entities/player'
-import {InjectRepository}   from '@nestjs/typeorm'
-import {MapEmitter}         from './map.emitter'
-import {CharacterClient}    from '../character/client/character.client'
-import {Game}               from 'phaser'
-import {MapTransition}      from './entities/map-transition'
-import {Directions}         from '../../../shared/phaser/directions'
-import {BaseScene}          from "../../../shared/phaser/base.scene";
-import {Mob}                from "../../../shared/phaser/mob";
+import { Inject, Injectable } from '@nestjs/common'
+import { MapConstants }       from './constants'
+import { Repository }         from 'typeorm'
+import { Player }             from './entities/player'
+import { InjectRepository }   from '@nestjs/typeorm'
+import { MapEmitter }         from './map.emitter'
+import { CharacterClient }    from '../character/client/character.client'
+import { Game }               from 'phaser'
+import { MapTransition }      from './entities/map-transition'
+import { Directions }         from '../../../shared/phaser/directions'
+import { BaseScene }          from '../../../shared/phaser/base.scene'
+import { Mob }                from '../../../shared/phaser/mob'
 
 @Injectable()
 export class MapService {
@@ -36,7 +36,7 @@ export class MapService {
             physics: {
                 default: 'arcade',
                 arcade : {
-                    gravity: {y: 0, x: 0}
+                    gravity: { y: 0, x: 0 }
                 }
             }
         })
@@ -45,7 +45,11 @@ export class MapService {
 
 
     start() {
-        this.map.savePlayer   = async (player) => await this.playerRepo.save(player)
+        this.map.savePlayer   = async (player) => {
+            this.map.players[player.id].x = player.x
+            this.map.players[player.id].y = player.y
+            await this.playerRepo.save(this.map.players[player.id])
+        }
         this.map.emitMob      = (player) => this.emitter.playerUpdate(this.map.constant, player.asPayload())
         this.map.onTransition = (mob: Mob, toMap: string, toId: string) => {
             console.log(mob.name, 'Should move to', toMap, toId)
@@ -64,7 +68,7 @@ export class MapService {
                 player.map       = map
                 player.x         = newX
                 player.y         = newY
-                const transition = await this.transitionRepo.findOne({map: lastMap, destinationMap: map})
+                const transition = await this.transitionRepo.findOne({ map: lastMap, destinationMap: map })
                 if (transition) {
                     player.x = transition.destinationX
                     player.y = transition.destinationY
@@ -81,7 +85,7 @@ export class MapService {
     async loggedIn(characterId: number, name: string) {
         let player = await this.playerRepo.findOne(characterId)
         if (!player && this.map.constant === 'tutorial') {
-            player = this.playerRepo.create({id: characterId, map: 'tutorial', x: 100, y: 100})
+            player = this.playerRepo.create({ id: characterId, map: 'tutorial', x: 100, y: 100 })
         }
         if (player && player.map === this.map.constant) {
             player.name = name
@@ -93,9 +97,9 @@ export class MapService {
     async loggedOut(characterId: number) {
         const player = await this.playerRepo.findOne(characterId)
         if (player && player.map === this.map.constant) {
-            if (this.map.entities.player[player.id]) {
-                await this.playerRepo.save(this.map.entities.player[player.id] as Player)
-                this.playerLeftMap(this.map.entities.player[player.id] as Player)
+            if (this.map.players[player.id]) {
+                await this.playerRepo.save(this.map.players[player.id] as Player)
+                this.playerLeftMap(this.map.players[player.id] as Player)
             }
         }
 
@@ -106,7 +110,7 @@ export class MapService {
     }
 
     getPlayerPosition(characterId: number) {
-        const player = this.map.entities.player[characterId]
+        const player = this.map.playerSprites[characterId]
         if (player) {
             return {
                 x: player.x,

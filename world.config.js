@@ -9,7 +9,7 @@ module.exports = {
             instances: (dir === 'world' ? 4 : 1),
             name: 'server.world.' + (process.env.WORLD_CONSTANT || 'maiden') + '.' + (dir === 'world' ? 'server' : dir),
             script: 'dist/nest/local/' + dir + '/main.js',
-            watch: ['dist/nest/local/' + dir, 'dist/nest/lib'],
+            watch: ['dist/nest/local/' + dir, 'dist/nest/lib', 'dist/shared'],
             env: {
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,
                 WORLD_NAME: process.env.WORLD_NAME,
@@ -23,7 +23,7 @@ module.exports = {
             instances: 1,
             name: 'server.world.' + (process.env.WORLD_CONSTANT || 'maiden') + '.map.' + map,
             script: 'dist/nest/local/map/main.js',
-            watch: ['dist/nest/local/map', 'dist/nest/lib'],
+            watch: ['dist/nest/local/map', 'dist/nest/lib', 'dist/shared'],
             env: {
                 MAP: map,
                 WORLD_CONSTANT: process.env.WORLD_CONSTANT,

@@ -6,6 +6,9 @@ import {Physics}    from './physics'
 import {Directions} from './directions'
 
 export class MobSprite extends Sprite {
+    id: number
+    x: number
+    y: number
     lastVelocity       = new Vector2(0, 0)
     stopped            = true
     moving: Directions = {
@@ -23,7 +26,7 @@ export class MobSprite extends Sprite {
     onStartMoving    = () => {
     }
 
-    constructor(scene: Scene, x: number, y: number, key: string = '') {
+    constructor(public name: string = '', scene: Scene, x: number, y: number, key: string = '') {
         super(scene, x, y, key)
         scene.add.existing(this)
         scene.physics.add.existing(this)
@@ -63,6 +66,15 @@ export class MobSprite extends Sprite {
         if (this.stopped) {
             this.onStartMoving()
             this.stopped = false
+        }
+    }
+    asPayload() {
+        return {
+            id    : this.id,
+            name  : this.name,
+            x     : this.x,
+            y     : this.y,
+            moving: this.moving,
         }
     }
 }
