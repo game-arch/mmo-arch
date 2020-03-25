@@ -8,7 +8,7 @@ import { GameEngineService }      from '../game-engine/game-engine.service'
 @Component({
     selector   : 'character-selection',
     templateUrl: 'character-selection.component.html',
-    styleUrls  : ['character-selection.component.scss'],
+    styleUrls  : ['character-selection.component.scss']
 })
 export class CharacterSelectionComponent implements OnInit {
     selected: GameCharacter = null
@@ -16,7 +16,7 @@ export class CharacterSelectionComponent implements OnInit {
     constructor(
         private engine: GameEngineService,
         public connection: ConnectionManager,
-        private dialog: MatDialog,
+        private dialog: MatDialog
     ) {
     }
 
@@ -38,9 +38,8 @@ export class CharacterSelectionComponent implements OnInit {
             if (this.connection.world) {
                 await this.connection.world.selectCharacter(
                     this.selected.name,
-                    this.selected.id,
+                    this.selected.id
                 )
-                this.engine.game.events.emit('game.scene', 'tutorial')
             }
         } catch (e) {
             console.log(e)

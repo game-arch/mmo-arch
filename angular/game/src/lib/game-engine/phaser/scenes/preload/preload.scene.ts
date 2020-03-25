@@ -1,4 +1,5 @@
-import {Location} from '@angular/common'
+import { Location }         from '@angular/common'
+import { MultiplayerScene } from '../multiplayer.scene'
 import Scene = Phaser.Scene
 
 export class PreloadScene extends Scene {
@@ -14,24 +15,27 @@ export class PreloadScene extends Scene {
     }
 
     preload() {
-        this.load.on('progress', (progress: number) => {
-            if (progress < 1) {
-                this.game.events.emit('load.progress', progress)
-            }
-        })
-        this.load.on('complete', () => {
-            this.game.events.emit('load.progress', .999)
-            setTimeout(() => {
-                this.game.events.emit('load.progress', 1)
-                this.game.events.emit('load.complete')
-            }, 1000)
-        })
+        if (!this.preloaded) {
+            this.load.on('progress', (progress: number) => {
+                if (progress < 1) {
+                    this.game.events.emit('load.progress', progress)
+                }
+            })
+            this.load.on('complete', () => {
+                this.game.events.emit('load.progress', .999)
+                setTimeout(() => {
+                    this.game.events.emit('load.progress', 1)
+                    this.game.events.emit('load.complete')
+                }, 1000)
+            })
 
-        this.load.image(
-            'background',
-            this.asset('/assets/backgrounds/login.png')
-        )
-        this.loadSpritesheets()
+            this.load.image(
+                'background',
+                this.asset('/assets/backgrounds/login.png')
+            )
+            this.loadSpritesheets()
+            this.preloaded = true
+        }
     }
 
     asset(url: string) {
@@ -39,6 +43,10 @@ export class PreloadScene extends Scene {
     }
 
     create() {
+        let scene: MultiplayerScene = this.game.scene.getScene('tutorial') as MultiplayerScene
+        scene.create()
+        scene = this.game.scene.getScene('tutorial-2') as MultiplayerScene
+        scene.create()
     }
 
     update(time: number, delta: number): void {

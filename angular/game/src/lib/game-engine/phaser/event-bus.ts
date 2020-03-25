@@ -36,7 +36,7 @@ export class EventBus {
                 scene = 'title'
             }
             this.engine.currentSceneKey = scene
-            this.engine.currentScene    = this.engine.scenes[scene]
+            this.engine.currentScene    = this.engine.getScene(scene) as MultiplayerScene
             this.keyEvents(this.engine.currentScene)
         })
     }
@@ -45,23 +45,24 @@ export class EventBus {
         this.engine.game.events.on(AllPlayers.event, (data: AllPlayers) => {
             from(data.players).subscribe(
                 (player: Mob) => {
-                    if (this.engine.scenes[data.map] instanceof MultiplayerScene) {
-                        this.engine.scenes[data.map].addOrUpdatePlayer(player)
+                    if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
+                        this.engine.getScene(data.map).addOrUpdatePlayer(player)
                     }
                 }
             )
         })
         this.engine.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
             console.log(data)
-            if (this.engine.scenes[data.map] instanceof MultiplayerScene) {
-                this.engine.scenes[data.map].addOrUpdatePlayer(data.player)
+            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
+                this.engine.getScene(data.map).addOrUpdatePlayer(data.player)
             }
         })
     }
 
     private playerPresenceEvents() {
         this.engine.game.events.on(PlayerEnteredMap.event, (data: PlayerEnteredMap) => {
-            if (this.engine.scenes[data.map] instanceof MultiplayerScene) {
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
                 console.log('Player Joined', data)
                 let mob = {
                     id  : data.characterId,
@@ -69,13 +70,17 @@ export class EventBus {
                     x   : data.x,
                     y   : data.y
                 }
-                this.engine.scenes[data.map].addOrUpdatePlayer(mob)
+                console.log(scene, scene.name, data.map)
+                scene.addOrUpdatePlayer(mob)
+                if (scene.self && scene.self.id === mob.id) {
+                    this.engine.game.events.emit('game.scene', data.map)
+                }
             }
         })
         this.engine.game.events.on(PlayerLeftMap.event, (data: PlayerLeftMap) => {
-            if (this.engine.scenes[data.map] instanceof MultiplayerScene) {
+            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
                 console.log('Player Left', data)
-                this.engine.scenes[data.map].removePlayer(data)
+                this.engine.getScene(data.map).removePlayer(data)
             }
         })
     }

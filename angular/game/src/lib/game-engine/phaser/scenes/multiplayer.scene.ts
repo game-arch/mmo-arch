@@ -24,11 +24,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         super(config)
     }
 
-    create() {
-        super.create()
-        console.log('created')
-        console.log(this.layers)
-    }
+
     get connection() {
         return this.manager.world
     }
@@ -89,6 +85,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
             left : false
         }
         Object.keys(this.playerSprites).map(id => this.playerSprites[id].destroy(true))
+        Object.keys(this.mobSprites).map(id => this.mobSprites[id].destroy(true))
         this.self          = null
         this.players       = {}
         this.mobs          = {}

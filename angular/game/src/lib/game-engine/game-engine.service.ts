@@ -1,34 +1,23 @@
 import { EventEmitter, Injectable }                                  from '@angular/core'
 import { ConnectionManager }                                         from '../connection/connection-manager'
 import { GAME_CONFIG }                                               from './phaser/config'
-import { SceneFactory }                                              from './phaser/scenes/scene-factory.service'
 import { fromEvent }                                                 from 'rxjs'
 import { filter, takeUntil, tap }                                    from 'rxjs/operators'
-import { TitleScene }                                                from './phaser/scenes/title/title.scene'
-import { PreloadScene }                                              from './phaser/scenes/preload/preload.scene'
-import { TutorialScene }                                             from './phaser/scenes/tutorial/tutorial.scene'
 import { AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../../../../nest/local/map/actions'
 import { MultiplayerScene }                                          from './phaser/scenes/multiplayer.scene'
 import { WorldConnection }                                           from '../connection/world-connection'
 import { EventBus }                                                  from './phaser/event-bus'
-import { Tutorial2Scene }                                            from './phaser/scenes/tutorial/tutorial2.scene'
+import { TUTORIAL_CONFIG }                                           from '../../../../../shared/maps/tutorial'
+import { TUTORIAL_2_CONFIG }                                         from '../../../../../shared/maps/tutorial-2'
+import { PreloadScene }                                              from './phaser/scenes/preload/preload.scene'
+import { Location }                                                  from '@angular/common'
+import { TitleScene }                                                from './phaser/scenes/title/title.scene'
 import Game = Phaser.Game
 
 @Injectable()
 export class GameEngineService {
     loading           = 0
     game: Game
-    scenes: {
-        preload: PreloadScene
-        title: TitleScene
-        tutorial: TutorialScene,
-        'tutorial-2': Tutorial2Scene
-    }                 = {
-        preload     : null,
-        title       : null,
-        tutorial    : null,
-        'tutorial-2': null
-    }
     currentSceneKey   = 'preload'
     currentScene: MultiplayerScene
     worldChange       = new EventEmitter()
@@ -36,7 +25,7 @@ export class GameEngineService {
     private destroyed = new EventEmitter()
 
     constructor(
-        public sceneFactory: SceneFactory,
+        private location: Location,
         public connection: ConnectionManager
     ) {
     }
@@ -70,14 +59,10 @@ export class GameEngineService {
     }
 
     createScenes() {
-        this.scenes.preload       = this.sceneFactory.preload()
-        this.scenes.title         = this.sceneFactory.title()
-        this.scenes.tutorial      = this.sceneFactory.tutorial()
-        this.scenes['tutorial-2'] = this.sceneFactory.tutorial2()
-        this.game.scene.add('preload', this.scenes.preload)
-        this.game.scene.add('title', this.scenes.title)
-        this.game.scene.add('tutorial', this.scenes.tutorial)
-        this.game.scene.add('tutorial-2', this.scenes['tutorial-2'])
+        this.game.scene.add('preload', new PreloadScene(this.location))
+        this.game.scene.add('title', new TitleScene())
+        this.game.scene.add('tutorial', new MultiplayerScene(this.connection, TUTORIAL_CONFIG))
+        this.game.scene.add('tutorial-2', new MultiplayerScene(this.connection, TUTORIAL_2_CONFIG))
     }
 
     convertEvent(world: WorldConnection, eventName: string) {
@@ -98,5 +83,9 @@ export class GameEngineService {
         this.game.events.emit('destroy')
         this.game.destroy(true)
         this.destroyed.emit()
+    }
+
+    getScene(scene: string) {
+        return this.game.scene.getScene(scene) as MultiplayerScene
     }
 }

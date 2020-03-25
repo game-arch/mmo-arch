@@ -1,17 +1,16 @@
 import { NgModule }          from '@angular/core'
 import { GameEngineService } from './game-engine.service'
-import { SceneFactory }      from './phaser/scenes/scene-factory.service'
 import { ConnectionModule }  from '../connection/connection.module'
 import { CommonModule }      from '@angular/common'
 
 @NgModule({
     imports     : [
         CommonModule,
-        ConnectionModule,
+        ConnectionModule
     ],
-    providers   : [GameEngineService, SceneFactory],
+    providers   : [GameEngineService],
     declarations: [],
-    exports     : [],
+    exports     : []
 })
 export class GameEngineModule {
 
