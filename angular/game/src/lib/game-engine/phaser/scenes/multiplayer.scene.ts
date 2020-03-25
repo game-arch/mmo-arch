@@ -79,7 +79,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     destroy() {
-        console.log('destroy!', this.layers.mobs)
         this.directions    = {
             up   : false,
             down : false,
