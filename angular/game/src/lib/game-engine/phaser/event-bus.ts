@@ -25,7 +25,6 @@ export class EventBus {
 
     private sceneChangeEvents() {
         this.engine.game.events.on('game.scene', scene => {
-            console.log(scene)
             if (this.engine.currentScene) {
                 this.engine.game.scene.stop(this.engine.currentSceneKey)
                 if (this.engine.currentScene.destroy) {
