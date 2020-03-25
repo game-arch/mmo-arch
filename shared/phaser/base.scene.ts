@@ -5,9 +5,10 @@ import { Directions }        from './directions'
 import { MapCollisionLayer } from './map-collision.layer'
 import { MobSprite }         from './mob-sprite'
 import Scene = Phaser.Scene
+import { Subject }           from 'rxjs'
 
 export class BaseScene extends Scene implements Scene {
-    created = false
+    onCreate = new Subject()
     constant: string
     name: string
 
@@ -33,79 +34,79 @@ export class BaseScene extends Scene implements Scene {
     }
 
     create() {
-        if (!this.created) {
-            this.physics.world.TILE_BIAS = 40
-            this.layers                  = {
-                mobs: new MapCollisionLayer({
-                    players: this.physics.add.group([], {
-                        visible      : true,
-                        frameQuantity: 30
-                    }),
-                    npcs   : this.physics.add.group([], {
-                        visible      : true,
-                        frameQuantity: 30
-                    })
+        this.physics.world.TILE_BIAS = 40
+        this.layers                  = {
+            mobs: new MapCollisionLayer({
+                players: this.physics.add.group([], {
+                    visible      : true,
+                    frameQuantity: 30
+                }),
+                npcs   : this.physics.add.group([], {
+                    visible      : true,
+                    frameQuantity: 30
                 })
-            }
-            if (this.config) {
-                this.layers = loadCollisions(this.layers, this.config, this)
-                for (let layer of Object.keys(this.config.layers)) {
-                    if (!!this.config.layers[layer].exits) {
-                        for (let key of Object.keys(this.config.layers[layer].exits)) {
-                            let shape      = this.layers[layer].exits[key]
-                            let transition = this.config.layers[layer].exits[key]
-                            let overlapped = false
-                            this.physics.add.overlap(this.layers.mobs.players, shape, (obj1, obj2) => {
-                                if (!overlapped) {
-                                    this.onTransition(obj2 as MobSprite, transition.landingMap, transition.landingId)
-                                    overlapped = true
-                                    setTimeout(() => {
-                                        overlapped = false
-                                    }, 1000)
-                                }
-                            })
-                        }
+            })
+        }
+        if (this.config) {
+            this.layers = loadCollisions(this.layers, this.config, this)
+            for (let layer of Object.keys(this.config.layers)) {
+                if (!!this.config.layers[layer].exits) {
+                    for (let key of Object.keys(this.config.layers[layer].exits)) {
+                        let shape      = this.layers[layer].exits[key]
+                        let transition = this.config.layers[layer].exits[key]
+                        let overlapped = false
+                        this.physics.add.overlap(this.layers.mobs.players, shape, (obj1, obj2) => {
+                            if (!overlapped) {
+                                this.onTransition(obj2 as MobSprite, transition.landingMap, transition.landingId)
+                                overlapped = true
+                                setTimeout(() => {
+                                    overlapped = false
+                                }, 1000)
+                            }
+                        })
                     }
                 }
             }
-            this.created = true
         }
+        this.onCreate.next()
     }
 
     addPlayer(player: Mob) {
         this.players[player.id]          = player
         this.playerSprites[player.id]    = new MobSprite(player.name, this, player.x, player.y, '')
         this.playerSprites[player.id].id = player.id
-        this.layers.mobs.players.add(this.playerSprites[player.id])
+        this.layers.mobs.players.add(this.playerSprites[player.id], true)
+        this.playerSprites[player.id].onVelocityChange = () => this.emitMob(this.playerSprites[player.id])
+        this.playerSprites[player.id].onStopMoving     = () => this.savePlayer(this.playerSprites[player.id])
     }
 
     addMob(mob: Mob) {
         this.mobs[mob.id]          = mob
         this.mobSprites[mob.id]    = new MobSprite(mob.name, this, mob.x, mob.y, '')
         this.mobSprites[mob.id].id = mob.id
-        this.layers.mobs.npcs.add(this.mobSprites[mob.id])
+        this.layers.mobs.npcs.add(this.mobSprites[mob.id], true)
+        this.mobSprites[mob.id].onVelocityChange = () => this.emitMob(this.mobSprites[mob.id])
     }
 
     addEntity(type: 'player' | 'mob', mob: Mob) {
         if (type === 'player') {
             this.addPlayer(mob)
-            this.playerSprites[mob.id].onVelocityChange = () => this.emitMob(this.playerSprites[mob.id])
-            this.playerSprites[mob.id].onStopMoving     = () => this.savePlayer(this.playerSprites[mob.id])
         } else {
             this.addMob(mob)
-            this.mobSprites[mob.id].onVelocityChange = () => this.emitMob(this.mobSprites[mob.id])
         }
     }
 
     removeEntity(type: 'player' | 'mob', id: number) {
-        if (type === 'player') {
-            this.layers.mobs.players.remove(this.playerSprites[id])
-            this.playerSprites[id].destroy()
+        if (type === 'player' && this.playerSprites[id]) {
+            if (this.layers.mobs.players.contains(this.playerSprites[id])) {
+                this.layers.mobs.players.remove(this.playerSprites[id], true, true)
+            }
             delete this.players[id]
             delete this.playerSprites[id]
-        } else {
-            this.layers.mobs.npcs.remove(this.mobSprites[id])
-            this.mobSprites[id].destroy()
+        } else if (this.mobSprites[id]) {
+            if (this.layers.mobs.npcs.contains(this.mobSprites[id])) {
+                this.layers.mobs.npcs.remove(this.mobSprites[id], true, true)
+            }
             delete this.mobs[id]
             delete this.mobSprites[id]
         }

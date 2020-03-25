@@ -20,6 +20,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         left : false
     }
 
+
     constructor(protected manager: ConnectionManager, config: MapConfig) {
         super(config)
     }
@@ -78,14 +79,13 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     destroy() {
-        this.directions = {
+        console.log('destroy!', this.layers.mobs)
+        this.directions    = {
             up   : false,
             down : false,
             right: false,
             left : false
         }
-        Object.keys(this.playerSprites).map(id => this.playerSprites[id].destroy(true))
-        Object.keys(this.mobSprites).map(id => this.mobSprites[id].destroy(true))
         this.self          = null
         this.players       = {}
         this.mobs          = {}

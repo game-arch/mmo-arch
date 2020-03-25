@@ -3,6 +3,7 @@ import { AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../..
 import { from }                                                      from 'rxjs'
 import { MultiplayerScene }                                          from './scenes/multiplayer.scene'
 import { Mob }                                                       from '../../../../../../shared/phaser/mob'
+import { first }                                                     from 'rxjs/operators'
 
 export class EventBus {
     constructor(private engine: GameEngineService) {
@@ -45,15 +46,24 @@ export class EventBus {
         this.engine.game.events.on(AllPlayers.event, (data: AllPlayers) => {
             from(data.players).subscribe(
                 (player: Mob) => {
-                    if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
+                    let scene = this.engine.getScene(data.map)
+                    if (scene instanceof MultiplayerScene) {
+                        if (!scene.physics.world || !scene.layers.mobs) {
+                            scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdatePlayer(player))
+                            return
+                        }
                         this.engine.getScene(data.map).addOrUpdatePlayer(player)
                     }
                 }
             )
         })
         this.engine.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
-            console.log(data)
-            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                if (!scene.physics.world || !scene.layers.mobs) {
+                    scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdatePlayer(data.player))
+                    return
+                }
                 this.engine.getScene(data.map).addOrUpdatePlayer(data.player)
             }
         })
@@ -64,16 +74,22 @@ export class EventBus {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 console.log('Player Joined', data)
-                let mob = {
+                let mob   = {
                     id  : data.characterId,
                     name: data.name,
                     x   : data.x,
                     y   : data.y
                 }
-                console.log(scene, scene.name, data.map)
-                scene.addOrUpdatePlayer(mob)
-                if (scene.self && scene.self.id === mob.id) {
-                    this.engine.game.events.emit('game.scene', data.map)
+                let scene = this.engine.getScene(data.map)
+                if (scene instanceof MultiplayerScene) {
+                    if (mob.id === this.engine.connection.world.selectedCharacter.id) {
+                        this.engine.game.events.emit('game.scene', data.map)
+                    }
+                    if (!scene.physics.world || !scene.layers.mobs) {
+                        scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(mob))
+                        return
+                    }
+                    scene.addOrUpdatePlayer(mob)
                 }
             }
         })

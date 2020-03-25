@@ -42,13 +42,6 @@ export class PreloadScene extends Scene {
         return this.location.prepareExternalUrl(url)
     }
 
-    create() {
-        let scene: MultiplayerScene = this.game.scene.getScene('tutorial') as MultiplayerScene
-        scene.create()
-        scene = this.game.scene.getScene('tutorial-2') as MultiplayerScene
-        scene.create()
-    }
-
     update(time: number, delta: number): void {
     }
 
