@@ -27,7 +27,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         return this.service.map.getAllPlayers()
     }
 
-    @MessagePattern(WORLD_PREFIX + GetAllPlayers.event)
+    @MessagePattern(WORLD_PREFIX + GetAllPlayers.event + '.' + MapConstants.MAP)
     getAllPlayers(data: GetAllPlayers) {
         return this.service.map.getAllPlayers()
     }

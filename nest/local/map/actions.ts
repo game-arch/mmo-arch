@@ -43,9 +43,6 @@ export class AllPlayers {
 export class GetAllPlayers {
     static readonly event = 'map.get_all_players'
 
-    constructor(public map: string) {
-
-    }
 }
 
 export class GetPlayerPosition {

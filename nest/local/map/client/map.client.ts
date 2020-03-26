@@ -13,7 +13,7 @@ export class MapClient {
     }
 
     async getAllPlayers(map: string) {
-        return await this.client.send(WORLD_PREFIX + GetAllPlayers.event, new GetAllPlayers(map)).pipe(first()).toPromise()
+        return await this.client.send(WORLD_PREFIX + GetAllPlayers.event + '.' + map, new GetAllPlayers()).pipe(first()).toPromise()
     }
 
     async getPlayer(characterId: number, map: string): Promise<{ x: number, y: number }> {
