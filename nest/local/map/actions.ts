@@ -19,7 +19,7 @@ export class PlayerEnteredMap implements Mob {
 export class PlayerChangedMap {
     static readonly event = 'map.player_changed_map'
 
-    constructor(public id: number, public map: string, public newX: number, public newY: number) {
+    constructor(public id: number, public map: string, public newX: number, public newY: number, public entrance?: string) {
 
     }
 }

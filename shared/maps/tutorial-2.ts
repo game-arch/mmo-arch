@@ -12,12 +12,6 @@ export const TUTORIAL_2_CONFIG: MapConfig = {
                     {
                         solid   : true,
                         shape   : 'rectangle',
-                        position: [320, 500],
-                        radius  : 100
-                    },
-                    {
-                        solid   : true,
-                        shape   : 'rectangle',
                         position: [0, 0],
                         width   : 1024,
                         height  : 32
@@ -51,13 +45,13 @@ export const TUTORIAL_2_CONFIG: MapConfig = {
                 'exit': {
                     landingMap: 'tutorial',
                     landingId : 'enter',
-                    position  : [0, 120],
+                    position  : [1024 - 64, 120],
                     width     : 64,
                     height    : 120
                 }
             },
             entrances: {
-                enter: [72, 200]
+                enter: [1024 - 96, 200]
             }
         }
     }

@@ -26,7 +26,7 @@ import {BaseScene}             from "../../../shared/phaser/base.scene";
         TypeOrmModule.forFeature([MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
         TypeOrmModule.forRoot({
             type       : 'sqlite',
-            database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_' + MapConstants.MAP + '.db'),
+            database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_map.db'),
             logging    : false,
             synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}']

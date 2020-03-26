@@ -1,8 +1,8 @@
-import { Inject, Injectable }                                                   from '@nestjs/common'
-import { ClientProxy }                                                          from '@nestjs/microservices'
-import { AllPlayers, MapOnline, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from './actions'
-import { WORLD_PREFIX }                                                         from '../world/world.prefix'
-import { LOCAL_CLIENT }                                                         from '../../client/client.module'
+import { Inject, Injectable }                                                                     from '@nestjs/common'
+import { ClientProxy }                                                                            from '@nestjs/microservices'
+import { AllPlayers, MapOnline, PlayerChangedMap, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from './actions'
+import { WORLD_PREFIX }                                                                           from '../world/world.prefix'
+import { LOCAL_CLIENT }                                                                           from '../../client/client.module'
 
 @Injectable()
 export class MapEmitter {
@@ -29,5 +29,9 @@ export class MapEmitter {
 
     nowOnline() {
         this.client.emit(WORLD_PREFIX + MapOnline.event, {})
+    }
+
+    changedMap(toMap: string, characterId: number, newX: number, newY: number, entrance?: string) {
+        this.client.emit(WORLD_PREFIX + PlayerChangedMap.event, new PlayerChangedMap(characterId, toMap, newX, newY, entrance))
     }
 }

@@ -75,6 +75,8 @@ delete-maiden:
 
 start-talos:
 	WORLD_NAME=Talos WORLD_CONSTANT=talos WORLD_PORT=3006 pm2 start world.config.js --kill-timeout 5000
+restart-talos:
+	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 restart world.config.js
 stop-talos:
 	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 stop world.config.js
 delete-talos:

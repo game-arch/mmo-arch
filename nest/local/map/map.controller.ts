@@ -34,7 +34,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(WORLD_PREFIX + PlayerChangedMap.event)
     async changedMap(data: PlayerChangedMap) {
-        await this.service.changedMaps(data.id, data.map, data.newX, data.newY)
+        await this.service.changedMaps(data.id, data.map, data.newX, data.newY, data.entrance)
     }
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)

@@ -57,7 +57,7 @@ export const TUTORIAL_CONFIG: MapConfig = {
                 }
             },
             entrances: {
-                enter: [72, 200]
+                enter: [96, 200]
             }
         }
     }
