@@ -8,10 +8,10 @@ export class MapOnline {
     }
 }
 
-export class PlayerEnteredMap {
+export class PlayerEnteredMap implements Mob {
     static readonly event = 'map.player_entered'
 
-    constructor(public characterId: number, public name: string, public map: string, public x: number, public y: number) {
+    constructor(public id: number, public name: string, public map: string, public x: number, public y: number) {
 
     }
 }
@@ -19,7 +19,7 @@ export class PlayerEnteredMap {
 export class PlayerChangedMap {
     static readonly event = 'map.player_changed_map'
 
-    constructor(public characterId: number, public map: string, public newX: number, public newY: number) {
+    constructor(public id: number, public map: string, public newX: number, public newY: number) {
 
     }
 }
@@ -27,7 +27,7 @@ export class PlayerChangedMap {
 export class PlayerLeftMap {
     static readonly event = 'map.player_left'
 
-    constructor(public characterId: number, public name: string, public map: string) {
+    constructor(public id: number, public name: string, public map: string) {
 
     }
 }
@@ -51,7 +51,7 @@ export class GetAllPlayers {
 export class GetPlayerPosition {
     static readonly event = 'map.get_player_position'
 
-    constructor(public characterId: number) {
+    constructor(public id: number) {
 
     }
 }
@@ -67,7 +67,7 @@ export class PlayerUpdate {
 export class PlayerDirectionalInput {
     static readonly event = 'map.player_directional_input'
 
-    constructor(public characterId: number, public map: string, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+    constructor(public id: number, public map: string, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
 
     }
 }

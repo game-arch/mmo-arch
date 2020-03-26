@@ -121,13 +121,13 @@ export class MapService {
     }
 
     private playerJoinedMap(player: Player) {
-        this.map.addEntity('player', player)
+        this.map.addPlayer(player)
         this.emitter.playerJoinedMap(this.map.constant, player.id, player.name, player.x, player.y)
     }
 
     private playerLeftMap(player: Player) {
         if (player) {
-            this.map.removeEntity('player', player.id)
+            this.map.removePlayer(player.id)
             this.emitter.playerLeftMap(this.map.constant, player.id, player.name)
         }
     }

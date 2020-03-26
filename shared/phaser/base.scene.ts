@@ -4,8 +4,8 @@ import { Mob }               from './mob'
 import { Directions }        from './directions'
 import { MapCollisionLayer } from './map-collision.layer'
 import { MobSprite }         from './mob-sprite'
-import Scene = Phaser.Scene
 import { Subject }           from 'rxjs'
+import Scene = Phaser.Scene
 
 export class BaseScene extends Scene implements Scene {
     onCreate = new Subject()
@@ -13,8 +13,8 @@ export class BaseScene extends Scene implements Scene {
     name: string
 
     players: { [characterId: number]: Mob }             = {}
-    mobs: { [mobId: number]: Mob }                      = {}
-    mobSprites: { [mobId: number]: MobSprite }          = {}
+    npcs: { [mobId: number]: Mob }                      = {}
+    npcSprites: { [mobId: number]: MobSprite }          = {}
     playerSprites: { [characterId: number]: MobSprite } = {}
     layers: { [id: string]: MapCollisionLayer }         = {}
 
@@ -72,44 +72,34 @@ export class BaseScene extends Scene implements Scene {
     }
 
     addPlayer(player: Mob) {
-        this.players[player.id]          = player
-        this.playerSprites[player.id]    = new MobSprite(player.name, this, player.x, player.y, '')
-        this.playerSprites[player.id].id = player.id
-        this.layers.mobs.players.add(this.playerSprites[player.id], true)
+        this.players[player.id]                        = player
+        this.playerSprites[player.id]                  = new MobSprite(player.name, this, this.layers.mobs.players, player.x, player.y)
+        this.playerSprites[player.id].id               = player.id
         this.playerSprites[player.id].onVelocityChange = () => this.emitMob(this.playerSprites[player.id])
         this.playerSprites[player.id].onStopMoving     = () => this.savePlayer(this.playerSprites[player.id])
     }
 
-    addMob(mob: Mob) {
-        this.mobs[mob.id]          = mob
-        this.mobSprites[mob.id]    = new MobSprite(mob.name, this, mob.x, mob.y, '')
-        this.mobSprites[mob.id].id = mob.id
-        this.layers.mobs.npcs.add(this.mobSprites[mob.id], true)
-        this.mobSprites[mob.id].onVelocityChange = () => this.emitMob(this.mobSprites[mob.id])
+    addNpc(mob: Mob) {
+        this.npcs[mob.id]                        = mob
+        this.npcSprites[mob.id]                  = new MobSprite(mob.name, this, this.layers.mobs.npcs, mob.x, mob.y, '')
+        this.npcSprites[mob.id].id               = mob.id
+        this.npcSprites[mob.id].onVelocityChange = () => this.emitMob(this.npcSprites[mob.id])
     }
 
-    addEntity(type: 'player' | 'mob', mob: Mob) {
-        if (type === 'player') {
-            this.addPlayer(mob)
-        } else {
-            this.addMob(mob)
+    removePlayer(id: number) {
+        if (this.layers.mobs.players.children && this.layers.mobs.players.contains(this.playerSprites[id])) {
+            this.layers.mobs.players.remove(this.playerSprites[id], true, true)
         }
+        delete this.players[id]
+        delete this.playerSprites[id]
     }
 
-    removeEntity(type: 'player' | 'mob', id: number) {
-        if (type === 'player' && this.playerSprites[id]) {
-            if (this.layers.mobs.players.contains(this.playerSprites[id])) {
-                this.layers.mobs.players.remove(this.playerSprites[id], true, true)
-            }
-            delete this.players[id]
-            delete this.playerSprites[id]
-        } else if (this.mobSprites[id]) {
-            if (this.layers.mobs.npcs.contains(this.mobSprites[id])) {
-                this.layers.mobs.npcs.remove(this.mobSprites[id], true, true)
-            }
-            delete this.mobs[id]
-            delete this.mobSprites[id]
+    removeNpc(id: number) {
+        if (this.layers.mobs.npcs.children && this.layers.mobs.npcs.contains(this.npcSprites[id])) {
+            this.layers.mobs.npcs.remove(this.npcSprites[id], true, true)
         }
+        delete this.npcs[id]
+        delete this.npcSprites[id]
     }
 
     moveEntity(type: 'player' | 'mob', id: number, directions: Directions) {
@@ -122,7 +112,7 @@ export class BaseScene extends Scene implements Scene {
             }
             return
         }
-        this.mobSprites[id].moving = {
+        this.npcSprites[id].moving = {
             up   : !!directions.up,
             down : !!directions.down,
             left : !!directions.left,

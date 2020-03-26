@@ -34,7 +34,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(WORLD_PREFIX + PlayerChangedMap.event)
     async changedMap(data: PlayerChangedMap) {
-        await this.service.changedMaps(data.characterId, data.map, data.newX, data.newY)
+        await this.service.changedMaps(data.id, data.map, data.newX, data.newY)
     }
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
@@ -50,13 +50,13 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     @EventPattern(WORLD_PREFIX + PlayerDirectionalInput.event)
     async playerMoved(data: PlayerDirectionalInput) {
         if (data.map === this.service.map.constant) {
-            this.service.movePlayer(data.characterId, data.directions)
+            this.service.movePlayer(data.id, data.directions)
         }
     }
 
     @MessagePattern(WORLD_PREFIX + GetPlayerPosition.event + '.' + MapConstants.MAP)
     getPlayer(data: GetPlayerPosition) {
-        return this.service.getPlayerPosition(data.characterId)
+        return this.service.getPlayerPosition(data.id)
     }
 
     onApplicationBootstrap() {

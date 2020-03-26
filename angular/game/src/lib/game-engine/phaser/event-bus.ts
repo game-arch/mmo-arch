@@ -73,29 +73,23 @@ export class EventBus {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 console.log('Player Joined', data)
-                let mob   = {
-                    id  : data.characterId,
-                    name: data.name,
-                    x   : data.x,
-                    y   : data.y
-                }
                 let scene = this.engine.getScene(data.map)
                 if (scene instanceof MultiplayerScene) {
-                    if (mob.id === this.engine.connection.world.selectedCharacter.id) {
+                    if (data.id === this.engine.connection.world.selectedCharacter.id) {
                         this.engine.game.events.emit('game.scene', data.map)
                     }
                     if (!scene.physics.world || !scene.layers.mobs) {
-                        scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(mob))
+                        scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(data))
                         return
                     }
-                    scene.addOrUpdatePlayer(mob)
+                    scene.addOrUpdatePlayer(data)
                 }
             }
         })
         this.engine.game.events.on(PlayerLeftMap.event, (data: PlayerLeftMap) => {
             if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
                 console.log('Player Left', data)
-                this.engine.getScene(data.map).removePlayer(data)
+                this.engine.getScene(data.map).removePlayer(data.id)
             }
         })
     }

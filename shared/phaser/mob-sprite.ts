@@ -2,8 +2,9 @@ import Scene = Phaser.Scene
 import Vector2 = Phaser.Math.Vector2
 import Body = Phaser.Physics.Arcade.Body
 import Sprite = Phaser.GameObjects.Sprite
-import {Physics}    from './physics'
-import {Directions} from './directions'
+import { Physics }    from './physics'
+import { Directions } from './directions'
+import Group = Phaser.GameObjects.Group
 
 export class MobSprite extends Sprite {
     id: number
@@ -15,7 +16,7 @@ export class MobSprite extends Sprite {
         up   : false,
         down : false,
         left : false,
-        right: false,
+        right: false
     }
     body: Body
 
@@ -26,20 +27,16 @@ export class MobSprite extends Sprite {
     onStartMoving    = () => {
     }
 
-    constructor(public name: string = '', scene: Scene, x: number, y: number, key: string = '') {
+    constructor(public name: string = '', scene: Scene, group:Group, x: number, y: number, key: string = 'template.png') {
         super(scene, x, y, key)
-        scene.add.existing(this)
         scene.physics.add.existing(this)
+        group.add(this, true)
         this.body.setSize(32, 32)
         this.body.collideWorldBounds = true
     }
 
     preUpdate(...args: any[]) {
-        let adjustmentX = Math.round(this.x)
-        let adjustmentY = Math.round(this.y)
-        if (this.x !== adjustmentX || this.y !== adjustmentY) {
-            this.setPosition(adjustmentX, adjustmentY)
-        }
+        this.setPosition(Math.round(this.x), Math.round(this.y))
         if (!this.moving) {
             return
         }
@@ -49,32 +46,26 @@ export class MobSprite extends Sprite {
             this.lastVelocity = this.body.velocity.clone()
             this.onVelocityChange()
             if (velocity.equals(new Vector2(0, 0))) {
-                return this.reportStopped()
+                if (!this.stopped) {
+                    this.onStopMoving()
+                    this.stopped = true
+                }
+                return
             }
-            return this.reportMoving()
+            if (this.stopped) {
+                this.onStartMoving()
+                this.stopped = false
+            }
         }
     }
 
-    private reportStopped() {
-        if (!this.stopped) {
-            this.onStopMoving()
-            this.stopped = true
-        }
-    }
-
-    private reportMoving() {
-        if (this.stopped) {
-            this.onStartMoving()
-            this.stopped = false
-        }
-    }
     asPayload() {
         return {
             id    : this.id,
             name  : this.name,
             x     : this.x,
             y     : this.y,
-            moving: this.moving,
+            moving: this.moving
         }
     }
 }

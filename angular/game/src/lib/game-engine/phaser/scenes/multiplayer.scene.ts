@@ -47,9 +47,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
         })
     }
 
-    removePlayer(data: PlayerLeftMap) {
-        this.removeEntity('player', data.characterId)
-    }
 
     addOrUpdatePlayer(data: Mob) {
         let player       = this.players[data.id] || this.createPlayer(data)
@@ -65,7 +62,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.id  = player.id
         mob.x   = player.x
         mob.y   = player.y
-        this.addEntity('player', mob)
+        this.addPlayer(mob)
         this.playerSprites[player.id].moving = player.moving || this.playerSprites[player.id].moving
         if (this.connection.selectedCharacter.id === player.id) {
             this.setSelf(mob)
@@ -87,8 +84,8 @@ export class MultiplayerScene extends BaseScene implements Scene {
         }
         this.self          = null
         this.players       = {}
-        this.mobs          = {}
+        this.npcs          = {}
         this.playerSprites = {}
-        this.mobSprites    = {}
+        this.npcSprites    = {}
     }
 }
