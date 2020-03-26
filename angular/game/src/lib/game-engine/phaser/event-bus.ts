@@ -1,9 +1,10 @@
 import { GameEngineService }                                         from '../game-engine.service'
 import { AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../../../../../nest/local/map/actions'
-import { from }                                                      from 'rxjs'
+import { from, fromEvent }                                           from 'rxjs'
 import { MultiplayerScene }                                          from './scenes/multiplayer.scene'
 import { Mob }                                                       from '../../../../../../shared/phaser/mob'
 import { first }                                                     from 'rxjs/operators'
+import { Directions }                                                from '../../../../../../shared/phaser/directions'
 
 export class EventBus {
     constructor(private engine: GameEngineService) {
@@ -25,9 +26,13 @@ export class EventBus {
 
     private sceneChangeEvents() {
         this.engine.game.events.on('game.scene', scene => {
+            let directions: Directions
             if (this.engine.currentScene) {
                 this.engine.game.scene.stop(this.engine.currentSceneKey)
                 if (this.engine.currentScene.destroy) {
+                    if (this.engine.currentScene instanceof MultiplayerScene) {
+                        directions = this.engine.currentScene.directions
+                    }
                     this.engine.currentScene.destroy()
                 }
             }
@@ -37,6 +42,10 @@ export class EventBus {
             }
             this.engine.currentSceneKey = scene
             this.engine.currentScene    = this.engine.getScene(scene) as MultiplayerScene
+            if (directions && this.engine.currentScene instanceof MultiplayerScene) {
+                this.engine.currentScene.directions = directions
+                this.engine.currentScene.sendDirectionalInput()
+            }
             this.keyEvents(this.engine.currentScene)
         })
     }

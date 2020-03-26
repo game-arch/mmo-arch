@@ -56,6 +56,20 @@ export class GameEngineService {
                     window.innerHeight
                 )
             )
+
+        fromEvent(window, 'blur')
+            .pipe(takeUntil(this.destroyed))
+            .subscribe(() => {
+                if (this.currentScene instanceof MultiplayerScene) {
+                    this.currentScene.directions = {
+                        up   : false,
+                        down : false,
+                        right: false,
+                        left : false
+                    }
+                    this.currentScene.sendDirectionalInput()
+                }
+            })
     }
 
     createScenes() {
