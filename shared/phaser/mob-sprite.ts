@@ -2,9 +2,9 @@ import Scene = Phaser.Scene
 import Vector2 = Phaser.Math.Vector2
 import Body = Phaser.Physics.Arcade.Body
 import Sprite = Phaser.GameObjects.Sprite
+import Group = Phaser.GameObjects.Group
 import { Physics }    from './physics'
 import { Directions } from './directions'
-import Group = Phaser.GameObjects.Group
 
 export class MobSprite extends Sprite {
     id: number
@@ -27,11 +27,12 @@ export class MobSprite extends Sprite {
     onStartMoving    = () => {
     }
 
-    constructor(public name: string = '', scene: Scene, group:Group, x: number, y: number, key: string = 'template.png') {
-        super(scene, x, y, key)
+    constructor(public name: string = '', scene: Scene, group: Group, x: number, y: number, key: string = 'Template') {
+        super(scene, x, y, key, 'template.png')
+        this.setSize(64, 64)
+        this.setOrigin(0.5, 0.5)
         scene.physics.add.existing(this)
         group.add(this, true)
-        this.body.setSize(32, 32)
         this.body.collideWorldBounds = true
     }
 
