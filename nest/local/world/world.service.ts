@@ -37,7 +37,7 @@ export class WorldService {
 
     async storeCharacter(client: Socket, character: { id: number, name: string }) {
         const player = await this.players.findOne({ socketId: client.id })
-        if (player) {
+        if (player && character.id) {
             await this.validateCharacterLogin(player, character.id)
             await this.character.characterOnline(character.id, client.id)
             player.characterId   = character.id
@@ -62,14 +62,18 @@ export class WorldService {
     }
 
     async removeCharacter(client: Socket) {
-        const player = await this.players.findOne({ socketId: client.id })
-        if (player) {
-            await this.character.characterOffline(player.characterId)
-            client.adapter.del(client.id, 'character-id.' + player.characterId)
-            client.adapter.del(client.id, 'character-name.' + player.characterName)
-            player.characterId   = null
-            player.characterName = null
-            await this.players.save(player)
+        try {
+            const player = await this.players.findOne({ socketId: client.id })
+            if (player) {
+                await this.character.characterOffline(player.characterId)
+                client.adapter.del(client.id, 'character-id.' + player.characterId)
+                client.adapter.del(client.id, 'character-name.' + player.characterName)
+                player.characterId   = null
+                player.characterName = null
+                await this.players.save(player)
+            }
+        } catch (e) {
+            // We are probably disconnected and shutting down right now
         }
     }
 

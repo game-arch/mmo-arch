@@ -5,6 +5,7 @@ import Sprite = Phaser.GameObjects.Sprite
 import Group = Phaser.GameObjects.Group
 import { Physics }    from './physics'
 import { Directions } from './directions'
+import { isServer }   from '../constants/environment-constants'
 
 export class MobSprite extends Sprite {
     id: number
@@ -27,8 +28,8 @@ export class MobSprite extends Sprite {
     onStartMoving    = () => {
     }
 
-    constructor(public name: string = '', scene: Scene, group: Group, x: number, y: number, key: string = 'Template') {
-        super(scene, x, y, key, 'template.png')
+    constructor(public name: string = '', scene: Scene, group: Group, x: number, y: number, key: string = !isServer ? 'Template' : '') {
+        super(scene, x, y, key, !isServer ? 'template.png' : '')
         this.setSize(64, 64)
         this.setOrigin(0.5, 0.5)
         scene.physics.add.existing(this)
