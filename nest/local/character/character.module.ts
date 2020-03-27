@@ -9,6 +9,8 @@ import * as path               from 'path'
 import { environment }         from '../../lib/config/environment'
 import { MapClientModule }     from '../map/client/map-client.module'
 import { ClientModule }        from '../../client/client.module'
+import { DB_CONFIG }           from '../../lib/config/db.config'
+import { ConnectionOptions }   from 'typeorm'
 
 
 @Module({
@@ -16,9 +18,9 @@ import { ClientModule }        from '../../client/client.module'
         ClientModule,
         MapClientModule,
         TypeOrmModule.forFeature([Character]),
-        TypeOrmModule.forRoot({
-            type       : 'sqlite',
-            database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_character.db'),
+        TypeOrmModule.forRoot(<ConnectionOptions>{
+            ...DB_CONFIG,
+            database   : DB_CONFIG.type === 'mysql' ? WorldConstants.DB_NAME + '_character' : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_character.db'),
             logging    : false,
             synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}']

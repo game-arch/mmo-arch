@@ -14,11 +14,10 @@ import { CharacterClient }                                  from '../character/c
 import { CharacterOffline, GetCharacters }                  from '../character/actions'
 import { InjectRepository }                                 from '@nestjs/typeorm'
 import { Player }                                           from './entities/player'
-import { createConnection, Repository }                     from 'typeorm'
-import * as fs                                              from 'fs'
-import * as path                                            from 'path'
+import { Repository }                                       from 'typeorm'
 import { Namespace, Socket }                                from 'socket.io'
 import * as parser                                          from 'socket.io-msgpack-parser'
+import { connectDatabase }                                  from '../../lib/config/db.config'
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -80,15 +79,11 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async onApplicationShutdown(signal?: string) {
-        const connection = await createConnection({
-            type    : 'sqlite',
-            database: path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'),
-            logging : false
-        })
+        const connection = await connectDatabase(WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE)
         const sockets    = await connection.query('select socketId from player')
-        await connection.close()
-        fs.unlinkSync(path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'))
         await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))))
+        await connection.dropDatabase()
+        await connection.close()
         this.presence.serverOffline(this.serverId)
     }
 }

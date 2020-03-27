@@ -8,6 +8,9 @@ export interface MapConfig {
     layers: { [key: string]: LayerConfig }
     tilesetName?: string
     tiles?: string
+    npcs?: {
+        [id: number]: VectorArray
+    }
 }
 
 export interface LayerConfig {

@@ -1,3 +1,7 @@
+let path = require('path')
+require('dotenv').config({
+    path: path.resolve(__dirname, '.env')
+})
 module.exports = {
     apps: [
         {
@@ -7,6 +11,13 @@ module.exports = {
             watch: ['dist/nest/global/lobby', 'dist/nest/lib'],
             watch_options: {
                 'followSymlinks': false
+            },
+            env: {
+                DB_TYPE: process.env.DB_TYPE,
+                MYSQL_HOST: process.env.MYSQL_HOST,
+                MYSQL_PORT: process.env.MYSQL_PORT,
+                MYSQL_USERNAME: process.env.MYSQL_USERNAME,
+                MYSQL_PASSWORD: process.env.MYSQL_PASSWORD
             }
         },
         {
@@ -16,6 +27,13 @@ module.exports = {
             watch: ['dist/nest/global/account', 'dist/nest/lib'],
             watch_options: {
                 'followSymlinks': false
+            },
+            env: {
+                DB_TYPE: process.env.DB_TYPE,
+                MYSQL_HOST: process.env.MYSQL_HOST,
+                MYSQL_PORT: process.env.MYSQL_PORT,
+                MYSQL_USERNAME: process.env.MYSQL_USERNAME,
+                MYSQL_PASSWORD: process.env.MYSQL_PASSWORD
             }
         },
         {
@@ -24,6 +42,13 @@ module.exports = {
             watch: ['dist/nest/global/presence', 'dist/nest/lib'],
             watch_options: {
                 'followSymlinks': false
+            },
+            env: {
+                DB_TYPE: process.env.DB_TYPE,
+                MYSQL_HOST: process.env.MYSQL_HOST,
+                MYSQL_PORT: process.env.MYSQL_PORT,
+                MYSQL_USERNAME: process.env.MYSQL_USERNAME,
+                MYSQL_PASSWORD: process.env.MYSQL_PASSWORD
             }
         }
 
