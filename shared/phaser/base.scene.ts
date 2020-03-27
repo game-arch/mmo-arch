@@ -4,7 +4,8 @@ import { Mob }               from './mob'
 import { Directions }        from './directions'
 import { MapCollisionLayer } from './map-collision.layer'
 import { MobSprite }         from './mob-sprite'
-import { Subject }           from 'rxjs'
+import { interval, Subject } from 'rxjs'
+import { takeUntil }         from 'rxjs/operators'
 import Scene = Phaser.Scene
 
 export class BaseScene extends Scene implements Scene {
@@ -17,6 +18,8 @@ export class BaseScene extends Scene implements Scene {
     npcSprites: { [mobId: number]: MobSprite }          = {}
     playerSprites: { [characterId: number]: MobSprite } = {}
     layers: { [id: string]: MapCollisionLayer }         = {}
+
+    protected stop = new Subject()
 
     savePlayer = (player: MobSprite) => {
     }
@@ -40,6 +43,8 @@ export class BaseScene extends Scene implements Scene {
     }
 
     create() {
+        this.stop.next()
+        this.canTransition           = {}
         this.physics.world.TILE_BIAS = 40
         this.layers                  = {
             mobs: new MapCollisionLayer({
@@ -60,19 +65,23 @@ export class BaseScene extends Scene implements Scene {
                     for (let key of Object.keys(this.config.layers[layer].exits)) {
                         let shape      = this.layers[layer].exits[key]
                         let transition = this.config.layers[layer].exits[key]
-                        let overlapped = false
                         this.physics.add.overlap(this.layers.mobs.players, shape, (obj1, obj2: MobSprite) => {
-                            if (!overlapped) {
-                                this.canTransition[obj2.id] = {
+                            if (!this.canTransition[obj2.id]) {
+                                let stop                    = new Subject()
+                                this.canTransition[obj2.id] = this.canTransition[obj2.id] || {
                                     mob       : obj2,
                                     landingMap: transition.landingMap,
                                     landingId : transition.landingId
                                 }
-                                overlapped                  = true
-                                setTimeout(() => {
-                                    overlapped = false
-                                    delete this.canTransition[obj2.id]
-                                }, 500)
+                                interval(300)
+                                    .pipe(takeUntil(stop))
+                                    .pipe(takeUntil(this.stop))
+                                    .subscribe(() => {
+                                        if (!this.physics.world.overlap(obj1, obj2)) {
+                                            delete this.canTransition[obj2.id]
+                                            stop.next()
+                                        }
+                                    })
                             }
                         })
                     }

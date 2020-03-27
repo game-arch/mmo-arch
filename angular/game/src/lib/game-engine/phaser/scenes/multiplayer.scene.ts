@@ -1,12 +1,8 @@
-import { BaseScene }                             from '../../../../../../../shared/phaser/base.scene'
-import { Mob }                                   from '../../../../../../../shared/phaser/mob'
-import { MapConfig }                             from '../../../../../../../shared/interfaces/map-config'
-import {
-    PlayerAttemptedTransition,
-    PlayerDirectionalInput,
-    PlayerLeftMap
-} from '../../../../../../../nest/local/map/actions'
-import { ConnectionManager }                     from '../../../connection/connection-manager'
+import { BaseScene }                                         from '../../../../../../../shared/phaser/base.scene'
+import { Mob }                                               from '../../../../../../../shared/phaser/mob'
+import { MapConfig }                                         from '../../../../../../../shared/interfaces/map-config'
+import { PlayerAttemptedTransition, PlayerDirectionalInput } from '../../../../../../../nest/local/map/actions'
+import { ConnectionManager }                                 from '../../../connection/connection-manager'
 import Scene = Phaser.Scene
 
 export class MultiplayerScene extends BaseScene implements Scene {
@@ -86,6 +82,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     destroy() {
+        this.stop.next()
         this.directions    = {
             up   : false,
             down : false,

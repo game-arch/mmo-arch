@@ -1,39 +1,18 @@
-import {NpcTypes} from "../../../../shared/types/npc.types";
-import {Npc}      from "../../../../shared/interfaces/npc";
+import { NpcConfig } from '../npc-config'
 
-export const TUTORIAL_NPC_CONFIG: Npc[] = [
+export const TUTORIAL_NPC_CONFIG: NpcConfig[] = [
     {
-        id      : 1,
-        name    : 'Test Mob',
-        types   : [NpcTypes.MOVABLE],
-        alive   : true,
-        respawn : 5 * 1000,
-        position: {
-            x: 100,
-            y: 100
-        },
-        spawn   : {
-            x: 100,
-            y: 100
-        },
-        path    : [
-            {
-                x: 100,
-                y: 100
-            },
-            {
-                x: 200,
-                y: 100
-            },
-            {
-                x: 200,
-                y: 200
-            },
-            {
-                x: 100,
-                y: 200
-            }
-        ],
-        effects : []
+        id             : 1,
+        position       : [300, 300],
+        respawnInterval: 30 * 100,
+        movingBounds   : [],
+        path           : []
+    },
+    {
+        id             : 1,
+        position       : [330, 312],
+        respawnInterval: 30 * 100,
+        movingBounds   : [],
+        path           : []
     }
 ]
