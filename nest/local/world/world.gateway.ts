@@ -79,6 +79,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async onApplicationShutdown(signal?: string) {
+        this.service.shuttingDown = true
         const connection = await connectDatabase(WorldConstants.DB_NAME)
         const sockets    = await connection.query('select socketId from player where instance = ?', [process.env.NODE_APP_INSTANCE])
         await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))))

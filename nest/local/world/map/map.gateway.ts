@@ -38,33 +38,43 @@ export class MapGateway {
     }
 
     async playerJoin(data: PlayerEnteredMap) {
-        const player = await this.players.findOne({ characterId: data.id })
-        if (player && this.server.sockets[player.socketId]) {
-            this.server.sockets[player.socketId].join('map.' + data.map)
-            this.server.sockets[player.socketId].emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map)))
+        if (!this.service.shuttingDown) {
+            const player = await this.players.findOne({ characterId: data.id })
+            if (player && this.server.sockets[player.socketId]) {
+                this.server.sockets[player.socketId].join('map.' + data.map)
+                this.server.sockets[player.socketId].emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map)))
+            }
+            this.server.to('map.' + data.map).emit(PlayerEnteredMap.event, data)
         }
-        this.server.to('map.' + data.map).emit(PlayerEnteredMap.event, data)
     }
 
     async playerLeave(data: PlayerLeftMap) {
-        this.server.to('map.' + data.map).emit(PlayerLeftMap.event, data)
-        const player = await this.players.findOne({ characterId: data.id })
-        if (player && this.server.sockets[player.socketId]) {
-            this.server.sockets[player.socketId].leave('map.' + data.map)
+        if (!this.service.shuttingDown) {
+            this.server.to('map.' + data.map).emit(PlayerLeftMap.event, data)
+            const player = await this.players.findOne({ characterId: data.id })
+            if (player && this.server.sockets[player.socketId]) {
+                this.server.sockets[player.socketId].leave('map.' + data.map)
+            }
         }
     }
 
     allPlayers(data: AllPlayers) {
-        this.server.to('map.' + data.map).emit(AllPlayers.event, data)
+        if (!this.service.shuttingDown) {
+            this.server.to('map.' + data.map).emit(AllPlayers.event, data)
+        }
     }
 
     @SubscribeMessage(PlayerDirectionalInput.event)
     async playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
-        await this.service.playerDirectionalInput(client, data)
+        if (!this.service.shuttingDown) {
+            await this.service.playerDirectionalInput(client, data)
+        }
     }
 
     @SubscribeMessage(PlayerAttemptedTransition.event)
     async playerAttemptedTransition(client: Socket) {
-        await this.service.playerAttemptedTransition(client)
+        if (!this.service.shuttingDown) {
+            await this.service.playerAttemptedTransition(client)
+        }
     }
 }
