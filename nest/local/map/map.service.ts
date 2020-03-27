@@ -6,7 +6,6 @@ import { InjectRepository }   from '@nestjs/typeorm'
 import { MapEmitter }         from './map.emitter'
 import { CharacterClient }    from '../character/client/character.client'
 import { Game }               from 'phaser'
-import { MapTransition }      from './entities/map-transition'
 import { Directions }         from '../../../shared/phaser/directions'
 import { BaseScene }          from '../../../shared/phaser/base.scene'
 
@@ -19,7 +18,6 @@ export class MapService {
         private emitter: MapEmitter,
         private character: CharacterClient,
         @Inject(MapConstants.MAP) public map: BaseScene,
-        @InjectRepository(MapTransition) private transitionRepo: Repository<MapTransition>,
         @InjectRepository(Player) private playerRepo: Repository<Player>
     ) {
 
@@ -123,8 +121,10 @@ export class MapService {
     }
 
     private playerJoinedMap(player: Player) {
-        this.map.addPlayer(player)
-        this.emitter.playerJoinedMap(this.map.constant, player.id, player.name, player.x, player.y)
+        if (player && !this.map.playerSprites[player.id]) {
+            this.map.addPlayer(player)
+            this.emitter.playerJoinedMap(this.map.constant, player.id, player.name, player.x, player.y)
+        }
     }
 
     private playerLeftMap(player: Player) {

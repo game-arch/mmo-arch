@@ -3,14 +3,9 @@ import { MapController }         from './map.controller'
 import { MapService }            from './map.service'
 import { TypeOrmModule }         from '@nestjs/typeorm'
 import { Player }                from './entities/player'
-import { Resource }              from './entities/resource'
-import { ResourceDrop }          from './entities/resource-drop'
-import { NpcLocation }           from './entities/npc-location'
-import { ResourceLocation }      from './entities/resource-location'
 import { WorldConstants }        from '../../lib/constants/world.constants'
 import { MapEmitter }            from './map.emitter'
 import { CharacterClientModule } from '../character/client/character-client.module'
-import { MapTransition }         from './entities/map-transition'
 import * as path                 from 'path'
 import { environment }           from '../../lib/config/environment'
 import { ClientModule }          from '../../client/client.module'
@@ -24,7 +19,7 @@ import { ConnectionOptions }     from 'typeorm'
     imports    : [
         ClientModule,
         CharacterClientModule,
-        TypeOrmModule.forFeature([MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
+        TypeOrmModule.forFeature([Player]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
             database   : DB_CONFIG.type === 'mysql' ? WorldConstants.DB_NAME + '_map' : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_map.db'),
