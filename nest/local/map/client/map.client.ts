@@ -1,7 +1,7 @@
 import { Inject, Injectable }                                       from '@nestjs/common'
-import { ClientProxy }                                              from '@nestjs/microservices'
-import { GetAllPlayers, GetPlayerPosition, PlayerDirectionalInput } from '../actions'
-import { first }                                                    from 'rxjs/operators'
+import { ClientProxy }                                                                         from '@nestjs/microservices'
+import { GetAllPlayers, GetPlayerPosition, PlayerAttemptedTransition, PlayerDirectionalInput } from '../actions'
+import { first }                                                                               from 'rxjs/operators'
 import { WORLD_PREFIX }                                             from '../../world/world.prefix'
 import { LOCAL_CLIENT }                                             from '../../../client/client.module'
 
@@ -22,5 +22,9 @@ export class MapClient {
 
     playerDirectionalInput(characterId: number, world: string, map: string, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
         this.client.emit(WORLD_PREFIX + PlayerDirectionalInput.event, new PlayerDirectionalInput(characterId, map, directions))
+    }
+
+    playerAttemptedTransition(characterId:number) {
+        this.client.emit(WORLD_PREFIX + PlayerAttemptedTransition.event, new PlayerAttemptedTransition(characterId))
     }
 }

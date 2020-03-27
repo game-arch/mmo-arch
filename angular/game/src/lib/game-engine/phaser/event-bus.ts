@@ -1,10 +1,16 @@
-import { GameEngineService }                                         from '../game-engine.service'
-import { AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../../../../../nest/local/map/actions'
-import { from, fromEvent }                                           from 'rxjs'
-import { MultiplayerScene }                                          from './scenes/multiplayer.scene'
-import { Mob }                                                       from '../../../../../../shared/phaser/mob'
-import { first }                                                     from 'rxjs/operators'
-import { Directions }                                                from '../../../../../../shared/phaser/directions'
+import { GameEngineService } from '../game-engine.service'
+import {
+    AllPlayers,
+    PlayerAttemptedTransition,
+    PlayerEnteredMap,
+    PlayerLeftMap,
+    PlayerUpdate
+}                            from '../../../../../../nest/local/map/actions'
+import { from }              from 'rxjs'
+import { MultiplayerScene }  from './scenes/multiplayer.scene'
+import { Mob }               from '../../../../../../shared/phaser/mob'
+import { first }             from 'rxjs/operators'
+import { Directions }        from '../../../../../../shared/phaser/directions'
 
 export class EventBus {
     constructor(private engine: GameEngineService) {
@@ -110,6 +116,13 @@ export class EventBus {
             })
             scene.input.keyboard.on('keyup', (event: KeyboardEvent) => {
                 scene.toggleDirection(event, false)
+                if (event.key === ' ') {
+                    this.engine.currentScene.transitionToNewMap()
+                }
+            })
+            this.engine.game.events.on(PlayerAttemptedTransition.event, () => {
+                console.log(scene.canTransition)
+                this.engine.currentScene.transitionToNewMap()
             })
         }
     }

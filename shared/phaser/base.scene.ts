@@ -18,12 +18,18 @@ export class BaseScene extends Scene implements Scene {
     playerSprites: { [characterId: number]: MobSprite } = {}
     layers: { [id: string]: MapCollisionLayer }         = {}
 
-    savePlayer   = (player: MobSprite) => {
+    savePlayer = (player: MobSprite) => {
     }
-    emitMob      = (mob: MobSprite) => {
+    emitMob    = (mob: MobSprite) => {
     }
-    onTransition = (mob: MobSprite, toMap: string, toId: string) => {
-    }
+
+    canTransition: {
+        [id: number]: {
+            mob: MobSprite,
+            landingMap: string,
+            landingId: string
+        }
+    } = {}
 
     constructor(public config: MapConfig) {
         super({
@@ -55,13 +61,18 @@ export class BaseScene extends Scene implements Scene {
                         let shape      = this.layers[layer].exits[key]
                         let transition = this.config.layers[layer].exits[key]
                         let overlapped = false
-                        this.physics.add.overlap(this.layers.mobs.players, shape, (obj1, obj2) => {
+                        this.physics.add.overlap(this.layers.mobs.players, shape, (obj1, obj2: MobSprite) => {
                             if (!overlapped) {
-                                this.onTransition(obj2 as MobSprite, transition.landingMap, transition.landingId)
-                                overlapped = true
+                                this.canTransition[obj2.id] = {
+                                    mob       : obj2,
+                                    landingMap: transition.landingMap,
+                                    landingId : transition.landingId
+                                }
+                                overlapped                  = true
                                 setTimeout(() => {
                                     overlapped = false
-                                }, 1000)
+                                    delete this.canTransition[obj2.id]
+                                }, 500)
                             }
                         })
                     }
@@ -87,11 +98,15 @@ export class BaseScene extends Scene implements Scene {
     }
 
     removePlayer(id: number) {
-        if (this.layers.mobs.players.children && this.layers.mobs.players.contains(this.playerSprites[id])) {
+        if (this.containsPlayer(id)) {
             this.layers.mobs.players.remove(this.playerSprites[id], true, true)
         }
         delete this.players[id]
         delete this.playerSprites[id]
+    }
+
+    containsPlayer(id: number) {
+        return this.layers.mobs.players.children && this.layers.mobs.players.contains(this.playerSprites[id])
     }
 
     removeNpc(id: number) {

@@ -9,7 +9,6 @@ import { Game }               from 'phaser'
 import { MapTransition }      from './entities/map-transition'
 import { Directions }         from '../../../shared/phaser/directions'
 import { BaseScene }          from '../../../shared/phaser/base.scene'
-import { Mob }                from '../../../shared/phaser/mob'
 
 @Injectable()
 export class MapService {
@@ -45,26 +44,28 @@ export class MapService {
 
 
     start() {
-        this.map.savePlayer   = async (player) => {
+        this.map.savePlayer = async (player) => {
             this.map.players[player.id].x = player.x
             this.map.players[player.id].y = player.y
             await this.playerRepo.save(this.map.players[player.id])
         }
-        this.map.emitMob      = (player) => this.emitter.playerUpdate(this.map.constant, player.asPayload())
-        this.map.onTransition = (mob: Mob, toMap: string, toId: string) => {
-            console.log(mob.name, 'Should move to', toMap, toId)
-            this.emitter.changedMap(toMap, mob.id, mob.x, mob.y, toId)
-        }
+        this.map.emitMob    = (player) => this.emitter.playerUpdate(this.map.constant, player.asPayload())
     }
 
     stop() {
         this.phaser.scene.stop(this.map.constant)
     }
 
+    async attemptTransition(characterId: number) {
+        if (this.map.canTransition[characterId]) {
+            let { mob, landingMap, landingId } = this.map.canTransition[characterId]
+            this.emitter.changedMap(landingMap, mob.id, mob.x, mob.y, landingId)
+        }
+    }
+
     async changedMaps(characterId: number, map: string, newX: number, newY: number, entrance?: string) {
         const player = await this.playerRepo.findOne(characterId)
         if (player) {
-            const lastMap = player.map
             if (map === this.map.constant) {
                 player.map     = map
                 let transition = this.map.config.layers.transitions ? this.map.config.layers.transitions.entrances[entrance] || null : null
@@ -72,13 +73,12 @@ export class MapService {
                     player.x = transition[0]
                     player.y = transition[1]
                 } else {
-                    player.x       = newX
-                    player.y       = newY
+                    player.x = newX
+                    player.y = newY
                 }
                 await this.playerRepo.save(player)
                 this.playerJoinedMap(player)
-            }
-            if (lastMap === this.map.constant) {
+            } else {
                 this.playerLeftMap(player)
             }
         }
@@ -128,7 +128,7 @@ export class MapService {
     }
 
     private playerLeftMap(player: Player) {
-        if (player) {
+        if (player && this.map.containsPlayer(player.id)) {
             this.map.removePlayer(player.id)
             this.emitter.playerLeftMap(this.map.constant, player.id, player.name)
         }

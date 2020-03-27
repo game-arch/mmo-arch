@@ -1,13 +1,22 @@
-import { SubscribeMessage, WebSocketGateway, WebSocketServer }                 from '@nestjs/websockets'
-import { AllPlayers, PlayerDirectionalInput, PlayerEnteredMap, PlayerLeftMap } from '../../map/actions'
-import { WorldService }                                                        from '../world.service'
-import { WorldConstants }                                                      from '../../../lib/constants/world.constants'
-import { Repository }                                                          from 'typeorm'
-import { Player }                                                              from '../entities/player'
-import { InjectRepository }                                                    from '@nestjs/typeorm'
-import { Namespace, Socket }                                                   from 'socket.io'
-import { MapClient }                                                           from '../../map/client/map.client'
-import * as parser                                                             from 'socket.io-msgpack-parser'
+import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
+import {
+    AllPlayers,
+    PlayerAttemptedTransition,
+    PlayerDirectionalInput,
+    PlayerEnteredMap,
+    PlayerLeftMap
+}                                                              from '../../map/actions'
+import { WorldService }                                        from '../world.service'
+import { WorldConstants }                                      from '../../../lib/constants/world.constants'
+import { Repository }                                          from 'typeorm'
+import { Player }                                              from '../entities/player'
+import { InjectRepository }                                    from '@nestjs/typeorm'
+import {
+    Namespace,
+    Socket
+}                                                              from 'socket.io'
+import { MapClient }                                           from '../../map/client/map.client'
+import * as parser                                             from 'socket.io-msgpack-parser'
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -52,5 +61,10 @@ export class MapGateway {
     @SubscribeMessage(PlayerDirectionalInput.event)
     async playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
         await this.service.playerDirectionalInput(client, data)
+    }
+
+    @SubscribeMessage(PlayerAttemptedTransition.event)
+    async playerAttemptedTransition(client: Socket) {
+        await this.service.playerAttemptedTransition(client)
     }
 }

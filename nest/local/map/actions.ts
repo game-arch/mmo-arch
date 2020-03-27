@@ -32,6 +32,13 @@ export class PlayerLeftMap {
     }
 }
 
+export class PlayerAttemptedTransition {
+    static readonly event = 'map.attempt_transition'
+
+    constructor(public characterId: number) {
+    }
+}
+
 export class AllPlayers {
     static readonly event = 'map.all_players'
 

@@ -51,9 +51,9 @@ export const TUTORIAL_CONFIG: MapConfig = {
                 'exit': {
                     landingMap: 'tutorial-2',
                     landingId : 'enter',
-                    position  : [0, 120],
-                    width     : 64,
-                    height    : 120
+                    position  : [64, 120],
+                    width     : 32,
+                    height    : 32
                 }
             },
             entrances: {

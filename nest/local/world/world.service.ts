@@ -23,9 +23,10 @@ export class WorldService {
 
 
     async storeUser(client: Socket, accountId: number) {
-        const player       = this.players.create()
+        const player     = this.players.create()
         player.accountId = accountId
         player.socketId  = client.id
+        player.instance  = Number(process.env.NODE_APP_INSTANCE)
         await this.players.save(player)
     }
 
@@ -94,6 +95,13 @@ export class WorldService {
         if (player && player.characterId !== null) {
             const map = this.getMapOf(client)
             this.map.playerDirectionalInput(player.characterId, WorldConstants.CONSTANT, map, data.directions)
+        }
+    }
+
+    async playerAttemptedTransition(client: Socket) {
+        const player = await this.players.findOne({ socketId: client.id })
+        if (player && player.characterId !== null) {
+            this.map.playerAttemptedTransition(player.characterId)
         }
     }
 

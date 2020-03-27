@@ -29,7 +29,7 @@ import { ConnectionOptions }     from 'typeorm'
         ClientModule,
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database   : DB_CONFIG.type === 'mysql' ? WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE + '.db'),
+            database   : DB_CONFIG.type === 'mysql' ? WorldConstants.DB_NAME : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '.db'),
             logging    : false,
             synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}']

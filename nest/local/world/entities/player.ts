@@ -5,6 +5,8 @@ export class Player {
     @PrimaryGeneratedColumn()
     id: number
     @Column()
+    instance: number
+    @Column()
     accountId: number
     @Column({ length: 255 })
     socketId: string

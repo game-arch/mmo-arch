@@ -79,10 +79,10 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async onApplicationShutdown(signal?: string) {
-        const connection = await connectDatabase(WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE)
-        const sockets    = await connection.query('select socketId from player')
+        const connection = await connectDatabase(WorldConstants.DB_NAME)
+        const sockets    = await connection.query('select socketId from player where instance = ?', [process.env.NODE_APP_INSTANCE])
         await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))))
-        await connection.dropDatabase()
+        await connection.query('DELETE FROM player where  instance = ?', [process.env.NODE_APP_INSTANCE])
         await connection.close()
         this.presence.serverOffline(this.serverId)
     }

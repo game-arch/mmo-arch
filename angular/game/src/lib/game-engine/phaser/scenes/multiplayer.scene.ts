@@ -1,7 +1,11 @@
 import { BaseScene }                             from '../../../../../../../shared/phaser/base.scene'
 import { Mob }                                   from '../../../../../../../shared/phaser/mob'
 import { MapConfig }                             from '../../../../../../../shared/interfaces/map-config'
-import { PlayerDirectionalInput, PlayerLeftMap } from '../../../../../../../nest/local/map/actions'
+import {
+    PlayerAttemptedTransition,
+    PlayerDirectionalInput,
+    PlayerLeftMap
+} from '../../../../../../../nest/local/map/actions'
 import { ConnectionManager }                     from '../../../connection/connection-manager'
 import Scene = Phaser.Scene
 
@@ -45,6 +49,12 @@ export class MultiplayerScene extends BaseScene implements Scene {
         this.connection.socket.emit(PlayerDirectionalInput.event, {
             directions: this.directions
         })
+    }
+
+    transitionToNewMap() {
+        if (this.canTransition[this.self.id]) {
+            this.connection.socket.emit(PlayerAttemptedTransition.event, {})
+        }
     }
 
 

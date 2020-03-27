@@ -8,7 +8,7 @@ import { createDatabase } from '../../lib/config/db.config'
 const logger = new Logger(WorldConstants.NAME + ' Server')
 
 async function bootstrap() {
-    await createDatabase(WorldConstants.DB_NAME + process.env.NODE_APP_INSTANCE, true)
+    await createDatabase(WorldConstants.DB_NAME, true)
     const app = await NestFactory.create(WorldModule)
     app.connectMicroservice({
         transport: environment.microservice.transport,
