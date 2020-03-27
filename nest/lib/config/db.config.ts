@@ -3,7 +3,6 @@ import { environment }       from './environment'
 import { ConnectionOptions } from 'typeorm/connection/ConnectionOptions'
 import * as path             from 'path'
 
-console.log(process.env.DB_TYPE)
 export const DB_CONFIG: ConnectionOptions = process.env.DB_TYPE !== 'mysql' ?
                                             <any>{
                                                 type       : 'sqlite',

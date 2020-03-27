@@ -89,9 +89,6 @@ export class MapService {
         if (!player && this.map.constant === 'tutorial') {
             player = this.playerRepo.create({ id: characterId, map: 'tutorial', x: 100, y: 100 })
         }
-        if (player) {
-            console.log(player.map, this.map.constant)
-        }
         if (player && player.map === this.map.constant) {
             player.name = name
             await this.playerRepo.save(player)
