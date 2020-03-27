@@ -10,6 +10,7 @@ JWT_SECRET=something-old
 
 
 DB_TYPE=sqlite
+#DB_TYPE=mysql
 MYSQL_HOST=127.0.0.1
 MYSQL_PORT=3306
 MYSQL_USERNAME=root
