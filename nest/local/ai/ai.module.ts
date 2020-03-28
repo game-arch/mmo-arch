@@ -2,9 +2,9 @@ import { Module }            from '@nestjs/common'
 import { ClientModule }      from '../../client/client.module'
 import { MapClientModule }   from '../map/client/map-client.module'
 import { AiController }      from './ai.controller'
-import { AiEmitter }         from './ai.emitter'
-import { NpcService }        from './npc.service'
-import { MovementService }   from './movement.service'
+import { AiEmitter }       from './ai.emitter'
+import { AiService }       from './ai.service'
+import { MovementService } from './movement.service'
 import { TypeOrmModule }     from '@nestjs/typeorm'
 import { Character }         from '../character/entities/character'
 import { ConnectionOptions } from 'typeorm'
@@ -28,7 +28,7 @@ import { AiMob }             from './entities/ai-mob'
         })
     ],
     controllers: [AiController],
-    providers  : [AiEmitter, NpcService, MovementService]
+    providers  : [AiEmitter, AiService, MovementService]
 })
 export class AiModule {
 

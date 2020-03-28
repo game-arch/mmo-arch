@@ -12,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 @Injectable()
 export class WorldService {
     shuttingDown = false
+
     constructor(
         @InjectRepository(Player)
         private players: Repository<Player>,
@@ -34,8 +35,12 @@ export class WorldService {
 
     async removePlayer(client: Socket) {
         if (!this.shuttingDown) {
-            await this.removeCharacter(client)
-            await this.players.delete({ socketId: client.id })
+            try {
+                await this.removeCharacter(client)
+                await this.players.delete({ socketId: client.id })
+            } catch (e) {
+                // Bad timing shutting down
+            }
         }
     }
 
@@ -71,14 +76,18 @@ export class WorldService {
 
     async removeCharacter(client: Socket) {
         if (!this.shuttingDown) {
-            const player = await this.players.findOne({ socketId: client.id })
-            if (player) {
-                await this.character.characterOffline(player.characterId)
-                client.adapter.del(client.id, 'character-id.' + player.characterId)
-                client.adapter.del(client.id, 'character-name.' + player.characterName)
-                player.characterId   = null
-                player.characterName = null
-                await this.players.save(player)
+            try {
+                const player = await this.players.findOne({ socketId: client.id })
+                if (player) {
+                    await this.character.characterOffline(player.characterId)
+                    client.adapter.del(client.id, 'character-id.' + player.characterId)
+                    client.adapter.del(client.id, 'character-name.' + player.characterName)
+                    player.characterId   = null
+                    player.characterName = null
+                    await this.players.save(player)
+                }
+            } catch (e) {
+                // Bad timing shutting down
             }
         }
     }

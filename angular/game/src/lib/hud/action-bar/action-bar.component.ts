@@ -14,7 +14,7 @@ export class ActionBarComponent {
     }
 
     get canTransition() {
-        return this.engine.currentScene && this.engine.currentScene.self && this.engine.currentScene.canTransition[this.engine.currentScene.self.id]
+        return this.engine.currentScene && this.engine.currentScene.self && this.engine.currentScene.canTransition[this.engine.currentScene.self.instanceId]
     }
 
     transition() {

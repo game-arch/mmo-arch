@@ -1,7 +1,8 @@
 import { Directions } from './directions'
 
 export class Mob {
-    id: number
+    instanceId: number
+    mobId:number
     x: number
     y: number
     map?: string

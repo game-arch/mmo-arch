@@ -23,7 +23,10 @@ export class BaseScene extends Scene implements Scene {
 
     savePlayer = (player: MobSprite) => {
     }
+    emitPlayer = (player: MobSprite) => {
+    }
     emitMob    = (mob: MobSprite) => {
+
     }
 
     canTransition: {
@@ -92,18 +95,18 @@ export class BaseScene extends Scene implements Scene {
     }
 
     addPlayer(player: Mob) {
-        this.players[player.id]                        = player
-        this.playerSprites[player.id]                  = new MobSprite(player.name, this, this.layers.mobs.players, player.x, player.y)
-        this.playerSprites[player.id].id               = player.id
-        this.playerSprites[player.id].onVelocityChange = () => this.emitMob(this.playerSprites[player.id])
-        this.playerSprites[player.id].onStopMoving     = () => this.savePlayer(this.playerSprites[player.id])
+        this.players[player.instanceId]                        = player
+        this.playerSprites[player.instanceId]                  = new MobSprite(player.name, this, this.layers.mobs.players, player.x, player.y)
+        this.playerSprites[player.instanceId].id               = player.instanceId
+        this.playerSprites[player.instanceId].onVelocityChange = () => this.emitPlayer(this.playerSprites[player.instanceId])
+        this.playerSprites[player.instanceId].onStopMoving     = () => this.savePlayer(this.playerSprites[player.instanceId])
     }
 
     addNpc(mob: Mob) {
-        this.npcs[mob.id]                        = mob
-        this.npcSprites[mob.id]                  = new MobSprite(mob.name, this, this.layers.mobs.npcs, mob.x, mob.y, '')
-        this.npcSprites[mob.id].id               = mob.id
-        this.npcSprites[mob.id].onVelocityChange = () => this.emitMob(this.npcSprites[mob.id])
+        this.npcs[mob.instanceId]                        = mob
+        this.npcSprites[mob.instanceId]                  = new MobSprite(mob.name, this, this.layers.mobs.npcs, mob.x, mob.y)
+        this.npcSprites[mob.instanceId].id               = mob.instanceId
+        this.npcSprites[mob.instanceId].onVelocityChange = () => this.emitMob(this.npcSprites[mob.instanceId])
     }
 
     removePlayer(id: number) {
@@ -146,7 +149,13 @@ export class BaseScene extends Scene implements Scene {
 
     getAllPlayers() {
         return Object.keys(this.playerSprites).map(key =>
-            this.playerSprites[key].asPayload()
+            this.playerSprites[key].asPayload(this.name)
+        )
+    }
+
+    getAllNpcs() {
+        return Object.keys(this.npcSprites).map(key =>
+            this.npcSprites[key].asPayload(this.name)
         )
     }
 }

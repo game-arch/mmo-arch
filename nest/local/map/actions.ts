@@ -3,16 +3,19 @@ import { Mob } from '../../../shared/phaser/mob'
 export class MapOnline {
     static readonly event = 'map.online'
 
-    constructor() {
+    constructor(public map: string) {
 
     }
 }
 
 export class PlayerEnteredMap implements Mob {
     static readonly event = 'map.player_entered'
+    public mobId: number
+    public instanceId: number
 
     constructor(public id: number, public name: string, public map: string, public x: number, public y: number) {
-
+        this.mobId      = id
+        this.instanceId = id
     }
 }
 
@@ -63,7 +66,7 @@ export class GetPlayerPosition {
 export class PlayerUpdate {
     static readonly event = 'map.player_update'
 
-    constructor(public map: string, public player: { id: number, name: string, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+    constructor(public map: string, public player: Mob) {
 
     }
 }
@@ -80,24 +83,20 @@ export class PlayerDirectionalInput {
 
 export class GetAllNpcs {
     static readonly event = 'map.get_all_npcs'
-
-    constructor(public map: string) {
-
-    }
 }
 
 export class AllNpcs {
     static readonly event = 'map.all_npcs'
 
-    constructor(public map: string, public npcs: { id: number, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }[]) {
+    constructor(public map: string, public npcs: Mob[]) {
 
     }
 }
 
-export class NewNpcSpawn {
-    static readonly event = 'map.new_npc_spawn'
+export class NpcAdded implements Mob {
+    static readonly event = 'map.npc_added'
 
-    constructor(public npcId: number, public map: string, public name: string, public x: number, public y: number) {
+    constructor(public mobId: number, public instanceId: number, public name: string, public map: string, public x: number, public y: number) {
 
     }
 }
@@ -105,7 +104,7 @@ export class NewNpcSpawn {
 export class NpcDirectionalInput {
     static readonly event = 'map.npc_directional_input'
 
-    constructor(public npcId: number, public map: string, public direction: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+    constructor(public mobId: number, public map: string, public direction: { up: boolean, down: boolean, left: boolean, right: boolean }) {
 
     }
 }
@@ -114,15 +113,15 @@ export class NpcDirectionalInput {
 export class NpcUpdate {
     static readonly event = 'map.npc_update'
 
-    constructor(public map: string, public npc: { id: number, name: string, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+    constructor(public map: string, public npc: Mob) {
 
     }
 }
 
-export class NpcDespawn {
-    static readonly event = 'map.npc_despawn'
+export class NpcRemoved {
+    static readonly event = 'map.npc_removed'
 
-    constructor(public map: string, public npcId: number) {
+    constructor(public instanceId: number, public map: string) {
 
     }
 }

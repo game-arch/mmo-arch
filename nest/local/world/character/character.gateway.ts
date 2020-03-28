@@ -41,7 +41,7 @@ export class CharacterGateway {
 
 
     async sendCharacters() {
-        const players = await this.players.find()
+        const players = await this.players.find({ instance: Number(process.env.NODE_APP_INSTANCE) })
         for (const player of players) {
             await this.character.characterOnline(player.accountId, player.socketId)
         }

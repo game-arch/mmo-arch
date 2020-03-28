@@ -48,29 +48,48 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     transitionToNewMap() {
-        if (this.canTransition[this.self.id]) {
+        if (this.canTransition[this.self.instanceId]) {
             this.connection.socket.emit(PlayerAttemptedTransition.event, {})
         }
     }
 
 
     addOrUpdatePlayer(data: Mob) {
-        let player       = this.players[data.id] || this.createPlayer(data)
-        let playerSprite = this.playerSprites[player.id]
+        let player       = this.players[data.instanceId] || this.createPlayer(data)
+        let playerSprite = this.playerSprites[player.instanceId]
         playerSprite.setPosition(data.x, data.y)
         if (data.moving) {
             playerSprite.moving = data.moving
         }
     }
 
+    addOrUpdateNpc(data: Mob) {
+        let npc       = this.npcs[data.instanceId] || this.createNpc(data)
+        let npcSprite = this.npcSprites[npc.instanceId]
+        npcSprite.setPosition(data.x, data.y)
+        if (data.moving) {
+            npcSprite.moving = data.moving
+        }
+    }
+
+    createNpc(npc: Mob) {
+        let mob        = new Mob(npc.name)
+        mob.instanceId = npc.instanceId
+        mob.x          = npc.x
+        mob.y          = npc.y
+        this.addNpc(mob)
+        this.npcSprites[npc.instanceId].moving = npc.moving || this.playerSprites[npc.instanceId].moving
+        return mob
+    }
+
     createPlayer(player: Mob) {
-        let mob = new Mob(player.name)
-        mob.id  = player.id
-        mob.x   = player.x
-        mob.y   = player.y
+        let mob        = new Mob(player.name)
+        mob.instanceId = player.instanceId
+        mob.x          = player.x
+        mob.y          = player.y
         this.addPlayer(mob)
-        this.playerSprites[player.id].moving = player.moving || this.playerSprites[player.id].moving
-        if (this.connection.selectedCharacter.id === player.id) {
+        this.playerSprites[player.instanceId].moving = player.moving || this.playerSprites[player.instanceId].moving
+        if (this.connection.selectedCharacter.id === player.instanceId) {
             this.setSelf(mob)
         }
         return mob
@@ -78,7 +97,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
 
     setSelf(player: Mob) {
         this.self = player
-        this.cameras.main.startFollow(this.playerSprites[player.id].body, true, 0.05, 0.05)
+        this.cameras.main.startFollow(this.playerSprites[player.instanceId].body, true, 0.05, 0.05)
     }
 
     destroy() {

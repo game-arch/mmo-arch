@@ -1,17 +1,29 @@
-import { EventEmitter, Injectable }                                  from '@angular/core'
-import { ConnectionManager }                                         from '../connection/connection-manager'
-import { GAME_CONFIG }                                               from './phaser/config'
-import { fromEvent }                                                 from 'rxjs'
-import { filter, takeUntil, tap }                                    from 'rxjs/operators'
-import { AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../../../../nest/local/map/actions'
-import { MultiplayerScene }                                          from './phaser/scenes/multiplayer.scene'
-import { WorldConnection }                                           from '../connection/world-connection'
-import { EventBus }                                                  from './phaser/event-bus'
-import { TUTORIAL_CONFIG }                                           from '../../../../../shared/maps/tutorial'
-import { TUTORIAL_2_CONFIG }                                         from '../../../../../shared/maps/tutorial-2'
-import { PreloadScene }                                              from './phaser/scenes/preload/preload.scene'
-import { Location }                                                  from '@angular/common'
-import { TitleScene }                                                from './phaser/scenes/title/title.scene'
+import { EventEmitter, Injectable } from '@angular/core'
+import { ConnectionManager }        from '../connection/connection-manager'
+import { GAME_CONFIG }              from './phaser/config'
+import { fromEvent }                from 'rxjs'
+import {
+    filter,
+    takeUntil,
+    tap
+}                                   from 'rxjs/operators'
+import {
+    AllNpcs,
+    AllPlayers,
+    NpcAdded,
+    NpcRemoved,
+    PlayerEnteredMap,
+    PlayerLeftMap,
+    PlayerUpdate
+}                                   from '../../../../../nest/local/map/actions'
+import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
+import { WorldConnection }          from '../connection/world-connection'
+import { EventBus }                 from './phaser/event-bus'
+import { TUTORIAL_CONFIG }          from '../../../../../shared/maps/tutorial'
+import { TUTORIAL_2_CONFIG }        from '../../../../../shared/maps/tutorial-2'
+import { PreloadScene }             from './phaser/scenes/preload/preload.scene'
+import { Location }                 from '@angular/common'
+import { TitleScene }               from './phaser/scenes/title/title.scene'
 import Game = Phaser.Game
 
 @Injectable()
@@ -42,7 +54,10 @@ export class GameEngineService {
                     PlayerEnteredMap.event,
                     PlayerLeftMap.event,
                     AllPlayers.event,
-                    PlayerUpdate.event
+                    PlayerUpdate.event,
+                    NpcAdded.event,
+                    NpcRemoved.event,
+                    AllNpcs.event
                 ])
             })
         this.createScenes()
@@ -83,6 +98,7 @@ export class GameEngineService {
         fromEvent(world.socket, eventName)
             .pipe(takeUntil(this.worldChange))
             .subscribe(event => {
+                console.log(eventName, event)
                 this.game.events.emit(eventName, event)
             })
     }

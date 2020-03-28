@@ -13,6 +13,15 @@ export class Player {
     @Column()
     name: string
 
+
+    get instanceId() {
+        return this.id
+    }
+
+    get mobId() {
+        return this.id
+    }
+
     _x = 0
 
     @Column('int', { nullable: true })

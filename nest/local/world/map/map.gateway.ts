@@ -1,5 +1,6 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
 import {
+    AllNpcs,
     AllPlayers,
     PlayerAttemptedTransition,
     PlayerDirectionalInput,
@@ -39,10 +40,11 @@ export class MapGateway {
 
     async playerJoin(data: PlayerEnteredMap) {
         if (!this.service.shuttingDown) {
-            const player = await this.players.findOne({ characterId: data.id })
+            const player = await this.players.findOne({ characterId: data.instanceId })
             if (player && this.server.sockets[player.socketId]) {
                 this.server.sockets[player.socketId].join('map.' + data.map)
                 this.server.sockets[player.socketId].emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map)))
+                this.server.sockets[player.socketId].emit(AllNpcs.event, new AllNpcs(data.map, await this.map.getAllNpcs(data.map)))
             }
             this.server.to('map.' + data.map).emit(PlayerEnteredMap.event, data)
         }
@@ -63,6 +65,7 @@ export class MapGateway {
             this.server.to('map.' + data.map).emit(AllPlayers.event, data)
         }
     }
+
 
     @SubscribeMessage(PlayerDirectionalInput.event)
     async playerDirectionalInput(client: Socket, data: { directions: { up: boolean, down: boolean, left: boolean, right: boolean } }) {

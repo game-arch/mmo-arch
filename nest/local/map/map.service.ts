@@ -47,7 +47,7 @@ export class MapService {
             this.map.players[player.id].y = player.y
             await this.playerRepo.save(this.map.players[player.id])
         }
-        this.map.emitMob    = (player) => this.emitter.playerUpdate(this.map.constant, player.asPayload())
+        this.map.emitPlayer = (player) => this.emitter.playerUpdate(this.map.constant, player.asPayload(this.map.constant))
     }
 
     stop() {

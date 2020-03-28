@@ -1,8 +1,19 @@
-import { Inject, Injectable }                                                                     from '@nestjs/common'
-import { ClientProxy }                                                                            from '@nestjs/microservices'
-import { AllPlayers, MapOnline, PlayerChangedMap, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from './actions'
-import { WORLD_PREFIX }                                                                           from '../world/world.prefix'
-import { LOCAL_CLIENT }                                                                           from '../../client/client.module'
+import { Inject, Injectable } from '@nestjs/common'
+import { ClientProxy }        from '@nestjs/microservices'
+import {
+    AllNpcs,
+    AllPlayers,
+    MapOnline,
+    NpcAdded,
+    NpcRemoved,
+    PlayerChangedMap,
+    PlayerEnteredMap,
+    PlayerLeftMap,
+    PlayerUpdate
+}                             from './actions'
+import { WORLD_PREFIX }       from '../world/world.prefix'
+import { LOCAL_CLIENT }       from '../../client/client.module'
+import { Mob }                from '../../../shared/phaser/mob'
 
 @Injectable()
 export class MapEmitter {
@@ -19,16 +30,28 @@ export class MapEmitter {
         this.client.emit(WORLD_PREFIX + PlayerLeftMap.event, new PlayerLeftMap(characterId, name, map))
     }
 
-    allPlayers(map: string, players: { id: number, name: string, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }[]) {
+    addedNpc(map: string, instanceId: number, mobId: number, name: string, x: number, y: number) {
+        this.client.emit(WORLD_PREFIX + NpcAdded.event + '.broadcast', new NpcAdded(mobId, instanceId, name, map, x, y))
+    }
+
+    removedNpc(map: string, instanceId: number) {
+        this.client.emit(WORLD_PREFIX + NpcRemoved.event + '.broadcast', new NpcRemoved(instanceId, map))
+    }
+
+    allNpcs(map: string, npcs: Mob[]) {
+        this.client.emit(WORLD_PREFIX + AllNpcs.event, new AllNpcs(map, npcs))
+    }
+
+    allPlayers(map: string, players: Mob[]) {
         this.client.emit(WORLD_PREFIX + AllPlayers.event, new AllPlayers(map, players))
     }
 
-    playerUpdate(map: string, player: { id: number, name: string, x: number, y: number, moving: { up: boolean, down: boolean, left: boolean, right: boolean } }) {
+    playerUpdate(map: string, player: Mob) {
         this.client.emit(WORLD_PREFIX + PlayerUpdate.event, new PlayerUpdate(map, player))
     }
 
-    nowOnline() {
-        this.client.emit(WORLD_PREFIX + MapOnline.event, {})
+    nowOnline(map: string) {
+        this.client.emit(WORLD_PREFIX + MapOnline.event, new MapOnline(map))
     }
 
     changedMap(toMap: string, characterId: number, newX: number, newY: number, entrance?: string) {

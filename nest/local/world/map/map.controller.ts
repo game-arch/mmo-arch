@@ -1,8 +1,8 @@
-import { Controller }                                                from '@nestjs/common'
-import { EventPattern }                                              from '@nestjs/microservices'
-import { AllPlayers, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../map/actions'
-import { MapGateway }                                                from './map.gateway'
-import { WORLD_PREFIX }                                              from '../world.prefix'
+import { Controller }                                                                      from '@nestjs/common'
+import { EventPattern }                                                                    from '@nestjs/microservices'
+import { AllPlayers, NpcAdded, NpcRemoved, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../map/actions'
+import { MapGateway }                                                                      from './map.gateway'
+import { WORLD_PREFIX }                                                                    from '../world.prefix'
 
 @Controller()
 export class MapController {
@@ -26,6 +26,16 @@ export class MapController {
     @EventPattern(WORLD_PREFIX + AllPlayers.event)
     onAllPlayers(data: AllPlayers) {
         this.gateway.allPlayers(data)
+    }
+
+    @EventPattern(WORLD_PREFIX + NpcAdded.event + '.broadcast')
+    onNpcAdded(data: NpcAdded) {
+        this.gateway.server.to('map.' + data.map).emit(NpcAdded.event, data)
+    }
+
+    @EventPattern(WORLD_PREFIX + NpcRemoved.event + '.broadcast')
+    onNpcRemoved(data: NpcRemoved) {
+        this.gateway.server.to('map.' + data.map).emit(NpcRemoved.event, data)
     }
 
     @EventPattern(WORLD_PREFIX + PlayerUpdate.event)

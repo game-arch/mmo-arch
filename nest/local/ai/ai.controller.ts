@@ -1,6 +1,27 @@
-import { Controller } from '@nestjs/common'
+import { Controller, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
+import { AiService }                                                 from './ai.service'
+import { MapOnline }                                                 from '../map/actions'
+import { EventPattern }                                              from '@nestjs/microservices'
+import { WORLD_PREFIX }                                              from '../world/world.prefix'
+import { from }                                                      from 'rxjs'
 
 @Controller()
-export class AiController {
+export class AiController implements OnApplicationBootstrap, OnApplicationShutdown {
 
+    constructor(private service: AiService) {
+    }
+
+    @EventPattern(WORLD_PREFIX + MapOnline.event)
+    onMapOnline(data: MapOnline) {
+        from(this.service.npcAddedCallbacks)
+            .subscribe(callback => callback(data.map))
+    }
+
+    onApplicationBootstrap() {
+        this.service.listen()
+    }
+
+    onApplicationShutdown(signal?: string) {
+        this.service.stop()
+    }
 }

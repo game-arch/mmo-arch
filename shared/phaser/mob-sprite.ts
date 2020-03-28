@@ -6,6 +6,7 @@ import Group = Phaser.GameObjects.Group
 import { Physics }    from './physics'
 import { Directions } from './directions'
 import { isServer }   from '../constants/environment-constants'
+import { Mob }        from './mob'
 
 export class MobSprite extends Sprite {
     id: number
@@ -61,13 +62,16 @@ export class MobSprite extends Sprite {
         }
     }
 
-    asPayload() {
+    asPayload(map: string): Mob {
         return {
-            id    : this.id,
-            name  : this.name,
-            x     : this.x,
-            y     : this.y,
-            moving: this.moving
-        }
+            id        : this.id,
+            instanceId: this.id,
+            mobId     : this.id,
+            map,
+            name      : this.name,
+            x         : this.x,
+            y         : this.y,
+            moving    : this.moving
+        } as Mob
     }
 }
