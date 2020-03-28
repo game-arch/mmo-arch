@@ -104,7 +104,7 @@ export class NpcAdded implements Mob {
 export class NpcDirectionalInput {
     static readonly event = 'map.npc_directional_input'
 
-    constructor(public mobId: number, public map: string, public direction: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+    constructor(public instanceId: number, public map: string, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
 
     }
 }

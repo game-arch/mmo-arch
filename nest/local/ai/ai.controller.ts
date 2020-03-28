@@ -1,6 +1,6 @@
 import { Controller, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
 import { AiService }                                                 from './ai.service'
-import { MapOnline }                                                 from '../map/actions'
+import { MapOnline, NpcUpdate, PlayerUpdate }                        from '../map/actions'
 import { EventPattern }                                              from '@nestjs/microservices'
 import { WORLD_PREFIX }                                              from '../world/world.prefix'
 import { from }                                                      from 'rxjs'
@@ -17,8 +17,18 @@ export class AiController implements OnApplicationBootstrap, OnApplicationShutdo
             .subscribe(callback => callback(data.map))
     }
 
+    @EventPattern(WORLD_PREFIX + NpcUpdate.event)
+    onNpcUpdate(data: NpcUpdate) {
+        this.service.onNpcUpdate.next(data.npc)
+    }
+
+    @EventPattern(WORLD_PREFIX + PlayerUpdate.event)
+    onPlayerUpdate(data: PlayerUpdate) {
+        this.service.onPlayerUpdate.next(data.player)
+    }
+
     onApplicationBootstrap() {
-        this.service.listen()
+        this.service.start()
     }
 
     onApplicationShutdown(signal?: string) {

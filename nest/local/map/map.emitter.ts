@@ -6,6 +6,7 @@ import {
     MapOnline,
     NpcAdded,
     NpcRemoved,
+    NpcUpdate,
     PlayerChangedMap,
     PlayerEnteredMap,
     PlayerLeftMap,
@@ -48,6 +49,10 @@ export class MapEmitter {
 
     playerUpdate(map: string, player: Mob) {
         this.client.emit(WORLD_PREFIX + PlayerUpdate.event, new PlayerUpdate(map, player))
+    }
+
+    npcUpdate(map: string, npc: Mob) {
+        this.client.emit(WORLD_PREFIX + NpcUpdate.event, new NpcUpdate(map, npc))
     }
 
     nowOnline(map: string) {

@@ -38,27 +38,45 @@ export class MobSprite extends Sprite {
         this.body.collideWorldBounds = true
     }
 
+    tick = 0
+
+    lastPosition = {
+        x: 0,
+        y: 0
+    }
+
     preUpdate(...args: any[]) {
         this.setPosition(Math.round(this.x), Math.round(this.y))
         if (!this.moving) {
             return
+        }
+        if (this.body.velocity.equals(new Vector2(0, 0))) {
+            if (!this.stopped) {
+                this.onStopMoving()
+                this.stopped = true
+            }
+        } else {
+            if (this.stopped) {
+                this.onStartMoving()
+                this.stopped = false
+            }
         }
         let velocity = Physics.getVelocity(this.moving)
         this.body.setVelocity(velocity.x, velocity.y)
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone()
             this.onVelocityChange()
-            if (velocity.equals(new Vector2(0, 0))) {
-                if (!this.stopped) {
-                    this.onStopMoving()
-                    this.stopped = true
-                }
-                return
+        }
+        this.tick++
+        if ((this.lastPosition.x !== this.body.x || this.lastPosition.y !== this.body.y)) {
+            this.lastPosition.x = this.body.x
+            this.lastPosition.y = this.body.y
+            if (this.tick > 50) {
+                this.onVelocityChange()
+                this.tick = 0
             }
-            if (this.stopped) {
-                this.onStartMoving()
-                this.stopped = false
-            }
+        } else {
+
         }
     }
 

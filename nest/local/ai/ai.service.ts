@@ -4,6 +4,7 @@ import { NPC_CONFIGS } from './config/npc.config'
 import { MapClient }   from '../map/client/map.client'
 import { Subject }     from 'rxjs'
 import { NpcMob }      from './npc-mob'
+import { Mob }         from '../../../shared/phaser/mob'
 
 @Injectable()
 export class AiService {
@@ -15,15 +16,18 @@ export class AiService {
     npcAddedCallbacks: Function[]   = []
     npcRemovedCallbacks: Function[] = []
 
+    onNpcUpdate    = new Subject<Mob>()
+    onPlayerUpdate = new Subject<Mob>()
+
     constructor(private emitter: AiEmitter, private map: MapClient) {
 
     }
 
-    listen() {
+    start() {
         this.npcAddedCallbacks = []
         for (let i = 0; i < NPC_CONFIGS.length; i++) {
             this.mobs[i] = new NpcMob(NPC_CONFIGS[i])
-            this.mobs[i].start(this.stop$)
+            this.mobs[i].start(this.stop$, this.onNpcUpdate, this.onPlayerUpdate)
             this.npcAddedCallbacks.push((map) => {
                 if (map === NPC_CONFIGS[i].map) {
                     this.map.npcAdded(
@@ -37,6 +41,9 @@ export class AiService {
                 }
             })
             this.npcRemovedCallbacks.push((map) => {
+                if (this.mobs[i]) {
+                    this.mobs[i].stop.next()
+                }
                 this.map.npcRemoved(
                     NPC_CONFIGS[i].instanceId,
                     NPC_CONFIGS[i].map
@@ -59,6 +66,7 @@ export class AiService {
         }
         this.npcAddedCallbacks   = []
         this.npcRemovedCallbacks = []
+        this.mobs                = {}
         this.stop$.next()
     }
 }

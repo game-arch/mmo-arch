@@ -7,6 +7,7 @@ import {
     GetAllPlayers,
     GetPlayerPosition,
     NpcAdded,
+    NpcDirectionalInput,
     NpcRemoved,
     PlayerAttemptedTransition,
     PlayerChangedMap,
@@ -69,7 +70,14 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     @EventPattern(WORLD_PREFIX + PlayerDirectionalInput.event)
     async playerMoved(data: PlayerDirectionalInput) {
         if (data.map === this.service.map.constant) {
-            this.service.movePlayer(data.id, data.directions)
+            this.service.map.moveEntity('player', data.id, data.directions)
+        }
+    }
+
+    @EventPattern(WORLD_PREFIX + NpcDirectionalInput.event)
+    async npcMoved(data: NpcDirectionalInput) {
+        if (data.map === this.service.map.constant) {
+            this.service.map.moveEntity('mob', data.instanceId, data.directions)
         }
     }
 
