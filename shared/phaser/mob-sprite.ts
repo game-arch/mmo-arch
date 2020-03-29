@@ -6,8 +6,8 @@ import Group = Phaser.GameObjects.Group
 import { Physics }    from './physics'
 import { Directions } from './directions'
 import { isServer }   from '../constants/environment-constants'
-import { Mob }       from './mob'
-import { NpcConfig } from '../interfaces/npc-config'
+import { Mob }        from './mob'
+import { NpcConfig }  from '../interfaces/npc-config'
 
 export class MobSprite extends Sprite {
     id: number
@@ -22,7 +22,7 @@ export class MobSprite extends Sprite {
         right: false
     }
     body: Body
-    npcConfig?:NpcConfig
+    npcConfig?: NpcConfig
 
     onVelocityChange = () => {
     }
@@ -70,8 +70,8 @@ export class MobSprite extends Sprite {
             this.lastVelocity = this.body.velocity.clone()
             this.onVelocityChange()
         }
-        this.tick++
         if ((this.lastPosition.x !== this.body.x || this.lastPosition.y !== this.body.y)) {
+            this.tick++
             this.lastPosition.x = this.body.x
             this.lastPosition.y = this.body.y
             if (this.tick > 50) {
@@ -79,9 +79,10 @@ export class MobSprite extends Sprite {
                 this.tick = 0
             }
         } else {
-
+            this.tick = 0
         }
     }
+
     private validateDirections() {
         if (this.npcConfig) {
             if (this.x < this.npcConfig.movingBounds.upperLeft[0]) {

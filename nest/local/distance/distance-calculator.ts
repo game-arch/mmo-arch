@@ -28,13 +28,23 @@ export class DistanceCalculator {
         playerUpdate.pipe(takeUntil(this.stop), takeUntil(serverStop))
                     .pipe(filter(mob => mob.map === this.config.map))
                     .subscribe(mob => this.playerUpdate(mob))
+        playerChangedMap.pipe(takeUntil(this.stop), takeUntil(serverStop))
+                        .subscribe(id => {
+                            delete this.cached['player-' + id]
+                            delete this.caching['player-' + id]
+                        })
     }
 
     async npcUpdate(mob: Mob) {
         if (mob.instanceId === this.config.instanceId) {
             this.position.x = mob.x
             this.position.y = mob.y
-            let distances   = await this.repo.find({ instanceId: mob.instanceId })
+            let distances   = await this.repo.find({
+                where: [{
+                    instanceId: mob.instanceId,
+                    map       : this.config.map
+                }]
+            })
             if (distances) {
                 for (let distance of distances) {
                     distance.x        = this.position.x
@@ -53,23 +63,34 @@ export class DistanceCalculator {
         await this.updateDistance('player', mob)
     }
 
-    async updateDistance(type: 'player' | 'npc', mob: Mob) {
-        let distance = await this.repo.findOne({
-            instanceId: this.config.instanceId,
-            otherType : type,
-            otherId   : mob.instanceId
-        })
-        distance     = distance || new Distance()
-        distance.update(
-            this.config.instanceId,
-            this.position.x,
-            this.position.y,
-            type,
-            mob.instanceId,
-            mob.x,
-            mob.y,
-            Phaser.Math.Distance.Between(this.position.x, this.position.y, mob.x, mob.y)
-        )
-        await this.repo.save(distance)
+    cached: { [key: string]: Distance } = {}
+    caching: { [key: string]: boolean } = {}
+
+    async updateDistance(otherType: 'player' | 'npc', mob: Mob) {
+        let key = otherType + '-' + mob.instanceId
+        if (!this.caching[key]) {
+            this.caching[key] = true
+            let distance      = this.cached[key] || await this.repo.findOne({
+                instanceId: this.config.instanceId,
+                map       : this.config.map,
+                otherType : otherType,
+                otherId   : mob.instanceId
+            })
+            distance          = distance || new Distance()
+            this.cached[key]  = distance
+            this.caching[key] = false
+            distance.update(
+                this.config.instanceId,
+                this.config.map,
+                this.position.x,
+                this.position.y,
+                otherType,
+                mob.instanceId,
+                mob.x,
+                mob.y,
+                Phaser.Math.Distance.Between(this.position.x, this.position.y, mob.x, mob.y)
+            )
+            await this.repo.save(distance)
+        }
     }
 }
