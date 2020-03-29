@@ -1,8 +1,8 @@
-import { createConnection }  from 'typeorm'
-import { environment }       from './environment'
-import { ConnectionOptions } from 'typeorm/connection/ConnectionOptions'
+import { createConnection }       from 'typeorm'
+import { environment }            from './environment'
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions'
 
-export const DB_CONFIG: ConnectionOptions = {
+export const DB_CONFIG: MysqlConnectionOptions = {
     type        : 'mysql',
     host        : environment.mysql.host,
     port        : environment.mysql.port,
@@ -10,14 +10,13 @@ export const DB_CONFIG: ConnectionOptions = {
     password    : environment.mysql.password,
     database    : 'database',
     synchronize : true,
-    insecureAuth: true,
-    keepAlive   : true
+    insecureAuth: true
 }
 
 
 export async function createDatabase(name: string, close: boolean = true) {
     try {
-        const connection = await createConnection(<ConnectionOptions>{
+        const connection = await createConnection(<MysqlConnectionOptions>{
             ...DB_CONFIG,
             database: ''
         })
@@ -32,7 +31,7 @@ export async function createDatabase(name: string, close: boolean = true) {
 }
 
 export async function connectDatabase(name: string) {
-    return await createConnection(<ConnectionOptions>{
+    return await createConnection(<MysqlConnectionOptions>{
         ...DB_CONFIG,
         database: name
     })

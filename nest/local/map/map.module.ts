@@ -20,10 +20,8 @@ import { ConnectionOptions }     from 'typeorm'
         TypeOrmModule.forFeature([Player]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database   : WorldConstants.DB_NAME + '_map',
-            logging    : false,
-            synchronize: true,
-            entities   : [__dirname + '/entities/*{.ts,.js}']
+            database: WorldConstants.DB_NAME + '_map',
+            entities: [__dirname + '/entities/*{.ts,.js}']
         })
     ],
     controllers: [MapController],

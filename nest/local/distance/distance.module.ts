@@ -17,8 +17,6 @@ import { Distance }           from './entities/distance'
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
             database   : WorldConstants.DB_NAME + '_distance',
-            logging    : false,
-            synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}']
         })
     ],

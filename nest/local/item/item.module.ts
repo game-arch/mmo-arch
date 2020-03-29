@@ -17,8 +17,6 @@ import { ConnectionOptions }     from 'typeorm'
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
             database   : WorldConstants.DB_NAME + '_item',
-            logging    : false,
-            synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}']
         })
     ],
