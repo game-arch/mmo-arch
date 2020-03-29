@@ -8,7 +8,6 @@ export function loadCollisions(layers: { [id: string]: MapCollisionLayer }, conf
     scene.physics.world.setBounds(0, 0, config.width, config.height)
 
     function addShapeToScene(shape: MapShape) {
-        shape.fillColor = 0xaaaaaa
         shape.setOrigin(0, 0)
         scene.physics.add.existing(shape);
         (shape.body as Body).immovable = true
@@ -27,6 +26,9 @@ export function loadCollisions(layers: { [id: string]: MapCollisionLayer }, conf
                     shape.body['radius']   = collision.radius + 4
                 }
                 shape.collision = collision
+                if (collision.color) {
+                    shape.fillColor = collision.color
+                }
                 addShapeToScene(shape)
                 collisions.push(shape)
             }
@@ -41,7 +43,7 @@ export function loadCollisions(layers: { [id: string]: MapCollisionLayer }, conf
             let transition      = config.layers[layer].exits[key]
             let shape: MapShape = scene.add.rectangle(transition.position[0], transition.position[1], transition.width, transition.height, 0x0055ff)
             addShapeToScene(shape)
-            shape.fillColor = 0x44aaff
+            shape.fillColor          = 0x44aaff
             layers[layer].exits[key] = shape
         }
     }

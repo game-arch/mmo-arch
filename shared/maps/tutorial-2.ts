@@ -12,29 +12,9 @@ export const TUTORIAL_2_CONFIG: MapConfig = {
                     {
                         solid   : true,
                         shape   : 'rectangle',
+                        color   : 0x00aa55,
                         position: [0, 0],
                         width   : 1024,
-                        height  : 32
-                    },
-                    {
-                        solid   : true,
-                        shape   : 'rectangle',
-                        position: [0, 0],
-                        width   : 32,
-                        height  : 768
-                    },
-                    {
-                        solid   : true,
-                        shape   : 'rectangle',
-                        position: [0, 768 - 32],
-                        width   : 1024,
-                        height  : 32
-                    },
-                    {
-                        solid   : true,
-                        shape   : 'rectangle',
-                        position: [1024 - 32, 0],
-                        width   : 32,
                         height  : 768
                     }
                 ]

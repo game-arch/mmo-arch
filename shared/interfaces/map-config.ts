@@ -29,7 +29,8 @@ export interface CollisionConfig {
     width?: number
     height?: number
     rotation?: number
-    solid?: boolean
+    solid?: boolean,
+    color?: number
 }
 
 export interface TransitionConfig {

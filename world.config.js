@@ -12,7 +12,7 @@ module.exports = {
             instances: (dir === 'world' ? 4 : 1),
             name: 'server.world.' + (process.env.WORLD_CONSTANT || 'maiden') + '.' + (dir === 'world' ? 'server' : dir),
             script: 'dist/nest/local/' + dir + '/main.js',
-            watch: ['dist/nest/local/' + dir, 'dist/nest/lib', 'dist/shared'],
+            watch: ['dist/nest/local/' + dir, 'dist/nest/lib'],
             env: {
                 DB_TYPE: process.env.DB_TYPE,
                 MYSQL_HOST: process.env.MYSQL_HOST,
