@@ -16,6 +16,14 @@ export const TUTORIAL_CONFIG: MapConfig = {
                         position: [0, 0],
                         width   : 1024,
                         height  : 768
+                    },
+                    {
+                        solid   : true,
+                        shape   : 'rectangle',
+                        color: 0x888888,
+                        position: [320, 500],
+                        width: 100,
+                        height: 100
                     }
                 ]
             }
