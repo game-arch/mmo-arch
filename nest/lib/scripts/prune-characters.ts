@@ -4,8 +4,7 @@ import { DB_CONFIG }                    from '../config/db.config'
 
 createConnection(<ConnectionOptions>{
     ...DB_CONFIG,
-    database: WorldConstants.DB_NAME + '_character',
-    logging : false
+    database: WorldConstants.DB_NAME + '_character'
 }).then(async (connection: Connection) => {
     await connection.query('DELETE FROM character_equipment')
     await connection.query('DELETE FROM character_stats')

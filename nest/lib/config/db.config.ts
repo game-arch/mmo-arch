@@ -8,7 +8,7 @@ export const DB_CONFIG: MysqlConnectionOptions = {
     port        : environment.mysql.port,
     username    : environment.mysql.username,
     password    : environment.mysql.password,
-    database    : 'database',
+    database    : '',
     synchronize : true,
     insecureAuth: true
 }
@@ -16,10 +16,7 @@ export const DB_CONFIG: MysqlConnectionOptions = {
 
 export async function createDatabase(name: string, close: boolean = true) {
     try {
-        const connection = await createConnection(<MysqlConnectionOptions>{
-            ...DB_CONFIG,
-            database: ''
-        })
+        const connection = await createConnection(DB_CONFIG)
         await connection.query('CREATE DATABASE IF NOT EXISTS `' + name + '`')
         if (close) {
             await connection.close()

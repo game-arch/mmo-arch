@@ -3,8 +3,7 @@ import { DB_CONFIG }                                       from '../config/db.co
 
 createConnection(<ConnectionOptions>{
     ...DB_CONFIG,
-    database: 'presence',
-    logging : false
+    database: 'presence'
 }).then(async (connection: Connection) => {
     await connection.query('UPDATE world set status = \'offline\'')
     await connection.close()
