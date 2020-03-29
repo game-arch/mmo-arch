@@ -1,11 +1,9 @@
-import { Connection, createConnection } from 'typeorm'
-import * as path                        from 'path'
-import { environment }                  from '../config/environment'
+import { Connection, ConnectionOptions, createConnection } from 'typeorm'
+import { DB_CONFIG }                                       from '../config/db.config'
 
-createConnection({
-    type    : 'sqlite',
-    database: path.resolve(environment.dbRoot, 'presence.db'),
-    logging : false,
+createConnection(<ConnectionOptions>{
+    ...DB_CONFIG,
+    database: 'presence'
 }).then(async (connection: Connection) => {
     await connection.query('DELETE FROM world')
     await connection.close()

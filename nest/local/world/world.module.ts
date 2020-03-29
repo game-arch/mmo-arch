@@ -15,8 +15,6 @@ import { ChatGateway }           from './chat/chat.gateway'
 import { TypeOrmModule }         from '@nestjs/typeorm'
 import { Player }                from './entities/player'
 import { WorldConstants }        from '../../lib/constants/world.constants'
-import * as path                 from 'path'
-import { environment }           from '../../lib/config/environment'
 import { PartyController }       from './party/party.controller'
 import { PartyGateway }          from './party/party.gateway'
 import { PartyClientModule }     from '../party/client/party-client.module'
@@ -29,9 +27,7 @@ import { ConnectionOptions }     from 'typeorm'
         ClientModule,
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database   : DB_CONFIG.type === 'mysql' ? WorldConstants.DB_NAME : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '.db'),
-            logging    : false,
-            synchronize: true,
+            database   : WorldConstants.DB_NAME,
             entities   : [__dirname + '/entities/*{.ts,.js}']
         }),
         TypeOrmModule.forFeature([Player]),

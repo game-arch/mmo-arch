@@ -6,7 +6,6 @@ import { AccountService }      from './account.service'
 import { JwtModule }           from '@nestjs/jwt'
 import { environment }         from '../../lib/config/environment'
 import { AccountClientModule } from './client/account-client.module'
-import * as path               from 'path'
 import { DB_CONFIG }           from '../../lib/config/db.config'
 import { ConnectionOptions }   from 'typeorm'
 
@@ -23,9 +22,7 @@ import { ConnectionOptions }   from 'typeorm'
         TypeOrmModule.forFeature([Account]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database   : DB_CONFIG.type === 'mysql' ? 'account' : path.resolve(environment.dbRoot, 'account.db'),
-            logging    : false,
-            synchronize: true,
+            database   : 'account',
             entities   : [__dirname + '/entities/*{.ts,.js}']
         })
     ],

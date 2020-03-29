@@ -17,7 +17,7 @@ https://join.slack.com/t/gamearch/shared_invite/zt-cfa97f7n-x_6q6ndOAlFYkZf7xtT8
     - Websocket library to communicate
 - TypeORM 
     - https://typeorm.io/
-    - Using SQLite as the driver
+    - Using MySQL as the driver
 - NATS 
     - https://docs.nats.io/
     - As the microservice communication method
