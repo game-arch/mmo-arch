@@ -8,6 +8,8 @@ import { CharacterClient }    from '../character/client/character.client'
 import { Game }               from 'phaser'
 import { Directions }         from '../../../shared/phaser/directions'
 import { BaseScene }          from '../../../shared/phaser/base.scene'
+import { NpcConfig }          from '../../../shared/interfaces/npc-config'
+import { NpcAdded }           from './actions'
 
 @Injectable()
 export class MapService {
@@ -42,6 +44,11 @@ export class MapService {
 
 
     start() {
+        for (let npc of (MapConstants.NPC[MapConstants.MAP] as NpcConfig[])) {
+            let data = new NpcAdded(npc.mobId, npc.instanceId, npc.name, npc.map, npc.position[0], npc.position[1])
+            this.map.addNpc(data, npc)
+            this.emitter.addedNpc(data.map, data.instanceId, data.mobId, data.name, data.x, data.y)
+        }
         this.map.savePlayer = async (player) => {
             this.map.players[player.id].x = player.x
             this.map.players[player.id].y = player.y

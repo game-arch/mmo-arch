@@ -1,4 +1,4 @@
-import { VectorArray } from '../../../shared/interfaces/map-config'
+import { VectorArray } from './map-config'
 
 export interface NpcConfig {
     instanceId: number

@@ -6,6 +6,7 @@ import { MapCollisionLayer } from './map-collision.layer'
 import { MobSprite }         from './mob-sprite'
 import { interval, Subject } from 'rxjs'
 import { takeUntil }         from 'rxjs/operators'
+import { NpcConfig }         from '../interfaces/npc-config'
 import Scene = Phaser.Scene
 
 export class BaseScene extends Scene implements Scene {
@@ -102,9 +103,10 @@ export class BaseScene extends Scene implements Scene {
         this.playerSprites[player.instanceId].onStopMoving     = () => this.savePlayer(this.playerSprites[player.instanceId])
     }
 
-    addNpc(mob: Mob) {
+    addNpc(mob: Mob, npcConfig?: NpcConfig) {
         this.npcs[mob.instanceId]                        = mob
         this.npcSprites[mob.instanceId]                  = new MobSprite(mob.name, this, this.layers.mobs.npcs, mob.x, mob.y)
+        this.npcSprites[mob.instanceId].npcConfig        = npcConfig
         this.npcSprites[mob.instanceId].id               = mob.instanceId
         this.npcSprites[mob.instanceId].onVelocityChange = () => this.emitMob(this.npcSprites[mob.instanceId])
     }
