@@ -11,12 +11,12 @@ export class NpcMob {
 
     directions: Directions = { down: false, left: false, right: false, up: false }
 
-    position = {
+    position                                                     = {
         x: 0,
         y: 0
     }
-
-    distances: { [playerInstanceId: number]: MobDistance } = {}
+    npcDistances: { [npcInstanceId: number]: MobDistance }       = {}
+    playerDistances: { [playerInstanceId: number]: MobDistance } = {}
 
     constructor(private config: NpcConfig, private repo: Repository<MobDistance>) {
         this.position.x = config.position[0]
@@ -32,42 +32,63 @@ export class NpcMob {
                     .subscribe(mob => this.playerUpdate(mob))
     }
 
-    update() {
-
-    }
-
-    npcUpdate(mob: Mob) {
+    async npcUpdate(mob: Mob) {
         if (mob.instanceId === this.config.instanceId) {
             this.position.x = mob.x
             this.position.y = mob.y
-            from(Object.keys(this.distances))
-                .subscribe(async id => {
-                    let distance: MobDistance
-                    if (this.distances[mob.instanceId]) {
-                        distance = await this.repo.findOne(id)
-                    }
-                    if (distance) {
-                        distance.distance = Phaser.Math.Distance.Between(this.position.x, this.position.y, distance.otherX, distance.otherY)
-                        await this.repo.save(distance)
-                    }
-                })
+            this.validateDirections()
+            for (let distances of [this.playerDistances, this.npcDistances]) {
+                from(Object.keys(distances))
+                    .subscribe(async id => {
+                        let distance: MobDistance
+                        if (distances[mob.instanceId]) {
+                            distance = await this.repo.findOne(id)
+                        }
+                        if (distance) {
+                            distance.distance = Phaser.Math.Distance.Between(this.position.x, this.position.y, distance.otherX, distance.otherY)
+                            await this.repo.save(distance)
+                        }
+                    })
+            }
+        } else {
+            await this.updateDistance('npc', mob)
+        }
+    }
+
+    private validateDirections() {
+        if (this.position.x < this.config.movingBounds.upperLeft[0]) {
+            this.directions.left = false
+        }
+        if (this.position.x > this.config.movingBounds.bottomRight[0]) {
+            this.directions.right = false
+        }
+        if (this.position.y < this.config.movingBounds.upperLeft[1]) {
+            this.directions.up = false
+        }
+        if (this.position.y > this.config.movingBounds.bottomRight[1]) {
+            this.directions.down = false
         }
     }
 
     async playerUpdate(mob: Mob) {
+        await this.updateDistance('player', mob)
+    }
+
+    async updateDistance(type: 'player' | 'npc', mob: Mob) {
+        let obj = (type === 'player' ? this.playerDistances : this.npcDistances)
         let distance: MobDistance
-        if (this.distances[mob.instanceId]) {
-            distance = await this.repo.findOne(this.distances[mob.instanceId].id)
+        if (obj[mob.instanceId]) {
+            distance = await this.repo.findOne(obj[mob.instanceId].id)
         }
-        this.distances[mob.instanceId] = distance || new MobDistance()
-        this.distances[mob.instanceId].update(
+        obj[mob.instanceId] = distance || new MobDistance()
+        obj[mob.instanceId].update(
             this.config.instanceId,
-            null,
-            mob.instanceId,
+            type === 'npc' ? mob.instanceId : null,
+            type === 'player' ? mob.instanceId : null,
             mob.x,
             mob.y,
             Phaser.Math.Distance.Between(this.position.x, this.position.y, mob.x, mob.y)
         )
-        await this.repo.save(this.distances[mob.instanceId])
+        await this.repo.save(obj[mob.instanceId])
     }
 }

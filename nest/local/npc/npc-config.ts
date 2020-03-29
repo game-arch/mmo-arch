@@ -1,3 +1,5 @@
+import { VectorArray } from '../../../shared/interfaces/map-config'
+
 export interface NpcConfig {
     instanceId: number
     mobId: number
@@ -5,6 +7,6 @@ export interface NpcConfig {
     map: string
     position: [number, number]
     moveInterval: number
-    movingBounds: [number, number][]
+    movingBounds: { upperLeft: VectorArray, bottomRight: VectorArray }
     path: [number, number][]
 }
