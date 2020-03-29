@@ -9,6 +9,10 @@ export class Distance {
     @Column()
     instanceId: number
     @Column()
+    x: number
+    @Column()
+    y: number
+    @Column()
     otherType: 'player' | 'npc'
     @Column()
     otherId: number
@@ -19,8 +23,10 @@ export class Distance {
     @Column()
     otherY: number
 
-    update(instanceId, otherType, otherId, otherX, otherY, distance) {
+    update(instanceId, x, y, otherType, otherId, otherX, otherY, distance) {
         this.instanceId = instanceId
+        this.x          = x
+        this.y          = y
         this.otherType  = otherType
         this.otherId    = otherId
         this.otherX     = otherX

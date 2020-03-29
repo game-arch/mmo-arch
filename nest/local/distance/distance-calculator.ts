@@ -11,12 +11,10 @@ export class DistanceCalculator {
 
     directions: Directions = { down: false, left: false, right: false, up: false }
 
-    position                                                  = {
+    position = {
         x: 0,
         y: 0
     }
-    npcDistances: { [npcInstanceId: number]: Distance }       = {}
-    playerDistances: { [playerInstanceId: number]: Distance } = {}
 
     constructor(private config: NpcConfig, private repo: Repository<Distance>) {
         this.position.x = config.position[0]
@@ -39,6 +37,8 @@ export class DistanceCalculator {
             let distances   = await this.repo.find({ instanceId: mob.instanceId })
             if (distances) {
                 for (let distance of distances) {
+                    distance.x        = this.position.x
+                    distance.y        = this.position.y
                     distance.distance = Phaser.Math.Distance.Between(this.position.x, this.position.y, distance.otherX, distance.otherY)
                     await this.repo.save(distance)
                 }
@@ -62,6 +62,8 @@ export class DistanceCalculator {
         distance     = distance || new Distance()
         distance.update(
             this.config.instanceId,
+            this.position.x,
+            this.position.y,
             type,
             mob.instanceId,
             mob.x,
