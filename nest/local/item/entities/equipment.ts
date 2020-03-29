@@ -1,6 +1,6 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { EquipmentTypes }                                   from '../../../../shared/types/equipment.types'
 import { Weapon }                                           from './weapon'
+import { Armor }                                            from './armor'
 
 @Entity()
 export class Equipment {
@@ -8,10 +8,11 @@ export class Equipment {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
-    equipmentType: EquipmentTypes
     @OneToOne(t => Weapon, w => w.equipment)
     weapon?: Weapon
+    @OneToOne(t => Armor, a => a.equipment)
+    armor?: Armor
+
 
     @Column()
     gemSlotCount: number
@@ -21,5 +22,9 @@ export class Equipment {
         if (this.weapon) {
             return this.weapon.name
         }
+        if (this.armor) {
+            return this.armor.name
+        }
+        return 'N/A'
     }
 }

@@ -18,8 +18,8 @@ export class EquipmentSet {
     @JoinColumn({ name: 'mainHandId', referencedColumnName: 'id' })
     mainHand: Equipment = null
     @ManyToOne(t => Equipment)
-    @JoinColumn({ name: 'subHandId', referencedColumnName: 'id' })
-    subHand: Equipment  = null
+    @JoinColumn({ name: 'offHandId', referencedColumnName: 'id' })
+    offHand: Equipment  = null
 
     @ManyToOne(t => Equipment)
     @JoinColumn({ name: 'headId', referencedColumnName: 'id' })

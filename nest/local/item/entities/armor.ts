@@ -1,15 +1,23 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Equipment }  from './equipment'
+import { ArmorTypes } from '../../../../shared/types/equipment.types'
+
 @Entity()
 export class Armor {
 
     @PrimaryGeneratedColumn()
     id: number
     @Column()
-    name:string
+    type: ArmorTypes
+    @OneToOne(t => Equipment, e => e.armor)
+    @JoinColumn({ name: 'equipmentId', referencedColumnName: 'id' })
+    equipment: Equipment
     @Column()
-    style:string
+    name: string
     @Column()
-    color:string
+    style: string
+    @Column()
+    color: string
 
 
 }
