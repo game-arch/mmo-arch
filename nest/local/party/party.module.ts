@@ -1,8 +1,6 @@
 import { Module }                from '@nestjs/common'
 import { TypeOrmModule }         from '@nestjs/typeorm'
 import { WorldConstants }        from '../../lib/constants/world.constants'
-import * as path                 from 'path'
-import { environment }           from '../../lib/config/environment'
 import { Party }                 from './entities/party'
 import { PartyController }       from './party.controller'
 import { PartyService }          from './party.service'
@@ -19,7 +17,7 @@ import { ConnectionOptions }     from 'typeorm'
         TypeOrmModule.forFeature([Party]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database   : DB_CONFIG.type === 'mysql' ? WorldConstants.DB_NAME + '_party' : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_party.db'),
+            database   : WorldConstants.DB_NAME + '_party',
             logging    : false,
             synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}']

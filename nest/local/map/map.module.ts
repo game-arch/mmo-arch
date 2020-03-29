@@ -6,8 +6,6 @@ import { Player }                from './entities/player'
 import { WorldConstants }        from '../../lib/constants/world.constants'
 import { MapEmitter }            from './map.emitter'
 import { CharacterClientModule } from '../character/client/character-client.module'
-import * as path                 from 'path'
-import { environment }           from '../../lib/config/environment'
 import { ClientModule }          from '../../client/client.module'
 import { TUTORIAL_CONFIG }       from '../../../shared/maps/tutorial'
 import { TUTORIAL_2_CONFIG }     from '../../../shared/maps/tutorial-2'
@@ -22,7 +20,7 @@ import { ConnectionOptions }     from 'typeorm'
         TypeOrmModule.forFeature([Player]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database   : DB_CONFIG.type === 'mysql' ? WorldConstants.DB_NAME + '_map' : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_map.db'),
+            database   : WorldConstants.DB_NAME + '_map',
             logging    : false,
             synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}']

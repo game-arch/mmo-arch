@@ -1,12 +1,11 @@
-import { Connection, createConnection } from 'typeorm'
-import { WorldConstants }               from '../constants/world.constants'
-import * as path                        from 'path'
-import { environment }                  from '../config/environment'
+import { Connection, ConnectionOptions, createConnection } from 'typeorm'
+import { WorldConstants }                                  from '../constants/world.constants'
+import { DB_CONFIG }                                       from '../config/db.config'
 
-createConnection({
-    type    : 'sqlite',
-    database: path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_character.db'),
-    logging : false,
+createConnection(<ConnectionOptions>{
+    ...DB_CONFIG,
+    database: WorldConstants.DB_NAME + '_character',
+    logging : false
 }).then(async (connection: Connection) => {
     await connection.query('UPDATE character set status = \'offline\'')
     await connection.close()
