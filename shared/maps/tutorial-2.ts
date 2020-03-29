@@ -31,7 +31,7 @@ export const TUTORIAL_2_CONFIG: MapConfig = {
                 }
             },
             entrances: {
-                enter: [1024 - 96, 200]
+                enter: [1024 - 48, 136]
             }
         }
     }

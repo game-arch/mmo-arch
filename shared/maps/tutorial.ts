@@ -10,7 +10,7 @@ export const TUTORIAL_CONFIG: MapConfig = {
             collisions: {
                 walls: [
                     {
-                        solid   : true,
+                        solid   : false,
                         shape   : 'rectangle',
                         color   : 0x00aa55,
                         position: [0, 0],
@@ -20,10 +20,10 @@ export const TUTORIAL_CONFIG: MapConfig = {
                     {
                         solid   : true,
                         shape   : 'rectangle',
-                        color: 0x888888,
+                        color   : 0x888888,
                         position: [320, 500],
-                        width: 100,
-                        height: 100
+                        width   : 100,
+                        height  : 100
                     }
                 ]
             }
@@ -39,7 +39,7 @@ export const TUTORIAL_CONFIG: MapConfig = {
                 }
             },
             entrances: {
-                enter: [96, 200]
+                enter: [80, 136]
             }
         }
     }
