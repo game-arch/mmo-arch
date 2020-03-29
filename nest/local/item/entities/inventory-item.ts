@@ -31,8 +31,8 @@ export class InventoryItem {
 
     @ManyToMany(t => Gem)
     @JoinTable({
-        name      : 'item_gem',
-        joinColumn: { referencedColumnName: 'id', name: 'gemId' }
+        name      : 'inventory_item_gem',
+        joinColumn: { referencedColumnName: 'id', name: 'id' }
     })
     private _gems: Gem[]
     get gems() {

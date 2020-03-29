@@ -1,5 +1,5 @@
-import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { GemEffect }                                 from './gem-effect'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { GemEffect }                                         from './gem-effect'
 
 @Entity()
 export class Gem {
@@ -9,4 +9,7 @@ export class Gem {
 
     @OneToMany('GemEffect', 'gem')
     effects: GemEffect[]
+
+    @Column()
+    name: string
 }
