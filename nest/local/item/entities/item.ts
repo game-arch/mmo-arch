@@ -1,7 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { ItemTypes }                                         from '../../../../shared/types/item.types'
-import { EquipmentTypes }                                    from '../../../../shared/types/equipment.types'
-import { ItemEffect }                                        from './item-effect'
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { ItemTypes }                                                    from '../../../../shared/types/item.types'
+import { Gem }                                                          from './gem'
+import { Equipment }                                                    from './equipment'
+
 
 @Entity()
 export class Item {
@@ -11,14 +12,27 @@ export class Item {
 
     @Column()
     type: ItemTypes
+    @OneToOne(t => Gem, { nullable: true })
+    @JoinColumn({ name: 'gemId', referencedColumnName: 'id' })
+    gem?: Gem
+    @OneToOne(t => Equipment, { nullable: true })
+    @JoinColumn({ name: 'equipmentId', referencedColumnName: 'id' })
+    equipment?: Equipment
 
-    @Column()
-    equipmentType?: EquipmentTypes | null
+    get name() {
+        if (this.gem) {
+            return this.gem.name
+        }
+        if (this.equipment) {
+            return this.equipment.name
+        }
+    }
 
-    @Column()
-    name: string
+    get stackable() {
+        return !this.equipment && !this.gem
+    }
 
-    @OneToMany('ItemEffect', 'item')
-    effects: ItemEffect[]
-
+    get maxQuantity() {
+        return this.stackable ? 99 : 1
+    }
 }
