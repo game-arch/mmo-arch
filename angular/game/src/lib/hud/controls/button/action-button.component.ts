@@ -19,9 +19,6 @@ export class ActionButtonComponent {
     @Input() color = '#0000FF'
     @Input() joystick: boolean
 
-    constructor() {
-        console.log(this.type)
-    }
 
     @HostBinding('attr.size')
     private _sizeClass: Size = 'default'
@@ -35,10 +32,5 @@ export class ActionButtonComponent {
         this._sizeClass = value
         this.size       = this.sizes[value]
 
-    }
-
-    @HostListener('click', ['$event'])
-    activateSkill(event) {
-        console.log(this.type)
     }
 }

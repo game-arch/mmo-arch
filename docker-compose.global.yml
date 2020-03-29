@@ -1,26 +1,26 @@
 version: '3'
 services:
-  global-nats:
-    image: nats:alpine
-    ports:
-      - 4222:4222
-      - 8222:8222
-      - 6222:6222
-  account:
-    image: server_builder:latest
-    env_file:
-      - .env
-    environment:
-      - SERVER_PATH=global/account
-  lobby:
-    image: server_builder:latest
-    env_file:
-      - .env
-    environment:
-      - SERVER_PATH=global/lobby
-  presence:
-    image: server_builder:latest
-    env_file:
-      - .env
-    environment:
-      - SERVER_PATH=global/presence
+    global-nats:
+        image: nats:alpine
+        ports:
+            - 4222:4222
+            - 8222:8222
+            - 6222:6222
+    account:
+        image: server_builder:latest
+        env_file:
+            - .env
+        environment:
+            - SERVER_PATH=global/account
+    lobby:
+        image: server_builder:latest
+        env_file:
+            - .env
+        environment:
+            - SERVER_PATH=global/lobby
+    presence:
+        image: server_builder:latest
+        env_file:
+            - .env
+        environment:
+            - SERVER_PATH=global/presence

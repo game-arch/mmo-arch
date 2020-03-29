@@ -4,6 +4,9 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 export class Player {
     @PrimaryGeneratedColumn()
     id: number
+
+    @Column()
+    instance: number
     @Column()
     accountId: number
     @Column({ length: 255 })

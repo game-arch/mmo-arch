@@ -8,7 +8,6 @@ import { HudComponent }          from './hud.component'
 import { ActionBarComponent }    from './action-bar/action-bar.component'
 import { FlexLayoutModule }      from '@angular/flex-layout'
 import { NgxJoystickModule }     from 'ngx-joystick'
-import { SceneFactory }          from '../game-engine/phaser/scenes/scene-factory.service'
 import { BarComponent }          from './progress/bar.component'
 import { MatRippleModule }       from '@angular/material/core'
 import { SvgModule }             from '../svg/svg.module'
@@ -34,7 +33,6 @@ import { MatCardModule }         from '@angular/material/card'
         NgxJoystickModule,
         MatCardModule
     ],
-    providers   : [SceneFactory],
     exports     : [HudComponent, PreloaderComponent]
 })
 export class HudModule {

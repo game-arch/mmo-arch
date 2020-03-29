@@ -11,9 +11,9 @@ import { ServerSelectionModule }    from '../lib/server-selection/server-selecti
 import { CharacterSelectionModule } from '../lib/character-selection/character-selection.module'
 import { ConnectionModule }         from '../lib/connection/connection.module'
 import { MatButtonModule }          from '@angular/material/button'
-import { RouterModule }             from '@angular/router'
-import { GameModule }               from '../lib/game/game.module'
-import { SvgModule }                from '../lib/svg/svg.module'
+import { RouterModule } from '@angular/router'
+import { GameModule }   from '../game/game.module'
+import { SvgModule }    from '../lib/svg/svg.module'
 import { HudModule }                from '../lib/hud/hud.module'
 
 @NgModule({

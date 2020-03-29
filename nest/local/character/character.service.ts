@@ -1,12 +1,10 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common'
-import { InjectRepository }                                            from '@nestjs/typeorm'
-import { Character }                                                   from './entities/character'
-import { Repository }                                                  from 'typeorm'
-import { RpcException }                                                from '@nestjs/microservices'
-import { AllCharactersOffline, CharacterOffline, CharacterOnline }     from './actions'
-import { CharacterEmitter }                                            from './character.emitter'
-import { CharacterStats }                                              from './entities/character-stats'
-import { CharacterParameters }                                         from './entities/character-parameters'
+import {ConflictException, Injectable, InternalServerErrorException} from '@nestjs/common'
+import {InjectRepository}                                            from '@nestjs/typeorm'
+import {Character}                                                   from './entities/character'
+import {Repository}                                                  from 'typeorm'
+import {RpcException}                                                from '@nestjs/microservices'
+import {AllCharactersOffline, CharacterOffline, CharacterOnline}     from './actions'
+import {CharacterEmitter}                                            from './character.emitter'
 
 @Injectable()
 export class CharacterService {
@@ -18,11 +16,11 @@ export class CharacterService {
     }
 
     async getCharactersFor(accountId: number, world: string) {
-        return (await this.repo.find({ accountId, world })).map(character => character)
+        return (await this.repo.find({accountId, world}))
     }
 
     async getCharacter(characterId: number) {
-        return (await this.repo.findOne(characterId, { relations: ['stats', 'parameters'] }))
+        return (await this.repo.findOne(characterId))
     }
 
     async getCharacterName(characterId: number) {
@@ -30,7 +28,7 @@ export class CharacterService {
     }
 
     async createCharacterFor(accountId: number, world: string, name: string, gender: 'male' | 'female') {
-        let character = await this.repo.findOne({ name, world })
+        let character = await this.repo.findOne({name, world})
         if (character) {
             throw new RpcException(new ConflictException('Character Name Already Taken'))
         }
@@ -40,8 +38,6 @@ export class CharacterService {
             character.world     = world
             character.accountId = accountId
             character.gender    = gender
-            this.newCharacterStats(character)
-            this.newCharacterParameters(character)
             await this.repo.save(character)
             return character
         } catch (e) {
@@ -55,28 +51,18 @@ export class CharacterService {
 
 
     async characterOnline(data: CharacterOnline) {
-        const character = await this.repo.findOne({ id: data.characterId }, { relations: ['stats', 'parameters'] })
+        const character = await this.repo.findOne(data.characterId)
         if (character) {
             character.status   = 'online'
             character.socketId = data.socketId
-            // if (!character.stats) {
-            //     this.newCharacterStats(character)
-            // }
-            // if (!character.parameters) {
-            //     this.newCharacterParameters(character)
-            // }
             await this.repo.save(character)
             this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name)
             this.emitter.characterDetails(character)
         }
     }
 
-    async characterDetails(characterId: number) {
-        return await this.repo.findOne({ id: characterId })
-    }
-
     async characterOffline(data: CharacterOffline) {
-        const character = await this.repo.findOne({ id: data.characterId })
+        const character = await this.repo.findOne(data.characterId)
         if (character) {
             character.status = 'offline'
             await this.repo.save(character)
@@ -88,13 +74,5 @@ export class CharacterService {
         for (const character of data.characters) {
             await this.characterOffline(character)
         }
-    }
-
-    private newCharacterStats(character) {
-        character.stats           = new CharacterStats()
-    }
-
-    private newCharacterParameters(character) {
-        character.parameters           = new CharacterParameters()
     }
 }

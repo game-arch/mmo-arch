@@ -1,7 +1,5 @@
-import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
-import { GameCharacter }                                                               from '../../../../shared/interfaces/game-character'
-import { CharacterStats }                                                              from './character-stats'
-import { CharacterParameters }                                                         from './character-parameters'
+import {Column, Entity, Index, PrimaryGeneratedColumn, Unique} from 'typeorm'
+import {GameCharacter}                                         from '../../../../shared/interfaces/game-character'
 
 @Entity()
 @Index('user', ['accountId', 'name'])
@@ -27,17 +25,9 @@ export class Character implements GameCharacter {
     @Column()
     status: 'online' | 'offline' = 'offline'
 
-    @Column({ nullable: true })
+    @Column({nullable: true})
     lastOnline: Date
 
-    @Column({ nullable: true })
+    @Column({nullable: true})
     socketId: string
-
-    @OneToOne('CharacterStats', 'character', { cascade: true })
-    @JoinColumn()
-    stats: CharacterStats
-
-    @OneToOne('CharacterParameters', 'character', { cascade: true })
-    @JoinColumn()
-    parameters: CharacterParameters
 }

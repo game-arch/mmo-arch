@@ -1,4 +1,4 @@
-import { BaseScene } from '../../../../../../../nest/local/map/maps/base.scene'
+import { BaseScene } from '../../../../../../../shared/phaser/base.scene'
 
 type CharacterAnimation = {
     [K in Orientation]: {

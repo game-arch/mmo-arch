@@ -6,7 +6,7 @@ export class Physics {
     static readonly SPEED_MODIFIER = 16
 
     static getVelocity(value: Directions = { up: false, down: false, left: false, right: false }) {
-        return new Vector2(this.getXVelocity(value), this.getYVelocity(value))
+        return new Vector2(value.left || value.right ? this.getXVelocity(value) : 0, value.up || value.down ? this.getYVelocity(value) : 0)
     }
 
     static getYVelocity(value: Directions) {

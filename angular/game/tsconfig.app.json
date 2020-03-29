@@ -4,7 +4,14 @@
         "importHelpers": true,
         "outDir": "../../out-tsc/app",
         "types": [
+            "node",
             "phaser"
+        ],
+        "lib": [
+            "es2015",
+            "es2018",
+            "dom",
+            "scripthost"
         ]
     },
     "angularCompilerOptions": {

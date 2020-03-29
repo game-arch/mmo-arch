@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/angular",
             "index": "angular/game/src/index.html",
             "main": "angular/game/src/main.ts",
             "polyfills": "angular/game/src/polyfills.ts",

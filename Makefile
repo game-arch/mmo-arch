@@ -5,7 +5,7 @@ install:
 	npm run build:server
 
 copy-environment:
-	cp -n ./client/projects/game/src/environments/environment.sample.ts ./client/projects/game/src/environments/environment.ts
+	cp -n ./angular/game/src/environments/environment.sample.ts ./angular/game/src/environments/environment.ts
 
 start:
 	pm2 start client.config.js
@@ -75,6 +75,8 @@ delete-maiden:
 
 start-talos:
 	WORLD_NAME=Talos WORLD_CONSTANT=talos WORLD_PORT=3006 pm2 start world.config.js --kill-timeout 5000
+restart-talos:
+	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 restart world.config.js
 stop-talos:
 	WORLD_NAME=Talos WORLD_CONSTANT=talos pm2 stop world.config.js
 delete-talos:

@@ -1,45 +1,44 @@
 import { EventEmitter, Injectable } from '@angular/core'
 import { ConnectionManager }        from '../connection/connection-manager'
 import { GAME_CONFIG }              from './phaser/config'
-import { SceneFactory }           from './phaser/scenes/scene-factory.service'
-import { fromEvent }              from 'rxjs'
-import { filter, takeUntil, tap } from 'rxjs/operators'
-import { TitleScene }             from './phaser/scenes/title/title.scene'
-import { PreloadScene }           from './phaser/scenes/preload/preload.scene'
-import { TutorialScene }          from './phaser/scenes/tutorial/tutorial.scene'
+import { fromEvent }                from 'rxjs'
 import {
+    filter,
+    takeUntil,
+    tap
+}                                   from 'rxjs/operators'
+import {
+    AllNpcs,
     AllPlayers,
+    NpcAdded,
+    NpcRemoved,
     PlayerEnteredMap,
     PlayerLeftMap,
-    PlayerUpdate,
-}                                 from '../../../../../nest/local/map/actions'
-import { MultiplayerScene }       from './phaser/scenes/multiplayer.scene'
-import { WorldConnection }        from '../connection/world-connection'
-import { EventBus }               from './phaser/event-bus'
+    PlayerUpdate
+}                                   from '../../../../../nest/local/map/actions'
+import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
+import { WorldConnection }          from '../connection/world-connection'
+import { EventBus }                 from './phaser/event-bus'
+import { TUTORIAL_CONFIG }          from '../../../../../shared/maps/tutorial'
+import { TUTORIAL_2_CONFIG }        from '../../../../../shared/maps/tutorial-2'
+import { PreloadScene }             from './phaser/scenes/preload/preload.scene'
+import { Location }                 from '@angular/common'
+import { TitleScene }               from './phaser/scenes/title/title.scene'
 import Game = Phaser.Game
 
 @Injectable()
 export class GameEngineService {
     loading           = 0
     game: Game
-    scenes: {
-        preload: PreloadScene
-        title: TitleScene
-        tutorial: TutorialScene
-    }                 = {
-        preload : null,
-        title   : null,
-        tutorial: null,
-    }
     currentSceneKey   = 'preload'
     currentScene: MultiplayerScene
-    worldChange = new EventEmitter()
-    eventBus = new EventBus(this)
+    worldChange       = new EventEmitter()
+    eventBus          = new EventBus(this)
     private destroyed = new EventEmitter()
 
     constructor(
-        public sceneFactory: SceneFactory,
-        public connection: ConnectionManager,
+        private location: Location,
+        public connection: ConnectionManager
     ) {
     }
 
@@ -56,6 +55,9 @@ export class GameEngineService {
                     PlayerLeftMap.event,
                     AllPlayers.event,
                     PlayerUpdate.event,
+                    NpcAdded.event,
+                    NpcRemoved.event,
+                    AllNpcs.event
                 ])
             })
         this.createScenes()
@@ -66,24 +68,37 @@ export class GameEngineService {
                 this.game.events.emit(
                     'resize',
                     window.innerWidth,
-                    window.innerHeight,
-                ),
+                    window.innerHeight
+                )
             )
+
+        fromEvent(window, 'blur')
+            .pipe(takeUntil(this.destroyed))
+            .subscribe(() => {
+                if (this.currentScene instanceof MultiplayerScene) {
+                    this.currentScene.directions = {
+                        up   : false,
+                        down : false,
+                        right: false,
+                        left : false
+                    }
+                    this.currentScene.sendDirectionalInput()
+                }
+            })
     }
 
     createScenes() {
-        this.scenes.preload  = this.sceneFactory.preload()
-        this.scenes.title    = this.sceneFactory.title()
-        this.scenes.tutorial = this.sceneFactory.tutorial()
-        this.game.scene.add('preload', this.scenes.preload)
-        this.game.scene.add('title', this.scenes.title)
-        this.game.scene.add('tutorial', this.scenes.tutorial)
+        this.game.scene.add('preload', new PreloadScene(this.location))
+        this.game.scene.add('title', new TitleScene())
+        this.game.scene.add('tutorial', new MultiplayerScene(this.connection, TUTORIAL_CONFIG))
+        this.game.scene.add('tutorial-2', new MultiplayerScene(this.connection, TUTORIAL_2_CONFIG))
     }
 
     convertEvent(world: WorldConnection, eventName: string) {
         fromEvent(world.socket, eventName)
             .pipe(takeUntil(this.worldChange))
             .subscribe(event => {
+                console.log(eventName, event)
                 this.game.events.emit(eventName, event)
             })
     }
@@ -98,5 +113,9 @@ export class GameEngineService {
         this.game.events.emit('destroy')
         this.game.destroy(true)
         this.destroyed.emit()
+    }
+
+    getScene(scene: string) {
+        return this.game.scene.getScene(scene) as MultiplayerScene
     }
 }

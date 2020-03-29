@@ -1,12 +1,19 @@
 import { GameEngineService } from '../game-engine.service'
 import {
+    AllNpcs,
     AllPlayers,
+    NpcAdded,
+    NpcRemoved,
+    PlayerAttemptedTransition,
     PlayerEnteredMap,
     PlayerLeftMap,
-    PlayerUpdate,
+    PlayerUpdate
 }                            from '../../../../../../nest/local/map/actions'
 import { from }              from 'rxjs'
 import { MultiplayerScene }  from './scenes/multiplayer.scene'
+import { Mob }               from '../../../../../../shared/phaser/mob'
+import { first }             from 'rxjs/operators'
+import { Directions }        from '../../../../../../shared/phaser/directions'
 
 export class EventBus {
     constructor(private engine: GameEngineService) {
@@ -16,6 +23,7 @@ export class EventBus {
         this.sceneChangeEvents()
         this.playerPresenceEvents()
         this.playerUpdateEvents()
+        this.npcPresenceEvents()
         this.joystickEvents()
         this.engine.game.events.on('load.progress', (progress: number) => {
             this.engine.loading = progress * 100
@@ -28,9 +36,13 @@ export class EventBus {
 
     private sceneChangeEvents() {
         this.engine.game.events.on('game.scene', scene => {
+            let directions: Directions
             if (this.engine.currentScene) {
                 this.engine.game.scene.stop(this.engine.currentSceneKey)
                 if (this.engine.currentScene.destroy) {
+                    if (this.engine.currentScene instanceof MultiplayerScene) {
+                        directions = this.engine.currentScene.directions
+                    }
                     this.engine.currentScene.destroy()
                 }
             }
@@ -39,53 +51,101 @@ export class EventBus {
                 scene = 'title'
             }
             this.engine.currentSceneKey = scene
-            this.engine.currentScene    = this.engine.scenes[scene]
+            this.engine.currentScene    = this.engine.getScene(scene) as MultiplayerScene
+            if (directions && this.engine.currentScene instanceof MultiplayerScene) {
+                this.engine.currentScene.directions = directions
+                this.engine.currentScene.sendDirectionalInput()
+            }
             this.keyEvents(this.engine.currentScene)
         })
     }
 
     private playerUpdateEvents() {
-        this.engine.game.events.on(AllPlayers.event, players => {
-            from(players).subscribe(
-                (player: {
-                    id: number
-                    name: string
-                    x: number
-                    y: number
-                    moving?: {
-                        up: boolean
-                        down: boolean
-                        left: boolean
-                        right: boolean
+        this.engine.game.events.on(AllPlayers.event, (data: AllPlayers) => {
+            from(data.players).subscribe(
+                (player: Mob) => {
+                    let scene = this.engine.getScene(data.map)
+                    if (scene instanceof MultiplayerScene) {
+                        if (!scene.physics.world || !scene.layers.mobs) {
+                            scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdatePlayer(player))
+                            return
+                        }
+                        this.engine.getScene(data.map).addOrUpdatePlayer(player)
                     }
-                }) => {
-                    if (this.engine.currentScene instanceof MultiplayerScene) {
-                        this.engine.currentScene.addOrUpdatePlayer(player)
-                    }
-                },
+                }
             )
         })
         this.engine.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
-            if (this.engine.currentScene instanceof MultiplayerScene) {
-                this.engine.currentScene.addOrUpdatePlayer(data.player)
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                if (!scene.physics.world || !scene.layers.mobs) {
+                    scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdatePlayer(data.player))
+                    return
+                }
+                this.engine.getScene(data.map).addOrUpdatePlayer(data.player)
             }
         })
     }
 
     private playerPresenceEvents() {
-        this.engine.game.events.on(PlayerEnteredMap.event, data => {
-            if (this.engine.currentScene instanceof MultiplayerScene) {
+        this.engine.game.events.on(PlayerEnteredMap.event, (data: PlayerEnteredMap) => {
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
                 console.log('Player Joined', data)
-                this.engine.currentScene.addOrUpdatePlayer({
-                    ...data,
-                    id: data.characterId,
-                })
+                let scene = this.engine.getScene(data.map)
+                if (scene instanceof MultiplayerScene) {
+                    if (data.instanceId === this.engine.connection.world.selectedCharacter.id) {
+                        this.engine.game.events.emit('game.scene', data.map)
+                    }
+                    if (!scene.physics.world || !scene.layers.mobs) {
+                        scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(data))
+                        return
+                    }
+                    scene.addOrUpdatePlayer(data)
+                }
             }
         })
-        this.engine.game.events.on(PlayerLeftMap.event, data => {
-            if (this.engine.currentScene instanceof MultiplayerScene) {
+        this.engine.game.events.on(PlayerLeftMap.event, (data: PlayerLeftMap) => {
+            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
                 console.log('Player Left', data)
-                this.engine.currentScene.removePlayer(data)
+                this.engine.getScene(data.map).removePlayer(data.id)
+            }
+        })
+    }
+
+    private npcPresenceEvents() {
+        this.engine.game.events.on(AllNpcs.event, (data: AllNpcs) => {
+            from(data.npcs).subscribe(
+                (mob: Mob) => {
+                    let scene = this.engine.getScene(data.map)
+                    if (scene instanceof MultiplayerScene) {
+                        if (!scene.physics.world || !scene.layers.mobs) {
+                            scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdateNpc(mob))
+                            return
+                        }
+                        this.engine.getScene(data.map).addOrUpdateNpc(mob)
+                    }
+                }
+            )
+        })
+        this.engine.game.events.on(NpcAdded.event, (data: NpcAdded) => {
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                console.log('Npc Added', data)
+                let scene = this.engine.getScene(data.map)
+                if (scene instanceof MultiplayerScene) {
+                    if (!scene.physics.world || !scene.layers.mobs) {
+                        scene.onCreate.pipe(first()).subscribe(() => scene.addNpc(data))
+                        return
+                    }
+                    scene.addNpc(data)
+                }
+            }
+        })
+        this.engine.game.events.on(NpcRemoved.event, (data: NpcRemoved) => {
+            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
+                console.log('Npc Removed', data)
+                this.engine.getScene(data.map).removeNpc(data.instanceId)
             }
         })
     }
@@ -97,6 +157,13 @@ export class EventBus {
             })
             scene.input.keyboard.on('keyup', (event: KeyboardEvent) => {
                 scene.toggleDirection(event, false)
+                if (event.key === ' ') {
+                    this.engine.currentScene.transitionToNewMap()
+                }
+            })
+            this.engine.game.events.on(PlayerAttemptedTransition.event, () => {
+                console.log(scene.canTransition)
+                this.engine.currentScene.transitionToNewMap()
             })
         }
     }
@@ -105,7 +172,7 @@ export class EventBus {
         this.engine.game.events.on('input.joystick', directions => {
             if (this.engine.currentScene instanceof MultiplayerScene) {
                 for (const dir of Object.keys(
-                    this.engine.currentScene.directions,
+                    this.engine.currentScene.directions
                 )) {
                     this.engine.currentScene.directions[dir] = directions[dir]
                 }

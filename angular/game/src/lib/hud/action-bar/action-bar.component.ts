@@ -1,5 +1,6 @@
-import { Component }         from '@angular/core'
-import { GameEngineService } from '../../game-engine/game-engine.service'
+import { Component }                 from '@angular/core'
+import { GameEngineService }         from '../../game-engine/game-engine.service'
+import { PlayerAttemptedTransition } from '../../../../../../nest/local/map/actions'
 
 @Component({
     selector   : 'action-bar',
@@ -7,10 +8,16 @@ import { GameEngineService } from '../../game-engine/game-engine.service'
     styleUrls  : ['action-bar.component.scss']
 })
 export class ActionBarComponent {
-    skill                                               = 'skill'
-    melee                                               = 'skill-sword'
-    meleeSize: 'default' | 'small' | 'medium' | 'large' = 'large'
+    skill = 'skill'
 
-    constructor(private service: GameEngineService) {
+    constructor(private engine: GameEngineService) {
+    }
+
+    get canTransition() {
+        return this.engine.currentScene && this.engine.currentScene.self && this.engine.currentScene.canTransition[this.engine.currentScene.self.instanceId]
+    }
+
+    transition() {
+        this.engine.game.events.emit(PlayerAttemptedTransition.event)
     }
 }

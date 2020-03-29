@@ -1,17 +1,18 @@
 import Image = Phaser.GameObjects.Image
-import { BaseScene } from '../../../../../../../../nest/local/map/maps/base.scene'
+import Scene = Phaser.Scene;
 
-export class TitleScene extends BaseScene {
+export class TitleScene extends Scene {
     background: Image
+    name = 'title'
 
     constructor() {
-        super({ name: 'title' })
+        super({key: 'title'})
     }
 
     create() {
         this.background = this.add.image(0, 0, 'background')
-        const width       = this.game.scale.width
-        const height      = this.game.scale.height
+        const width     = this.game.scale.width
+        const height    = this.game.scale.height
         this.background.setDisplaySize(width, height)
         this.background.setPosition(width / 2, height / 2)
         this.game.events.on('resize', (width, height) =>

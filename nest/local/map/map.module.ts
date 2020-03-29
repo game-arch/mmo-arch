@@ -3,28 +3,26 @@ import { MapController }         from './map.controller'
 import { MapService }            from './map.service'
 import { TypeOrmModule }         from '@nestjs/typeorm'
 import { Player }                from './entities/player'
-import { Resource }              from './entities/resource'
-import { ResourceDrop }          from './entities/resource-drop'
-import { NpcLocation }           from './entities/npc-location'
-import { ResourceLocation }      from './entities/resource-location'
 import { WorldConstants }        from '../../lib/constants/world.constants'
-import { TutorialMap }           from './maps/tutorial.map'
 import { MapEmitter }            from './map.emitter'
 import { CharacterClientModule } from '../character/client/character-client.module'
-import { MapTransition }         from './entities/map-transition'
-import { MapConstants }          from './constants'
 import * as path                 from 'path'
 import { environment }           from '../../lib/config/environment'
 import { ClientModule }          from '../../client/client.module'
+import { TUTORIAL_CONFIG }       from '../../../shared/maps/tutorial'
+import { TUTORIAL_2_CONFIG }     from '../../../shared/maps/tutorial-2'
+import { BaseScene }             from '../../../shared/phaser/base.scene'
+import { DB_CONFIG }             from '../../lib/config/db.config'
+import { ConnectionOptions }     from 'typeorm'
 
 @Module({
     imports    : [
         ClientModule,
         CharacterClientModule,
-        TypeOrmModule.forFeature([MapTransition, Resource, ResourceDrop, NpcLocation, ResourceLocation, Player]),
-        TypeOrmModule.forRoot({
-            type       : 'sqlite',
-            database   : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_' + MapConstants.MAP + '.db'),
+        TypeOrmModule.forFeature([Player]),
+        TypeOrmModule.forRoot(<ConnectionOptions>{
+            ...DB_CONFIG,
+            database   : DB_CONFIG.type === 'mysql' ? WorldConstants.DB_NAME + '_map' : path.resolve(environment.dbRoot, WorldConstants.DB_NAME + '_map.db'),
             logging    : false,
             synchronize: true,
             entities   : [__dirname + '/entities/*{.ts,.js}']
@@ -35,8 +33,12 @@ import { ClientModule }          from '../../client/client.module'
         MapService,
         MapEmitter,
         {
-            provide : 'tutorial',
-            useClass: TutorialMap
+            provide   : 'tutorial',
+            useFactory: () => new BaseScene(TUTORIAL_CONFIG)
+        },
+        {
+            provide   : 'tutorial-2',
+            useFactory: () => new BaseScene(TUTORIAL_2_CONFIG)
         }
     ]
 })

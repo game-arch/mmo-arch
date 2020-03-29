@@ -1,8 +1,8 @@
-import { BaseScene }                             from '../../../../../../../nest/local/map/maps/base.scene'
-import { Mob }                                   from '../../../../../../../shared/phaser/mob'
-import { MapConfig }                             from '../../../../../../../nest/local/map/config/config'
-import { PlayerDirectionalInput, PlayerLeftMap } from '../../../../../../../nest/local/map/actions'
-import { ConnectionManager }                     from '../../../connection/connection-manager'
+import { BaseScene }                                         from '../../../../../../../shared/phaser/base.scene'
+import { Mob }                                               from '../../../../../../../shared/phaser/mob'
+import { MapConfig }                                         from '../../../../../../../shared/interfaces/map-config'
+import { PlayerAttemptedTransition, PlayerDirectionalInput } from '../../../../../../../nest/local/map/actions'
+import { ConnectionManager }                                 from '../../../connection/connection-manager'
 import Scene = Phaser.Scene
 
 export class MultiplayerScene extends BaseScene implements Scene {
@@ -20,9 +20,11 @@ export class MultiplayerScene extends BaseScene implements Scene {
         left : false
     }
 
+
     constructor(protected manager: ConnectionManager, config: MapConfig) {
         super(config)
     }
+
 
     get connection() {
         return this.manager.world
@@ -34,7 +36,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
             const direction = this.directionMap[event.key]
             if (this.directions[direction] !== status) {
                 this.directions[direction] = status
-                // this.self.moving = this.directions;
                 this.sendDirectionalInput()
             }
         }
@@ -46,55 +47,71 @@ export class MultiplayerScene extends BaseScene implements Scene {
         })
     }
 
-    removePlayer(data: PlayerLeftMap) {
-        this.removeEntity('player', data.characterId)
+    transitionToNewMap() {
+        if (this.canTransition[this.self.instanceId]) {
+            this.connection.socket.emit(PlayerAttemptedTransition.event, {})
+        }
     }
 
-    addOrUpdatePlayer(data: {
-        id: number
-        name: string
-        x: number
-        y: number
-        moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
-    }) {
-        let player = this.entities.player[data.id]
-        if (!player) {
-            player = this.createPlayer(data)
-        }
-        player.sprite.setPosition(data.x, data.y)
+
+    addOrUpdatePlayer(data: Mob) {
+        let player       = this.players[data.instanceId] || this.createPlayer(data)
+        let playerSprite = this.playerSprites[player.instanceId]
+        playerSprite.setPosition(data.x, data.y)
         if (data.moving) {
-            player.moving = data.moving
+            playerSprite.moving = data.moving
         }
     }
 
-    createPlayer(data: {
-        id: number
-        name: string
-        x: number
-        y: number
-        moving?: { up: boolean; down: boolean; left: boolean; right: boolean }
-    }) {
-        const player = new Mob(data.name)
-        this.addEntity('player', player, data.id)
-        if (this.connection.selectedCharacter.id === data.id) {
-            this.setSelf(player)
+    addOrUpdateNpc(data: Mob) {
+        let npc       = this.npcs[data.instanceId] || this.createNpc(data)
+        let npcSprite = this.npcSprites[npc.instanceId]
+        npcSprite.setPosition(data.x, data.y)
+        if (data.moving) {
+            npcSprite.moving = data.moving
         }
-        return player
     }
 
-    setSelf(player) {
+    createNpc(npc: Mob) {
+        let mob        = new Mob(npc.name)
+        mob.instanceId = npc.instanceId
+        mob.x          = npc.x
+        mob.y          = npc.y
+        this.addNpc(mob)
+        this.npcSprites[npc.instanceId].moving = npc.moving || this.playerSprites[npc.instanceId].moving
+        return mob
+    }
+
+    createPlayer(player: Mob) {
+        let mob        = new Mob(player.name)
+        mob.instanceId = player.instanceId
+        mob.x          = player.x
+        mob.y          = player.y
+        this.addPlayer(mob)
+        this.playerSprites[player.instanceId].moving = player.moving || this.playerSprites[player.instanceId].moving
+        if (this.connection.selectedCharacter.id === player.instanceId) {
+            this.setSelf(mob)
+        }
+        return mob
+    }
+
+    setSelf(player: Mob) {
         this.self = player
-        this.cameras.main.startFollow(player.sprite.body, true, 0.05, 0.05)
+        this.cameras.main.startFollow(this.playerSprites[player.instanceId].body, true, 0.05, 0.05)
     }
 
     destroy() {
-        this.directions = {
+        this.stop.next()
+        this.directions    = {
             up   : false,
             down : false,
             right: false,
             left : false
         }
-        this.self       = null
-        this.entities   = { player: {}, mob: {} }
+        this.self          = null
+        this.players       = {}
+        this.npcs          = {}
+        this.playerSprites = {}
+        this.npcSprites    = {}
     }
 }

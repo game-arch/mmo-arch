@@ -1,9 +1,9 @@
-import { ClientProxy }                                             from '@nestjs/microservices'
-import { Inject, Injectable }                                      from '@nestjs/common'
-import { CharacterDetails, CharacterLoggedIn, CharacterLoggedOut } from './actions'
-import { WORLD_PREFIX }                                            from '../world/world.prefix'
-import { Character }                                               from './entities/character'
-import { LOCAL_CLIENT }                                            from '../../client/client.module'
+import {ClientProxy}                                             from '@nestjs/microservices'
+import {Inject, Injectable}                                      from '@nestjs/common'
+import {CharacterDetails, CharacterLoggedIn, CharacterLoggedOut} from './actions'
+import {WORLD_PREFIX}                                            from '../world/world.prefix'
+import {Character}                                               from './entities/character'
+import {LOCAL_CLIENT}                                            from '../../client/client.module'
 
 @Injectable()
 export class CharacterEmitter {

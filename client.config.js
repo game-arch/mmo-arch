@@ -1,8 +1,8 @@
 module.exports = {
     apps: [
         {
-            name: 'client-game',
+            name: 'client.game',
             script: 'npm run start:client'
         }
     ]
-};
+}
