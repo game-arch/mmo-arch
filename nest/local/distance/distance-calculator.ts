@@ -1,22 +1,22 @@
 import { NpcConfig }           from '../../../shared/interfaces/npc-config'
 import { Observable, Subject } from 'rxjs'
 import { filter, takeUntil }   from 'rxjs/operators'
-import { Directions }          from '../../../shared/phaser/directions'
 import { Mob }                 from '../../../shared/phaser/mob'
 import { Repository }          from 'typeorm'
 import { Distance }            from './entities/distance'
+import { ClientProxy }         from '@nestjs/microservices'
+import { WORLD_PREFIX }        from '../world/world.prefix'
+import { NpcDistanceChanged }  from './actions'
 
 export class DistanceCalculator {
     stop = new Subject()
-
-    directions: Directions = { down: false, left: false, right: false, up: false }
 
     position = {
         x: 0,
         y: 0
     }
 
-    constructor(private config: NpcConfig, private repo: Repository<Distance>) {
+    constructor(private config: NpcConfig, private client: ClientProxy, private repo: Repository<Distance>) {
         this.position.x = config.position[0]
         this.position.y = config.position[1]
     }
@@ -51,6 +51,7 @@ export class DistanceCalculator {
                     distance.y        = this.position.y
                     distance.distance = Phaser.Math.Distance.Between(this.position.x, this.position.y, distance.otherX, distance.otherY)
                     await this.repo.save(distance)
+                    this.client.emit(WORLD_PREFIX + NpcDistanceChanged.event, new NpcDistanceChanged(distance))
                 }
             }
         } else {
@@ -91,6 +92,7 @@ export class DistanceCalculator {
                 Phaser.Math.Distance.Between(this.position.x, this.position.y, mob.x, mob.y)
             )
             await this.repo.save(distance)
+            this.client.emit(WORLD_PREFIX + NpcDistanceChanged.event, new NpcDistanceChanged(distance))
         }
     }
 }

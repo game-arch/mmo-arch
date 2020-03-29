@@ -21,14 +21,15 @@ import { PartyClientModule }     from '../party/client/party-client.module'
 import { ClientModule }          from '../../client/client.module'
 import { DB_CONFIG }             from '../../lib/config/db.config'
 import { ConnectionOptions }     from 'typeorm'
+import { DistanceController }    from './distance/distance.controller'
 
 @Module({
     imports    : [
         ClientModule,
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database   : WorldConstants.DB_NAME,
-            entities   : [__dirname + '/entities/*{.ts,.js}']
+            database: WorldConstants.DB_NAME,
+            entities: [__dirname + '/entities/*{.ts,.js}']
         }),
         TypeOrmModule.forFeature([Player]),
         AccountClientModule,
@@ -42,7 +43,8 @@ import { ConnectionOptions }     from 'typeorm'
         MapController,
         CharacterController,
         ChatController,
-        PartyController
+        PartyController,
+        DistanceController
     ],
     providers  : [
         WorldService,
