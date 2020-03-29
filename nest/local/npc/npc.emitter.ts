@@ -3,7 +3,7 @@ import { LOCAL_CLIENT }       from '../../client/client.module'
 import { ClientProxy }        from '@nestjs/microservices'
 
 @Injectable()
-export class AiEmitter {
+export class NpcEmitter {
 
     constructor(
         @Inject(LOCAL_CLIENT) protected client: ClientProxy

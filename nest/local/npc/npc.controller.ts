@@ -1,14 +1,17 @@
 import { Controller, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
-import { AiService }                                                 from './ai.service'
+import { NpcService }                                                from './npc.service'
 import { MapOnline, NpcUpdate, PlayerUpdate }                        from '../map/actions'
 import { EventPattern }                                              from '@nestjs/microservices'
 import { WORLD_PREFIX }                                              from '../world/world.prefix'
 import { from }                                                      from 'rxjs'
+import { Repository }                                                from 'typeorm'
+import { MobDistance }                                               from './entities/mob-distance'
+import { InjectRepository }                                          from '@nestjs/typeorm'
 
 @Controller()
-export class AiController implements OnApplicationBootstrap, OnApplicationShutdown {
+export class NpcController implements OnApplicationBootstrap, OnApplicationShutdown {
 
-    constructor(private service: AiService) {
+    constructor(private service: NpcService, @InjectRepository(MobDistance) private repo: Repository<MobDistance>) {
     }
 
     @EventPattern(WORLD_PREFIX + MapOnline.event)
@@ -19,15 +22,18 @@ export class AiController implements OnApplicationBootstrap, OnApplicationShutdo
 
     @EventPattern(WORLD_PREFIX + NpcUpdate.event)
     onNpcUpdate(data: NpcUpdate) {
+        data.npc.map = data.map
         this.service.onNpcUpdate.next(data.npc)
     }
 
     @EventPattern(WORLD_PREFIX + PlayerUpdate.event)
     onPlayerUpdate(data: PlayerUpdate) {
+        data.player.map = data.map
         this.service.onPlayerUpdate.next(data.player)
     }
 
-    onApplicationBootstrap() {
+    async onApplicationBootstrap() {
+        await this.repo.clear()
         this.service.start()
     }
 
