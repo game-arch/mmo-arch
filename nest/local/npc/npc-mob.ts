@@ -23,13 +23,18 @@ export class NpcMob {
         this.position.y = config.position[1]
     }
 
-    start(serverStop: Subject<any>, npcUpdate: Observable<Mob>, playerUpdate: Observable<Mob>) {
+    start(serverStop: Subject<any>, npcUpdate: Observable<Mob>, playerUpdate: Observable<Mob>, playerChangedMap: Observable<number>) {
         npcUpdate.pipe(takeUntil(this.stop), takeUntil(serverStop))
                  .pipe(filter(mob => mob.map === this.config.map))
                  .subscribe(mob => this.npcUpdate(mob))
         playerUpdate.pipe(takeUntil(this.stop), takeUntil(serverStop))
                     .pipe(filter(mob => mob.map === this.config.map))
                     .subscribe(mob => this.playerUpdate(mob))
+        playerChangedMap.pipe(takeUntil(this.stop), takeUntil(serverStop))
+                        .pipe(filter(id => !!this.playerDistances[id]))
+                        .subscribe(id => {
+                            delete this.playerDistances[id]
+                        })
     }
 
     async npcUpdate(mob: Mob) {

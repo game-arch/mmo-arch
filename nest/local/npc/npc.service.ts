@@ -21,6 +21,7 @@ export class NpcService {
 
     onNpcUpdate    = new Subject<Mob>()
     onPlayerUpdate = new Subject<Mob>()
+    onPlayerChangedMap = new Subject<number>()
 
     constructor(private emitter: NpcEmitter, private map: MapClient, @InjectRepository(MobDistance) private repo: Repository<MobDistance>) {
 
@@ -30,7 +31,7 @@ export class NpcService {
         this.npcAddedCallbacks = []
         for (let i = 0; i < NPC_CONFIGS.length; i++) {
             this.mobs[i] = new NpcMob(NPC_CONFIGS[i], this.repo)
-            this.mobs[i].start(this.stop$, this.onNpcUpdate, this.onPlayerUpdate)
+            this.mobs[i].start(this.stop$, this.onNpcUpdate, this.onPlayerUpdate, this.onPlayerChangedMap)
             this.npcAddedCallbacks.push((map) => {
                 if (map === NPC_CONFIGS[i].map) {
                     this.map.npcAdded(

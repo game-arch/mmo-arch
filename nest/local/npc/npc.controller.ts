@@ -1,7 +1,7 @@
 import { Controller, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
-import { NpcService }                                                from './npc.service'
-import { MapOnline, NpcUpdate, PlayerUpdate }                        from '../map/actions'
-import { EventPattern }                                              from '@nestjs/microservices'
+import { NpcService }                                           from './npc.service'
+import { MapOnline, NpcUpdate, PlayerChangedMap, PlayerUpdate } from '../map/actions'
+import { EventPattern }                                         from '@nestjs/microservices'
 import { WORLD_PREFIX }                                              from '../world/world.prefix'
 import { from }                                                      from 'rxjs'
 import { Repository }                                                from 'typeorm'
@@ -30,6 +30,11 @@ export class NpcController implements OnApplicationBootstrap, OnApplicationShutd
     onPlayerUpdate(data: PlayerUpdate) {
         data.player.map = data.map
         this.service.onPlayerUpdate.next(data.player)
+    }
+    @EventPattern(WORLD_PREFIX + PlayerChangedMap.event)
+    async onPlayerChangedMap(data:PlayerChangedMap) {
+        this.service.onPlayerChangedMap.next(data.id)
+        await this.repo.query("DELETE FROM mob_distance WHERE playerInstanceId = ?", [data.id])
     }
 
     async onApplicationBootstrap() {
