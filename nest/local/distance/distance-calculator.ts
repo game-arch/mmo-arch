@@ -1,22 +1,22 @@
-import { NpcConfig }           from '../../../shared/interfaces/npc-config'
-import { Observable, Subject } from 'rxjs'
-import { filter, takeUntil }   from 'rxjs/operators'
-import { Directions }          from '../../../shared/phaser/directions'
-import { Mob }                 from '../../../shared/phaser/mob'
-import { Repository }          from 'typeorm'
-import { Distance }            from './entities/distance'
+import { NpcConfig }                     from '../../../shared/interfaces/npc-config'
+import { interval, Observable, Subject } from 'rxjs'
+import { filter, first, takeUntil }      from 'rxjs/operators'
+import { Mob }                           from '../../../shared/phaser/mob'
+import { Repository }                    from 'typeorm'
+import { Distance }                      from './entities/distance'
+import { ClientProxy }                   from '@nestjs/microservices'
+import { WORLD_PREFIX }                  from '../world/world.prefix'
+import { NpcDistanceChanged }            from './actions'
 
 export class DistanceCalculator {
     stop = new Subject()
-
-    directions: Directions = { down: false, left: false, right: false, up: false }
 
     position = {
         x: 0,
         y: 0
     }
 
-    constructor(private config: NpcConfig, private repo: Repository<Distance>) {
+    constructor(private config: NpcConfig, private client: ClientProxy, private repo: Repository<Distance>) {
         this.position.x = config.position[0]
         this.position.y = config.position[1]
     }
@@ -51,6 +51,7 @@ export class DistanceCalculator {
                     distance.y        = this.position.y
                     distance.distance = Phaser.Math.Distance.Between(this.position.x, this.position.y, distance.otherX, distance.otherY)
                     await this.repo.save(distance)
+                    this.client.emit(WORLD_PREFIX + NpcDistanceChanged.event, new NpcDistanceChanged(distance))
                 }
             }
         } else {
@@ -67,30 +68,36 @@ export class DistanceCalculator {
     caching: { [key: string]: boolean } = {}
 
     async updateDistance(otherType: 'player' | 'npc', mob: Mob) {
-        let key = otherType + '-' + mob.instanceId
-        if (!this.caching[key]) {
-            this.caching[key] = true
-            let distance      = this.cached[key] || await this.repo.findOne({
-                instanceId: this.config.instanceId,
-                map       : this.config.map,
-                otherType : otherType,
-                otherId   : mob.instanceId
-            })
-            distance          = distance || new Distance()
-            this.cached[key]  = distance
-            this.caching[key] = false
-            distance.update(
-                this.config.instanceId,
-                this.config.map,
-                this.position.x,
-                this.position.y,
-                otherType,
-                mob.instanceId,
-                mob.x,
-                mob.y,
-                Phaser.Math.Distance.Between(this.position.x, this.position.y, mob.x, mob.y)
-            )
-            await this.repo.save(distance)
+        try {
+            let key = otherType + '-' + mob.instanceId
+            if (!this.caching[key]) {
+                this.caching[key] = true
+                let distance      = this.cached[key] || await this.repo.findOne({
+                    instanceId: this.config.instanceId,
+                    map       : this.config.map,
+                    otherType : otherType,
+                    otherId   : mob.instanceId
+                })
+                distance          = distance || new Distance()
+                this.cached[key]  = distance
+                this.caching[key] = false
+                distance.update(
+                    this.config.instanceId,
+                    this.config.map,
+                    this.position.x,
+                    this.position.y,
+                    otherType,
+                    mob.instanceId,
+                    mob.x,
+                    mob.y,
+                    Phaser.Math.Distance.Between(this.position.x, this.position.y, mob.x, mob.y)
+                )
+                await this.repo.save(distance)
+                this.client.emit(WORLD_PREFIX + NpcDistanceChanged.event, new NpcDistanceChanged(distance))
+            }
+        } catch (e) {
+            await interval(100).pipe(first()).toPromise()
+            await this.updateDistance(otherType, mob)
         }
     }
 }
