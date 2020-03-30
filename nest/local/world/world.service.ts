@@ -122,7 +122,7 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && player.characterId !== null) {
                 const map = this.getMapOf(client)
-                this.map.playerDirectionalInput(player.characterId, WorldConstants.CONSTANT, map, data.directions)
+                this.map.playerDirectionalInput(player.characterId, map, data.directions)
             }
         }
     }

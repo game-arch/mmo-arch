@@ -4,6 +4,7 @@ import {
     AllPlayers,
     NpcAdded,
     NpcRemoved,
+    NpcUpdate,
     PlayerAttemptedTransition,
     PlayerEnteredMap,
     PlayerLeftMap,
@@ -23,7 +24,7 @@ export class EventBus {
         this.sceneChangeEvents()
         this.playerPresenceEvents()
         this.playerUpdateEvents()
-        this.npcPresenceEvents()
+        this.npcEvents()
         this.joystickEvents()
         this.engine.game.events.on('load.progress', (progress: number) => {
             this.engine.loading = progress * 100
@@ -113,7 +114,7 @@ export class EventBus {
         })
     }
 
-    private npcPresenceEvents() {
+    private npcEvents() {
         this.engine.game.events.on(AllNpcs.event, (data: AllNpcs) => {
             from(data.npcs).subscribe(
                 (mob: Mob) => {
@@ -127,6 +128,17 @@ export class EventBus {
                     }
                 }
             )
+        })
+
+        this.engine.game.events.on(NpcUpdate.event, (data: NpcUpdate) => {
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                if (!scene.physics.world || !scene.layers.mobs) {
+                    scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdateNpc(data.npc))
+                    return
+                }
+                this.engine.getScene(data.map).addOrUpdateNpc(data.npc)
+            }
         })
         this.engine.game.events.on(NpcAdded.event, (data: NpcAdded) => {
             let scene = this.engine.getScene(data.map)

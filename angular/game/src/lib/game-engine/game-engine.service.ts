@@ -11,11 +11,11 @@ import {
     AllNpcs,
     AllPlayers,
     NpcAdded,
-    NpcRemoved,
+    NpcRemoved, NpcUpdate,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                                   from '../../../../../nest/local/map/actions'
+} from '../../../../../nest/local/map/actions'
 import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
 import { WorldConnection }          from '../connection/world-connection'
 import { EventBus }                 from './phaser/event-bus'
@@ -55,6 +55,7 @@ export class GameEngineService {
                     PlayerLeftMap.event,
                     AllPlayers.event,
                     PlayerUpdate.event,
+                    NpcUpdate.event,
                     NpcAdded.event,
                     NpcRemoved.event,
                     AllNpcs.event
