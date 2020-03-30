@@ -10,7 +10,7 @@ for (let i = 1; i < 30; i++) {
         position    : [400 + i, 400 + i],
         moveStart   : i * 100,
         moveInterval: 10000,
-        movingBounds: { upperLeft: [200, 100], bottomRight: [800, 600] },
+        movingBounds: { upperLeft: [0, 0], bottomRight: [1024, 768] },
         path        : []
     })
 }

@@ -37,19 +37,17 @@ export class NpcAI {
     horizontalDirections    = ['', 'left', 'right']
     lastVerticalDirection   = 0
     lastHorizontalDirection = 0
-    walkLimit               = 5
     shouldMove              = false
 
     async update(num: number) {
         if (this.shouldMove) {
             this.walkTick++
-            if (this.walkTick === this.walkLimit * 2) {
+            if (this.walkTick === 12) {
                 this.stopMoving()
-                this.walkTick  = 0
-                this.walkLimit = Math.floor(Math.random() * 3) + 2
+                this.walkTick = 0
                 return
             }
-            if (this.walkTick === this.walkLimit) {
+            if (this.walkTick === 10) {
                 this.moveInARandomDirection()
             }
         }
