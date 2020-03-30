@@ -37,26 +37,43 @@ export class NpcAI {
 
     walkTick      = 0
     directionList = ['down', 'right', 'up', 'left']
-    direction     = 0
+    lastDirection = 0
 
     async update(num: number) {
         this.walkTick++
-        if (this.walkTick > 5) {
-            this.direction++
-            if (this.direction > 3) {
-                this.direction = 0
-            }
-            this.map.npcDirectionalInput(this.config.instanceId, this.config.map, {
-                ...this.directions,
-                [this.directionList[this.direction]]: true
-            })
+        if (this.walkTick === 10) {
+            this.stopMoving()
             this.walkTick = 0
+            return
         }
+        if (this.walkTick === 5) {
+            this.moveInARandomDirection()
+        }
+    }
+
+    private moveInARandomDirection() {
+        let direction = this.getRandomDirection()
+        this.map.npcDirectionalInput(this.config.instanceId, this.config.map, {
+            ...this.directions,
+            [this.directionList[direction]]: true
+        })
+    }
+
+    private stopMoving() {
+        this.map.npcDirectionalInput(this.config.instanceId, this.config.map, this.directions)
     }
 
     async distanceUpdated(data) {
 
     }
 
+    getRandomDirection() {
+        let direction = Math.floor(Math.random() * 4)
+        if (this.lastDirection === direction) {
+            return this.getRandomDirection()
+        }
+        this.lastDirection = direction
+        return direction
+    }
 
 }
