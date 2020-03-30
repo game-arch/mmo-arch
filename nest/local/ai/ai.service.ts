@@ -1,10 +1,9 @@
 import { Injectable }        from '@nestjs/common'
 import { interval, Subject } from 'rxjs'
 import { MapClient }         from '../map/client/map.client'
-import { NPC_DATA }       from '../map/npc/npc.data'
-import { NpcAI }          from './npc-ai'
-import { DistanceClient } from '../distance/client/distance.client'
-import { filter, takeUntil } from 'rxjs/operators'
+import { NPC_DATA }          from '../map/npc/npc.data'
+import { NpcAI }             from './npc-ai'
+import { takeUntil }         from 'rxjs/operators'
 import { PlayerChangedMap }  from '../../../shared/events/map.events'
 
 @Injectable()
@@ -18,16 +17,15 @@ export class AiService {
     onDistanceChange   = new Subject<any>()
     onPlayerChangedMap = new Subject<PlayerChangedMap>()
 
-    constructor(private map: MapClient, private distance: DistanceClient) {
+    constructor(private map: MapClient) {
 
     }
 
     start() {
         for (let i = 0; i < NPC_DATA.length; i++) {
-            this.mobs[i] = new NpcAI(NPC_DATA[i], this.distance, this.map)
+            this.mobs[i] = new NpcAI(NPC_DATA[i], this.map)
             this.mobs[i].start(
                 this.tick,
-                this.onDistanceChange.pipe(filter(data => data.map === NPC_DATA[i].map && data.instanceId === NPC_DATA[i].instanceId)),
                 this.onPlayerChangedMap
             )
         }

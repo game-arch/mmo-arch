@@ -13,9 +13,15 @@ export class MobSprite extends Sprite {
     id: number
     x: number
     y: number
-    lastVelocity       = new Vector2(0, 0)
-    stopped            = true
-    moving: Directions = {
+    lastVelocity           = new Vector2(0, 0)
+    stopped                = true
+    moving: Directions     = {
+        up   : false,
+        down : false,
+        left : false,
+        right: false
+    }
+    lastMoving: Directions = {
         up   : false,
         down : false,
         left : false,
@@ -64,23 +70,25 @@ export class MobSprite extends Sprite {
             }
         }
         this.validateDirections()
-        let velocity = Physics.getVelocity(this.moving)
-        this.body.setVelocity(velocity.x, velocity.y)
-        if (!velocity.equals(this.lastVelocity)) {
-            this.lastVelocity = this.body.velocity.clone()
-            this.onVelocityChange()
-        }
-        if ((this.lastPosition.x !== this.body.x || this.lastPosition.y !== this.body.y)) {
-            this.tick++
-            this.lastPosition.x = this.body.x
-            this.lastPosition.y = this.body.y
-            if (this.tick > 50) {
+        if (this.lastMoving !== this.moving) {
+            let velocity = Physics.getVelocity(this.moving)
+            this.body.setVelocity(velocity.x, velocity.y)
+            if (!velocity.equals(this.lastVelocity)) {
+                this.lastVelocity = this.body.velocity.clone()
                 this.onVelocityChange()
-                this.tick = 0
             }
-        } else {
-            this.tick = 0
+            if ((this.lastPosition.x !== this.body.x || this.lastPosition.y !== this.body.y)) {
+                this.tick++
+                this.lastPosition.x = this.body.x
+                this.lastPosition.y = this.body.y
+                if (this.tick > 500) {
+                    this.onVelocityChange()
+                    this.tick = 0
+                }
+            }
+            return
         }
+        this.tick = 0
     }
 
     private validateDirections() {

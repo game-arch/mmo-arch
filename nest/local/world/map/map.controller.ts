@@ -11,14 +11,21 @@ import {
 }                       from '../../../../shared/events/map.events'
 import { MapGateway }   from './map.gateway'
 import { WORLD_PREFIX } from '../world.prefix'
+import { Mob }          from '../../../../shared/phaser/mob'
 
 @Controller()
 export class MapController {
 
+    maps: {
+        [map: string]: {
+            npcs: { [instanceId: number]: Mob },
+            players: { [instanceId: number]: Mob }
+        }
+    } = {}
+
     constructor(
         private gateway: MapGateway
     ) {
-
     }
 
     @EventPattern(WORLD_PREFIX + PlayerEnteredMap.event)
@@ -48,11 +55,15 @@ export class MapController {
 
     @EventPattern(WORLD_PREFIX + PlayerUpdate.event)
     playerUpdate(data: PlayerUpdate) {
+        this.maps[data.map]                                 = this.maps[data.map] || { players: {}, npcs: {} }
+        this.maps[data.map].players[data.player.instanceId] = data.player
         this.gateway.server.to('map.' + data.map).emit(PlayerUpdate.event, data)
     }
 
     @EventPattern(WORLD_PREFIX + NpcUpdate.event)
     npcUpdate(data: NpcUpdate) {
+        this.maps[data.map]                           = this.maps[data.map] || { players: {}, npcs: {} }
+        this.maps[data.map].npcs[data.npc.instanceId] = data.npc
         this.gateway.server.to('map.' + data.map).emit(NpcUpdate.event, data)
     }
 }
