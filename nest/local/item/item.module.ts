@@ -2,7 +2,6 @@ import { Module }                from '@nestjs/common'
 import { TypeOrmModule }         from '@nestjs/typeorm'
 import { WorldConstants }        from '../../lib/constants/world.constants'
 import { CharacterClientModule } from '../character/client/character-client.module'
-import { EquipmentSet }          from './entities/equipment-set'
 import { GemEffect }             from './entities/gem-effect'
 import { Item }                  from './entities/item'
 import { ClientModule }          from '../../client/client.module'
@@ -12,20 +11,20 @@ import { InventoryItem }         from './entities/inventory-item'
 import { Armor }                 from './entities/armor'
 import { Weapon }                from './entities/weapon'
 import { Gem }                   from './entities/gem'
-import { Equipment }             from './entities/equipment'
+import { ItemController }        from './item.controller'
 
 @Module({
     imports    : [
         ClientModule,
         CharacterClientModule,
-        TypeOrmModule.forFeature([EquipmentSet, Item, GemEffect, InventoryItem, Armor, Weapon, Gem, Equipment]),
+        TypeOrmModule.forFeature([Item, GemEffect, InventoryItem, Armor, Weapon, Gem]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
             database: WorldConstants.DB_NAME + '_item',
             entities: [__dirname + '/entities/*{.ts,.js}']
         })
     ],
-    controllers: [],
+    controllers: [ItemController],
     providers  : []
 })
 export class ItemModule {

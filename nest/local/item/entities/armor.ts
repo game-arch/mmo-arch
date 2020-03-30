@@ -1,6 +1,5 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Equipment }  from './equipment'
-import { ArmorTypes } from '../../../../shared/types/equipment.types'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { ArmorParts, ArmorTypes }                 from '../../../../shared/types/equipment.types'
 
 @Entity()
 export class Armor {
@@ -8,16 +7,22 @@ export class Armor {
     @PrimaryGeneratedColumn()
     id: number
     @Column()
+    part: ArmorParts
+    @Column()
     type: ArmorTypes
-    @OneToOne(t => Equipment, e => e.armor)
-    @JoinColumn({ name: 'equipmentId', referencedColumnName: 'id' })
-    equipment: Equipment
     @Column()
     name: string
     @Column()
     style: string
     @Column()
-    color: string
+    color: number
+    @Column()
+    gemSlotCount: number
 
 
+    static create(data: Partial<Armor>) {
+        let armor = new Armor()
+        Object.assign(armor, data)
+        return armor
+    }
 }

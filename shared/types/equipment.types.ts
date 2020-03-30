@@ -1,7 +1,13 @@
-export enum ArmorTypes {
+export enum ArmorParts {
     HEAD  = 'head',
     UPPER = 'upper',
     LOWER = 'lower'
+}
+
+export enum ArmorTypes {
+    LIGHT  = 'light',
+    MEDIUM = 'medium',
+    HEAVY  = 'heavy'
 }
 
 export enum WeaponTypes {
@@ -15,6 +21,9 @@ export enum WeaponTypes {
     STAFF        = 'staff',
     SPEAR        = 'spear',
     CLUB         = 'club',
+    BOW          = 'bow',
 
     SHIELD       = 'shield'
 }
+
+export const TWO_HANDED: WeaponTypes[] = [WeaponTypes.GREAT_SWORD, WeaponTypes.GREAT_HAMMER, WeaponTypes.GREAT_AXE, WeaponTypes.SPEAR, WeaponTypes.STAFF]

@@ -12,4 +12,11 @@ export class Gem {
 
     @Column()
     name: string
+
+
+    static create(data: Partial<Gem>) {
+        let gem = new Gem()
+        Object.assign(gem, data)
+        return gem
+    }
 }

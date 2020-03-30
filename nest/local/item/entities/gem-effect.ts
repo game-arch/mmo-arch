@@ -17,4 +17,10 @@ export class GemEffect implements Effect {
 
     @Column()
     potency: number
+
+    static create(data: Partial<GemEffect>) {
+        let effect = new GemEffect()
+        Object.assign(effect, data)
+        return effect
+    }
 }
