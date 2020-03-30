@@ -2,7 +2,7 @@ import {Controller, OnApplicationBootstrap}        from '@nestjs/common'
 import {EventPattern, MessagePattern}              from '@nestjs/microservices'
 import {ServerPresence}                            from './services/server.presence'
 import {PresenceEmitter}                           from './emitter/presence.emitter'
-import {GetServers, RegisterServer, ServerOffline} from './actions'
+import {GetServers, RegisterServer, ServerOffline} from '../../../shared/events/server-presence.events'
 
 @Controller()
 export class PresenceController implements OnApplicationBootstrap {

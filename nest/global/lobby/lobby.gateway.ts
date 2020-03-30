@@ -8,9 +8,9 @@ import {
 import {Server, Socket} from 'socket.io'
 import {LobbyService}   from './lobby.service'
 import {GameWorld}      from '../../../shared/interfaces/game-world'
-import {Logger}         from '@nestjs/common'
-import {GetServers}     from '../presence/actions'
-import * as parser      from 'socket.io-msgpack-parser'
+import {Logger}     from '@nestjs/common'
+import {GetServers} from '../../../shared/events/server-presence.events'
+import * as parser  from 'socket.io-msgpack-parser'
 
 @WebSocketGateway({
     parser

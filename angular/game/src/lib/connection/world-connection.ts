@@ -1,6 +1,6 @@
 import { Connection }                     from './connection'
 import { GameWorld }                      from '../../../../../shared/interfaces/game-world'
-import { CharacterOnline, GetCharacters } from '../../../../../nest/local/character/actions'
+import { CharacterOnline, GetCharacters } from '../../../../../shared/events/character.events'
 import { GameCharacter }                  from '../../../../../shared/interfaces/game-character'
 
 export class WorldConnection extends Connection {

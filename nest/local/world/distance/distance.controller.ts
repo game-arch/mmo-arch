@@ -1,6 +1,6 @@
 import { Controller }         from '@nestjs/common'
 import { WorldGateway }       from '../world.gateway'
-import { NpcDistanceChanged } from '../../distance/actions'
+import { NpcDistanceChanged } from '../../../../shared/events/distance.events'
 import { EventPattern }       from '@nestjs/microservices'
 import { WORLD_PREFIX }       from '../world.prefix'
 

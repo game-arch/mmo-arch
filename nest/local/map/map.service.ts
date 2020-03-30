@@ -8,8 +8,8 @@ import { CharacterClient }    from '../character/client/character.client'
 import { Game }               from 'phaser'
 import { Directions }         from '../../../shared/phaser/directions'
 import { BaseScene }          from '../../../shared/phaser/base.scene'
-import { NpcConfig }          from '../../../shared/interfaces/npc-config'
-import { NpcAdded }           from './actions'
+import { NpcConfig } from '../../../shared/interfaces/npc-config'
+import { NpcAdded }  from '../../../shared/events/map.events'
 
 @Injectable()
 export class MapService {

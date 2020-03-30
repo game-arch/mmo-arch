@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ClientProxy }        from '@nestjs/microservices'
 import { first }              from 'rxjs/operators'
-import { Character }          from '../entities/character'
+import { Character }    from '../entities/character'
 import {
     AllCharactersOffline,
     CharacterOffline,
@@ -10,8 +10,8 @@ import {
     GetCharacter,
     GetCharacterName,
     GetCharacters
-}                             from '../actions'
-import { WORLD_PREFIX }       from '../../world/world.prefix'
+}                       from '../../../../shared/events/character.events'
+import { WORLD_PREFIX } from '../../world/world.prefix'
 import { LOCAL_CLIENT }       from '../../../client/client.module'
 
 @Injectable()

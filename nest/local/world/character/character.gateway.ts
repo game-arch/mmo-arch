@@ -3,7 +3,7 @@ import { Namespace, Socket }                                   from 'socket.io'
 import { WorldService }                                        from '../world.service'
 import { Logger }                                              from '@nestjs/common'
 import { WorldConstants }                                      from '../../../lib/constants/world.constants'
-import { CharacterClient }                                     from '../../character/client/character.client'
+import { CharacterClient } from '../../character/client/character.client'
 import {
     CharacterCreated,
     CharacterNotCreated,
@@ -12,8 +12,8 @@ import {
     CreateCharacter,
     GetCharacter,
     GetCharacters
-}                                                              from '../../character/actions'
-import { Character }                                           from '../../character/entities/character'
+}                          from '../../../../shared/events/character.events'
+import { Character }       from '../../character/entities/character'
 import { InjectRepository }                                    from '@nestjs/typeorm'
 import { Player }                                              from '../entities/player'
 import { Repository }                                          from 'typeorm'

@@ -3,9 +3,9 @@ import { InjectRepository }                                            from '@ne
 import { RpcException }                                                from '@nestjs/microservices'
 import { Party }                                                       from './entities/party'
 import { Repository }                                                  from 'typeorm'
-import { PartyEmitter }                                                from './party.emitter'
-import { PartyLeaderOnline }                                           from './actions'
-import { CharacterClient }                                             from '../character/client/character.client'
+import { PartyEmitter }      from './party.emitter'
+import { PartyLeaderOnline } from '../../../shared/events/party.events'
+import { CharacterClient }   from '../character/client/character.client'
 
 @Injectable()
 export class PartyService {

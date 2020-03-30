@@ -6,7 +6,7 @@ import {
     filter,
     takeUntil,
     tap
-}                                   from 'rxjs/operators'
+}                           from 'rxjs/operators'
 import {
     AllNpcs,
     AllPlayers,
@@ -15,8 +15,8 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-} from '../../../../../nest/local/map/actions'
-import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
+}                           from '../../../../../shared/events/map.events'
+import { MultiplayerScene } from './phaser/scenes/multiplayer.scene'
 import { WorldConnection }          from '../connection/world-connection'
 import { EventBus }                 from './phaser/event-bus'
 import { TUTORIAL_CONFIG }          from '../../../../../shared/maps/tutorial'

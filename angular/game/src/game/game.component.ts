@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core'
-import { ConnectionManager }                                          from '../lib/connection/connection-manager'
-import { CharacterOffline }                                           from '../../../../nest/local/character/actions'
-import { GameEngineService }                                          from '../lib/game-engine/game-engine.service'
+import { ConnectionManager } from '../lib/connection/connection-manager'
+import { CharacterOffline }  from '../../../../shared/events/character.events'
+import { GameEngineService } from '../lib/game-engine/game-engine.service'
 
 @Component({
     selector   : 'game',

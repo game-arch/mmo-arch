@@ -1,6 +1,6 @@
 import {ClientProxy}                                             from '@nestjs/microservices'
 import {Inject, Injectable}                                      from '@nestjs/common'
-import {CharacterDetails, CharacterLoggedIn, CharacterLoggedOut} from './actions'
+import {CharacterDetails, CharacterLoggedIn, CharacterLoggedOut} from '../../../shared/events/character.events'
 import {WORLD_PREFIX}                                            from '../world/world.prefix'
 import {Character}                                               from './entities/character'
 import {LOCAL_CLIENT}                                            from '../../client/client.module'

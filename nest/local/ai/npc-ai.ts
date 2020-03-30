@@ -3,9 +3,9 @@ import { Observable, Subject } from 'rxjs'
 import { Directions }          from '../../../shared/phaser/directions'
 import { takeUntil }           from 'rxjs/operators'
 import { DistanceClient }      from '../distance/client/distance.client'
-import { NpcDistance }         from '../../../shared/interfaces/npc-distance'
-import { PlayerChangedMap }    from '../map/actions'
-import { MapClient }           from '../map/client/map.client'
+import { NpcDistance }      from '../../../shared/interfaces/npc-distance'
+import { PlayerChangedMap } from '../../../shared/events/map.events'
+import { MapClient }        from '../map/client/map.client'
 
 export class NpcAI {
     stop = new Subject()

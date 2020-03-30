@@ -11,8 +11,8 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                             from './actions'
-import { WORLD_PREFIX }       from '../world/world.prefix'
+}                       from '../../../shared/events/map.events'
+import { WORLD_PREFIX } from '../world/world.prefix'
 import { LOCAL_CLIENT }       from '../../client/client.module'
 import { Mob }                from '../../../shared/phaser/mob'
 

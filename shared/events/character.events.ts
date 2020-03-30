@@ -1,4 +1,4 @@
-import { GameCharacter } from '../../../shared/interfaces/game-character'
+import { GameCharacter } from '../interfaces/game-character'
 
 export class CreateCharacter {
     static readonly event = 'character.create'

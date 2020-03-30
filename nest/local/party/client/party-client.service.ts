@@ -1,7 +1,7 @@
 import { Inject, Injectable }                                    from '@nestjs/common'
 import { ClientProxy }                                           from '@nestjs/microservices'
 import { WORLD_PREFIX }                                          from '../../world/world.prefix'
-import { CreateParty, GetParty, InviteToParty, MakePartyLeader } from '../actions'
+import { CreateParty, GetParty, InviteToParty, MakePartyLeader } from '../../../../shared/events/party.events'
 import { first }                                                 from 'rxjs/operators'
 import { Party }                                                 from '../entities/party'
 

@@ -5,8 +5,8 @@ import { Player }                                              from '../entities
 import { InjectRepository }                                    from '@nestjs/typeorm'
 import { Namespace, Socket }                                   from 'socket.io'
 import * as parser
-                                                               from 'socket.io-msgpack-parser'
-import { CreateParty, MakePartyLeader, PartyCreated, PartyLeaderNotChanged, PartyNotCreated } from '../../party/actions'
+                                                                                              from 'socket.io-msgpack-parser'
+import { CreateParty, MakePartyLeader, PartyCreated, PartyLeaderNotChanged, PartyNotCreated } from '../../../../shared/events/party.events'
 import { PartyClient }                                                                        from '../../party/client/party-client.service'
 
 @WebSocketGateway({

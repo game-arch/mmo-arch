@@ -6,7 +6,7 @@ import {
     PlayerDirectionalInput,
     PlayerEnteredMap,
     PlayerLeftMap
-}                                                              from '../../map/actions'
+}                                                              from '../../../../shared/events/map.events'
 import { WorldService }                                        from '../world.service'
 import { WorldConstants }                                      from '../../../lib/constants/world.constants'
 import { Repository }                                          from 'typeorm'

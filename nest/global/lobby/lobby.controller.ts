@@ -4,8 +4,8 @@ import {AccountClient}                      from '../account/client/account.clie
 import {Request, Response}                  from 'express'
 import {EventPattern}                       from '@nestjs/microservices'
 import {GameWorld}                          from '../../../shared/interfaces/game-world'
-import {LobbyGateway}                       from './lobby.gateway'
-import {GetServers}                         from '../presence/actions'
+import {LobbyGateway} from './lobby.gateway'
+import {GetServers}   from '../../../shared/events/server-presence.events'
 
 @Controller()
 export class LobbyController {

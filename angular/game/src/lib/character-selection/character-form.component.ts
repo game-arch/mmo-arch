@@ -3,12 +3,12 @@ import { ConnectionManager }                  from '../connection/connection-man
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialogRef }                       from '@angular/material/dialog'
 import { fromEvent }                          from 'rxjs'
-import { takeUntil }                          from 'rxjs/operators'
+import { takeUntil } from 'rxjs/operators'
 import {
     CharacterCreated,
     CharacterNotCreated,
     CreateCharacter,
-}                                             from '../../../../../nest/local/character/actions'
+}                    from '../../../../../shared/events/character.events'
 
 @Component({
     selector   : 'character-form',

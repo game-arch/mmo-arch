@@ -2,7 +2,7 @@ import { Controller }      from '@nestjs/common'
 import { PartyGateway }    from './party.gateway'
 import { EventPattern }    from '@nestjs/microservices'
 import { WORLD_PREFIX }    from '../world.prefix'
-import { MadePartyLeader } from '../../party/actions'
+import { MadePartyLeader } from '../../../../shared/events/party.events'
 import { PartyClient }     from '../../party/client/party-client.service'
 
 @Controller()

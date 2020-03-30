@@ -1,7 +1,7 @@
 import { Controller, Get, OnApplicationBootstrap, OnApplicationShutdown, Req, Res } from '@nestjs/common'
 import { MapService }                                                               from './map.service'
-import { EventPattern, MessagePattern }                                             from '@nestjs/microservices'
-import { CharacterLoggedIn, CharacterLoggedOut }                                    from '../character/actions'
+import { EventPattern, MessagePattern }          from '@nestjs/microservices'
+import { CharacterLoggedIn, CharacterLoggedOut } from '../../../shared/events/character.events'
 import {
     GetAllNpcs,
     GetAllPlayers,
@@ -10,8 +10,8 @@ import {
     PlayerAttemptedTransition,
     PlayerChangedMap,
     PlayerDirectionalInput
-}                                                                                   from './actions'
-import { Request, Response }                                                        from 'express'
+}                                                from '../../../shared/events/map.events'
+import { Request, Response }                     from 'express'
 import { MapEmitter }                                                               from './map.emitter'
 import { MapConstants }                                                             from './constants'
 import { WORLD_PREFIX }                                                             from '../world/world.prefix'

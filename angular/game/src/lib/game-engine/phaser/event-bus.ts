@@ -9,8 +9,8 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                            from '../../../../../../nest/local/map/actions'
-import { from }              from 'rxjs'
+}               from '../../../../../../shared/events/map.events'
+import { from } from 'rxjs'
 import { MultiplayerScene }  from './scenes/multiplayer.scene'
 import { Mob }               from '../../../../../../shared/phaser/mob'
 import { first }             from 'rxjs/operators'

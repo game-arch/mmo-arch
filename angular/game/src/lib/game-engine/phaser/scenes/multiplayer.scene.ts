@@ -1,7 +1,7 @@
 import { BaseScene }                                         from '../../../../../../../shared/phaser/base.scene'
 import { Mob }                                               from '../../../../../../../shared/phaser/mob'
 import { MapConfig }                                         from '../../../../../../../shared/interfaces/map-config'
-import { PlayerAttemptedTransition, PlayerDirectionalInput } from '../../../../../../../nest/local/map/actions'
+import { PlayerAttemptedTransition, PlayerDirectionalInput } from '../../../../../../../shared/events/map.events'
 import { ConnectionManager }                                 from '../../../connection/connection-manager'
 import Scene = Phaser.Scene
 

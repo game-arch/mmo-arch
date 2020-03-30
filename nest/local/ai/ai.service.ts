@@ -5,7 +5,7 @@ import { NPC_DATA }       from '../map/npc/npc.data'
 import { NpcAI }          from './npc-ai'
 import { DistanceClient } from '../distance/client/distance.client'
 import { filter, takeUntil } from 'rxjs/operators'
-import { PlayerChangedMap }  from '../map/actions'
+import { PlayerChangedMap }  from '../../../shared/events/map.events'
 
 @Injectable()
 export class AiService {

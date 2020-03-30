@@ -1,6 +1,6 @@
 import { Controller }       from '@nestjs/common'
 import { CharacterService } from './character.service'
-import { MessagePattern }   from '@nestjs/microservices'
+import { MessagePattern } from '@nestjs/microservices'
 import {
     AllCharactersOffline,
     CharacterOffline,
@@ -9,8 +9,8 @@ import {
     GetCharacter,
     GetCharacterName,
     GetCharacters
-}                           from './actions'
-import { WORLD_PREFIX }     from '../world/world.prefix'
+}                         from '../../../shared/events/character.events'
+import { WORLD_PREFIX }   from '../world/world.prefix'
 
 @Controller()
 export class CharacterController {

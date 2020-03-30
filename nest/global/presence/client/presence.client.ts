@@ -1,7 +1,7 @@
 import { Inject, Injectable }                        from '@nestjs/common'
 import { ClientProxy }                               from '@nestjs/microservices'
 import { first }                                     from 'rxjs/operators'
-import { GetServers, RegisterServer, ServerOffline } from '../actions'
+import { GetServers, RegisterServer, ServerOffline } from '../../../../shared/events/server-presence.events'
 import { GLOBAL_CLIENT }                             from '../../../client/client.module'
 
 @Injectable()

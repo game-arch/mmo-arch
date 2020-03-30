@@ -5,8 +5,8 @@ import { Mob }                           from '../../../shared/phaser/mob'
 import { Repository }                    from 'typeorm'
 import { Distance }                      from './entities/distance'
 import { ClientProxy }                   from '@nestjs/microservices'
-import { WORLD_PREFIX }                  from '../world/world.prefix'
-import { NpcDistanceChanged }            from './actions'
+import { WORLD_PREFIX }       from '../world/world.prefix'
+import { NpcDistanceChanged } from '../../../shared/events/distance.events'
 
 export class DistanceCalculator {
     stop = new Subject()

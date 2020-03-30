@@ -2,9 +2,9 @@ import {ConflictException, Injectable, InternalServerErrorException} from '@nest
 import {InjectRepository}                                            from '@nestjs/typeorm'
 import {Character}                                                   from './entities/character'
 import {Repository}                                                  from 'typeorm'
-import {RpcException}                                                from '@nestjs/microservices'
-import {AllCharactersOffline, CharacterOffline, CharacterOnline}     from './actions'
-import {CharacterEmitter}                                            from './character.emitter'
+import {RpcException}                                            from '@nestjs/microservices'
+import {AllCharactersOffline, CharacterOffline, CharacterOnline} from '../../../shared/events/character.events'
+import {CharacterEmitter}                                        from './character.emitter'
 
 @Injectable()
 export class CharacterService {

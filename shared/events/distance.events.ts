@@ -1,4 +1,4 @@
-import { NpcDistance } from '../../../shared/interfaces/npc-distance'
+import { NpcDistance } from '../interfaces/npc-distance'
 
 export class NpcDistanceChanged {
     static readonly event = 'distance.changed'

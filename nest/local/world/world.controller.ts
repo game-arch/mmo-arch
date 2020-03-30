@@ -1,8 +1,8 @@
 import { Controller, Get, Logger } from '@nestjs/common'
 import { WorldGateway }            from './world.gateway'
-import { EventPattern }            from '@nestjs/microservices'
-import { PresenceOnline }          from '../../global/presence/actions'
-import { WorldService }            from './world.service'
+import { EventPattern }         from '@nestjs/microservices'
+import { ServerPresenceOnline } from '../../../shared/events/server-presence.events'
+import { WorldService }         from './world.service'
 
 @Controller()
 export class WorldController {
@@ -21,7 +21,7 @@ export class WorldController {
         return 'OK'
     }
 
-    @EventPattern(PresenceOnline.event)
+    @EventPattern(ServerPresenceOnline.event)
     async onPresenceOnline() {
         await this.gateway.afterInit(this.gateway.server)
     }

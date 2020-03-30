@@ -1,4 +1,4 @@
-export class PresenceOnline {
+export class ServerPresenceOnline {
     static readonly event = 'presence.online'
 }
 

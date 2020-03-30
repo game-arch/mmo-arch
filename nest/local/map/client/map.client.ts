@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { ClientProxy }        from '@nestjs/microservices'
+import { ClientProxy } from '@nestjs/microservices'
 import {
     GetAllNpcs,
     GetAllPlayers,
@@ -8,8 +8,8 @@ import {
     NpcRemoved,
     PlayerAttemptedTransition,
     PlayerDirectionalInput
-} from '../actions'
-import { first }              from 'rxjs/operators'
+}                      from '../../../../shared/events/map.events'
+import { first }       from 'rxjs/operators'
 import { WORLD_PREFIX }       from '../../world/world.prefix'
 import { LOCAL_CLIENT }       from '../../../client/client.module'
 

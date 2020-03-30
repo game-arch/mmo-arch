@@ -1,6 +1,6 @@
 import { Component }                 from '@angular/core'
 import { GameEngineService }         from '../../game-engine/game-engine.service'
-import { PlayerAttemptedTransition } from '../../../../../../nest/local/map/actions'
+import { PlayerAttemptedTransition } from '../../../../../../shared/events/map.events'
 
 @Component({
     selector   : 'action-bar',

@@ -1,4 +1,4 @@
-import { Mob } from '../../../shared/phaser/mob'
+import { Mob } from '../phaser/mob'
 
 export class MapOnline {
     static readonly event = 'map.online'

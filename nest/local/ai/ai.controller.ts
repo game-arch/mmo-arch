@@ -1,10 +1,10 @@
 import { Controller, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
 import { AiService }                                                 from './ai.service'
-import { NpcDistance }                                               from '../../../shared/interfaces/npc-distance'
-import { PlayerChangedMap }                                          from '../map/actions'
-import { EventPattern }                                              from '@nestjs/microservices'
-import { WORLD_PREFIX }                                              from '../world/world.prefix'
-import { NpcDistanceChanged }                                        from '../distance/actions'
+import { NpcDistance }      from '../../../shared/interfaces/npc-distance'
+import { PlayerChangedMap } from '../../../shared/events/map.events'
+import { EventPattern }     from '@nestjs/microservices'
+import { WORLD_PREFIX }       from '../world/world.prefix'
+import { NpcDistanceChanged } from '../../../shared/events/distance.events'
 
 @Controller()
 export class AiController implements OnApplicationBootstrap, OnApplicationShutdown {

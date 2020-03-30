@@ -8,7 +8,7 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                       from '../../map/actions'
+}                       from '../../../../shared/events/map.events'
 import { MapGateway }   from './map.gateway'
 import { WORLD_PREFIX } from '../world.prefix'
 
