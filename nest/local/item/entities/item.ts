@@ -1,15 +1,18 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { ItemTypes }                                                    from '../../../../shared/types/item.types'
-import { Gem }                                                          from './gem'
-import { Armor }                                                        from './armor'
-import { Weapon }                                                       from './weapon'
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
+import { ItemTypes }                                                            from '../../../../shared/types/item.types'
+import { Gem }                                                                  from './gem'
+import { Armor }                                                                from './armor'
+import { Weapon }                                                               from './weapon'
 
 
 @Entity()
+@Unique(['constant'])
 export class Item {
 
     @PrimaryGeneratedColumn()
     id: number
+    @Column()
+    constant: string
 
     @Column()
     type: ItemTypes
@@ -46,6 +49,9 @@ export class Item {
     static create(data: Partial<Item>) {
         let item = new Item()
         Object.assign(item, data)
+        if (!item.constant) {
+            throw new Error('All items must have constants')
+        }
         if (!item.weapon && !item.armor && !item.gem) {
             throw new Error('Must create an item of some kind')
         }
