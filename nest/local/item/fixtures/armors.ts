@@ -5,12 +5,13 @@ import { ArmorParts, ArmorTypes } from '../../../../shared/types/equipment.types
 
 export const ARMORS: Item[] = [
     Item.create({
-        type : ItemTypes.EQUIPMENT,
-        armor: Armor.create({
+        type    : ItemTypes.EQUIPMENT,
+        constant: 'heavy-upper-armor-1',
+        armor   : Armor.create({
             name        : 'Test Armor',
             part        : ArmorParts.UPPER,
             type        : ArmorTypes.HEAVY,
-            style       : 'heavy-armor-1',
+            style       : 'heavy-upper-armor-1',
             color       : 0xff2200,
             gemSlotCount: 2
         })

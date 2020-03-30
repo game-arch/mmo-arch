@@ -26,7 +26,7 @@ export class InventoryItem {
     characterId: number
 
     @OneToOne(t => Item)
-    @JoinColumn({ name: 'itemId', referencedColumnName: 'id' })
+    @JoinColumn({ name: 'itemConstant', referencedColumnName: 'constant' })
     item: Item
 
     @ManyToMany(t => Gem)

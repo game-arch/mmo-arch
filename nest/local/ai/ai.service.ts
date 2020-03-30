@@ -24,7 +24,7 @@ export class AiService {
 
     start() {
         for (let i = 0; i < NPC_DATA.length; i++) {
-            this.mobs[i] = new NpcAI(NPC_DATA[i], this.distance)
+            this.mobs[i] = new NpcAI(NPC_DATA[i], this.distance, this.map)
             this.mobs[i].start(
                 this.tick,
                 this.onDistanceChange.pipe(filter(data => data.map === NPC_DATA[i].map && data.instanceId === NPC_DATA[i].instanceId)),

@@ -5,6 +5,7 @@ import { takeUntil }           from 'rxjs/operators'
 import { DistanceClient }      from '../distance/client/distance.client'
 import { NpcDistance }         from '../../../shared/interfaces/npc-distance'
 import { PlayerChangedMap }    from '../map/actions'
+import { MapClient }           from '../map/client/map.client'
 
 export class NpcAI {
     stop = new Subject()
@@ -16,7 +17,7 @@ export class NpcAI {
         y: 0
     }
 
-    constructor(private config: NpcConfig, private distance: DistanceClient) {
+    constructor(private config: NpcConfig, private distance: DistanceClient, private map: MapClient) {
         this.position.x = config.position[0]
         this.position.y = config.position[1]
     }
@@ -34,11 +35,45 @@ export class NpcAI {
             })
     }
 
+    walkTick      = 0
+    directionList = ['down', 'right', 'up', 'left']
+    lastDirection = 0
+
     async update(num: number) {
+        this.walkTick++
+        if (this.walkTick === 10) {
+            this.stopMoving()
+            this.walkTick = 0
+            return
+        }
+        if (this.walkTick === 5) {
+            this.moveInARandomDirection()
+        }
+    }
+
+    private moveInARandomDirection() {
+        let direction = this.getRandomDirection()
+        this.map.npcDirectionalInput(this.config.instanceId, this.config.map, {
+            ...this.directions,
+            [this.directionList[direction]]: true
+        })
+    }
+
+    private stopMoving() {
+        this.map.npcDirectionalInput(this.config.instanceId, this.config.map, this.directions)
     }
 
     async distanceUpdated(data) {
 
+    }
+
+    getRandomDirection() {
+        let direction = Math.floor(Math.random() * 4)
+        if (this.lastDirection === direction) {
+            return this.getRandomDirection()
+        }
+        this.lastDirection = direction
+        return direction
     }
 
 }

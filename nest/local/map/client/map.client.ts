@@ -4,11 +4,11 @@ import {
     GetAllNpcs,
     GetAllPlayers,
     GetPlayerPosition,
-    NpcAdded,
+    NpcAdded, NpcDirectionalInput,
     NpcRemoved,
     PlayerAttemptedTransition,
     PlayerDirectionalInput
-}                             from '../actions'
+} from '../actions'
 import { first }              from 'rxjs/operators'
 import { WORLD_PREFIX }       from '../../world/world.prefix'
 import { LOCAL_CLIENT }       from '../../../client/client.module'
@@ -32,7 +32,7 @@ export class MapClient {
         return await this.client.send(WORLD_PREFIX + GetPlayerPosition.event + '.' + map, new GetPlayerPosition(characterId)).pipe(first()).toPromise()
     }
 
-    playerDirectionalInput(characterId: number, world: string, map: string, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+    playerDirectionalInput(characterId: number, map: string, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
         this.client.emit(WORLD_PREFIX + PlayerDirectionalInput.event, new PlayerDirectionalInput(characterId, map, directions))
     }
 
@@ -47,5 +47,8 @@ export class MapClient {
 
     npcRemoved(instanceId: number, map: string) {
         this.client.emit(WORLD_PREFIX + NpcRemoved.event, new NpcRemoved(instanceId, map))
+    }
+    npcDirectionalInput(instanceId: number, map: string, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+        this.client.emit(WORLD_PREFIX + NpcDirectionalInput.event, new NpcDirectionalInput(instanceId, map, directions))
     }
 }
