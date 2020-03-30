@@ -30,7 +30,7 @@ export class AiService {
             )
         }
         let tick = 0
-        interval(300)
+        interval(600)
             .pipe(takeUntil(this.stop$))
             .subscribe(() => this.tick.next(++tick))
     }

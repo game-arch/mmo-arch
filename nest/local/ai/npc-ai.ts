@@ -32,30 +32,38 @@ export class NpcAI {
                                        .subscribe(() => this.shouldMove = true)
     }
 
-    walkTick      = 0
-    directionList = ['down', 'right', 'up', 'left']
-    lastDirection = 0
-    shouldMove    = false
+    walkTick                = 0
+    verticalDirections      = ['', 'down', 'up']
+    horizontalDirections    = ['', 'left', 'right']
+    lastVerticalDirection   = 0
+    lastHorizontalDirection = 0
+    walkLimit               = 5
+    shouldMove              = false
 
     async update(num: number) {
         if (this.shouldMove) {
             this.walkTick++
-            if (this.walkTick === 10) {
+            if (this.walkTick === this.walkLimit * 2) {
                 this.stopMoving()
-                this.walkTick = 0
+                this.walkTick  = 0
+                this.walkLimit = Math.floor(Math.random() * 3) + 2
                 return
             }
-            if (this.walkTick === 5) {
+            if (this.walkTick === this.walkLimit) {
                 this.moveInARandomDirection()
             }
         }
     }
 
     private moveInARandomDirection() {
-        let direction = this.getRandomDirection()
+        let vertical                 = this.getRandomDirection(this.verticalDirections, this.lastVerticalDirection)
+        this.lastVerticalDirection   = vertical
+        let horizontal               = this.getRandomDirection(this.horizontalDirections, this.lastHorizontalDirection)
+        this.lastHorizontalDirection = horizontal
         this.map.npcDirectionalInput(this.config.instanceId, this.config.map, {
             ...this.directions,
-            [this.directionList[direction]]: true
+            [this.verticalDirections[vertical]]    : true,
+            [this.horizontalDirections[horizontal]]: true
         })
     }
 
@@ -63,12 +71,11 @@ export class NpcAI {
         this.map.npcDirectionalInput(this.config.instanceId, this.config.map, this.directions)
     }
 
-    getRandomDirection() {
-        let direction = Math.floor(Math.random() * 4)
-        if (this.lastDirection === direction) {
-            return this.getRandomDirection()
+    getRandomDirection(directions, lastDirection) {
+        let direction = Math.floor(Math.random() * directions.length)
+        if (lastDirection === direction) {
+            return this.getRandomDirection(directions, lastDirection)
         }
-        this.lastDirection = direction
         return direction
     }
 

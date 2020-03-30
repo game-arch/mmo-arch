@@ -81,7 +81,7 @@ export class MobSprite extends Sprite {
                 this.tick++
                 this.lastPosition.x = this.body.x
                 this.lastPosition.y = this.body.y
-                if (this.tick > 500) {
+                if (this.tick > 1000) {
                     this.onVelocityChange()
                     this.tick = 0
                 }
