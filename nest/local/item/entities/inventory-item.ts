@@ -39,8 +39,12 @@ export class InventoryItem {
         return [].concat(this._gems)
     }
 
+    get equipment(): { name: string, gemSlotCount: number } {
+        return this.item.armor || this.item.weapon
+    }
+
     addGem(gem: Gem) {
-        if (this.item.equipment && this.item.equipment.gemSlotCount > this._gems.length) {
+        if (this.equipment && this.equipment.gemSlotCount > this._gems.length) {
             this._gems.push(gem)
         }
     }

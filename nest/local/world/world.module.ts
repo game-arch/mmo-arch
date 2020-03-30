@@ -22,6 +22,7 @@ import { ClientModule }          from '../../client/client.module'
 import { DB_CONFIG }             from '../../lib/config/db.config'
 import { ConnectionOptions }     from 'typeorm'
 import { DistanceController }    from './distance/distance.controller'
+import { ItemClientModule }      from '../item/client/item-client.module'
 
 @Module({
     imports    : [
@@ -36,7 +37,8 @@ import { DistanceController }    from './distance/distance.controller'
         CharacterClientModule,
         PresenceClientModule,
         MapClientModule,
-        PartyClientModule
+        PartyClientModule,
+        ItemClientModule
     ],
     controllers: [
         WorldController,
