@@ -72,13 +72,6 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         }
     }
 
-    @EventPattern(WORLD_PREFIX + NpcDirectionalInput.event)
-    async npcMoved(data: NpcDirectionalInput) {
-        if (data.map === this.service.map.constant) {
-            this.service.map.moveEntity('mob', data.instanceId, data.directions)
-        }
-    }
-
     @MessagePattern(WORLD_PREFIX + GetPlayerPosition.event + '.' + MapConstants.MAP)
     getPlayer(data: GetPlayerPosition) {
         return this.service.getPlayerPosition(data.id)

@@ -6,10 +6,9 @@ import { InjectRepository }   from '@nestjs/typeorm'
 import { MapEmitter }         from './map.emitter'
 import { CharacterClient }    from '../character/client/character.client'
 import { Game }               from 'phaser'
-import { Directions }         from '../../../shared/phaser/directions'
 import { BaseScene }          from '../../../shared/phaser/base.scene'
-import { NpcConfig } from '../../../shared/interfaces/npc-config'
-import { NpcAdded }  from '../../../shared/events/map.events'
+import { NpcConfig }          from '../../../shared/interfaces/npc-config'
+import { NpcAdded }           from '../../../shared/events/map.events'
 
 @Injectable()
 export class MapService {
@@ -110,11 +109,6 @@ export class MapService {
                 this.playerLeftMap(this.map.players[player.id] as Player)
             }
         }
-
-    }
-
-    movePlayer(id: number, directions: Directions) {
-        this.map.moveEntity('player', id, directions)
     }
 
     getPlayerPosition(characterId: number) {
