@@ -99,7 +99,7 @@ export class GameEngineService {
         fromEvent(world.socket, eventName)
             .pipe(takeUntil(this.worldChange))
             .subscribe(event => {
-                console.log(eventName, event)
+                // console.log(eventName, event)
                 this.game.events.emit(eventName, event)
             })
     }

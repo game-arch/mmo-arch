@@ -7,6 +7,7 @@ import { MobSprite }         from './mob-sprite'
 import { interval, Subject } from 'rxjs'
 import { takeUntil }         from 'rxjs/operators'
 import { NpcConfig }         from '../interfaces/npc-config'
+import { NpcSprite }         from './npc.sprite'
 import Scene = Phaser.Scene
 
 export class BaseScene extends Scene implements Scene {
@@ -104,8 +105,13 @@ export class BaseScene extends Scene implements Scene {
     }
 
     addNpc(mob: Mob, npcConfig?: NpcConfig) {
+        npcConfig                                        = npcConfig || <NpcConfig>{
+            ...mob,
+            key     : 'Template',
+            position: [mob.x, mob.y]
+        }
         this.npcs[mob.instanceId]                        = mob
-        this.npcSprites[mob.instanceId]                  = new MobSprite(mob.name, this, this.layers.mobs.npcs, mob.x, mob.y)
+        this.npcSprites[mob.instanceId]                  = new NpcSprite(this, this.layers.mobs.npcs, npcConfig)
         this.npcSprites[mob.instanceId].npcConfig        = npcConfig
         this.npcSprites[mob.instanceId].id               = mob.instanceId
         this.npcSprites[mob.instanceId].onVelocityChange = () => this.emitMob(this.npcSprites[mob.instanceId])
@@ -134,7 +140,7 @@ export class BaseScene extends Scene implements Scene {
     moveEntity(type: 'player' | 'mob', id: number, directions: Directions) {
         if (type === 'player') {
             this.playerSprites[id].lastMoving = this.playerSprites[id].moving
-            this.playerSprites[id].moving = {
+            this.playerSprites[id].moving     = {
                 up   : !!directions.up,
                 down : !!directions.down,
                 left : !!directions.left,
@@ -143,7 +149,7 @@ export class BaseScene extends Scene implements Scene {
             return
         }
         this.npcSprites[id].lastMoving = this.npcSprites[id].moving
-        this.npcSprites[id].moving = {
+        this.npcSprites[id].moving     = {
             up   : !!directions.up,
             down : !!directions.down,
             left : !!directions.left,

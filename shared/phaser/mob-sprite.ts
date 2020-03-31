@@ -11,24 +11,14 @@ import { NpcConfig }  from '../interfaces/npc-config'
 
 export class MobSprite extends Sprite {
     id: number
-    x: number
-    y: number
     lastVelocity           = new Vector2(0, 0)
     stopped                = true
-    moving: Directions     = {
-        up   : false,
-        down : false,
-        left : false,
-        right: false
-    }
-    lastMoving: Directions = {
-        up   : false,
-        down : false,
-        left : false,
-        right: false
-    }
+    moving: Directions     = new Directions()
+    lastMoving: Directions = new Directions()
     body: Body
     npcConfig?: NpcConfig
+
+    speed = 1
 
     onVelocityChange = () => {
     }
@@ -37,7 +27,7 @@ export class MobSprite extends Sprite {
     onStartMoving    = () => {
     }
 
-    constructor(public name: string = '', scene: Scene, group: Group, x: number, y: number, key: string = !isServer ? 'Template' : '') {
+    constructor(public name: string = '', scene: Scene, group: Group, public x: number, public y: number, key: string = !isServer ? 'Template' : '') {
         super(scene, x, y, key, !isServer ? 'template.png' : '')
         this.setSize(64, 64)
         this.setOrigin(0.5, 0.5)
@@ -69,9 +59,8 @@ export class MobSprite extends Sprite {
                 this.stopped = false
             }
         }
-        this.validateDirections()
         if (this.lastMoving !== this.moving) {
-            let velocity = Physics.getVelocity(this.moving)
+            let velocity = Physics.getVelocity(this.moving, this.speed)
             this.body.setVelocity(velocity.x, velocity.y)
             if (!velocity.equals(this.lastVelocity)) {
                 this.lastVelocity = this.body.velocity.clone()
@@ -91,22 +80,6 @@ export class MobSprite extends Sprite {
         this.tick = 0
     }
 
-    private validateDirections() {
-        if (this.npcConfig) {
-            if (this.x < this.npcConfig.movingBounds.upperLeft[0]) {
-                this.moving.left = false
-            }
-            if (this.x > this.npcConfig.movingBounds.bottomRight[0]) {
-                this.moving.right = false
-            }
-            if (this.y < this.npcConfig.movingBounds.upperLeft[1]) {
-                this.moving.up = false
-            }
-            if (this.y > this.npcConfig.movingBounds.bottomRight[1]) {
-                this.moving.down = false
-            }
-        }
-    }
 
     asPayload(map: string): Mob {
         return {
