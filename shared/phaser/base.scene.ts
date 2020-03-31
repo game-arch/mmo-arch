@@ -140,7 +140,6 @@ export class BaseScene extends Scene implements Scene {
     moveEntity(type: 'player' | 'mob', id: number, directions: Directions) {
         if (type === 'player') {
             if (this.playerSprites[id]) {
-                this.playerSprites[id].lastMoving = this.playerSprites[id].moving
                 this.playerSprites[id].moving     = {
                     up   : !!directions.up,
                     down : !!directions.down,
@@ -151,7 +150,6 @@ export class BaseScene extends Scene implements Scene {
             return
         }
         if (this.npcSprites[id]) {
-            this.npcSprites[id].lastMoving = this.npcSprites[id].moving
             this.npcSprites[id].moving     = {
                 up   : !!directions.up,
                 down : !!directions.down,

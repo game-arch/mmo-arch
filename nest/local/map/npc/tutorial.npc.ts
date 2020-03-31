@@ -1,7 +1,7 @@
 import { NpcConfig } from '../../../../shared/interfaces/npc-config'
 
 let npcs: NpcConfig[] = []
-for (let i = 1; i < 60; i++) {
+for (let i = 1; i < 100; i++) {
     let positionX = Math.floor(Math.random() * 1024)
     let positionY = Math.floor(Math.random() * 768)
     npcs.push({

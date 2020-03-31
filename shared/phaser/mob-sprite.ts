@@ -59,25 +59,12 @@ export class MobSprite extends Sprite {
                 this.stopped = false
             }
         }
-        if (this.lastMoving !== this.moving) {
-            let velocity = Physics.getVelocity(this.moving, this.speed)
-            this.body.setVelocity(velocity.x, velocity.y)
-            if (!velocity.equals(this.lastVelocity)) {
-                this.lastVelocity = this.body.velocity.clone()
-                this.onVelocityChange()
-            }
-            if ((this.lastPosition.x !== this.body.x || this.lastPosition.y !== this.body.y)) {
-                this.tick++
-                this.lastPosition.x = this.body.x
-                this.lastPosition.y = this.body.y
-                if (this.tick > 1000) {
-                    this.onVelocityChange()
-                    this.tick = 0
-                }
-            }
-            return
+        let velocity = Physics.getVelocity(this.moving, this.speed)
+        this.body.setVelocity(velocity.x, velocity.y)
+        if (!velocity.equals(this.lastVelocity)) {
+            this.lastVelocity = this.body.velocity.clone()
+            this.onVelocityChange()
         }
-        this.tick = 0
     }
 
 
