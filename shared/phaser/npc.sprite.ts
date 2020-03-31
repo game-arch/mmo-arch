@@ -46,21 +46,30 @@ export class NpcSprite extends MobSprite {
 
     private validateDirections() {
         if (this.npcConfig.movingBounds) {
+            let moving = { ...this.moving }
             if (this.x <= this.npcConfig.movingBounds.upperLeft[0]) {
                 this.moving.left  = false
                 this.moving.right = true
+                this.lastMoving   = this.moving
+                this.moving       = moving
             }
             if (this.x >= this.npcConfig.movingBounds.bottomRight[0]) {
                 this.moving.right = false
                 this.moving.left  = true
+                this.lastMoving   = this.moving
+                this.moving       = moving
             }
             if (this.y <= this.npcConfig.movingBounds.upperLeft[1]) {
                 this.moving.up   = false
                 this.moving.down = true
+                this.lastMoving  = this.moving
+                this.moving      = moving
             }
             if (this.y >= this.npcConfig.movingBounds.bottomRight[1]) {
                 this.moving.down = false
                 this.moving.up   = true
+                this.lastMoving  = this.moving
+                this.moving      = moving
             }
         }
     }
@@ -69,6 +78,7 @@ export class NpcSprite extends MobSprite {
         let { vertical, horizontal } = this.getRandomMovement()
         this.lastVerticalDirection   = vertical
         this.lastHorizontalDirection = horizontal
+        this.lastMoving              = this.moving
         this.moving                  = {
             ...new Directions(),
             [this.verticalDirections[vertical]]    : true,
@@ -83,7 +93,8 @@ export class NpcSprite extends MobSprite {
     }
 
     stopMoving() {
-        this.moving = new Directions()
+        this.lastMoving = this.moving
+        this.moving     = new Directions()
     }
 
     getRandomDirection(directions) {
