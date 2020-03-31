@@ -7,12 +7,11 @@ import { WorldConstants }        from '../../lib/constants/world.constants'
 import { MapEmitter }            from './map.emitter'
 import { CharacterClientModule } from '../character/client/character-client.module'
 import { ClientModule }          from '../../client/client.module'
-import { TUTORIAL_CONFIG }       from '../../../shared/maps/tutorial'
-import { TUTORIAL_2_CONFIG }     from '../../../shared/maps/tutorial-2'
 import { BaseScene }             from '../../../shared/phaser/base.scene'
 import { DB_CONFIG }             from '../../lib/config/db.config'
-import { ConnectionOptions } from 'typeorm'
-import { MapInstance }       from './entities/map-instance'
+import { ConnectionOptions }     from 'typeorm'
+import { MapInstance }           from './entities/map-instance'
+import { MapConstants }          from './constants'
 
 @Module({
     imports    : [
@@ -30,12 +29,8 @@ import { MapInstance }       from './entities/map-instance'
         MapService,
         MapEmitter,
         {
-            provide   : 'tutorial',
-            useFactory: () => new BaseScene(TUTORIAL_CONFIG)
-        },
-        {
-            provide   : 'tutorial-2',
-            useFactory: () => new BaseScene(TUTORIAL_2_CONFIG)
+            provide   : MapConstants.MAP,
+            useFactory: () => new BaseScene(MapConstants.MAPS[MapConstants.MAP])
         }
     ]
 })

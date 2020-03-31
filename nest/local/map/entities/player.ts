@@ -15,7 +15,7 @@ export class Player {
     @Column()
     name: string
     @Column()
-    online: boolean
+    online: boolean = false
 
 
     get instanceId() {
