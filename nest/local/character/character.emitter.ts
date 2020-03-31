@@ -16,11 +16,12 @@ export class CharacterEmitter {
         id: number,
         gender: 'male' | 'female',
         world: string,
-        name: string
+        name: string,
+        instance?:number
     ) {
         this.client.emit(
             WORLD_PREFIX + CharacterLoggedIn.event,
-            new CharacterLoggedIn(id, name, world, gender)
+            new CharacterLoggedIn(id, name, world, gender, instance)
         )
     }
 

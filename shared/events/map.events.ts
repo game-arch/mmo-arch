@@ -22,7 +22,7 @@ export class PlayerEnteredMap implements Mob {
 export class PlayerChangedMap {
     static readonly event = 'map.player_changed_map'
 
-    constructor(public id: number, public map: string, public newX: number, public newY: number, public entrance?: string) {
+    constructor(public id: number, public map: string, public newX: number, public newY: number, public instance:number, public entrance?: string) {
 
     }
 }
@@ -38,7 +38,7 @@ export class PlayerLeftMap {
 export class PlayerAttemptedTransition {
     static readonly event = 'map.attempt_transition'
 
-    constructor(public characterId: number) {
+    constructor(public characterId: number, public instance:number) {
     }
 }
 
@@ -136,7 +136,7 @@ export class GetMapInstances {
 export class MapInstances {
     static readonly event = 'map.instances'
 
-    constructor(public map: string, public instances: { instanceNumber: number, playerCount: number }) {
+    constructor(public characterId: number, public map: string, public instances: { instanceNumber: number, playerCount: number }[]) {
     }
 }
 
@@ -150,6 +150,6 @@ export class GetLeastPopulatedMapInstance {
 export class ChangeMapInstance {
     static readonly event = 'map.change_map_instance'
 
-    constructor(public characterId: number, public map: string, public instanceNumber: number) {
+    constructor(public characterId: number, public instanceNumber: number) {
     }
 }

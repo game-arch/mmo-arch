@@ -29,8 +29,8 @@ export class CharacterClient {
         return await this.client.send(WORLD_PREFIX + GetCharacters.event, new GetCharacters(accountId, world)).pipe(first()).toPromise()
     }
 
-    async characterOnline(id: number, socketId: string) {
-        this.client.send(WORLD_PREFIX + CharacterOnline.event, new CharacterOnline(id, socketId)).subscribe()
+    async characterOnline(id: number, socketId: string, instance?:number) {
+        this.client.send(WORLD_PREFIX + CharacterOnline.event, new CharacterOnline(id, socketId, instance)).subscribe()
     }
 
     async characterOffline(id: number) {

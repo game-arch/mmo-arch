@@ -2,6 +2,7 @@ import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/web
 import {
     AllNpcs,
     AllPlayers,
+    ChangeMapInstance,
     PlayerAttemptedTransition,
     PlayerDirectionalInput,
     PlayerEnteredMap,
@@ -12,10 +13,7 @@ import { WorldConstants }                                      from '../../../li
 import { Repository }                                          from 'typeorm'
 import { Player }                                              from '../entities/player'
 import { InjectRepository }                                    from '@nestjs/typeorm'
-import {
-    Namespace,
-    Socket
-}                                                              from 'socket.io'
+import { Namespace, Socket }                                   from 'socket.io'
 import { MapClient }                                           from '../../map/client/map.client'
 import * as parser                                             from 'socket.io-msgpack-parser'
 
@@ -80,4 +78,12 @@ export class MapGateway {
             await this.service.playerAttemptedTransition(client)
         }
     }
+
+    @SubscribeMessage(ChangeMapInstance.event)
+    async changeInstance(client: Socket, data: ChangeMapInstance) {
+        if (!this.service.shuttingDown) {
+            await this.service.changeInstance(client, data)
+        }
+    }
+
 }

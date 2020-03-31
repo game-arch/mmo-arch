@@ -70,7 +70,8 @@ export class CharacterOnline {
 
     constructor(
         public characterId: number,
-        public socketId: string
+        public socketId: string,
+        public instance?:number
     ) {
 
     }
@@ -83,7 +84,8 @@ export class CharacterLoggedIn {
         public characterId: number,
         public name: string,
         public world: string,
-        public gender: 'male' | 'female'
+        public gender: 'male' | 'female',
+        public instance?: number
     ) {
 
     }

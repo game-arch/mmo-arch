@@ -28,7 +28,7 @@ module.exports = {
             }
         }))
         .concat(maps.map(map => map.split('/').pop().split('.')[0]).map(map => ({
-            instances: 1,
+            instances: 2,
             name: 'server.world.' + (process.env.WORLD_CONSTANT || 'maiden') + '.map.' + map,
             script: 'dist/nest/local/map/main.js',
             watch: ['dist/nest/local/map', 'dist/nest/lib', 'dist/shared'],

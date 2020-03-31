@@ -1,12 +1,13 @@
-import { Injectable }       from '@nestjs/common'
-import { AccountClient }    from '../../global/account/client/account.client'
-import { Socket }           from 'socket.io'
-import { CharacterClient }  from '../character/client/character.client'
-import { WorldConstants }   from '../../lib/constants/world.constants'
-import { MapClient }        from '../map/client/map.client'
-import { Repository }       from 'typeorm'
-import { Player }           from './entities/player'
-import { InjectRepository } from '@nestjs/typeorm'
+import { Injectable }        from '@nestjs/common'
+import { AccountClient }     from '../../global/account/client/account.client'
+import { Socket }            from 'socket.io'
+import { CharacterClient }   from '../character/client/character.client'
+import { WorldConstants }    from '../../lib/constants/world.constants'
+import { MapClient }         from '../map/client/map.client'
+import { Repository }        from 'typeorm'
+import { Player }            from './entities/player'
+import { InjectRepository }  from '@nestjs/typeorm'
+import { ChangeMapInstance } from '../../../shared/events/map.events'
 
 
 @Injectable()
@@ -44,12 +45,12 @@ export class WorldService {
         }
     }
 
-    async storeCharacter(client: Socket, character: { id: number, name: string }) {
+    async storeCharacter(client: Socket, character: { id: number, name: string, instance:number }) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && character.id) {
                 await this.validateCharacterLogin(player, character.id)
-                await this.character.characterOnline(character.id, client.id)
+                await this.character.characterOnline(character.id, client.id, character.instance)
                 player.characterId   = character.id
                 player.characterName = await this.character.getCharacterName(character.id)
                 await this.players.save(player)
@@ -127,11 +128,20 @@ export class WorldService {
         }
     }
 
-    async playerAttemptedTransition(client: Socket) {
+    async playerAttemptedTransition(client: Socket, instance?:number) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && player.characterId !== null) {
-                this.map.playerAttemptedTransition(player.characterId)
+                this.map.playerAttemptedTransition(player.characterId, instance)
+            }
+        }
+    }
+
+    async changeInstance(client: Socket, data: ChangeMapInstance) {
+        if (!this.shuttingDown) {
+            const player = await this.players.findOne({ socketId: client.id })
+            if (player && player.characterId !== null) {
+                this.map.changeInstance(player.characterId, data.instanceNumber)
             }
         }
     }

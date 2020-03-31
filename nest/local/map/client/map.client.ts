@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import {
+    ChangeMapInstance,
     GetAllNpcs,
     GetAllPlayers,
     GetPlayerPosition,
@@ -8,7 +9,7 @@ import {
     NpcRemoved,
     PlayerAttemptedTransition,
     PlayerDirectionalInput
-}                      from '../../../../shared/events/map.events'
+} from '../../../../shared/events/map.events'
 import { first }       from 'rxjs/operators'
 import { WORLD_PREFIX }       from '../../world/world.prefix'
 import { LOCAL_CLIENT }       from '../../../client/client.module'
@@ -36,19 +37,11 @@ export class MapClient {
         this.client.emit(WORLD_PREFIX + PlayerDirectionalInput.event, new PlayerDirectionalInput(characterId, map, directions))
     }
 
-    playerAttemptedTransition(characterId: number) {
-        this.client.emit(WORLD_PREFIX + PlayerAttemptedTransition.event, new PlayerAttemptedTransition(characterId))
+    playerAttemptedTransition(characterId: number, instance:number) {
+        this.client.emit(WORLD_PREFIX + PlayerAttemptedTransition.event, new PlayerAttemptedTransition(characterId, instance))
     }
 
-
-    npcAdded(instanceId: number, mobId: number, name: string, map: string, x: number, y: number) {
-        this.client.emit(WORLD_PREFIX + NpcAdded.event, new NpcAdded(mobId, instanceId, name, map, x, y))
-    }
-
-    npcRemoved(instanceId: number, map: string) {
-        this.client.emit(WORLD_PREFIX + NpcRemoved.event, new NpcRemoved(instanceId, map))
-    }
-    npcDirectionalInput(instanceId: number, map: string, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
-        this.client.emit(WORLD_PREFIX + NpcDirectionalInput.event, new NpcDirectionalInput(instanceId, map, directions))
+    changeInstance(characterId:number, instance:number) {
+        this.client.emit(WORLD_PREFIX + ChangeMapInstance.event, new ChangeMapInstance(characterId, instance))
     }
 }

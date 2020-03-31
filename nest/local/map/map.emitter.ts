@@ -3,6 +3,7 @@ import { ClientProxy }        from '@nestjs/microservices'
 import {
     AllNpcs,
     AllPlayers,
+    MapInstances,
     MapOnline,
     NpcAdded,
     NpcRemoved,
@@ -11,8 +12,8 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                       from '../../../shared/events/map.events'
-import { WORLD_PREFIX } from '../world/world.prefix'
+}                             from '../../../shared/events/map.events'
+import { WORLD_PREFIX }       from '../world/world.prefix'
 import { LOCAL_CLIENT }       from '../../client/client.module'
 import { Mob }                from '../../../shared/phaser/mob'
 
@@ -59,7 +60,11 @@ export class MapEmitter {
         this.client.emit(WORLD_PREFIX + MapOnline.event, new MapOnline(map))
     }
 
-    changedMap(toMap: string, characterId: number, newX: number, newY: number, entrance?: string) {
-        this.client.emit(WORLD_PREFIX + PlayerChangedMap.event, new PlayerChangedMap(characterId, toMap, newX, newY, entrance))
+    changedMap(toMap: string, characterId: number, newX: number, newY: number, instance:number,  entrance?: string) {
+        this.client.emit(WORLD_PREFIX + PlayerChangedMap.event, new PlayerChangedMap(characterId, toMap, newX, newY, instance, entrance))
+    }
+
+    instances(characterId: number, map: string, instances: { instanceNumber: number, playerCount: number }[]) {
+        this.client.emit(WORLD_PREFIX + MapInstances.event, new MapInstances(characterId, map, instances))
     }
 }

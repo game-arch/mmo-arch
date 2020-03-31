@@ -22,8 +22,8 @@ import { InjectRepository }                                                     
 import { Player }                                                                   from './entities/player'
 import { getConnection, Repository }                                                from 'typeorm'
 import { from }                                                                     from 'rxjs'
-import { map, toArray } from 'rxjs/operators'
-import { MapInstance }  from './entities/map-instance'
+import { map, toArray }                                                             from 'rxjs/operators'
+import { MapInstance }                                                              from './entities/map-instance'
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -52,17 +52,17 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(WORLD_PREFIX + PlayerChangedMap.event)
     async changedMap(data: PlayerChangedMap) {
-        await this.service.changedMaps(data.id, data.map, data.newX, data.newY, data.entrance)
+        await this.service.changedMaps(data.id, data.map, data.newX, data.newY, data.instance, data.entrance)
     }
 
     @EventPattern(WORLD_PREFIX + PlayerAttemptedTransition.event)
     async attemptedTransition(data: PlayerAttemptedTransition) {
-        await this.service.attemptTransition(data.characterId)
+        await this.service.attemptTransition(data.characterId, data.instance)
     }
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
     async characterLoggedIn(data: CharacterLoggedIn) {
-        await this.service.loggedIn(data.characterId, data.name)
+        await this.service.loggedIn(data.characterId, data.name, data.instance)
     }
 
     @EventPattern(WORLD_PREFIX + ChangeMapInstance.event)
