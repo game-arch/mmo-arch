@@ -9,9 +9,13 @@ export class Player {
     @PrimaryColumn()
     id: number
     @Column()
+    instance: number
+    @Column()
     map: string
     @Column()
     name: string
+    @Column()
+    online: boolean
 
 
     get instanceId() {

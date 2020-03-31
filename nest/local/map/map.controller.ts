@@ -1,17 +1,20 @@
 import { Controller, Get, OnApplicationBootstrap, OnApplicationShutdown, Req, Res } from '@nestjs/common'
 import { MapService }                                                               from './map.service'
-import { EventPattern, MessagePattern }          from '@nestjs/microservices'
-import { CharacterLoggedIn, CharacterLoggedOut } from '../../../shared/events/character.events'
+import { EventPattern, MessagePattern }                                             from '@nestjs/microservices'
 import {
+    CharacterLoggedIn,
+    CharacterLoggedOut
+}                                                                                   from '../../../shared/events/character.events'
+import {
+    ChangeMapInstance,
     GetAllNpcs,
     GetAllPlayers,
     GetPlayerPosition,
-    NpcDirectionalInput,
     PlayerAttemptedTransition,
     PlayerChangedMap,
     PlayerDirectionalInput
-}                                                from '../../../shared/events/map.events'
-import { Request, Response }                     from 'express'
+}                                                                                   from '../../../shared/events/map.events'
+import { Request, Response }                                                        from 'express'
 import { MapEmitter }                                                               from './map.emitter'
 import { MapConstants }                                                             from './constants'
 import { WORLD_PREFIX }                                                             from '../world/world.prefix'
@@ -19,14 +22,16 @@ import { InjectRepository }                                                     
 import { Player }                                                                   from './entities/player'
 import { getConnection, Repository }                                                from 'typeorm'
 import { from }                                                                     from 'rxjs'
-import { map, toArray }                                                             from 'rxjs/operators'
+import { map, toArray } from 'rxjs/operators'
+import { MapInstance }  from './entities/map-instance'
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
     constructor(
         private readonly emitter: MapEmitter,
         private readonly service: MapService,
-        @InjectRepository(Player) private playerRepo: Repository<Player>
+        @InjectRepository(Player) private playerRepo: Repository<Player>,
+        @InjectRepository(MapInstance) private instance: Repository<MapInstance>
     ) {
     }
 
@@ -60,6 +65,11 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         await this.service.loggedIn(data.characterId, data.name)
     }
 
+    @EventPattern(WORLD_PREFIX + ChangeMapInstance.event)
+    async changeInstance(data: ChangeMapInstance) {
+        await this.service.changeInstance(data)
+    }
+
     @EventPattern(WORLD_PREFIX + CharacterLoggedOut.event)
     async characterLoggedOut(data: CharacterLoggedOut) {
         await this.service.loggedOut(data.characterId)
@@ -77,9 +87,16 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         return this.service.getPlayerPosition(data.id)
     }
 
-    onApplicationBootstrap() {
+    async onApplicationBootstrap() {
         this.service.start()
         this.emitter.nowOnline(this.service.map.constant)
+        let instance = await this.instance.findOne({ map: MapConstants.MAP, instanceNumber: MapConstants.INSTANCE_ID })
+        if (!instance) {
+            instance                = new MapInstance()
+            instance.instanceNumber = MapConstants.INSTANCE_ID
+            instance.map            = MapConstants.MAP
+            await this.instance.save(instance)
+        }
     }
 
     async onApplicationShutdown(signal?: string) {

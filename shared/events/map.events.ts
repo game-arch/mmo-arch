@@ -125,3 +125,31 @@ export class NpcRemoved {
 
     }
 }
+
+export class GetMapInstances {
+    static readonly event = 'map.get_instances'
+
+    constructor(public map: string) {
+    }
+}
+
+export class MapInstances {
+    static readonly event = 'map.instances'
+
+    constructor(public map: string, public instances: { instanceNumber: number, playerCount: number }) {
+    }
+}
+
+export class GetLeastPopulatedMapInstance {
+    static readonly event = 'map.least_populated_instance'
+
+    constructor(public map: string) {
+    }
+}
+
+export class ChangeMapInstance {
+    static readonly event = 'map.change_map_instance'
+
+    constructor(public characterId: number, public map: string, public instanceNumber: number) {
+    }
+}

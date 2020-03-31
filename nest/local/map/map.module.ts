@@ -11,13 +11,14 @@ import { TUTORIAL_CONFIG }       from '../../../shared/maps/tutorial'
 import { TUTORIAL_2_CONFIG }     from '../../../shared/maps/tutorial-2'
 import { BaseScene }             from '../../../shared/phaser/base.scene'
 import { DB_CONFIG }             from '../../lib/config/db.config'
-import { ConnectionOptions }     from 'typeorm'
+import { ConnectionOptions } from 'typeorm'
+import { MapInstance }       from './entities/map-instance'
 
 @Module({
     imports    : [
         ClientModule,
         CharacterClientModule,
-        TypeOrmModule.forFeature([Player]),
+        TypeOrmModule.forFeature([Player, MapInstance]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
             database: WorldConstants.DB_NAME + '_map',

@@ -1,14 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { MapConstants }       from './constants'
-import { Repository }         from 'typeorm'
-import { Player }             from './entities/player'
-import { InjectRepository }   from '@nestjs/typeorm'
-import { MapEmitter }         from './map.emitter'
-import { CharacterClient }    from '../character/client/character.client'
-import { Game }               from 'phaser'
-import { BaseScene }          from '../../../shared/phaser/base.scene'
-import { NpcConfig }          from '../../../shared/interfaces/npc-config'
-import { NpcAdded }           from '../../../shared/events/map.events'
+import { Inject, Injectable }          from '@nestjs/common'
+import { MapConstants }                from './constants'
+import { Repository }                  from 'typeorm'
+import { Player }                      from './entities/player'
+import { InjectRepository }            from '@nestjs/typeorm'
+import { MapEmitter }                  from './map.emitter'
+import { CharacterClient }             from '../character/client/character.client'
+import { Game }                        from 'phaser'
+import { BaseScene }                   from '../../../shared/phaser/base.scene'
+import { NpcConfig }                   from '../../../shared/interfaces/npc-config'
+import { ChangeMapInstance, NpcAdded } from '../../../shared/events/map.events'
+import { MapInstance }                 from './entities/map-instance'
 
 @Injectable()
 export class MapService {
@@ -19,7 +20,8 @@ export class MapService {
         private emitter: MapEmitter,
         private character: CharacterClient,
         @Inject(MapConstants.MAP) public map: BaseScene,
-        @InjectRepository(Player) private playerRepo: Repository<Player>
+        @InjectRepository(Player) private playerRepo: Repository<Player>,
+        @InjectRepository(MapInstance) private instance: Repository<MapInstance>
     ) {
 
         this.phaser = new Game({
@@ -64,7 +66,14 @@ export class MapService {
     async attemptTransition(characterId: number) {
         if (this.map.canTransition[characterId]) {
             let { mob, landingMap, landingId } = this.map.canTransition[characterId]
-            this.emitter.changedMap(landingMap, mob.id, mob.x, mob.y, landingId)
+            let player                         = await this.playerRepo.findOne(characterId)
+            let count                          = await this.instance.count({
+                instanceNumber: player.instance,
+                map           : landingMap
+            })
+            if (count < MapConstants.CAPACITY) {
+                this.emitter.changedMap(landingMap, mob.id, mob.x, mob.y, landingId)
+            }
         }
     }
 
@@ -90,14 +99,34 @@ export class MapService {
     }
 
     async loggedIn(characterId: number, name: string) {
-        let player = await this.playerRepo.findOne(characterId)
+        let player = await this.playerRepo.findOne({ id: characterId })
         if (!player && this.map.constant === 'tutorial') {
-            player = this.playerRepo.create({ id: characterId, map: 'tutorial', x: 100, y: 100 })
+            player = this.playerRepo.create({
+                id      : characterId,
+                map     : 'tutorial',
+                instance: MapConstants.INSTANCE_ID,
+                x       : 100,
+                y       : 100
+            })
         }
-        if (player && player.map === this.map.constant) {
+        if (player && player.map === this.map.constant && player.instance === MapConstants.INSTANCE_ID) {
             player.name = name
             await this.playerRepo.save(player)
             this.playerJoinedMap(player)
+        }
+    }
+
+    async changeInstance(data: ChangeMapInstance) {
+        let count    = await this.instance.count({ instanceNumber: data.instanceNumber, map: MapConstants.MAP })
+        const player = await this.playerRepo.findOne(data.characterId)
+        if (count < MapConstants.CAPACITY) {
+            if (MapConstants.INSTANCE_ID === data.instanceNumber) {
+                this.playerJoinedMap(player)
+            } else if (MapConstants.INSTANCE_ID === player.instance) {
+                player.instance = data.instanceNumber
+                await this.playerRepo.save(player)
+                this.playerLeftMap(player)
+            }
         }
     }
 
