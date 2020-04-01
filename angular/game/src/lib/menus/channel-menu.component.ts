@@ -9,7 +9,7 @@ import { MultiplayerScene }                                            from '../
     templateUrl: 'channel-menu.component.html',
     styleUrls  : ['channel-menu.component.scss'],
     inputs     : ['map', 'character', 'forCharacterSelection'],
-    outputs    : ['selected']
+    outputs    : ['selected', 'close']
 })
 export class ChannelMenuComponent {
     @HostBinding('class.shown')
@@ -19,6 +19,7 @@ export class ChannelMenuComponent {
     forCharacterSelection = false
     destroy               = new EventEmitter()
     selected              = new EventEmitter()
+    close                 = new EventEmitter()
 
     constructor(private game: GameEngineService, private connection: ConnectionManager) {
     }
@@ -29,7 +30,7 @@ export class ChannelMenuComponent {
 
     ngOnInit() {
         this.shown = true
-        let scene  = this.game.currentScene instanceof MultiplayerScene ? this.game.currentScene.name : null
+        let scene  = this.game.currentScene instanceof MultiplayerScene ? this.game.currentScene.config.constant : null
         this.connection.world.socket.emit(GetMapChannels.event, new GetMapChannels(scene, this.character), (channels) => {
             console.log(channels)
             this.game.mapChannels[this.game.currentSceneKey] = channels
@@ -46,13 +47,16 @@ export class ChannelMenuComponent {
                         this.game.mapChannels[result.map] = channels
                     })
                 } else {
-                    this.selected.emit(channel)
+                    this.selected.emit()
                 }
             })
             return
         }
         if (!this.forCharacterSelection) {
+            console.log('change map!')
             this.connection.world.socket.emit(ChangeMapChannel.event, channel)
+            this.selected.emit()
+            return
         }
         this.selected.emit(channel)
     }

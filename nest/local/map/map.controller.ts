@@ -72,7 +72,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         await this.service.loggedIn(data.characterId, data.name, data.channel)
     }
 
-    @EventPattern(WORLD_PREFIX + ChangeMapChannel.event + '.' + MapConstants.MAP)
+    @EventPattern(WORLD_PREFIX + ChangeMapChannel.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
     async changeInstance(data: ChangeMapChannel) {
         // this.logger.log(ChangeMapChannel.event)
         await this.service.changeInstance(data)
@@ -80,7 +80,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedOut.event)
     async characterLoggedOut(data: CharacterLoggedOut) {
-        // this.logger.log(CharacterLoggedOut.event)
+        this.logger.log(CharacterLoggedOut.event)
         await this.service.loggedOut(data.characterId)
     }
 
@@ -99,7 +99,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         return await this.service.findPlayer(data.id)
     }
 
-    @MessagePattern(WORLD_PREFIX + GetMapChannels.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
+    @MessagePattern(WORLD_PREFIX + GetMapChannels.event + '.' + MapConstants.MAP )
     async getChannels() {
         // this.logger.log(GetMapChannels.event)
         return await this.service.getChannels(MapConstants.MAP)

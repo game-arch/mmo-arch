@@ -13,11 +13,13 @@ import { ConnectionOptions }     from 'typeorm'
 import { Channel }               from './entities/channel'
 import { MapConstants }          from './constants'
 import { LOGGER }                from '../../lib/functions/create-microservice'
+import { MapClientModule }       from './client/map-client.module'
 
 @Module({
     imports    : [
         ClientModule,
         CharacterClientModule,
+        MapClientModule,
         TypeOrmModule.forFeature([Player, Channel]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,

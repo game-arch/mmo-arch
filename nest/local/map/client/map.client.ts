@@ -14,6 +14,7 @@ import { first, takeUntil }   from 'rxjs/operators'
 import { WORLD_PREFIX }       from '../../world/world.prefix'
 import { LOCAL_CLIENT }       from '../../../client/client.module'
 import { Subject }            from 'rxjs'
+import { Mob }                from '../../../../shared/phaser/mob'
 
 
 @Injectable()
@@ -22,12 +23,28 @@ export class MapClient {
     constructor(@Inject(LOCAL_CLIENT) public client: ClientProxy) {
     }
 
-    async getAllPlayers(map: string, channel: number) {
-        return await this.client.send(WORLD_PREFIX + GetAllPlayers.event + '.' + map + '.' + channel, new GetAllPlayers()).pipe(first()).toPromise()
+    getAllPlayers(map: string, channel: number): Promise<Mob[]> {
+        return new Promise(resolve => {
+            let stop = new Subject()
+            this.client.send(WORLD_PREFIX + GetAllPlayers.event + '.' + map + '.' + channel, new GetAllPlayers())
+                .pipe(takeUntil(stop))
+                .subscribe(data => {
+                    stop.next()
+                    resolve(data)
+                })
+        })
     }
 
-    async getAllNpcs(map: string, channel: number) {
-        return await this.client.send(WORLD_PREFIX + GetAllNpcs.event + '.' + map + '.' + channel, new GetAllNpcs()).pipe(first()).toPromise()
+    async getAllNpcs(map: string, channel: number): Promise<Mob[]> {
+        return new Promise(resolve => {
+            let stop = new Subject()
+            this.client.send(WORLD_PREFIX + GetAllNpcs.event + '.' + map + '.' + channel, new GetAllNpcs())
+                .pipe(takeUntil(stop))
+                .subscribe(data => {
+                    stop.next()
+                    resolve(data)
+                })
+        })
     }
 
     async getPlayer(characterId: number, map: string, channel: number): Promise<{ x: number, y: number }> {
@@ -38,12 +55,20 @@ export class MapClient {
         this.client.emit(WORLD_PREFIX + PlayerDirectionalInput.event + '.' + map + '.' + channel, new PlayerDirectionalInput(characterId, directions))
     }
 
-    async playerAttemptedTransition(characterId: number, map: string, channel: number) {
-        return await this.client.send(WORLD_PREFIX + PlayerAttemptedTransition.event + '.' + map + '.' + channel, new PlayerAttemptedTransition(characterId, channel)).pipe(first()).toPromise()
+    async playerAttemptedTransition(characterId: number, map: string, currentChannel: number, channel: number) {
+        return await this.client.send(WORLD_PREFIX + PlayerAttemptedTransition.event + '.' + map + '.' + currentChannel, new PlayerAttemptedTransition(characterId, channel)).pipe(first()).toPromise()
     }
 
-    async getChannels(map: string, channel: number) {
-        return await this.client.send(WORLD_PREFIX + GetMapChannels.event + '.' + map + '.' + channel, {}).pipe(first()).toPromise()
+    getChannels(map: string, channel: number) {
+        return new Promise(resolve => {
+            let stop = new Subject()
+            this.client.send(WORLD_PREFIX + GetMapChannels.event + '.' + map, {})
+                .pipe(takeUntil(stop))
+                .subscribe(channels => {
+                    stop.next()
+                    resolve(channels)
+                })
+        })
     }
 
     findPlayer(id: number) {
@@ -58,7 +83,7 @@ export class MapClient {
         })
     }
 
-    changeChannel(characterId: number, channel: number) {
-        this.client.emit(WORLD_PREFIX + ChangeMapChannel.event, new ChangeMapChannel(characterId, channel))
+    changeChannel(characterId: number, map: string, currentChannel: number, channel: number) {
+        this.client.emit(WORLD_PREFIX + ChangeMapChannel.event + '.' + map + '.' + currentChannel, new ChangeMapChannel(characterId, channel))
     }
 }

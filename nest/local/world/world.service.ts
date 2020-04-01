@@ -8,6 +8,7 @@ import { Repository }       from 'typeorm'
 import { Player }           from './entities/player'
 import { InjectRepository } from '@nestjs/typeorm'
 import { GetMapChannels }   from '../../../shared/events/map.events'
+import { CharacterOnline }  from '../../../shared/events/character.events'
 
 
 @Injectable()
@@ -45,15 +46,15 @@ export class WorldService {
         }
     }
 
-    async storeCharacter(client: Socket, character: { id: number, name: string, instance: number }) {
+    async storeCharacter(client: Socket, character: CharacterOnline) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
-            if (player && character.id) {
-                await this.validateCharacterLogin(player, character.id)
-                await this.character.characterOnline(character.id, client.id, character.instance || player.channel)
-                player.characterId   = character.id
-                player.characterName = await this.character.getCharacterName(character.id)
-                player.channel       = character.instance || player.channel || 1
+            if (player && character.characterId) {
+                await this.validateCharacterLogin(player, character.characterId)
+                await this.character.characterOnline(character.characterId, client.id, character.channel || player.channel)
+                player.characterId   = character.characterId
+                player.characterName = await this.character.getCharacterName(character.characterId)
+                player.channel       = character.channel || player.channel || 1
                 await this.players.save(player)
                 client.join('character-id.' + player.characterId)
                 client.join('character-name.' + player.characterName)
@@ -134,7 +135,7 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             let map      = this.getMapOf(client)
             if (player && player.characterId !== null && map) {
-                return await this.map.playerAttemptedTransition(player.characterId, map, channel || player.channel)
+                return await this.map.playerAttemptedTransition(player.characterId, map, player.channel, channel || player.channel)
             }
         }
         return { status: false, map: null, reason: 'shutting_down_server' }
@@ -145,7 +146,8 @@ export class WorldService {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && player.characterId !== null) {
-                this.map.changeChannel(player.characterId, channel)
+                let position: any = await this.map.findPlayer(player.characterId)
+                this.map.changeChannel(player.characterId, position.map, position.channel, channel)
             }
         }
     }
@@ -155,7 +157,7 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             if (player) {
                 let position: any = await this.map.findPlayer(data.characterId || player.characterId)
-                return await this.map.getChannels(position.map, position.channel)
+                return await this.map.getChannels(data.map || position.map, position.channel)
             }
         }
         return []

@@ -3,13 +3,14 @@
     <div style="display:flex">
         <div style="flex:1"></div>
         <mat-card>
-            <mat-card-title>
+            <mat-card-title style="display:flex">
                 Channel Selection
-                <button (click)="shown = false;map = ''">close</button>
+                <div style="flex:1"></div>
+                <button (click)="close.emit()">close</button>
             </mat-card-title>
             <mat-card-content>
                 <ng-container *ngFor="let channel of channels">
-                    <button (click)="selectChannel(channel.channel)">{{channel.channel}} ({{channel.playerCount}})
+                    <button (click)="selectChannel(channel.channel)">{{channel.channel}} ({{channel.playerCount}} / {{channel.playerCapacity}})
                     </button>
                 </ng-container>
             </mat-card-content>

@@ -51,7 +51,7 @@ export class WorldConnection extends Connection {
         return new Promise((resolve, reject) => {
             this.socket.emit(
                 CharacterOnline.event,
-                { id: characterId, name: characterName, channel: channel },
+                new CharacterOnline(characterId, characterName, channel),
                 data => {
                     if (data.status === 'success') {
                         this.selectedCharacter = {

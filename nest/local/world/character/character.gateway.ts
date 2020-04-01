@@ -76,7 +76,7 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CharacterOnline.event)
-    async characterJoined(client: Socket, character: { id: number, name: string, instance: number }) {
+    async characterJoined(client: Socket, character: CharacterOnline) {
         try {
             await this.service.storeCharacter(client, character)
             return { status: 'success' }

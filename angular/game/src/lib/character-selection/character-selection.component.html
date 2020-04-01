@@ -40,4 +40,5 @@
     Go Back
 </button>
 <channel-menu *ngIf="showChannels && selected?.id" [character]="selected?.id" [forCharacterSelection]="true"
+              (close)="showChannels = false"
               (selected)="selectChannel($event)"></channel-menu>

@@ -10,6 +10,7 @@ import { BaseScene }                                    from '../../../shared/ph
 import { NpcConfig }                                    from '../../../shared/interfaces/npc-config'
 import { ChangeMapChannel, NpcAdded, PlayerChangedMap } from '../../../shared/events/map.events'
 import { Channel }                                      from './entities/channel'
+import { MapClient }                                    from './client/map.client'
 
 @Injectable()
 export class MapService {
@@ -19,6 +20,7 @@ export class MapService {
     constructor(
         private emitter: MapEmitter,
         private character: CharacterClient,
+        private client: MapClient,
         @Inject(MapConstants.MAP) public map: BaseScene,
         @InjectRepository(Player) private players: Repository<Player>,
         @InjectRepository(Channel) private channels: Repository<Channel>
@@ -113,9 +115,10 @@ export class MapService {
     async changedMaps(data: PlayerChangedMap) {
         const player = await this.players.findOne(data.id)
         if (player) {
-            if (data.map === this.map.constant && player.channel === MapConstants.CHANNEL) {
+            if (data.map === this.map.constant && data.channel === MapConstants.CHANNEL) {
                 player.map     = data.map
                 let transition = this.map.config.layers.transitions ? this.map.config.layers.transitions.entrances[data.entrance] || null : null
+                player.channel = data.channel
                 if (transition) {
                     player.x = transition[0]
                     player.y = transition[1]
@@ -144,8 +147,9 @@ export class MapService {
             })
         }
         if (player && (channel === MapConstants.CHANNEL)) {
-            player.name = name
-            let count   = await this.players.count({ channel: channel, map: MapConstants.MAP, online: true })
+            player.name   = name
+            player.online = true
+            let count     = await this.players.count({ channel: channel, map: MapConstants.MAP, online: true })
             if (count < MapConstants.CAPACITY) {
                 player.channel = channel
                 await this.players.save(player)
@@ -162,14 +166,7 @@ export class MapService {
         if (player) {
             let count = await this.players.count({ channel: data.channel, map: MapConstants.MAP, online: true })
             if (count < MapConstants.CAPACITY) {
-                if (MapConstants.CHANNEL === data.channel) {
-                    this.playerJoinedMap(player)
-                } else if (MapConstants.CHANNEL === player.channel) {
-                    this.playerLeftMap(player)
-                    player.channel = data.channel
-                    await this.players.save(player)
-                    this.emitter.changedChannel(MapConstants.MAP, player.id, data.channel)
-                }
+                this.emitter.changedMap(MapConstants.MAP, player.id, player.x, player.y, data.channel)
             } else {
                 this.sendChannels(MapConstants.MAP, player)
             }
@@ -178,13 +175,14 @@ export class MapService {
 
     async loggedOut(characterId: number) {
         let player = await this.players.findOne(characterId)
-        if (player && player.map === this.map.constant) {
+        console.log(player.map, player.channel, MapConstants.MAP, MapConstants.CHANNEL)
+        if (player && player.map === this.map.constant && player.channel === MapConstants.CHANNEL) {
             if (this.map.players[player.id]) {
-                player        = this.map.players[player.id] as Player
-                player.online = false
-                await this.players.save(player)
+                player = this.map.players[player.id] as Player
                 this.playerLeftMap(player)
             }
+            player.online = false
+            await this.players.save(player)
         }
     }
 

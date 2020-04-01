@@ -1,13 +1,23 @@
 <canvas #canvas height="600" id="game-canvas" width="800"></canvas>
 <ng-container *ngIf="world.socket && world.selectedCharacter !== null">
-    <button
-        (click)="signOut()"
-        color="accent"
-        mat-raised-button
-        style="position:fixed;left:16px;bottom:16px;"
-    >
-        Character Screen
-    </button>
+    <div
+        style="position:fixed;left:16px;bottom:16px;">
+        <button
+            (click)="signOut()"
+            color="accent"
+            mat-raised-button
+        >
+            Character Screen
+        </button>
+        <button
+            (click)="mapForChannels = '';showChannels = true;"
+            color="accent"
+            mat-raised-button
+        >
+            Change Channels
+        </button>
+    </div>
     <hud></hud>
 </ng-container>
-<channel-menu *ngIf="showChannels" [map]="mapForChannels" (selected)="showChannels = false"></channel-menu>
+<channel-menu *ngIf="showChannels" [map]="mapForChannels" (selected)="showChannels = false; mapForChannels = ''"
+              (close)="showChannels = false"></channel-menu>
