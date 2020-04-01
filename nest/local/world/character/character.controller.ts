@@ -17,8 +17,8 @@ export class CharacterController {
     }
 
     @EventPattern(WORLD_PREFIX + MapOnline.event)
-    async onMapOnline() {
-        await this.gateway.sendCharacters()
+    async onMapOnline(data:MapOnline) {
+        await this.gateway.sendCharacters(data)
     }
 
     @EventPattern(WORLD_PREFIX + CharacterDetails.event)

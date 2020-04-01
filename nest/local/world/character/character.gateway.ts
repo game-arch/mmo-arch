@@ -3,7 +3,7 @@ import { Namespace, Socket }                                   from 'socket.io'
 import { WorldService }                                        from '../world.service'
 import { Logger }                                              from '@nestjs/common'
 import { WorldConstants }                                      from '../../../lib/constants/world.constants'
-import { CharacterClient } from '../../character/client/character.client'
+import { CharacterClient }                                     from '../../character/client/character.client'
 import {
     CharacterCreated,
     CharacterNotCreated,
@@ -12,12 +12,14 @@ import {
     CreateCharacter,
     GetCharacter,
     GetCharacters
-}                          from '../../../../shared/events/character.events'
-import { Character }       from '../../character/entities/character'
+}                                                              from '../../../../shared/events/character.events'
+import { Character }                                           from '../../character/entities/character'
 import { InjectRepository }                                    from '@nestjs/typeorm'
 import { Player }                                              from '../entities/player'
 import { Repository }                                          from 'typeorm'
 import * as parser                                             from 'socket.io-msgpack-parser'
+import { AllNpcs, AllPlayers, MapOnline }                      from '../../../../shared/events/map.events'
+import { MapClient }                                           from '../../map/client/map.client'
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -33,6 +35,7 @@ export class CharacterGateway {
         @InjectRepository(Player)
         private players: Repository<Player>,
         private logger: Logger,
+        private map: MapClient,
         private service: WorldService,
         private character: CharacterClient
     ) {
@@ -40,11 +43,16 @@ export class CharacterGateway {
     }
 
 
-    async sendCharacters() {
-        const players = await this.players.find({ instance: Number(process.env.NODE_APP_INSTANCE) })
+    async sendCharacters(data: MapOnline) {
+        const players = await this.players.find({
+            instance: Number(process.env.NODE_APP_INSTANCE),
+            channel : data.channel
+        })
         for (const player of players) {
             await this.character.characterOnline(player.accountId, player.socketId)
         }
+        this.server.to('map.' + data.map + '.' + data.channel).emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, data.channel)))
+        this.server.to('map.' + data.map + '.' + data.channel).emit(AllNpcs.event, new AllNpcs(data.map, await this.map.getAllNpcs(data.map, data.channel)))
     }
 
     @SubscribeMessage(CreateCharacter.event)
@@ -68,7 +76,7 @@ export class CharacterGateway {
     }
 
     @SubscribeMessage(CharacterOnline.event)
-    async characterJoined(client: Socket, character: { id: number, name: string, instance:number }) {
+    async characterJoined(client: Socket, character: { id: number, name: string, instance: number }) {
         try {
             await this.service.storeCharacter(client, character)
             return { status: 'success' }

@@ -3,7 +3,7 @@ import { Mob } from '../phaser/mob'
 export class MapOnline {
     static readonly event = 'map.online'
 
-    constructor(public map: string) {
+    constructor(public map: string, public channel: number) {
 
     }
 }

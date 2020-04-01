@@ -1,15 +1,15 @@
-import { Inject, Injectable }         from '@nestjs/common'
-import { MapConstants }               from './constants'
-import { Repository }                 from 'typeorm'
-import { Player }                     from './entities/player'
-import { InjectRepository }           from '@nestjs/typeorm'
-import { MapEmitter }                 from './map.emitter'
-import { CharacterClient }            from '../character/client/character.client'
-import { Game }                       from 'phaser'
-import { BaseScene }                  from '../../../shared/phaser/base.scene'
-import { NpcConfig }                  from '../../../shared/interfaces/npc-config'
-import { ChangeMapChannel, NpcAdded } from '../../../shared/events/map.events'
-import { Channel }                    from './entities/channel'
+import { Inject, Injectable }                           from '@nestjs/common'
+import { MapConstants }                                 from './constants'
+import { Repository }                                   from 'typeorm'
+import { Player }                                       from './entities/player'
+import { InjectRepository }                             from '@nestjs/typeorm'
+import { MapEmitter }                                   from './map.emitter'
+import { CharacterClient }                              from '../character/client/character.client'
+import { Game }                                         from 'phaser'
+import { BaseScene }                                    from '../../../shared/phaser/base.scene'
+import { NpcConfig }                                    from '../../../shared/interfaces/npc-config'
+import { ChangeMapChannel, NpcAdded, PlayerChangedMap } from '../../../shared/events/map.events'
+import { Channel }                                      from './entities/channel'
 
 @Injectable()
 export class MapService {
@@ -95,18 +95,18 @@ export class MapService {
         this.emitter.instances(player.id, landingMap, list)
     }
 
-    async changedMaps(characterId: number, map: string, newX: number, newY: number, channel: number, entrance?: string) {
-        const player = await this.players.findOne(characterId)
+    async changedMaps(data: PlayerChangedMap) {
+        const player = await this.players.findOne(data.id)
         if (player) {
-            if (map === this.map.constant && player.channel === MapConstants.CHANNEL) {
-                player.map     = map
-                let transition = this.map.config.layers.transitions ? this.map.config.layers.transitions.entrances[entrance] || null : null
+            if (data.map === this.map.constant && player.channel === MapConstants.CHANNEL) {
+                player.map     = data.map
+                let transition = this.map.config.layers.transitions ? this.map.config.layers.transitions.entrances[data.entrance] || null : null
                 if (transition) {
                     player.x = transition[0]
                     player.y = transition[1]
                 } else {
-                    player.x = newX
-                    player.y = newY
+                    player.x = data.newX
+                    player.y = data.newY
                 }
                 await this.players.save(player)
                 this.playerJoinedMap(player)
