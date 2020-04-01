@@ -12,6 +12,8 @@ import { GameEngineService }      from '../game-engine/game-engine.service'
 })
 export class CharacterSelectionComponent implements OnInit {
     selected: GameCharacter = null
+    channel = null
+    showChannels = false
 
     constructor(
         private engine: GameEngineService,
@@ -33,12 +35,18 @@ export class CharacterSelectionComponent implements OnInit {
         this.dialog.open(CharacterFormComponent)
     }
 
+    async selectChannel(channel:number) {
+        this.channel = channel
+        await this.join()
+    }
+
     async join() {
         try {
             if (this.connection.world) {
                 await this.connection.world.selectCharacter(
                     this.selected.name,
-                    this.selected.id
+                    this.selected.id,
+                    this.channel
                 )
             }
         } catch (e) {

@@ -2,9 +2,12 @@ import { Logger, Type }   from '@nestjs/common'
 import { NestFactory }    from '@nestjs/core'
 import { environment }    from '../config/environment'
 import { createDatabase } from '../config/db.config'
-
+export const LOGGER = {
+    logger: null
+}
 export async function createMicroservice(module: Type<any>, key: string, label: string, queueType: 'local' | 'global', dbName?: string) {
     const logger = new Logger(label)
+    LOGGER.logger = logger
     if (dbName) {
         await createDatabase(dbName, true)
     }

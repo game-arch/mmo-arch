@@ -10,3 +10,4 @@
     </button>
     <hud></hud>
 </ng-container>
+<channel-menu *ngIf="showChannels" [map]="mapForChannels" (selected)="showChannels = false"></channel-menu>

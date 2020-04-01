@@ -1,13 +1,13 @@
-import { Injectable }        from '@nestjs/common'
-import { AccountClient }     from '../../global/account/client/account.client'
-import { Socket }            from 'socket.io'
-import { CharacterClient }   from '../character/client/character.client'
-import { WorldConstants }    from '../../lib/constants/world.constants'
-import { MapClient }         from '../map/client/map.client'
-import { Repository }        from 'typeorm'
-import { Player }            from './entities/player'
+import { Injectable }       from '@nestjs/common'
+import { AccountClient }    from '../../global/account/client/account.client'
+import { Socket }           from 'socket.io'
+import { CharacterClient }  from '../character/client/character.client'
+import { WorldConstants }   from '../../lib/constants/world.constants'
+import { MapClient }        from '../map/client/map.client'
+import { Repository }       from 'typeorm'
+import { Player }           from './entities/player'
 import { InjectRepository } from '@nestjs/typeorm'
-import { ChangeMapChannel } from '../../../shared/events/map.events'
+import { GetMapChannels }   from '../../../shared/events/map.events'
 
 
 @Injectable()
@@ -45,14 +45,15 @@ export class WorldService {
         }
     }
 
-    async storeCharacter(client: Socket, character: { id: number, name: string, instance:number }) {
+    async storeCharacter(client: Socket, character: { id: number, name: string, instance: number }) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && character.id) {
                 await this.validateCharacterLogin(player, character.id)
-                await this.character.characterOnline(character.id, client.id, character.instance)
+                await this.character.characterOnline(character.id, client.id, character.instance || player.channel)
                 player.characterId   = character.id
                 player.characterName = await this.character.getCharacterName(character.id)
+                player.channel       = character.instance || player.channel || 1
                 await this.players.save(player)
                 client.join('character-id.' + player.characterId)
                 client.join('character-name.' + player.characterName)
@@ -128,23 +129,38 @@ export class WorldService {
         }
     }
 
-    async playerAttemptedTransition(client: Socket, instance?:number) {
+    async playerAttemptedTransition(client: Socket, channel?: number) {
+        if (!this.shuttingDown) {
+            const player = await this.players.findOne({ socketId: client.id })
+            let map      = this.getMapOf(client)
+            if (player && player.characterId !== null && map) {
+                return await this.map.playerAttemptedTransition(player.characterId, map, channel || player.channel)
+            }
+        }
+        return { status: false, map: null, reason: 'shutting_down_server' }
+    }
+
+
+    async changeInstance(client: Socket, channel: number) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && player.characterId !== null) {
-                this.map.playerAttemptedTransition(player.characterId, instance)
+                this.map.changeChannel(player.characterId, channel)
             }
         }
     }
 
-    async changeInstance(client: Socket, data: ChangeMapChannel) {
+    async getChannels(client: Socket, data: GetMapChannels) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
-            if (player && player.characterId !== null) {
-                this.map.changeChannel(player.characterId, data.channel)
+            if (player) {
+                let position: any = await this.map.findPlayer(data.characterId || player.characterId)
+                return await this.map.getChannels(position.map, position.channel)
             }
         }
+        return []
     }
+
 
     getMapOf(client: Socket) {
         const mapRoom = Object.keys(client.rooms).filter(name => name.indexOf('map.') === 0)[0] || ''

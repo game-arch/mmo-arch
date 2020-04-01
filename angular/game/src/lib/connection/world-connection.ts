@@ -6,7 +6,7 @@ import { GameCharacter }                  from '../../../../../shared/interfaces
 export class WorldConnection extends Connection {
     characters: GameCharacter[] = []
 
-    selectedCharacter: { id: number; name: string } = null
+    selectedCharacter: { id: number; name: string, channel: number } = null
 
     constructor(
         public world?: GameWorld,
@@ -38,7 +38,8 @@ export class WorldConnection extends Connection {
                     this.socket.once(GetCharacters.event, async () => {
                         await this.selectCharacter(
                             this.selectedCharacter.name,
-                            this.selectedCharacter.id
+                            this.selectedCharacter.id,
+                            this.selectedCharacter.channel
                         )
                     })
                 }
@@ -46,16 +47,17 @@ export class WorldConnection extends Connection {
         }
     }
 
-    selectCharacter(characterName: string, characterId: number) {
+    selectCharacter(characterName: string, characterId: number, channel: number) {
         return new Promise((resolve, reject) => {
             this.socket.emit(
                 CharacterOnline.event,
-                { id: characterId, name: characterName },
+                { id: characterId, name: characterName, channel: channel },
                 data => {
                     if (data.status === 'success') {
                         this.selectedCharacter = {
-                            id  : characterId,
-                            name: characterName
+                            id     : characterId,
+                            name   : characterName,
+                            channel: channel
                         }
                         console.log('You are logged in as ' + characterName)
                         resolve(data)

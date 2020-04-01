@@ -59,6 +59,10 @@ export class MapService {
         this.map.emitMob    = (npc) => this.emitter.npcUpdate(this.map.constant, MapConstants.CHANNEL, npc.asPayload(this.map.constant))
     }
 
+    async findPlayer(id: number): Promise<Player> {
+        return await this.players.findOne(id)
+    }
+
     stop() {
         this.phaser.scene.stop(this.map.constant)
     }
@@ -69,30 +73,41 @@ export class MapService {
             let player                         = await this.players.findOne(characterId)
             let count                          = await this.players.count({
                 channel: channel || player.channel,
+                online : true,
                 map    : landingMap
             })
             if (count < MapConstants.CAPACITY) {
                 this.emitter.changedMap(landingMap, mob.id, mob.x, mob.y, channel || player.channel, landingId)
+                return { status: true, map: landingMap, reason: '' }
             } else {
                 await this.sendChannels(landingMap, player)
+                return { status: false, map: landingMap, reason: 'channel' }
             }
         }
+        return { status: false, map: null, reason: 'no_transition_available' }
     }
 
     private async sendChannels(landingMap: string, player: Player) {
-        let instances                                               = await this.channels.find({ map: landingMap })
-        let list: { instanceNumber: number, playerCount: number }[] = []
+        let list = await this.getChannels(landingMap)
+        this.emitter.channels(player.id, landingMap, list)
+    }
+
+    async getChannels(map: string) {
+        let instances                                                                = await this.channels.find({ map: map })
+        let list: { channel: number, playerCount: number, playerCapacity: number }[] = []
         for (let row of instances) {
             let instance = {
-                instanceNumber: row.channel,
+                channel       : row.channel,
                 playerCount   : await this.players.count({
                     channel: row.channel,
-                    map    : landingMap
-                })
+                    online : true,
+                    map    : map
+                }),
+                playerCapacity: MapConstants.CAPACITY
             }
             list.push(instance)
         }
-        this.emitter.instances(player.id, landingMap, list)
+        return list
     }
 
     async changedMaps(data: PlayerChangedMap) {
@@ -117,24 +132,26 @@ export class MapService {
     }
 
     async loggedIn(characterId: number, name: string, channel: number = 1) {
-        let player = await this.players.findOne({ id: characterId })
+        let player = await this.players.findOne({ id: characterId, map: this.map.constant })
         if (!player && this.map.constant === 'tutorial' && MapConstants.CHANNEL === 1) {
             player = this.players.create({
                 id     : characterId,
                 map    : 'tutorial',
+                online : true,
                 channel: channel,
                 x      : 100,
                 y      : 100
             })
         }
-        if (player && player.map === this.map.constant && (channel === MapConstants.CHANNEL)) {
-            player.name    = name
-            player.channel = channel
-            await this.players.save(player)
-            let count = await this.channels.count({ channel: channel, map: MapConstants.MAP })
+        if (player && (channel === MapConstants.CHANNEL)) {
+            player.name = name
+            let count   = await this.players.count({ channel: channel, map: MapConstants.MAP, online: true })
             if (count < MapConstants.CAPACITY) {
+                player.channel = channel
+                await this.players.save(player)
                 this.playerJoinedMap(player)
             } else {
+                await this.players.save(player)
                 this.sendChannels(MapConstants.MAP, player)
             }
         }
@@ -143,7 +160,7 @@ export class MapService {
     async changeInstance(data: ChangeMapChannel) {
         const player = await this.players.findOne({ id: data.characterId, map: MapConstants.MAP })
         if (player) {
-            let count = await this.channels.count({ channel: data.channel, map: MapConstants.MAP })
+            let count = await this.players.count({ channel: data.channel, map: MapConstants.MAP, online: true })
             if (count < MapConstants.CAPACITY) {
                 if (MapConstants.CHANNEL === data.channel) {
                     this.playerJoinedMap(player)
@@ -160,11 +177,13 @@ export class MapService {
     }
 
     async loggedOut(characterId: number) {
-        const player = await this.players.findOne(characterId)
+        let player = await this.players.findOne(characterId)
         if (player && player.map === this.map.constant) {
             if (this.map.players[player.id]) {
-                await this.players.save(this.map.players[player.id] as Player)
-                this.playerLeftMap(this.map.players[player.id] as Player)
+                player        = this.map.players[player.id] as Player
+                player.online = false
+                await this.players.save(player)
+                this.playerLeftMap(player)
             }
         }
     }

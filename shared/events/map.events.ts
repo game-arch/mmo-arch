@@ -63,6 +63,13 @@ export class GetPlayerPosition {
     }
 }
 
+export class FindPlayer {
+    static readonly event = 'map.find_player'
+
+    constructor(public id:number) {
+    }
+}
+
 export class PlayerUpdate {
     static readonly event = 'map.player_update'
 
@@ -122,14 +129,14 @@ export class NpcRemoved {
 export class GetMapChannels {
     static readonly event = 'map.get_channels'
 
-    constructor(public map: string) {
+    constructor(public map: string, public characterId?:number) {
     }
 }
 
 export class MapChannels {
     static readonly event = 'map.channels'
 
-    constructor(public characterId: number, public map: string, public channels: { instanceNumber: number, playerCount: number }[]) {
+    constructor(public characterId: number, public map: string, public channels: { channel: number, playerCount: number, playerCapacity: number }[]) {
     }
 }
 

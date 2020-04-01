@@ -1,4 +1,4 @@
-<div style="display:flex;height:100%;flex-direction:column;">
+<div style="display:flex;height:100%;flex-direction:column;" *ngIf="!showChannels">
     <div style="flex:1"></div>
     <div style="display:flex">
         <div style="flex:1"></div>
@@ -27,8 +27,8 @@
                     Delete
                 </button>
                 <div style="flex:1"></div>
-                <button (click)="join()" *ngIf="selected !== null" mat-raised-button>
-                    Enter Game
+                <button (click)="showChannels = true" *ngIf="selected !== null" mat-raised-button>
+                    Continue
                 </button>
             </mat-card-actions>
         </mat-card>
@@ -39,3 +39,5 @@
 <button (click)="disconnect()" color="accent" mat-raised-button style="position:fixed;left:16px;bottom:16px;">
     Go Back
 </button>
+<channel-menu *ngIf="showChannels && selected?.id" [character]="selected?.id" [forCharacterSelection]="true"
+              (selected)="selectChannel($event)"></channel-menu>

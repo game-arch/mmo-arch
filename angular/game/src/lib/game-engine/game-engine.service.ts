@@ -2,10 +2,15 @@ import { EventEmitter, Injectable } from '@angular/core'
 import { ConnectionManager }        from '../connection/connection-manager'
 import { GAME_CONFIG }              from './phaser/config'
 import { fromEvent }                from 'rxjs'
-import { filter, takeUntil, tap }   from 'rxjs/operators'
+import {
+    filter,
+    takeUntil,
+    tap
+}                                   from 'rxjs/operators'
 import {
     AllNpcs,
     AllPlayers,
+    MapChannels,
     NpcAdded,
     NpcUpdate,
     PlayerEnteredMap,
@@ -24,13 +29,14 @@ import Game = Phaser.Game
 
 @Injectable()
 export class GameEngineService {
-    loading           = 0
+    loading                                                                    = 0
     game: Game
-    currentSceneKey   = 'preload'
+    currentSceneKey                                                            = 'preload'
     currentScene: MultiplayerScene
-    worldChange       = new EventEmitter()
-    eventBus          = new EventBus(this)
-    private destroyed = new EventEmitter()
+    worldChange                                                                = new EventEmitter()
+    eventBus                                                                   = new EventBus(this)
+    mapChannels: { [map: string]: { channel: number, playerCount: number }[] } = {}
+    private destroyed                                                          = new EventEmitter()
 
     constructor(
         private location: Location,
@@ -46,6 +52,12 @@ export class GameEngineService {
             .pipe(tap(world => (this.connection.world = world)))
             .subscribe(world => {
                 this.worldChange.emit()
+                fromEvent(world.socket, MapChannels.event)
+                    .pipe(takeUntil(this.worldChange))
+                    .subscribe((channels: MapChannels) => {
+                        console.log('got map channels')
+                        this.mapChannels[channels.map] = channels.channels
+                    })
                 this.convertEvents(world, [
                     PlayerEnteredMap.event,
                     PlayerLeftMap.event,

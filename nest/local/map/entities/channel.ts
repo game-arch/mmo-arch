@@ -10,6 +10,8 @@ export class Channel {
     map: string
     @Column()
     channel: number
+    @Column()
+    online: boolean = false
     @ManyToMany(t => Player, { cascade: true })
     @JoinColumn({ name: 'channel', referencedColumnName: 'channel' })
     players: Player[]

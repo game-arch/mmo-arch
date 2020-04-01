@@ -14,6 +14,7 @@ import { MatFormFieldModule }             from '@angular/material/form-field'
 import { MatInputModule }                 from '@angular/material/input'
 import { MatButtonToggleModule }          from '@angular/material/button-toggle'
 import { GameEngineModule }               from '../game-engine/game-engine.module'
+import { MenusModule }                    from '../menus/menus.module'
 
 
 @NgModule({
@@ -31,9 +32,10 @@ import { GameEngineModule }               from '../game-engine/game-engine.modul
         MatInputModule,
         MatButtonToggleModule,
         GameEngineModule,
+        MenusModule
     ],
     exports        : [CharacterSelectionComponent],
-    entryComponents: [CharacterFormComponent],
+    entryComponents: [CharacterFormComponent]
 })
 export class CharacterSelectionModule {
 

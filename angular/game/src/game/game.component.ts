@@ -1,7 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core'
-import { ConnectionManager } from '../lib/connection/connection-manager'
-import { CharacterOffline }  from '../../../../shared/events/character.events'
-import { GameEngineService } from '../lib/game-engine/game-engine.service'
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, ViewChild } from '@angular/core'
+import { ConnectionManager }                                                        from '../lib/connection/connection-manager'
+import { CharacterOffline }                                                         from '../../../../shared/events/character.events'
+import { GameEngineService }                                                        from '../lib/game-engine/game-engine.service'
+import { fromEvent }                                                                from 'rxjs'
+import { takeUntil }                                                                from 'rxjs/operators'
+import { GetMapChannels }                                                           from '../../../../shared/events/map.events'
 
 @Component({
     selector   : 'game',
@@ -11,6 +14,10 @@ import { GameEngineService } from '../lib/game-engine/game-engine.service'
 export class GameComponent implements AfterViewInit, OnDestroy {
     @ViewChild('canvas', { static: true })
     canvas: ElementRef
+    destroy = new EventEmitter()
+
+    mapForChannels = ''
+    showChannels   = false
 
     constructor(
         public connection: ConnectionManager,
@@ -24,10 +31,22 @@ export class GameComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         this.engine.init(this.canvas.nativeElement)
+        fromEvent(this.engine.game.events, 'transition_failed')
+            .pipe(takeUntil(this.destroy))
+            .subscribe((result: any) => {
+                if (result && result.reason === 'channel') {
+                    this.mapForChannels = result.map
+                    this.connection.world.socket.emit(GetMapChannels.event, new GetMapChannels(result.map), (channels) => {
+                        this.engine.mapChannels[result.map] = channels
+                        this.showChannels                   = true
+                    })
+                }
+            })
     }
 
     ngOnDestroy() {
         this.engine.destroy()
+        this.destroy.emit()
     }
 
     signOut() {

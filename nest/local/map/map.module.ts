@@ -1,4 +1,4 @@
-import { Module }                from '@nestjs/common'
+import { Logger, Module }        from '@nestjs/common'
 import { MapController }         from './map.controller'
 import { MapService }            from './map.service'
 import { TypeOrmModule }         from '@nestjs/typeorm'
@@ -9,9 +9,10 @@ import { CharacterClientModule } from '../character/client/character-client.modu
 import { ClientModule }          from '../../client/client.module'
 import { BaseScene }             from '../../../shared/phaser/base.scene'
 import { DB_CONFIG }             from '../../lib/config/db.config'
-import { ConnectionOptions } from 'typeorm'
-import { Channel }           from './entities/channel'
-import { MapConstants }      from './constants'
+import { ConnectionOptions }     from 'typeorm'
+import { Channel }               from './entities/channel'
+import { MapConstants }          from './constants'
+import { LOGGER }                from '../../lib/functions/create-microservice'
 
 @Module({
     imports    : [
@@ -26,6 +27,10 @@ import { MapConstants }      from './constants'
     ],
     controllers: [MapController],
     providers  : [
+        {
+            provide   : Logger,
+            useFactory: () => LOGGER.logger
+        },
         MapService,
         MapEmitter,
         {

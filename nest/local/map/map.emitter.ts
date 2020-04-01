@@ -10,11 +10,11 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                       from '../../../shared/events/map.events'
-import { WORLD_PREFIX } from '../world/world.prefix'
-import { LOCAL_CLIENT } from '../../client/client.module'
-import { Mob }          from '../../../shared/phaser/mob'
-import { MapConstants } from './constants'
+}                             from '../../../shared/events/map.events'
+import { WORLD_PREFIX }       from '../world/world.prefix'
+import { LOCAL_CLIENT }       from '../../client/client.module'
+import { Mob }                from '../../../shared/phaser/mob'
+import { MapConstants }       from './constants'
 
 @Injectable()
 export class MapEmitter {
@@ -55,7 +55,7 @@ export class MapEmitter {
         this.client.emit(WORLD_PREFIX + ChangedMapChannel.event, new ChangedMapChannel(map, channel, characterId))
     }
 
-    instances(characterId: number, map: string, instances: { instanceNumber: number, playerCount: number }[]) {
-        this.client.emit(WORLD_PREFIX + MapChannels.event, new MapChannels(characterId, map, instances))
+    channels(characterId: number, map: string, channels: { channel: number, playerCount: number, playerCapacity: number }[]) {
+        this.client.emit(WORLD_PREFIX + MapChannels.event, new MapChannels(characterId, map, channels))
     }
 }
