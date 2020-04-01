@@ -178,11 +178,12 @@ export class MapService {
         console.log(player.map, player.channel, MapConstants.MAP, MapConstants.CHANNEL)
         if (player && player.map === this.map.constant && player.channel === MapConstants.CHANNEL) {
             if (this.map.players[player.id]) {
-                player = this.map.players[player.id] as Player
+                player        = this.map.players[player.id] as Player
+                player.online = false
+                await this.players.save(player)
                 this.playerLeftMap(player)
+                return
             }
-            player.online = false
-            await this.players.save(player)
         }
     }
 
