@@ -4,7 +4,7 @@ import { MAPS }                from './config'
 
 export class MapConstants {
     static readonly MAP         = process.env.MAP
-    static readonly CAPACITY = 1
+    static readonly CAPACITY = 50
     static readonly CHANNEL  = Number(process.env.MAP_INSTANCE_ID || '0') + (Number(process.env.NODE_APP_INSTANCE || '0') + 1)
     static readonly MAPS     = MAPS
     static readonly NPC         = {
