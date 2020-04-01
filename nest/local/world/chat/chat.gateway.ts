@@ -52,8 +52,8 @@ export class ChatGateway {
         if (player && player.characterId !== null) {
             const map = this.world.getMapOf(client)
             if (map !== '') {
-                const position = await this.map.getPlayer(player.characterId, map)
-                this.client.emit(WORLD_PREFIX + LocalMessage.event, new LocalMessage(player.character, map, position.x, position.y, message))
+                const position = await this.map.getPlayer(player.characterId, map, player.channel)
+                this.client.emit(WORLD_PREFIX + LocalMessage.event, new LocalMessage(player.character, map, player.channel, position.x, position.y, message))
             }
         }
     }
@@ -64,7 +64,7 @@ export class ChatGateway {
         if (player && player.characterId !== null) {
             const map = this.world.getMapOf(client)
             if (map !== '') {
-                this.client.emit(WORLD_PREFIX + ZoneMessage.event, new ZoneMessage(player.character, map, message))
+                this.client.emit(WORLD_PREFIX + ZoneMessage.event, new ZoneMessage(player.character, map, player.channel, message))
             }
         }
     }
@@ -75,7 +75,7 @@ export class ChatGateway {
         if (player && player.characterId !== null) {
             const map = this.world.getMapOf(client)
             if (map !== '') {
-                this.client.emit(WORLD_PREFIX + RegionMessage.event, new ZoneMessage(player.character, map, message))
+                this.client.emit(WORLD_PREFIX + RegionMessage.event, new ZoneMessage(player.character, map, player.channel, message))
             }
         }
     }

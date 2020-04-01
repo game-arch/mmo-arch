@@ -40,12 +40,12 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         return this.service.map.getAllPlayers()
     }
 
-    @MessagePattern(WORLD_PREFIX + GetAllPlayers.event + '.' + MapConstants.MAP)
+    @MessagePattern(WORLD_PREFIX + GetAllPlayers.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
     getAllPlayers(data: GetAllPlayers) {
         return this.service.map.getAllPlayers()
     }
 
-    @MessagePattern(WORLD_PREFIX + GetAllNpcs.event + '.' + MapConstants.MAP)
+    @MessagePattern(WORLD_PREFIX + GetAllNpcs.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
     getAllNpcs(data: GetAllNpcs) {
         return this.service.map.getAllNpcs()
     }
@@ -62,10 +62,10 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
     async characterLoggedIn(data: CharacterLoggedIn) {
-        await this.service.loggedIn(data.characterId, data.name, data.instance)
+        await this.service.loggedIn(data.characterId, data.name, data.channel)
     }
 
-    @EventPattern(WORLD_PREFIX + ChangeMapChannel.event)
+    @EventPattern(WORLD_PREFIX + ChangeMapChannel.event + '.' + MapConstants.MAP)
     async changeInstance(data: ChangeMapChannel) {
         await this.service.changeInstance(data)
     }
@@ -75,14 +75,12 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         await this.service.loggedOut(data.characterId)
     }
 
-    @EventPattern(WORLD_PREFIX + PlayerDirectionalInput.event)
+    @EventPattern(WORLD_PREFIX + PlayerDirectionalInput.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
     async playerMoved(data: PlayerDirectionalInput) {
-        if (data.map === this.service.map.constant && data.channel === MapConstants.CHANNEL) {
-            this.service.map.moveEntity('player', data.id, data.directions)
-        }
+        this.service.map.moveEntity('player', data.id, data.directions)
     }
 
-    @MessagePattern(WORLD_PREFIX + GetPlayerPosition.event + '.' + MapConstants.MAP)
+    @MessagePattern(WORLD_PREFIX + GetPlayerPosition.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
     getPlayer(data: GetPlayerPosition) {
         return this.service.getPlayerPosition(data.id)
     }

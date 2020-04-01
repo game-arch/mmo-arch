@@ -25,7 +25,7 @@ export class ChatController {
     @EventPattern(WorldConstants.CONSTANT + '.' + SystemMessage.event)
     systemMessage(data: SystemMessage) {
         if (data.map) {
-            this.gateway.server.to('map.' + data.map).emit(SystemMessage.event, data)
+            this.gateway.server.to('map.' + data.map + '.' + data.channel).emit(SystemMessage.event, data)
             return
         }
         this.gateway.server.emit(SystemMessage.event, data)
@@ -43,7 +43,7 @@ export class ChatController {
 
     @EventPattern(WorldConstants.CONSTANT + '.' + ZoneMessage.event)
     zoneMessage(data: ZoneMessage) {
-        this.gateway.server.to('map.' + data.map).emit(ZoneMessage.event, data)
+        this.gateway.server.to('map.' + data.map + '.' + data.channel).emit(ZoneMessage.event, data)
     }
 
     @EventPattern(WorldConstants.CONSTANT + '.' + TradeMessage.event)

@@ -20,19 +20,19 @@ export class MapClient {
     }
 
     async getAllPlayers(map: string, channel: number) {
-        return await this.client.send(WORLD_PREFIX + GetAllPlayers.event + '.' + map, new GetAllPlayers(channel)).pipe(first()).toPromise()
+        return await this.client.send(WORLD_PREFIX + GetAllPlayers.event + '.' + map + '.' + channel, new GetAllPlayers()).pipe(first()).toPromise()
     }
 
-    async getAllNpcs(map: string, channel:number) {
-        return await this.client.send(WORLD_PREFIX + GetAllNpcs.event + '.' + map, new GetAllNpcs(channel)).pipe(first()).toPromise()
+    async getAllNpcs(map: string, channel: number) {
+        return await this.client.send(WORLD_PREFIX + GetAllNpcs.event + '.' + map + '.' + channel, new GetAllNpcs()).pipe(first()).toPromise()
     }
 
-    async getPlayer(characterId: number, map: string): Promise<{ x: number, y: number }> {
-        return await this.client.send(WORLD_PREFIX + GetPlayerPosition.event + '.' + map, new GetPlayerPosition(characterId)).pipe(first()).toPromise()
+    async getPlayer(characterId: number, map: string, channel:number): Promise<{ x: number, y: number }> {
+        return await this.client.send(WORLD_PREFIX + GetPlayerPosition.event + '.' + map + '.' + channel, new GetPlayerPosition(characterId)).pipe(first()).toPromise()
     }
 
-    playerDirectionalInput(characterId: number, map: string, channel:number, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
-        this.client.emit(WORLD_PREFIX + PlayerDirectionalInput.event, new PlayerDirectionalInput(characterId, map, channel, directions))
+    playerDirectionalInput(characterId: number, map: string, channel: number, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+        this.client.emit(WORLD_PREFIX + PlayerDirectionalInput.event + '.' + map + '.' + channel, new PlayerDirectionalInput(characterId, directions))
     }
 
     playerAttemptedTransition(characterId: number, channel: number) {

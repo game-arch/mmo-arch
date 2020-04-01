@@ -71,17 +71,11 @@ export class MapGateway {
         if (!this.service.shuttingDown) {
             const player = await this.players.findOne({ characterId: data.id })
             if (player) {
-                this.server.to('map.' + data.map + '.' + player.channel).emit(PlayerLeftMap.event, data)
+                this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerLeftMap.event, data)
                 if (this.server.sockets[player.socketId]) {
                     this.server.sockets[player.socketId].leave('map.' + data.map + '.' + data.channel)
                 }
             }
-        }
-    }
-
-    allPlayers(data: AllPlayers) {
-        if (!this.service.shuttingDown) {
-            this.server.to('map.' + data.map).emit(AllPlayers.event, data)
         }
     }
 

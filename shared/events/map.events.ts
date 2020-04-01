@@ -30,7 +30,7 @@ export class PlayerChangedMap {
 export class PlayerLeftMap {
     static readonly event = 'map.player_left'
 
-    constructor(public id: number, public name: string, public map: string, public channel:number) {
+    constructor(public id: number, public name: string, public map: string, public channel: number) {
 
     }
 }
@@ -53,8 +53,6 @@ export class AllPlayers {
 export class GetAllPlayers {
     static readonly event = 'map.get_all_players'
 
-    constructor(public channel: number) {
-    }
 }
 
 export class GetPlayerPosition {
@@ -76,7 +74,7 @@ export class PlayerUpdate {
 export class PlayerDirectionalInput {
     static readonly event = 'map.player_directional_input'
 
-    constructor(public id: number, public map: string, public channel:number, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+    constructor(public id: number, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
 
     }
 }
@@ -86,8 +84,6 @@ export class PlayerDirectionalInput {
 export class GetAllNpcs {
     static readonly event = 'map.get_all_npcs'
 
-    constructor(public channel: number) {
-    }
 }
 
 export class AllNpcs {

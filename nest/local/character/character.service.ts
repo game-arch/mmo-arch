@@ -56,7 +56,7 @@ export class CharacterService {
             character.status   = 'online'
             character.socketId = data.socketId
             await this.repo.save(character)
-            this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name, data.instance)
+            this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name, data.channel)
             this.emitter.characterDetails(character)
         }
     }

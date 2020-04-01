@@ -1,7 +1,6 @@
 import { Controller }   from '@nestjs/common'
 import { EventPattern } from '@nestjs/microservices'
 import {
-    AllPlayers,
     ChangedMapChannel,
     NpcUpdate,
     PlayerEnteredMap,
@@ -28,11 +27,6 @@ export class MapController {
     @EventPattern(WORLD_PREFIX + PlayerLeftMap.event)
     async onMapLeft(data: PlayerLeftMap) {
         await this.gateway.playerLeave(data)
-    }
-
-    @EventPattern(WORLD_PREFIX + AllPlayers.event)
-    onAllPlayers(data: AllPlayers) {
-        this.gateway.allPlayers(data)
     }
 
     @EventPattern(WORLD_PREFIX + ChangedMapChannel.event)

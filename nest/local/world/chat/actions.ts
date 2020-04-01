@@ -3,7 +3,7 @@ import { GameCharacter } from '../../../../shared/interfaces/game-character'
 export class SystemMessage {
     static readonly event = 'chat.system_message'
 
-    constructor(public message: string, public map?: string) {
+    constructor(public message: string, public map?: string, public channel?: number) {
 
     }
 }
@@ -19,7 +19,7 @@ export class ErrorMessage {
 export class LocalMessage {
     static readonly event = 'chat.local_message'
 
-    constructor(public sender: GameCharacter, public map: string, public x: number, public y: number, public message: string) {
+    constructor(public sender: GameCharacter, public map: string, public channel: number, public x: number, public y: number, public message: string) {
 
     }
 }
@@ -27,7 +27,7 @@ export class LocalMessage {
 export class ZoneMessage {
     static readonly event = 'chat.zone_message'
 
-    constructor(public sender: GameCharacter, public map: string, public message: string) {
+    constructor(public sender: GameCharacter, public map: string, public channel: number, public message: string) {
 
     }
 }
