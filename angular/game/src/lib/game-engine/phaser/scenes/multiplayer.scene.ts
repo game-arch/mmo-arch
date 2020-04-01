@@ -58,8 +58,8 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
 
-    addOrUpdatePlayer(data: Mob) {
-        let player       = this.players[data.instanceId] || this.createPlayer(data)
+    addOrUpdatePlayer(data: Mob, replace: boolean = false) {
+        let player       = replace ? this.createPlayer(data) : (this.players[data.instanceId] || this.createPlayer(data))
         let playerSprite = this.playerSprites[player.instanceId]
         playerSprite.setPosition(data.x, data.y)
         if (data.moving) {
@@ -67,8 +67,8 @@ export class MultiplayerScene extends BaseScene implements Scene {
         }
     }
 
-    addOrUpdateNpc(data: Mob) {
-        let npc       = this.npcs[data.instanceId] || this.createNpc(data)
+    addOrUpdateNpc(data: Mob, replace: boolean = false) {
+        let npc       = replace ? this.createNpc(data) : (this.npcs[data.instanceId] || this.createNpc(data))
         let npcSprite = this.npcSprites[npc.instanceId]
         npcSprite.setPosition(data.x, data.y)
         if (data.moving) {
@@ -102,6 +102,30 @@ export class MultiplayerScene extends BaseScene implements Scene {
     setSelf(player: Mob) {
         this.self = player
         this.cameras.main.startFollow(this.playerSprites[player.instanceId].body, true, 0.05, 0.05)
+    }
+
+    reloadNpcs(npcs: Mob[]) {
+        let ids = npcs.map(npc => npc.instanceId)
+        for (let id of Object.keys(this.npcs)) {
+            if (!ids.includes(Number(id))) {
+                this.removeNpc(Number(id))
+            }
+        }
+        for (let npc of npcs) {
+            this.addOrUpdateNpc(npc, true)
+        }
+    }
+
+    reloadPlayers(players: Mob[]) {
+        let ids = players.map(player => player.instanceId)
+        for (let id of Object.keys(this.players)) {
+            if (!ids.includes(Number(id))) {
+                this.removePlayer(Number(id))
+            }
+        }
+        for (let player of players) {
+            this.addOrUpdatePlayer(player, true)
+        }
     }
 
     destroy() {

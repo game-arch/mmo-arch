@@ -9,9 +9,7 @@ import {
     PlayerLeftMap,
     PlayerUpdate
 }                            from '../../../../../../shared/events/map.events'
-import { from }              from 'rxjs'
 import { MultiplayerScene }  from './scenes/multiplayer.scene'
-import { Mob }               from '../../../../../../shared/phaser/mob'
 import { first }             from 'rxjs/operators'
 import { Directions }        from '../../../../../../shared/phaser/directions'
 
@@ -20,10 +18,10 @@ export class EventBus {
     }
 
     listen() {
+        this.npcEvents()
         this.sceneChangeEvents()
         this.playerPresenceEvents()
         this.playerUpdateEvents()
-        this.npcEvents()
         this.joystickEvents()
         this.engine.game.events.on('load.progress', (progress: number) => {
             this.engine.loading = progress * 100
@@ -62,18 +60,14 @@ export class EventBus {
 
     private playerUpdateEvents() {
         this.engine.game.events.on(AllPlayers.event, (data: AllPlayers) => {
-            from(data.players).subscribe(
-                (player: Mob) => {
-                    let scene = this.engine.getScene(data.map)
-                    if (scene instanceof MultiplayerScene) {
-                        if (!scene.physics.world || !scene.layers.mobs) {
-                            scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdatePlayer(player))
-                            return
-                        }
-                        this.engine.getScene(data.map).addOrUpdatePlayer(player)
-                    }
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                if (!scene.physics.world || !scene.layers.mobs) {
+                    scene.onCreate.pipe(first()).subscribe(() => scene.reloadPlayers(data.players))
+                    return
                 }
-            )
+                scene.reloadPlayers(data.players)
+            }
         })
         this.engine.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
             let scene = this.engine.getScene(data.map)
@@ -114,19 +108,18 @@ export class EventBus {
     }
 
     private npcEvents() {
+        console.log('listen on npc events')
         this.engine.game.events.on(AllNpcs.event, (data: AllNpcs) => {
-            from(data.npcs).subscribe(
-                (mob: Mob) => {
-                    let scene = this.engine.getScene(data.map)
-                    if (scene instanceof MultiplayerScene) {
-                        if (!scene.physics.world || !scene.layers.mobs) {
-                            scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdateNpc(mob))
-                            return
-                        }
-                        this.engine.getScene(data.map).addOrUpdateNpc(mob)
-                    }
+            console.log(data)
+            let scene = this.engine.getScene(data.map)
+            console.log(scene)
+            if (scene instanceof MultiplayerScene) {
+                if (!scene.physics.world || !scene.layers.mobs) {
+                    scene.onCreate.pipe(first()).subscribe(() => scene.reloadNpcs(data.npcs))
+                    return
                 }
-            )
+                scene.reloadNpcs(data.npcs)
+            }
         })
 
         this.engine.game.events.on(NpcUpdate.event, (data: NpcUpdate) => {

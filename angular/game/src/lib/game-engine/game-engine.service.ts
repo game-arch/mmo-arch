@@ -46,6 +46,9 @@ export class GameEngineService {
 
     init(canvas: HTMLCanvasElement) {
         this.game = new Game({ ...GAME_CONFIG, canvas })
+        this.createScenes()
+        this.eventBus.listen()
+        
         this.connection.worldChange
             .pipe(takeUntil(this.destroyed))
             .pipe(filter(world => !!world.socket))
@@ -68,8 +71,6 @@ export class GameEngineService {
                     AllNpcs.event
                 ])
             })
-        this.createScenes()
-        this.eventBus.listen()
         fromEvent(window, 'resize')
             .pipe(takeUntil(this.destroyed))
             .subscribe(() =>
@@ -106,7 +107,9 @@ export class GameEngineService {
         fromEvent(world.socket, eventName)
             .pipe(takeUntil(this.worldChange))
             .subscribe(event => {
-                // console.log(eventName, event)
+                if (eventName.indexOf('_update') === -1) {
+                    console.log(eventName, event)
+                }
                 this.game.events.emit(eventName, event)
             })
     }
