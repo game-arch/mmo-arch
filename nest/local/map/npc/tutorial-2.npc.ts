@@ -11,8 +11,6 @@ for (let i = 1; i < 50; i++) {
         name        : 'Test Mob ' + (i + 100),
         map         : 'tutorial-2',
         position    : [positionX, positionY],
-        moveStart   : i * 500,
-        moveInterval: 300,
         path        : []
     })
 }

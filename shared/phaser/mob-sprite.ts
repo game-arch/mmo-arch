@@ -11,10 +11,9 @@ import { NpcConfig }  from '../interfaces/npc-config'
 
 export class MobSprite extends Sprite {
     id: number
-    lastVelocity           = new Vector2(0, 0)
-    stopped                = true
-    moving: Directions     = new Directions()
-    lastMoving: Directions = new Directions()
+    lastVelocity       = new Vector2(0, 0)
+    walking                = true
+    directions: Directions = new Directions()
     body: Body
     npcConfig?: NpcConfig
 
@@ -36,30 +35,22 @@ export class MobSprite extends Sprite {
         this.body.collideWorldBounds = true
     }
 
-    tick = 0
-
-    lastPosition = {
-        x: 0,
-        y: 0
-    }
-
     preUpdate(...args: any[]) {
-        this.setPosition(Math.round(this.x), Math.round(this.y))
-        if (!this.moving) {
+        if (!this.directions) {
             return
         }
         if (this.body.velocity.equals(new Vector2(0, 0))) {
-            if (!this.stopped) {
+            if (this.walking) {
                 this.onStopMoving()
-                this.stopped = true
+                this.walking = true
             }
         } else {
-            if (this.stopped) {
+            if (!this.walking) {
                 this.onStartMoving()
-                this.stopped = false
+                this.walking = false
             }
         }
-        let velocity = Physics.getVelocity(this.moving, this.speed)
+        let velocity = Physics.getVelocity(this.directions, this.speed)
         this.body.setVelocity(velocity.x, velocity.y)
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone()
@@ -77,7 +68,7 @@ export class MobSprite extends Sprite {
             name      : this.name,
             x         : this.x,
             y         : this.y,
-            moving    : this.moving
+            moving    : this.directions
         } as Mob
     }
 }

@@ -86,7 +86,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     }
 
     async onApplicationBootstrap() {
-        this.service.start()
+        this.service.init()
         this.emitter.nowOnline(this.service.map.constant)
         let instance = await this.instance.findOne({ map: MapConstants.MAP, channel: MapConstants.CHANNEL })
         if (!instance) {

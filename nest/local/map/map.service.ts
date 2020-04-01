@@ -44,7 +44,7 @@ export class MapService {
     }
 
 
-    start() {
+    init() {
         for (let npc of (MapConstants.NPC[MapConstants.MAP] as NpcConfig[])) {
             let data = new NpcAdded(npc.mobId, npc.instanceId, npc.name, npc.map, npc.position[0], npc.position[1])
             this.map.addNpc(data, npc)
@@ -185,6 +185,7 @@ export class MapService {
             this.map.addPlayer(player)
             this.emitter.playerJoinedMap(this.map.constant, player.channel, player.id, player.name, player.x, player.y)
         }
+
     }
 
     private playerLeftMap(player: Player) {

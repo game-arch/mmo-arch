@@ -59,7 +59,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         let playerSprite = this.playerSprites[player.instanceId]
         playerSprite.setPosition(data.x, data.y)
         if (data.moving) {
-            playerSprite.moving = data.moving
+            playerSprite.directions = data.moving
         }
     }
 
@@ -68,7 +68,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         let npcSprite = this.npcSprites[npc.instanceId]
         npcSprite.setPosition(data.x, data.y)
         if (data.moving) {
-            npcSprite.moving = data.moving
+            npcSprite.directions = data.moving
         }
     }
 
@@ -78,7 +78,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.x          = npc.x
         mob.y          = npc.y
         this.addNpc(mob)
-        this.npcSprites[npc.instanceId].moving = npc.moving || this.playerSprites[npc.instanceId].moving
+        this.npcSprites[npc.instanceId].directions = npc.moving || this.playerSprites[npc.instanceId].directions
         return mob
     }
 
@@ -88,7 +88,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.x          = player.x
         mob.y          = player.y
         this.addPlayer(mob)
-        this.playerSprites[player.instanceId].moving = player.moving || this.playerSprites[player.instanceId].moving
+        this.playerSprites[player.instanceId].directions = player.moving || this.playerSprites[player.instanceId].directions
         if (this.connection.selectedCharacter.id === player.instanceId) {
             this.setSelf(mob)
         }
@@ -101,7 +101,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
     }
 
     destroy() {
-        this.stop.next()
+        this.stop$.next()
         this.directions    = {
             up   : false,
             down : false,
