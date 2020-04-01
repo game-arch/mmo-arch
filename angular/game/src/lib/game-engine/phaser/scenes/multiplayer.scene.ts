@@ -50,6 +50,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
     transitionToNewMap() {
         if (this.canTransition[this.self.instanceId]) {
             this.connection.socket.emit(PlayerAttemptedTransition.event, null, (result) => {
+                console.log(result)
                 if (!result.status) {
                     this.game.events.emit('transition_failed', result)
                 }
