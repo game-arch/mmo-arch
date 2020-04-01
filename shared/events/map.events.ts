@@ -13,7 +13,7 @@ export class PlayerEnteredMap implements Mob {
     public mobId: number
     public instanceId: number
 
-    constructor(public id: number, public name: string, public map: string, public x: number, public y: number) {
+    constructor(public id: number, public name: string, public map: string, public channel: number, public x: number, public y: number) {
         this.mobId      = id
         this.instanceId = id
     }
@@ -22,7 +22,7 @@ export class PlayerEnteredMap implements Mob {
 export class PlayerChangedMap {
     static readonly event = 'map.player_changed_map'
 
-    constructor(public id: number, public map: string, public newX: number, public newY: number, public instance:number, public entrance?: string) {
+    constructor(public id: number, public map: string, public newX: number, public newY: number, public channel: number, public entrance?: string) {
 
     }
 }
@@ -30,7 +30,7 @@ export class PlayerChangedMap {
 export class PlayerLeftMap {
     static readonly event = 'map.player_left'
 
-    constructor(public id: number, public name: string, public map: string) {
+    constructor(public id: number, public name: string, public map: string, public channel:number) {
 
     }
 }
@@ -38,7 +38,7 @@ export class PlayerLeftMap {
 export class PlayerAttemptedTransition {
     static readonly event = 'map.attempt_transition'
 
-    constructor(public characterId: number, public instance:number) {
+    constructor(public characterId: number, public channel: number) {
     }
 }
 
@@ -53,6 +53,8 @@ export class AllPlayers {
 export class GetAllPlayers {
     static readonly event = 'map.get_all_players'
 
+    constructor(public channel: number) {
+    }
 }
 
 export class GetPlayerPosition {
@@ -66,7 +68,7 @@ export class GetPlayerPosition {
 export class PlayerUpdate {
     static readonly event = 'map.player_update'
 
-    constructor(public map: string, public player: Mob) {
+    constructor(public map: string, public channel: number, public player: Mob) {
 
     }
 }
@@ -74,7 +76,7 @@ export class PlayerUpdate {
 export class PlayerDirectionalInput {
     static readonly event = 'map.player_directional_input'
 
-    constructor(public id: number, public map: string, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+    constructor(public id: number, public map: string, public channel:number, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
 
     }
 }
@@ -83,6 +85,9 @@ export class PlayerDirectionalInput {
 
 export class GetAllNpcs {
     static readonly event = 'map.get_all_npcs'
+
+    constructor(public channel: number) {
+    }
 }
 
 export class AllNpcs {
@@ -101,19 +106,11 @@ export class NpcAdded implements Mob {
     }
 }
 
-export class NpcDirectionalInput {
-    static readonly event = 'map.npc_directional_input'
-
-    constructor(public instanceId: number, public map: string, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
-
-    }
-}
-
 
 export class NpcUpdate {
     static readonly event = 'map.npc_update'
 
-    constructor(public map: string, public npc: Mob) {
+    constructor(public map: string, public channel: number, public npc: Mob) {
 
     }
 }
@@ -121,35 +118,42 @@ export class NpcUpdate {
 export class NpcRemoved {
     static readonly event = 'map.npc_removed'
 
-    constructor(public instanceId: number, public map: string) {
+    constructor(public instanceId: number, public map: string, public channel: number) {
 
     }
 }
 
-export class GetMapInstances {
-    static readonly event = 'map.get_instances'
+export class GetMapChannels {
+    static readonly event = 'map.get_channels'
 
     constructor(public map: string) {
     }
 }
 
-export class MapInstances {
-    static readonly event = 'map.instances'
+export class MapChannels {
+    static readonly event = 'map.channels'
 
-    constructor(public characterId: number, public map: string, public instances: { instanceNumber: number, playerCount: number }[]) {
+    constructor(public characterId: number, public map: string, public channels: { instanceNumber: number, playerCount: number }[]) {
     }
 }
 
-export class GetLeastPopulatedMapInstance {
-    static readonly event = 'map.least_populated_instance'
+export class GetLeastPopulatedChannel {
+    static readonly event = 'map.least_populated_channel'
 
     constructor(public map: string) {
     }
 }
 
-export class ChangeMapInstance {
-    static readonly event = 'map.change_map_instance'
+export class ChangeMapChannel {
+    static readonly event = 'map.change_map_channel'
 
-    constructor(public characterId: number, public instanceNumber: number) {
+    constructor(public characterId: number, public channel: number) {
+    }
+}
+
+export class ChangedMapChannel {
+    static readonly event = 'map.changed_map_channel'
+
+    constructor(public map: string, public channel: number, public characterId: number) {
     }
 }

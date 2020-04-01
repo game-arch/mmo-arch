@@ -8,6 +8,8 @@ export class Player {
     @Column()
     instance: number
     @Column()
+    channel: number = 1
+    @Column()
     accountId: number
     @Column({ length: 255 })
     socketId: string

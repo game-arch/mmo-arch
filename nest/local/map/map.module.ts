@@ -9,15 +9,15 @@ import { CharacterClientModule } from '../character/client/character-client.modu
 import { ClientModule }          from '../../client/client.module'
 import { BaseScene }             from '../../../shared/phaser/base.scene'
 import { DB_CONFIG }             from '../../lib/config/db.config'
-import { ConnectionOptions }     from 'typeorm'
-import { MapInstance }           from './entities/map-instance'
-import { MapConstants }          from './constants'
+import { ConnectionOptions } from 'typeorm'
+import { Channel }           from './entities/channel'
+import { MapConstants }      from './constants'
 
 @Module({
     imports    : [
         ClientModule,
         CharacterClientModule,
-        TypeOrmModule.forFeature([Player, MapInstance]),
+        TypeOrmModule.forFeature([Player, Channel]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
             database: WorldConstants.DB_NAME + '_map',

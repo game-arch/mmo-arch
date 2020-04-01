@@ -3,25 +3,29 @@ import { MapConfig } from '../interfaces/map-config'
 export const TUTORIAL_CONFIG: MapConfig = {
     constant: 'tutorial',
     name    : 'Tutorial Island',
-    width   : 1024,
-    height  : 768,
+    width   : 4000,
+    height  : 3000,
     layers  : {
+        floors     : {
+            collisions: {
+                floor: [{
+                    solid   : false,
+                    shape   : 'rectangle',
+                    color   : 0x00aa55,
+                    position: [0, 0],
+                    width   : 4000,
+                    height  : 3000
+                }]
+            }
+        },
         walls      : {
             collisions: {
                 walls: [
                     {
-                        solid   : false,
-                        shape   : 'rectangle',
-                        color   : 0x00aa55,
-                        position: [0, 0],
-                        width   : 1024,
-                        height  : 768
-                    },
-                    {
                         solid   : true,
                         shape   : 'rectangle',
                         color   : 0x888888,
-                        position: [320, 500],
+                        position: [2000, 500],
                         width   : 100,
                         height  : 100
                     }

@@ -2,6 +2,7 @@ import { Controller }   from '@nestjs/common'
 import { EventPattern } from '@nestjs/microservices'
 import {
     AllPlayers,
+    ChangedMapChannel,
     NpcUpdate,
     PlayerEnteredMap,
     PlayerLeftMap,
@@ -9,17 +10,10 @@ import {
 }                       from '../../../../shared/events/map.events'
 import { MapGateway }   from './map.gateway'
 import { WORLD_PREFIX } from '../world.prefix'
-import { Mob }          from '../../../../shared/phaser/mob'
 
 @Controller()
 export class MapController {
 
-    maps: {
-        [map: string]: {
-            npcs: { [instanceId: number]: Mob },
-            players: { [instanceId: number]: Mob }
-        }
-    } = {}
 
     constructor(
         private gateway: MapGateway
@@ -41,17 +35,18 @@ export class MapController {
         this.gateway.allPlayers(data)
     }
 
+    @EventPattern(WORLD_PREFIX + ChangedMapChannel.event)
+    async onChangedChannel(data: ChangedMapChannel) {
+        await this.gateway.changedChannel(data)
+    }
+
     @EventPattern(WORLD_PREFIX + PlayerUpdate.event)
     playerUpdate(data: PlayerUpdate) {
-        this.maps[data.map]                                 = this.maps[data.map] || { players: {}, npcs: {} }
-        this.maps[data.map].players[data.player.instanceId] = data.player
-        this.gateway.server.to('map.' + data.map).emit(PlayerUpdate.event, data)
+        this.gateway.server.to('map.' + data.map + '.' + data.channel).emit(PlayerUpdate.event, data)
     }
 
     @EventPattern(WORLD_PREFIX + NpcUpdate.event)
     npcUpdate(data: NpcUpdate) {
-        this.maps[data.map]                           = this.maps[data.map] || { players: {}, npcs: {} }
-        this.maps[data.map].npcs[data.npc.instanceId] = data.npc
-        this.gateway.server.to('map.' + data.map).emit(NpcUpdate.event, data)
+        this.gateway.server.to('map.' + data.map + '.' + data.channel).emit(NpcUpdate.event, data)
     }
 }

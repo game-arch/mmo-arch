@@ -6,8 +6,8 @@ import { WorldConstants }    from '../../lib/constants/world.constants'
 import { MapClient }         from '../map/client/map.client'
 import { Repository }        from 'typeorm'
 import { Player }            from './entities/player'
-import { InjectRepository }  from '@nestjs/typeorm'
-import { ChangeMapInstance } from '../../../shared/events/map.events'
+import { InjectRepository } from '@nestjs/typeorm'
+import { ChangeMapChannel } from '../../../shared/events/map.events'
 
 
 @Injectable()
@@ -123,7 +123,7 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && player.characterId !== null) {
                 const map = this.getMapOf(client)
-                this.map.playerDirectionalInput(player.characterId, map, data.directions)
+                this.map.playerDirectionalInput(player.characterId, map, player.channel, data.directions)
             }
         }
     }
@@ -137,18 +137,18 @@ export class WorldService {
         }
     }
 
-    async changeInstance(client: Socket, data: ChangeMapInstance) {
+    async changeInstance(client: Socket, data: ChangeMapChannel) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && player.characterId !== null) {
-                this.map.changeInstance(player.characterId, data.instanceNumber)
+                this.map.changeChannel(player.characterId, data.channel)
             }
         }
     }
 
     getMapOf(client: Socket) {
         const mapRoom = Object.keys(client.rooms).filter(name => name.indexOf('map.') === 0)[0] || ''
-        return mapRoom.substr(4, mapRoom.length)
+        return mapRoom.split('.')[1]
     }
 }
 

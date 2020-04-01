@@ -2,21 +2,17 @@ import { EventEmitter, Injectable } from '@angular/core'
 import { ConnectionManager }        from '../connection/connection-manager'
 import { GAME_CONFIG }              from './phaser/config'
 import { fromEvent }                from 'rxjs'
-import {
-    filter,
-    takeUntil,
-    tap
-}                           from 'rxjs/operators'
+import { filter, takeUntil, tap }   from 'rxjs/operators'
 import {
     AllNpcs,
     AllPlayers,
     NpcAdded,
-    NpcRemoved, NpcUpdate,
+    NpcUpdate,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                           from '../../../../../shared/events/map.events'
-import { MultiplayerScene } from './phaser/scenes/multiplayer.scene'
+}                                   from '../../../../../shared/events/map.events'
+import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
 import { WorldConnection }          from '../connection/world-connection'
 import { EventBus }                 from './phaser/event-bus'
 import { TUTORIAL_CONFIG }          from '../../../../../shared/maps/tutorial'
@@ -57,7 +53,6 @@ export class GameEngineService {
                     PlayerUpdate.event,
                     NpcUpdate.event,
                     NpcAdded.event,
-                    NpcRemoved.event,
                     AllNpcs.event
                 ])
             })

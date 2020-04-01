@@ -3,7 +3,8 @@ import { ClientProxy }        from '@nestjs/microservices'
 import {
     AllNpcs,
     AllPlayers,
-    MapInstances,
+    ChangedMapChannel,
+    MapChannels,
     MapOnline,
     NpcAdded,
     NpcRemoved,
@@ -24,47 +25,39 @@ export class MapEmitter {
 
     }
 
-    playerJoinedMap(map: string, characterId: number, name: string, x: number, y: number) {
-        this.client.emit(WORLD_PREFIX + PlayerEnteredMap.event, new PlayerEnteredMap(characterId, name, map, x, y))
+    playerJoinedMap(map: string, channel:number, characterId: number, name: string, x: number, y: number) {
+        this.client.emit(WORLD_PREFIX + PlayerEnteredMap.event, new PlayerEnteredMap(characterId, name, map, channel, x, y))
     }
 
-    playerLeftMap(map: string, characterId: number, name: string) {
-        this.client.emit(WORLD_PREFIX + PlayerLeftMap.event, new PlayerLeftMap(characterId, name, map))
+    playerLeftMap(map: string, channel:number, characterId: number, name: string) {
+        this.client.emit(WORLD_PREFIX + PlayerLeftMap.event, new PlayerLeftMap(characterId, name, map, channel))
     }
 
     addedNpc(map: string, instanceId: number, mobId: number, name: string, x: number, y: number) {
         this.client.emit(WORLD_PREFIX + NpcAdded.event + '.broadcast', new NpcAdded(mobId, instanceId, name, map, x, y))
     }
 
-    removedNpc(map: string, instanceId: number) {
-        this.client.emit(WORLD_PREFIX + NpcRemoved.event + '.broadcast', new NpcRemoved(instanceId, map))
+    playerUpdate(map: string, channel:number, player: Mob) {
+        this.client.emit(WORLD_PREFIX + PlayerUpdate.event, new PlayerUpdate(map, channel, player))
     }
 
-    allNpcs(map: string, npcs: Mob[]) {
-        this.client.emit(WORLD_PREFIX + AllNpcs.event, new AllNpcs(map, npcs))
-    }
-
-    allPlayers(map: string, players: Mob[]) {
-        this.client.emit(WORLD_PREFIX + AllPlayers.event, new AllPlayers(map, players))
-    }
-
-    playerUpdate(map: string, player: Mob) {
-        this.client.emit(WORLD_PREFIX + PlayerUpdate.event, new PlayerUpdate(map, player))
-    }
-
-    npcUpdate(map: string, npc: Mob) {
-        this.client.emit(WORLD_PREFIX + NpcUpdate.event, new NpcUpdate(map, npc))
+    npcUpdate(map: string, channel:number, npc: Mob) {
+        this.client.emit(WORLD_PREFIX + NpcUpdate.event, new NpcUpdate(map, channel,  npc))
     }
 
     nowOnline(map: string) {
         this.client.emit(WORLD_PREFIX + MapOnline.event, new MapOnline(map))
     }
 
-    changedMap(toMap: string, characterId: number, newX: number, newY: number, instance:number,  entrance?: string) {
-        this.client.emit(WORLD_PREFIX + PlayerChangedMap.event, new PlayerChangedMap(characterId, toMap, newX, newY, instance, entrance))
+    changedMap(toMap: string, characterId: number, newX: number, newY: number, channel: number, entrance?: string) {
+        this.client.emit(WORLD_PREFIX + PlayerChangedMap.event, new PlayerChangedMap(characterId, toMap, newX, newY, channel, entrance))
+    }
+
+    changedChannel(map: string, channel: number, characterId: number) {
+        this.client.emit(WORLD_PREFIX + ChangedMapChannel.event, new ChangedMapChannel(map, channel, characterId))
     }
 
     instances(characterId: number, map: string, instances: { instanceNumber: number, playerCount: number }[]) {
-        this.client.emit(WORLD_PREFIX + MapInstances.event, new MapInstances(characterId, map, instances))
+        this.client.emit(WORLD_PREFIX + MapChannels.event, new MapChannels(characterId, map, instances))
     }
 }

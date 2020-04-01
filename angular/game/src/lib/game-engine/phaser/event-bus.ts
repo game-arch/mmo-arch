@@ -3,14 +3,13 @@ import {
     AllNpcs,
     AllPlayers,
     NpcAdded,
-    NpcRemoved,
     NpcUpdate,
     PlayerAttemptedTransition,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}               from '../../../../../../shared/events/map.events'
-import { from } from 'rxjs'
+}                            from '../../../../../../shared/events/map.events'
+import { from }              from 'rxjs'
 import { MultiplayerScene }  from './scenes/multiplayer.scene'
 import { Mob }               from '../../../../../../shared/phaser/mob'
 import { first }             from 'rxjs/operators'
@@ -152,12 +151,6 @@ export class EventBus {
                     }
                     scene.addNpc(data)
                 }
-            }
-        })
-        this.engine.game.events.on(NpcRemoved.event, (data: NpcRemoved) => {
-            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
-                console.log('Npc Removed', data)
-                this.engine.getScene(data.map).removeNpc(data.instanceId)
             }
         })
     }

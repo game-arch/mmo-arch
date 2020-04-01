@@ -6,7 +6,7 @@ import {
     CharacterLoggedOut
 }                                                                                   from '../../../shared/events/character.events'
 import {
-    ChangeMapInstance,
+    ChangeMapChannel,
     GetAllNpcs,
     GetAllPlayers,
     GetPlayerPosition,
@@ -23,7 +23,7 @@ import { Player }                                                               
 import { getConnection, Repository }                                                from 'typeorm'
 import { from }                                                                     from 'rxjs'
 import { map, toArray }                                                             from 'rxjs/operators'
-import { MapInstance }                                                              from './entities/map-instance'
+import { Channel }                                                                  from './entities/channel'
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -31,7 +31,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         private readonly emitter: MapEmitter,
         private readonly service: MapService,
         @InjectRepository(Player) private playerRepo: Repository<Player>,
-        @InjectRepository(MapInstance) private instance: Repository<MapInstance>
+        @InjectRepository(Channel) private instance: Repository<Channel>
     ) {
     }
 
@@ -52,12 +52,12 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(WORLD_PREFIX + PlayerChangedMap.event)
     async changedMap(data: PlayerChangedMap) {
-        await this.service.changedMaps(data.id, data.map, data.newX, data.newY, data.instance, data.entrance)
+        await this.service.changedMaps(data.id, data.map, data.newX, data.newY, data.channel, data.entrance)
     }
 
     @EventPattern(WORLD_PREFIX + PlayerAttemptedTransition.event)
     async attemptedTransition(data: PlayerAttemptedTransition) {
-        await this.service.attemptTransition(data.characterId, data.instance)
+        await this.service.attemptTransition(data.characterId, data.channel)
     }
 
     @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
@@ -65,8 +65,8 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         await this.service.loggedIn(data.characterId, data.name, data.instance)
     }
 
-    @EventPattern(WORLD_PREFIX + ChangeMapInstance.event)
-    async changeInstance(data: ChangeMapInstance) {
+    @EventPattern(WORLD_PREFIX + ChangeMapChannel.event)
+    async changeInstance(data: ChangeMapChannel) {
         await this.service.changeInstance(data)
     }
 
@@ -77,7 +77,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
 
     @EventPattern(WORLD_PREFIX + PlayerDirectionalInput.event)
     async playerMoved(data: PlayerDirectionalInput) {
-        if (data.map === this.service.map.constant) {
+        if (data.map === this.service.map.constant && data.channel === MapConstants.CHANNEL) {
             this.service.map.moveEntity('player', data.id, data.directions)
         }
     }
@@ -90,11 +90,11 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     async onApplicationBootstrap() {
         this.service.start()
         this.emitter.nowOnline(this.service.map.constant)
-        let instance = await this.instance.findOne({ map: MapConstants.MAP, instanceNumber: MapConstants.INSTANCE_ID })
+        let instance = await this.instance.findOne({ map: MapConstants.MAP, channel: MapConstants.CHANNEL })
         if (!instance) {
-            instance                = new MapInstance()
-            instance.instanceNumber = MapConstants.INSTANCE_ID
-            instance.map            = MapConstants.MAP
+            instance         = new Channel()
+            instance.channel = MapConstants.CHANNEL
+            instance.map     = MapConstants.MAP
             await this.instance.save(instance)
         }
     }
