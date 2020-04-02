@@ -14,7 +14,7 @@ import { ConnectionOptions }          from 'typeorm'
         TypeOrmModule.forFeature([World]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database   : 'account',
+            database   : 'presence',
             entities   : [__dirname + '/entities/*{.ts,.js}']
         })
     ],
