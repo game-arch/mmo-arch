@@ -15,7 +15,7 @@ export class PlayerSprite extends MobSprite {
         super.preUpdate(...args)
         this.walkTick++
         if (isServer) {
-            if (this.walking && this.walkTick === 100) {
+            if (this.walking && this.walkTick % 20 === 0) {
                 this.onVelocityChange()
                 this.walkTick = 0
             }

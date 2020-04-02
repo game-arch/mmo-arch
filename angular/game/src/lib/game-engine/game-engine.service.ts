@@ -48,7 +48,7 @@ export class GameEngineService {
         this.game = new Game({ ...GAME_CONFIG, canvas })
         this.createScenes()
         this.eventBus.listen()
-        
+
         this.connection.worldChange
             .pipe(takeUntil(this.destroyed))
             .pipe(filter(world => !!world.socket))
@@ -58,7 +58,6 @@ export class GameEngineService {
                 fromEvent(world.socket, MapChannels.event)
                     .pipe(takeUntil(this.worldChange))
                     .subscribe((channels: MapChannels) => {
-                        console.log('got map channels')
                         this.mapChannels[channels.map] = channels.channels
                     })
                 this.convertEvents(world, [

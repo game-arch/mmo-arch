@@ -109,7 +109,7 @@ export class BaseScene extends Scene implements Scene {
         if (isServer) {
             if (this.playerCount === 0) {
                 // console.log('stop!')
-                // this.game.scene.pause(this.config.constant)
+                this.game.scene.pause(this.config.constant)
             }
         }
     }
@@ -119,7 +119,7 @@ export class BaseScene extends Scene implements Scene {
             this.playerCount++
             if (isServer) {
                 if (!this.game.scene.isActive(this.config.constant)) {
-                    // this.game.scene.resume(this.config.constant)
+                    this.game.scene.resume(this.config.constant)
                 }
             }
         }

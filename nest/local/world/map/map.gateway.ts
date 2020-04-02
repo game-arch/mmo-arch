@@ -2,7 +2,6 @@ import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/web
 import {
     AllNpcs,
     AllPlayers,
-    ChangedMapChannel,
     ChangeMapChannel,
     GetMapChannels,
     PlayerAttemptedTransition,
@@ -45,30 +44,12 @@ export class MapGateway {
                 player.channel = data.channel
                 player.map     = data.map
                 this.server.sockets[player.socketId].join('map.' + data.map + '.' + player.channel)
+                let npcs = await this.map.getAllNpcs(data.map, player.channel)
                 this.server.sockets[player.socketId].emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, player.channel)))
-                this.server.sockets[player.socketId].emit(AllNpcs.event, new AllNpcs(data.map, await this.map.getAllNpcs(data.map, player.channel)))
+                this.server.sockets[player.socketId].emit(AllNpcs.event, new AllNpcs(data.map, npcs))
                 await this.players.save(player)
             }
             this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerEnteredMap.event, data)
-        }
-    }
-
-    async changedChannel(data: ChangedMapChannel) {
-        if (!this.service.shuttingDown) {
-            const player = await this.players.findOne({ characterId: data.characterId })
-            if (player) {
-                this.server.to('map.' + data.map + '.' + player.channel).emit(PlayerLeftMap.event, data)
-                this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerEnteredMap.event, data)
-            }
-            if (player && this.server.sockets[player.socketId]) {
-                this.server.sockets[player.socketId].leave('map.' + data.map + '.' + player.channel)
-                this.server.sockets[player.socketId].join('map.' + data.map + '.' + data.channel)
-                player.map     = data.map
-                player.channel = data.channel
-                await this.players.save(player)
-                this.server.sockets[player.socketId].emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, player.channel)))
-                this.server.sockets[player.socketId].emit(AllNpcs.event, new AllNpcs(data.map, await this.map.getAllNpcs(data.map, player.channel)))
-            }
         }
     }
 
@@ -76,10 +57,10 @@ export class MapGateway {
         if (!this.service.shuttingDown) {
             const player = await this.players.findOne({ characterId: data.id })
             if (player) {
-                this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerLeftMap.event, data)
                 if (this.server.sockets[player.socketId]) {
                     this.server.sockets[player.socketId].leave('map.' + data.map + '.' + data.channel)
                 }
+                this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerLeftMap.event, data)
             }
         }
     }

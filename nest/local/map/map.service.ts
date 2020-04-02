@@ -135,7 +135,7 @@ export class MapService {
     }
 
     async loggedIn(characterId: number, name: string, channel: number = 1) {
-        let player = await this.players.findOne({ id: characterId, map: this.map.constant })
+        let player = await this.players.findOne({ id: characterId })
         if (!player && this.map.constant === 'tutorial' && MapConstants.CHANNEL === 1) {
             player = this.players.create({
                 id     : characterId,
@@ -146,7 +146,7 @@ export class MapService {
                 y      : 100
             })
         }
-        if (player && (channel === MapConstants.CHANNEL)) {
+        if (player && player.map === this.map.constant && (channel === MapConstants.CHANNEL)) {
             player.name   = name
             player.online = true
             let count     = await this.players.count({ channel: channel, map: MapConstants.MAP, online: true })

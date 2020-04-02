@@ -32,7 +32,6 @@ export class ChannelMenuComponent {
         this.shown = true
         let scene  = this.game.currentScene instanceof MultiplayerScene ? this.game.currentScene.config.constant : null
         this.connection.world.socket.emit(GetMapChannels.event, new GetMapChannels(scene, this.character), (channels) => {
-            console.log(channels)
             this.game.mapChannels[this.game.currentSceneKey] = channels
         })
     }
@@ -41,7 +40,6 @@ export class ChannelMenuComponent {
         this.selected.emit()
         if (this.map !== '') {
             this.connection.world.socket.emit(PlayerAttemptedTransition.event, channel, (result) => {
-                console.log(result)
                 if (!result.status) {
                     this.connection.world.socket.emit(GetMapChannels.event, new GetMapChannels(result.map, this.character), (channels) => {
                         this.game.mapChannels[result.map] = channels
@@ -53,7 +51,6 @@ export class ChannelMenuComponent {
             return
         }
         if (!this.forCharacterSelection) {
-            console.log('change map!')
             this.connection.world.socket.emit(ChangeMapChannel.event, channel)
             this.selected.emit()
             return

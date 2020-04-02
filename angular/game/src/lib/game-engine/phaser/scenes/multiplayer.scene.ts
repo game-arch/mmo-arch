@@ -3,6 +3,7 @@ import { Mob }                                               from '../../../../.
 import { MapConfig }                                         from '../../../../../../../shared/interfaces/map-config'
 import { PlayerAttemptedTransition, PlayerDirectionalInput } from '../../../../../../../shared/events/map.events'
 import { ConnectionManager }                                 from '../../../connection/connection-manager'
+import { Directions }                                        from '../../../../../../../shared/phaser/directions'
 import Scene = Phaser.Scene
 
 export class MultiplayerScene extends BaseScene implements Scene {
@@ -50,7 +51,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
     transitionToNewMap() {
         if (this.canTransition[this.self.instanceId]) {
             this.connection.socket.emit(PlayerAttemptedTransition.event, null, (result) => {
-                console.log(result)
                 if (!result.status) {
                     this.game.events.emit('transition_failed', result)
                 }
@@ -62,21 +62,18 @@ export class MultiplayerScene extends BaseScene implements Scene {
     addOrUpdatePlayer(data: Mob, replace: boolean = false) {
         let player       = replace ? this.createPlayer(data) : (this.players[data.instanceId] || this.createPlayer(data))
         let playerSprite = this.playerSprites[player.instanceId]
+        console.log(playerSprite.x - data.x, playerSprite.y - data.y)
         playerSprite.setPosition(data.x, data.y)
-        playerSprite.preUpdate()
-        if (data.moving) {
-            playerSprite.directions = data.moving
-        }
+        playerSprite.directions = data.moving || new Directions()
+        return playerSprite
     }
 
     addOrUpdateNpc(data: Mob, replace: boolean = false) {
         let npc       = replace ? this.createNpc(data) : (this.npcs[data.instanceId] || this.createNpc(data))
         let npcSprite = this.npcSprites[npc.instanceId]
         npcSprite.setPosition(data.x, data.y)
-        npcSprite.preUpdate()
-        if (data.moving) {
-            npcSprite.directions = data.moving
-        }
+        npcSprite.directions = data.moving || new Directions()
+        return npcSprite
     }
 
     createNpc(npc: Mob) {
@@ -109,25 +106,25 @@ export class MultiplayerScene extends BaseScene implements Scene {
 
     reloadNpcs(npcs: Mob[]) {
         let ids = npcs.map(npc => npc.instanceId)
+        for (let npc of npcs) {
+            let mob = this.addOrUpdateNpc(npc)
+        }
         for (let id of Object.keys(this.npcs)) {
             if (!ids.includes(Number(id))) {
                 this.removeNpc(Number(id))
             }
         }
-        for (let npc of npcs) {
-            this.addOrUpdateNpc(npc)
-        }
     }
 
     reloadPlayers(players: Mob[]) {
         let ids = players.map(player => player.instanceId)
+        for (let player of players) {
+            this.addOrUpdatePlayer(player)
+        }
         for (let id of Object.keys(this.players)) {
             if (!ids.includes(Number(id))) {
                 this.removePlayer(Number(id))
             }
-        }
-        for (let player of players) {
-            this.addOrUpdatePlayer(player)
         }
     }
 

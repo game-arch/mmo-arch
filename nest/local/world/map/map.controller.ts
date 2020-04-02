@@ -1,14 +1,8 @@
-import { Controller }   from '@nestjs/common'
-import { EventPattern } from '@nestjs/microservices'
-import {
-    ChangedMapChannel,
-    NpcUpdate,
-    PlayerEnteredMap,
-    PlayerLeftMap,
-    PlayerUpdate
-}                       from '../../../../shared/events/map.events'
-import { MapGateway } from './map.gateway'
-import { WorldEvent } from '../event.types'
+import { Controller }                                               from '@nestjs/common'
+import { EventPattern }                                             from '@nestjs/microservices'
+import { NpcUpdate, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../../../shared/events/map.events'
+import { MapGateway }                                               from './map.gateway'
+import { WorldEvent }                                               from '../event.types'
 
 @Controller()
 export class MapController {
@@ -27,11 +21,6 @@ export class MapController {
     @EventPattern(new WorldEvent(PlayerLeftMap.event))
     async onMapLeft(data: PlayerLeftMap) {
         await this.gateway.playerLeave(data)
-    }
-
-    @EventPattern(new WorldEvent(ChangedMapChannel.event))
-    async onChangedChannel(data: ChangedMapChannel) {
-        await this.gateway.changedChannel(data)
     }
 
     @EventPattern(new WorldEvent(PlayerUpdate.event))

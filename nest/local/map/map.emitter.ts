@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ClientProxy }        from '@nestjs/microservices'
 import {
-    ChangedMapChannel,
     MapChannels,
     MapOnline,
     NpcAdded,
@@ -13,8 +12,8 @@ import {
 }                             from '../../../shared/events/map.events'
 import { LOCAL_CLIENT }       from '../../client/client.module'
 import { Mob }                from '../../../shared/phaser/mob'
-import { MapConstants } from './constants'
-import { WorldEvent }   from '../world/event.types'
+import { MapConstants }       from './constants'
+import { WorldEvent }         from '../world/event.types'
 
 @Injectable()
 export class MapEmitter {
@@ -49,10 +48,6 @@ export class MapEmitter {
 
     changedMap(toMap: string, characterId: number, newX: number, newY: number, channel: number, entrance?: string) {
         this.client.emit(new WorldEvent(PlayerChangedMap.event), new PlayerChangedMap(characterId, toMap, newX, newY, channel, entrance))
-    }
-
-    changedChannel(map: string, channel: number, characterId: number) {
-        this.client.emit(new WorldEvent(ChangedMapChannel.event), new ChangedMapChannel(map, channel, characterId))
     }
 
     channels(characterId: number, map: string, channels: { channel: number, playerCount: number, playerCapacity: number }[]) {

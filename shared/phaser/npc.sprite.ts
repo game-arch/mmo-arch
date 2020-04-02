@@ -2,8 +2,6 @@ import { MobSprite }  from './mob-sprite'
 import { isServer }   from '../constants/environment-constants'
 import { NpcConfig }  from '../interfaces/npc-config'
 import { Directions } from './directions'
-import { interval }   from 'rxjs'
-import { first }      from 'rxjs/operators'
 import Group = Phaser.GameObjects.Group
 import Scene = Phaser.Scene
 
@@ -15,7 +13,7 @@ export class NpcSprite extends MobSprite {
     lastVerticalDirection   = 0
     lastHorizontalDirection = 0
     speed                   = 0.8
-    moveInterval = Math.floor(Math.random() * 300) + 100
+    moveInterval            = Math.floor(Math.random() * 300) + 100
 
     constructor(scene: Scene, group: Group, public config: NpcConfig) {
         super(config.name, scene, group, config.position[0], config.position[1], !isServer ? config.key || '' : '')
@@ -28,7 +26,7 @@ export class NpcSprite extends MobSprite {
             this.walkTick++
             if (this.walkTick === Math.floor(this.moveInterval * 1.4)) {
                 this.stopMoving()
-                this.walkTick = 0
+                this.walkTick     = 0
                 this.moveInterval = Math.floor(Math.random() * 300) + 100
             }
             if (this.walkTick === this.moveInterval) {

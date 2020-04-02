@@ -154,9 +154,3 @@ export class ChangeMapChannel {
     }
 }
 
-export class ChangedMapChannel {
-    static readonly event = 'map.changed_map_channel'
-
-    constructor(public map: string, public channel: number, public characterId: number) {
-    }
-}

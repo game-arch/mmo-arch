@@ -88,8 +88,10 @@ export class EventBus {
                 console.log('Player Joined', data)
                 let scene = this.engine.getScene(data.map)
                 if (scene instanceof MultiplayerScene) {
-                    if (data.instanceId === this.engine.connection.world.selectedCharacter.id) {
-                        this.engine.game.events.emit('game.scene', data.map)
+                    if (!this.engine.game.scene.isActive(data.map)) {
+                        if (data.instanceId === this.engine.connection.world.selectedCharacter.id) {
+                            this.engine.game.events.emit('game.scene', data.map)
+                        }
                     }
                     if (!scene.physics.world || !scene.layers.mobs) {
                         scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(data))
@@ -100,19 +102,19 @@ export class EventBus {
             }
         })
         this.engine.game.events.on(PlayerLeftMap.event, (data: PlayerLeftMap) => {
-            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
-                console.log('Player Left', data)
-                this.engine.getScene(data.map).removePlayer(data.id)
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                if (scene.self.instanceId !== data.id) {
+                    console.log('Player Left', data)
+                    scene.removePlayer(data.id)
+                }
             }
         })
     }
 
     private npcEvents() {
-        console.log('listen on npc events')
         this.engine.game.events.on(AllNpcs.event, (data: AllNpcs) => {
-            console.log(data)
             let scene = this.engine.getScene(data.map)
-            console.log(scene)
             if (scene instanceof MultiplayerScene) {
                 if (!scene.physics.world || !scene.layers.mobs) {
                     scene.onCreate.pipe(first()).subscribe(() => scene.reloadNpcs(data.npcs))
@@ -160,7 +162,6 @@ export class EventBus {
                 }
             })
             this.engine.game.events.on(PlayerAttemptedTransition.event, () => {
-                console.log(scene.canTransition)
                 this.engine.currentScene.transitionToNewMap()
             })
         }
