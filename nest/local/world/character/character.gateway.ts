@@ -49,7 +49,9 @@ export class CharacterGateway {
             channel : data.channel
         })
         for (const player of players) {
-            await this.character.characterOnline(player.characterId, player.socketId)
+            if (player.characterId) {
+                await this.character.characterOnline(player.characterId, player.socketId)
+            }
         }
         this.server.to('map.' + data.map + '.' + data.channel).emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, data.channel)))
         this.server.to('map.' + data.map + '.' + data.channel).emit(AllNpcs.event, new AllNpcs(data.map, await this.map.getAllNpcs(data.map, data.channel)))

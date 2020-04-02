@@ -66,6 +66,8 @@ export class MobSprite extends Sprite {
                 }
             })
         }
+        this.interpolation.updateTo('x', this.destX, true)
+        this.interpolation.updateTo('y', this.destY, true)
     }
 
     preUpdate(...args: any[]) {
@@ -85,6 +87,13 @@ export class MobSprite extends Sprite {
         }
         let velocity = Physics.getVelocity(this.directions, this.speed)
         this.body.setVelocity(velocity.x, velocity.y)
+        if (velocity.x === 0 && velocity.y === 0) {
+            if (this.x !== this.destX || this.y !== this.destY) {
+                if (this.interpolation) {
+                    this.setPosition(this.destX, this.destY)
+                }
+            }
+        }
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone()
             this.onVelocityChange()
