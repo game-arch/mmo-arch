@@ -3,16 +3,13 @@ import {
     AllNpcs,
     AllPlayers,
     NpcAdded,
-    NpcRemoved,
     NpcUpdate,
     PlayerAttemptedTransition,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}               from '../../../../../../shared/events/map.events'
-import { from } from 'rxjs'
+}                            from '../../../../../../shared/events/map.events'
 import { MultiplayerScene }  from './scenes/multiplayer.scene'
-import { Mob }               from '../../../../../../shared/phaser/mob'
 import { first }             from 'rxjs/operators'
 import { Directions }        from '../../../../../../shared/phaser/directions'
 
@@ -21,10 +18,10 @@ export class EventBus {
     }
 
     listen() {
+        this.npcEvents()
         this.sceneChangeEvents()
         this.playerPresenceEvents()
         this.playerUpdateEvents()
-        this.npcEvents()
         this.joystickEvents()
         this.engine.game.events.on('load.progress', (progress: number) => {
             this.engine.loading = progress * 100
@@ -63,18 +60,14 @@ export class EventBus {
 
     private playerUpdateEvents() {
         this.engine.game.events.on(AllPlayers.event, (data: AllPlayers) => {
-            from(data.players).subscribe(
-                (player: Mob) => {
-                    let scene = this.engine.getScene(data.map)
-                    if (scene instanceof MultiplayerScene) {
-                        if (!scene.physics.world || !scene.layers.mobs) {
-                            scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdatePlayer(player))
-                            return
-                        }
-                        this.engine.getScene(data.map).addOrUpdatePlayer(player)
-                    }
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                if (!scene.physics.world || !scene.layers.mobs) {
+                    scene.onCreate.pipe(first()).subscribe(() => scene.reloadPlayers(data.players))
+                    return
                 }
-            )
+                scene.reloadPlayers(data.players)
+            }
         })
         this.engine.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
             let scene = this.engine.getScene(data.map)
@@ -95,8 +88,10 @@ export class EventBus {
                 console.log('Player Joined', data)
                 let scene = this.engine.getScene(data.map)
                 if (scene instanceof MultiplayerScene) {
-                    if (data.instanceId === this.engine.connection.world.selectedCharacter.id) {
-                        this.engine.game.events.emit('game.scene', data.map)
+                    if (!this.engine.game.scene.isActive(data.map)) {
+                        if (data.instanceId === this.engine.connection.world.selectedCharacter.id) {
+                            this.engine.game.events.emit('game.scene', data.map)
+                        }
                     }
                     if (!scene.physics.world || !scene.layers.mobs) {
                         scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(data))
@@ -107,27 +102,26 @@ export class EventBus {
             }
         })
         this.engine.game.events.on(PlayerLeftMap.event, (data: PlayerLeftMap) => {
-            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
-                console.log('Player Left', data)
-                this.engine.getScene(data.map).removePlayer(data.id)
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                if (scene.self.instanceId !== data.id) {
+                    console.log('Player Left', data)
+                    scene.removePlayer(data.id)
+                }
             }
         })
     }
 
     private npcEvents() {
         this.engine.game.events.on(AllNpcs.event, (data: AllNpcs) => {
-            from(data.npcs).subscribe(
-                (mob: Mob) => {
-                    let scene = this.engine.getScene(data.map)
-                    if (scene instanceof MultiplayerScene) {
-                        if (!scene.physics.world || !scene.layers.mobs) {
-                            scene.onCreate.pipe(first()).subscribe(() => this.engine.getScene(data.map).addOrUpdateNpc(mob))
-                            return
-                        }
-                        this.engine.getScene(data.map).addOrUpdateNpc(mob)
-                    }
+            let scene = this.engine.getScene(data.map)
+            if (scene instanceof MultiplayerScene) {
+                if (!scene.physics.world || !scene.layers.mobs) {
+                    scene.onCreate.pipe(first()).subscribe(() => scene.reloadNpcs(data.npcs))
+                    return
                 }
-            )
+                scene.reloadNpcs(data.npcs)
+            }
         })
 
         this.engine.game.events.on(NpcUpdate.event, (data: NpcUpdate) => {
@@ -154,12 +148,6 @@ export class EventBus {
                 }
             }
         })
-        this.engine.game.events.on(NpcRemoved.event, (data: NpcRemoved) => {
-            if (this.engine.getScene(data.map) instanceof MultiplayerScene) {
-                console.log('Npc Removed', data)
-                this.engine.getScene(data.map).removeNpc(data.instanceId)
-            }
-        })
     }
 
     private keyEvents(scene: MultiplayerScene) {
@@ -174,7 +162,6 @@ export class EventBus {
                 }
             })
             this.engine.game.events.on(PlayerAttemptedTransition.event, () => {
-                console.log(scene.canTransition)
                 this.engine.currentScene.transitionToNewMap()
             })
         }

@@ -2,6 +2,8 @@ import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/web
 import {
     AllNpcs,
     AllPlayers,
+    ChangeMapChannel,
+    GetMapChannels,
     PlayerAttemptedTransition,
     PlayerDirectionalInput,
     PlayerEnteredMap,
@@ -12,10 +14,7 @@ import { WorldConstants }                                      from '../../../li
 import { Repository }                                          from 'typeorm'
 import { Player }                                              from '../entities/player'
 import { InjectRepository }                                    from '@nestjs/typeorm'
-import {
-    Namespace,
-    Socket
-}                                                              from 'socket.io'
+import { Namespace, Socket }                                   from 'socket.io'
 import { MapClient }                                           from '../../map/client/map.client'
 import * as parser                                             from 'socket.io-msgpack-parser'
 
@@ -42,27 +41,27 @@ export class MapGateway {
         if (!this.service.shuttingDown) {
             const player = await this.players.findOne({ characterId: data.instanceId })
             if (player && this.server.sockets[player.socketId]) {
-                this.server.sockets[player.socketId].join('map.' + data.map)
-                this.server.sockets[player.socketId].emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map)))
-                this.server.sockets[player.socketId].emit(AllNpcs.event, new AllNpcs(data.map, await this.map.getAllNpcs(data.map)))
+                player.channel = data.channel
+                player.map     = data.map
+                this.server.sockets[player.socketId].join('map.' + data.map + '.' + player.channel)
+                let npcs = await this.map.getAllNpcs(data.map, player.channel)
+                this.server.sockets[player.socketId].emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, player.channel)))
+                this.server.sockets[player.socketId].emit(AllNpcs.event, new AllNpcs(data.map, npcs))
+                await this.players.save(player)
             }
-            this.server.to('map.' + data.map).emit(PlayerEnteredMap.event, data)
+            this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerEnteredMap.event, data)
         }
     }
 
     async playerLeave(data: PlayerLeftMap) {
         if (!this.service.shuttingDown) {
-            this.server.to('map.' + data.map).emit(PlayerLeftMap.event, data)
             const player = await this.players.findOne({ characterId: data.id })
-            if (player && this.server.sockets[player.socketId]) {
-                this.server.sockets[player.socketId].leave('map.' + data.map)
+            if (player) {
+                if (this.server.sockets[player.socketId]) {
+                    this.server.sockets[player.socketId].leave('map.' + data.map + '.' + data.channel)
+                }
+                this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerLeftMap.event, data)
             }
-        }
-    }
-
-    allPlayers(data: AllPlayers) {
-        if (!this.service.shuttingDown) {
-            this.server.to('map.' + data.map).emit(AllPlayers.event, data)
         }
     }
 
@@ -75,9 +74,21 @@ export class MapGateway {
     }
 
     @SubscribeMessage(PlayerAttemptedTransition.event)
-    async playerAttemptedTransition(client: Socket) {
-        if (!this.service.shuttingDown) {
-            await this.service.playerAttemptedTransition(client)
-        }
+    async playerAttemptedTransition(client: Socket, channel: number) {
+        return await this.service.playerAttemptedTransition(client, channel)
     }
+
+    @SubscribeMessage(ChangeMapChannel.event)
+    async changeInstance(client: Socket, channel: number) {
+        if (!this.service.shuttingDown) {
+            return await this.service.changeInstance(client, channel)
+        }
+        return false
+    }
+
+    @SubscribeMessage(GetMapChannels.event)
+    async getChannels(client: Socket, data: GetMapChannels) {
+        return await this.service.getChannels(client, data)
+    }
+
 }

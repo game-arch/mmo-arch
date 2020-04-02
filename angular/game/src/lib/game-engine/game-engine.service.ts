@@ -6,17 +6,18 @@ import {
     filter,
     takeUntil,
     tap
-}                           from 'rxjs/operators'
+}                                   from 'rxjs/operators'
 import {
     AllNpcs,
     AllPlayers,
+    MapChannels,
     NpcAdded,
-    NpcRemoved, NpcUpdate,
+    NpcUpdate,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                           from '../../../../../shared/events/map.events'
-import { MultiplayerScene } from './phaser/scenes/multiplayer.scene'
+}                                   from '../../../../../shared/events/map.events'
+import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
 import { WorldConnection }          from '../connection/world-connection'
 import { EventBus }                 from './phaser/event-bus'
 import { TUTORIAL_CONFIG }          from '../../../../../shared/maps/tutorial'
@@ -28,13 +29,14 @@ import Game = Phaser.Game
 
 @Injectable()
 export class GameEngineService {
-    loading           = 0
+    loading                                                                                            = 0
     game: Game
-    currentSceneKey   = 'preload'
+    currentSceneKey                                                                                    = 'preload'
     currentScene: MultiplayerScene
-    worldChange       = new EventEmitter()
-    eventBus          = new EventBus(this)
-    private destroyed = new EventEmitter()
+    worldChange                                                                                        = new EventEmitter()
+    eventBus                                                                                           = new EventBus(this)
+    mapChannels: { [map: string]: { channel: number, playerCount: number, playerCapacity: number }[] } = {}
+    private destroyed                                                                                  = new EventEmitter()
 
     constructor(
         private location: Location,
@@ -44,12 +46,20 @@ export class GameEngineService {
 
     init(canvas: HTMLCanvasElement) {
         this.game = new Game({ ...GAME_CONFIG, canvas })
+        this.createScenes()
+        this.eventBus.listen()
+
         this.connection.worldChange
             .pipe(takeUntil(this.destroyed))
             .pipe(filter(world => !!world.socket))
             .pipe(tap(world => (this.connection.world = world)))
             .subscribe(world => {
                 this.worldChange.emit()
+                fromEvent(world.socket, MapChannels.event)
+                    .pipe(takeUntil(this.worldChange))
+                    .subscribe((channels: MapChannels) => {
+                        this.mapChannels[channels.map] = channels.channels
+                    })
                 this.convertEvents(world, [
                     PlayerEnteredMap.event,
                     PlayerLeftMap.event,
@@ -57,12 +67,9 @@ export class GameEngineService {
                     PlayerUpdate.event,
                     NpcUpdate.event,
                     NpcAdded.event,
-                    NpcRemoved.event,
                     AllNpcs.event
                 ])
             })
-        this.createScenes()
-        this.eventBus.listen()
         fromEvent(window, 'resize')
             .pipe(takeUntil(this.destroyed))
             .subscribe(() =>
@@ -99,7 +106,9 @@ export class GameEngineService {
         fromEvent(world.socket, eventName)
             .pipe(takeUntil(this.worldChange))
             .subscribe(event => {
-                // console.log(eventName, event)
+                if (eventName.indexOf('_update') === -1) {
+                    console.log(eventName, event)
+                }
                 this.game.events.emit(eventName, event)
             })
     }

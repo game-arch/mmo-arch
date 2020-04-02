@@ -7,6 +7,7 @@ import { ConnectionModule } from '../lib/connection/connection.module'
 import { RouterModule }     from '@angular/router'
 import { GameEngineModule } from '../lib/game-engine/game-engine.module'
 import { HudModule }        from '../lib/hud/hud.module'
+import { MenusModule }      from '../lib/menus/menus.module'
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { HudModule }        from '../lib/hud/hud.module'
         MatCardModule,
         ConnectionModule,
         GameEngineModule,
-        HudModule
+        HudModule,
+        MenusModule
     ],
     exports     : [GameComponent]
 })

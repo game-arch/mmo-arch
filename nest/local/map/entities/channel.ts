@@ -2,15 +2,17 @@ import { Column, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn, Unique 
 import { Player }                                                                 from './player'
 
 @Entity()
-@Unique(['map', 'instanceNumber'])
-export class MapInstance {
+@Unique(['map', 'channel'])
+export class Channel {
     @PrimaryGeneratedColumn()
     id: number
     @Column()
     map: string
     @Column()
-    instanceNumber: number
+    channel: number
+    @Column()
+    online: boolean = false
     @ManyToMany(t => Player, { cascade: true })
-    @JoinColumn({ name: 'instanceNumber', referencedColumnName: 'instance' })
+    @JoinColumn({ name: 'channel', referencedColumnName: 'channel' })
     players: Player[]
 }

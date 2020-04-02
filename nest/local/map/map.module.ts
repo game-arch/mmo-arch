@@ -1,4 +1,4 @@
-import { Module }                from '@nestjs/common'
+import { Logger, Module }        from '@nestjs/common'
 import { MapController }         from './map.controller'
 import { MapService }            from './map.service'
 import { TypeOrmModule }         from '@nestjs/typeorm'
@@ -7,18 +7,20 @@ import { WorldConstants }        from '../../lib/constants/world.constants'
 import { MapEmitter }            from './map.emitter'
 import { CharacterClientModule } from '../character/client/character-client.module'
 import { ClientModule }          from '../../client/client.module'
-import { TUTORIAL_CONFIG }       from '../../../shared/maps/tutorial'
-import { TUTORIAL_2_CONFIG }     from '../../../shared/maps/tutorial-2'
 import { BaseScene }             from '../../../shared/phaser/base.scene'
 import { DB_CONFIG }             from '../../lib/config/db.config'
-import { ConnectionOptions } from 'typeorm'
-import { MapInstance }       from './entities/map-instance'
+import { ConnectionOptions }     from 'typeorm'
+import { Channel }               from './entities/channel'
+import { MapConstants }          from './constants'
+import { LOGGER }                from '../../lib/functions/create-microservice'
+import { MapClientModule }       from './client/map-client.module'
 
 @Module({
     imports    : [
         ClientModule,
         CharacterClientModule,
-        TypeOrmModule.forFeature([Player, MapInstance]),
+        MapClientModule,
+        TypeOrmModule.forFeature([Player, Channel]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
             database: WorldConstants.DB_NAME + '_map',
@@ -27,15 +29,15 @@ import { MapInstance }       from './entities/map-instance'
     ],
     controllers: [MapController],
     providers  : [
+        {
+            provide   : Logger,
+            useFactory: () => LOGGER.logger
+        },
         MapService,
         MapEmitter,
         {
-            provide   : 'tutorial',
-            useFactory: () => new BaseScene(TUTORIAL_CONFIG)
-        },
-        {
-            provide   : 'tutorial-2',
-            useFactory: () => new BaseScene(TUTORIAL_2_CONFIG)
+            provide   : MapConstants.MAP,
+            useFactory: () => new BaseScene(MapConstants.MAPS[MapConstants.MAP])
         }
     ]
 })

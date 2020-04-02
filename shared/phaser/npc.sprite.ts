@@ -2,8 +2,6 @@ import { MobSprite }  from './mob-sprite'
 import { isServer }   from '../constants/environment-constants'
 import { NpcConfig }  from '../interfaces/npc-config'
 import { Directions } from './directions'
-import { interval }   from 'rxjs'
-import { first }      from 'rxjs/operators'
 import Group = Phaser.GameObjects.Group
 import Scene = Phaser.Scene
 
@@ -14,32 +12,32 @@ export class NpcSprite extends MobSprite {
     horizontalDirections    = ['', 'left', 'right']
     lastVerticalDirection   = 0
     lastHorizontalDirection = 0
-    shouldMove              = false
     speed                   = 0.8
+    moveInterval            = Math.floor(Math.random() * 300) + 100
 
     constructor(scene: Scene, group: Group, public config: NpcConfig) {
         super(config.name, scene, group, config.position[0], config.position[1], !isServer ? config.key || '' : '')
-        if (isServer) {
-            interval(this.config.moveStart).pipe(first())
-                                           .subscribe(() => this.shouldMove = true)
-        }
     }
 
     preUpdate(...args) {
         super.preUpdate(...args)
-        if (this.shouldMove && this.config.moveInterval) {
+        if (isServer) {
             this.validateDirections()
             this.walkTick++
-            if (this.walkTick === Math.floor(this.config.moveInterval * 1.5)) {
+            if (this.walkTick === Math.floor(this.moveInterval * 1.4)) {
                 this.stopMoving()
-                this.walkTick = 0
+                this.walkTick     = 0
+                this.moveInterval = Math.floor(Math.random() * 300) + 100
             }
-            if (this.walkTick === this.config.moveInterval) {
+            if (this.walkTick === this.moveInterval) {
                 this.moveInARandomDirection()
             }
 
-            if (this.walkTick === Math.floor(this.config.moveInterval * 1.25)) {
+            if (this.walkTick === Math.floor(this.moveInterval * 1.2)) {
                 this.moveInARandomDirection()
+            }
+            if (this.walkTick > this.moveInterval && this.walkTick % 100 === 0) {
+                this.onVelocityChange()
             }
         }
     }
@@ -47,20 +45,20 @@ export class NpcSprite extends MobSprite {
     private validateDirections() {
         if (this.npcConfig.movingBounds) {
             if (this.x <= this.npcConfig.movingBounds.upperLeft[0]) {
-                this.moving.left  = false
-                this.moving.right = true
+                this.directions.left  = false
+                this.directions.right = true
             }
             if (this.x >= this.npcConfig.movingBounds.bottomRight[0]) {
-                this.moving.right = false
-                this.moving.left  = true
+                this.directions.right = false
+                this.directions.left  = true
             }
             if (this.y <= this.npcConfig.movingBounds.upperLeft[1]) {
-                this.moving.up   = false
-                this.moving.down = true
+                this.directions.up   = false
+                this.directions.down = true
             }
             if (this.y >= this.npcConfig.movingBounds.bottomRight[1]) {
-                this.moving.down = false
-                this.moving.up   = true
+                this.directions.down = false
+                this.directions.up   = true
             }
         }
     }
@@ -69,7 +67,7 @@ export class NpcSprite extends MobSprite {
         let { vertical, horizontal } = this.getRandomMovement()
         this.lastVerticalDirection   = vertical
         this.lastHorizontalDirection = horizontal
-        this.moving                  = {
+        this.directions              = {
             ...new Directions(),
             [this.verticalDirections[vertical]]    : true,
             [this.horizontalDirections[horizontal]]: true
@@ -83,7 +81,7 @@ export class NpcSprite extends MobSprite {
     }
 
     stopMoving() {
-        this.moving = new Directions()
+        this.directions = new Directions()
     }
 
     getRandomDirection(directions) {

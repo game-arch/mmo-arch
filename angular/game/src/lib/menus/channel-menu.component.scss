@@ -1,0 +1,49 @@
+:host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    &.shown {
+        display: block;
+    }
+
+    pointer-events: none;
+
+    mat-card {
+        pointer-events: all;
+    }
+
+    .mat-raised-button {
+        overflow: hidden;
+        margin: 4px;
+        min-width: 200px;
+
+        .capacity {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            background-color: #00aa33;
+            z-index: -1;
+        }
+
+        .medium-capacity {
+            background-color: #FFAA00;
+        }
+
+        .high-capacity {
+            background-color: #ff6600;
+        }
+
+        .full-capacity {
+            background-color: #ff2200;
+        }
+
+        &[disabled] .capacity {
+            opacity: 0.5;
+        }
+    }
+}

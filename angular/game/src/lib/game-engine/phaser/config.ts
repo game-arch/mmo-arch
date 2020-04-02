@@ -16,7 +16,7 @@ export const GAME_CONFIG: GameConfig = {
     physics        : {
         default: 'arcade',
         arcade : {
-            debug: true,
+            // debug: true,
         },
     },
 }

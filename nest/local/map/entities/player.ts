@@ -9,7 +9,7 @@ export class Player {
     @PrimaryColumn()
     id: number
     @Column()
-    instance: number
+    channel: number
     @Column()
     map: string
     @Column()

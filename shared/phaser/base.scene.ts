@@ -8,6 +8,8 @@ import { interval, Subject } from 'rxjs'
 import { takeUntil }         from 'rxjs/operators'
 import { NpcConfig }         from '../interfaces/npc-config'
 import { NpcSprite }         from './npc.sprite'
+import { isServer }          from '../constants/environment-constants'
+import { PlayerSprite }      from './player.sprite'
 import Scene = Phaser.Scene
 
 export class BaseScene extends Scene implements Scene {
@@ -21,7 +23,7 @@ export class BaseScene extends Scene implements Scene {
     playerSprites: { [characterId: number]: MobSprite } = {}
     layers: { [id: string]: MapCollisionLayer }         = {}
 
-    protected stop = new Subject()
+    protected stop$ = new Subject()
 
     savePlayer = (player: MobSprite) => {
     }
@@ -48,18 +50,20 @@ export class BaseScene extends Scene implements Scene {
     }
 
     create() {
-        this.stop.next()
+        this.stop$.next()
         this.canTransition           = {}
         this.physics.world.TILE_BIAS = 40
         this.layers                  = {
             mobs: new MapCollisionLayer({
                 players: this.physics.add.group([], {
-                    visible      : true,
-                    frameQuantity: 30
+                    visible       : true,
+                    runChildUpdate: true,
+                    frameQuantity : 30
                 }),
                 npcs   : this.physics.add.group([], {
-                    visible      : true,
-                    frameQuantity: 30
+                    visible       : true,
+                    runChildUpdate: true,
+                    frameQuantity : 30
                 })
             })
         }
@@ -80,7 +84,7 @@ export class BaseScene extends Scene implements Scene {
                                 }
                                 interval(300)
                                     .pipe(takeUntil(stop))
-                                    .pipe(takeUntil(this.stop))
+                                    .pipe(takeUntil(this.stop$))
                                     .subscribe(() => {
                                         if (!this.physics.world.overlap(obj1, obj2)) {
                                             delete this.canTransition[obj2.id]
@@ -96,9 +100,31 @@ export class BaseScene extends Scene implements Scene {
         this.onCreate.next()
     }
 
+    playerCount = 0
+
+    update(time: number, delta: number): void {
+        super.update(time, delta)
+        if (!isServer) {
+        }
+        if (isServer) {
+            if (this.playerCount === 0) {
+                // console.log('stop!')
+                this.game.scene.pause(this.config.constant)
+            }
+        }
+    }
+
     addPlayer(player: Mob) {
+        if (!this.players[player.instanceId]) {
+            this.playerCount++
+            if (isServer) {
+                if (!this.game.scene.isActive(this.config.constant)) {
+                    this.game.scene.resume(this.config.constant)
+                }
+            }
+        }
         this.players[player.instanceId]                        = player
-        this.playerSprites[player.instanceId]                  = new MobSprite(player.name, this, this.layers.mobs.players, player.x, player.y)
+        this.playerSprites[player.instanceId]                  = new PlayerSprite(player.name, this, this.layers.mobs.players, player.x, player.y)
         this.playerSprites[player.instanceId].id               = player.instanceId
         this.playerSprites[player.instanceId].onVelocityChange = () => this.emitPlayer(this.playerSprites[player.instanceId])
         this.playerSprites[player.instanceId].onStopMoving     = () => this.savePlayer(this.playerSprites[player.instanceId])
@@ -118,6 +144,12 @@ export class BaseScene extends Scene implements Scene {
     }
 
     removePlayer(id: number) {
+        if (this.players[id]) {
+            this.playerCount--
+            if (this.playerCount < 0) {
+                this.playerCount = 0
+            }
+        }
         if (this.containsPlayer(id)) {
             this.layers.mobs.players.remove(this.playerSprites[id], true, true)
         }
@@ -140,7 +172,7 @@ export class BaseScene extends Scene implements Scene {
     moveEntity(type: 'player' | 'mob', id: number, directions: Directions) {
         if (type === 'player') {
             if (this.playerSprites[id]) {
-                this.playerSprites[id].moving     = {
+                this.playerSprites[id].directions = {
                     up   : !!directions.up,
                     down : !!directions.down,
                     left : !!directions.left,
@@ -150,7 +182,7 @@ export class BaseScene extends Scene implements Scene {
             return
         }
         if (this.npcSprites[id]) {
-            this.npcSprites[id].moving     = {
+            this.npcSprites[id].directions = {
                 up   : !!directions.up,
                 down : !!directions.down,
                 left : !!directions.left,

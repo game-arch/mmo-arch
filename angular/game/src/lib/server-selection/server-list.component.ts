@@ -2,11 +2,11 @@ import { Component, EventEmitter, OnInit } from '@angular/core'
 import { fromEvent, Observable }           from 'rxjs'
 import { ConnectionManager }               from '../connection/connection-manager'
 import { GameWorld }                       from '../../../../../shared/interfaces/game-world'
-import { map, takeUntil, tap }             from 'rxjs/operators'
+import { map, takeUntil }                  from 'rxjs/operators'
 import { Store }                           from '@ngxs/store'
-import { SetToken }   from '../authentication/state/auth.actions'
-import { GetServers } from '../../../../../shared/events/server-presence.events'
-import { Hosts }      from '../hosts'
+import { SetToken }                        from '../authentication/state/auth.actions'
+import { GetServers }                      from '../../../../../shared/events/server-presence.events'
+import { Hosts }                           from '../hosts'
 
 @Component({
     selector   : 'server-list',
@@ -27,9 +27,7 @@ export class ServerListComponent implements OnInit {
 
     ngOnInit() {
         const connection = this.manager.connectTo(Hosts.LOBBY, false)
-        this.servers$    = fromEvent<GameWorld[]>(connection.socket, GetServers.event).pipe(tap(list => {
-            console.log('got server list', list)
-        }))
+        this.servers$    = fromEvent<GameWorld[]>(connection.socket, GetServers.event)
     }
 
     onConnect(world: GameWorld) {

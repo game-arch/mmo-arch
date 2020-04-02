@@ -3,6 +3,7 @@ import { Mob }                                               from '../../../../.
 import { MapConfig }                                         from '../../../../../../../shared/interfaces/map-config'
 import { PlayerAttemptedTransition, PlayerDirectionalInput } from '../../../../../../../shared/events/map.events'
 import { ConnectionManager }                                 from '../../../connection/connection-manager'
+import { Directions }                                        from '../../../../../../../shared/phaser/directions'
 import Scene = Phaser.Scene
 
 export class MultiplayerScene extends BaseScene implements Scene {
@@ -49,27 +50,30 @@ export class MultiplayerScene extends BaseScene implements Scene {
 
     transitionToNewMap() {
         if (this.canTransition[this.self.instanceId]) {
-            this.connection.socket.emit(PlayerAttemptedTransition.event, {})
+            this.connection.socket.emit(PlayerAttemptedTransition.event, null, (result) => {
+                if (!result.status) {
+                    this.game.events.emit('transition_failed', result)
+                }
+            })
         }
     }
 
 
-    addOrUpdatePlayer(data: Mob) {
-        let player       = this.players[data.instanceId] || this.createPlayer(data)
+    addOrUpdatePlayer(data: Mob, replace: boolean = false) {
+        let player       = replace ? this.createPlayer(data) : (this.players[data.instanceId] || this.createPlayer(data))
         let playerSprite = this.playerSprites[player.instanceId]
+        console.log(playerSprite.x - data.x, playerSprite.y - data.y)
         playerSprite.setPosition(data.x, data.y)
-        if (data.moving) {
-            playerSprite.moving = data.moving
-        }
+        playerSprite.directions = data.moving || new Directions()
+        return playerSprite
     }
 
-    addOrUpdateNpc(data: Mob) {
-        let npc       = this.npcs[data.instanceId] || this.createNpc(data)
+    addOrUpdateNpc(data: Mob, replace: boolean = false) {
+        let npc       = replace ? this.createNpc(data) : (this.npcs[data.instanceId] || this.createNpc(data))
         let npcSprite = this.npcSprites[npc.instanceId]
         npcSprite.setPosition(data.x, data.y)
-        if (data.moving) {
-            npcSprite.moving = data.moving
-        }
+        npcSprite.directions = data.moving || new Directions()
+        return npcSprite
     }
 
     createNpc(npc: Mob) {
@@ -78,7 +82,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.x          = npc.x
         mob.y          = npc.y
         this.addNpc(mob)
-        this.npcSprites[npc.instanceId].moving = npc.moving || this.playerSprites[npc.instanceId].moving
+        this.npcSprites[npc.instanceId].directions = npc.moving || this.playerSprites[npc.instanceId].directions
         return mob
     }
 
@@ -88,7 +92,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.x          = player.x
         mob.y          = player.y
         this.addPlayer(mob)
-        this.playerSprites[player.instanceId].moving = player.moving || this.playerSprites[player.instanceId].moving
+        this.playerSprites[player.instanceId].directions = player.moving || this.playerSprites[player.instanceId].directions
         if (this.connection.selectedCharacter.id === player.instanceId) {
             this.setSelf(mob)
         }
@@ -100,8 +104,32 @@ export class MultiplayerScene extends BaseScene implements Scene {
         this.cameras.main.startFollow(this.playerSprites[player.instanceId].body, true, 0.05, 0.05)
     }
 
+    reloadNpcs(npcs: Mob[]) {
+        let ids = npcs.map(npc => npc.instanceId)
+        for (let npc of npcs) {
+            let mob = this.addOrUpdateNpc(npc)
+        }
+        for (let id of Object.keys(this.npcs)) {
+            if (!ids.includes(Number(id))) {
+                this.removeNpc(Number(id))
+            }
+        }
+    }
+
+    reloadPlayers(players: Mob[]) {
+        let ids = players.map(player => player.instanceId)
+        for (let player of players) {
+            this.addOrUpdatePlayer(player)
+        }
+        for (let id of Object.keys(this.players)) {
+            if (!ids.includes(Number(id))) {
+                this.removePlayer(Number(id))
+            }
+        }
+    }
+
     destroy() {
-        this.stop.next()
+        this.stop$.next()
         this.directions    = {
             up   : false,
             down : false,

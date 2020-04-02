@@ -10,14 +10,13 @@ import { ConflictException, Logger, OnApplicationShutdown } from '@nestjs/common
 import { PresenceClient }                                   from '../../global/presence/client/presence.client'
 import { environment }                                      from '../../lib/config/environment'
 import { WorldConstants }                                   from '../../lib/constants/world.constants'
-import { CharacterClient }                 from '../character/client/character.client'
-import { CharacterOffline, GetCharacters } from '../../../shared/events/character.events'
-import { InjectRepository }                from '@nestjs/typeorm'
+import { CharacterClient }                                  from '../character/client/character.client'
+import { CharacterOffline, GetCharacters }                  from '../../../shared/events/character.events'
+import { InjectRepository }                                 from '@nestjs/typeorm'
 import { Player }                                           from './entities/player'
-import { Repository }                                       from 'typeorm'
+import { getConnection, Repository }                        from 'typeorm'
 import { Namespace, Socket }                                from 'socket.io'
 import * as parser                                          from 'socket.io-msgpack-parser'
-import { connectDatabase }                                  from '../../lib/config/db.config'
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -80,8 +79,8 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async onApplicationShutdown(signal?: string) {
         this.service.shuttingDown = true
-        const connection = await connectDatabase(WorldConstants.DB_NAME)
-        const sockets    = await connection.query('select socketId from player where instance = ?', [process.env.NODE_APP_INSTANCE])
+        let connection            = await getConnection().connect()
+        const sockets             = await connection.query('select socketId from player where instance = ?', [process.env.NODE_APP_INSTANCE])
         await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))))
         await connection.query('DELETE FROM player where  instance = ?', [process.env.NODE_APP_INSTANCE])
         await connection.close()
