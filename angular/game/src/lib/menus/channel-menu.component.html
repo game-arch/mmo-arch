@@ -6,11 +6,20 @@
             <mat-card-title style="display:flex">
                 Channel Selection
                 <div style="flex:1"></div>
-                <button (click)="close.emit()">close</button>
+                <button mat-icon-button (click)="close.emit()">
+                    <mat-icon>close</mat-icon>
+                </button>
             </mat-card-title>
             <mat-card-content>
                 <ng-container *ngFor="let channel of channels">
-                    <button (click)="selectChannel(channel.channel)">{{channel.channel}} ({{channel.playerCount}} / {{channel.playerCapacity}})
+                    <button mat-raised-button [disabled]="channel.playerCount >= channel.playerCapacity"
+                            (click)="selectChannel(channel.channel)">
+                        <div class="capacity"
+                             [class.medium-capacity]="channel.playerCount / channel.playerCapacity > 0.4"
+                             [class.high-capacity]="channel.playerCount / channel.playerCapacity > 0.75"
+                             [class.full-capacity]="channel.playerCount >= channel.playerCapacity"
+                             [style.width.%]="channel.playerCount / channel.playerCapacity * 100"></div>
+                        <div>CH {{channel.channel}}</div>
                     </button>
                 </ng-container>
             </mat-card-content>

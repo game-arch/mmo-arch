@@ -28,6 +28,7 @@ export class ChannelMenuComponent {
         return this.game.mapChannels[this.game.currentSceneKey] || []
     }
 
+
     ngOnInit() {
         this.shown = true
         let scene  = this.game.currentScene instanceof MultiplayerScene ? this.game.currentScene.config.constant : null

@@ -4,13 +4,17 @@ import { CommonModule }         from '@angular/common'
 import { ConnectionModule }     from '../connection/connection.module'
 import { GameEngineModule }     from '../game-engine/game-engine.module'
 import { MatCardModule }        from '@angular/material/card'
+import { MatIconModule }        from '@angular/material/icon'
+import { MatButtonModule }      from '@angular/material/button'
 
 @NgModule({
     imports     : [
         CommonModule,
         ConnectionModule,
         GameEngineModule,
-        MatCardModule
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule
     ],
     declarations: [ChannelMenuComponent],
     exports     : [ChannelMenuComponent]

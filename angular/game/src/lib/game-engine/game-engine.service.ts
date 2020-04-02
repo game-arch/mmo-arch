@@ -29,14 +29,14 @@ import Game = Phaser.Game
 
 @Injectable()
 export class GameEngineService {
-    loading                                                                    = 0
+    loading                                                                                            = 0
     game: Game
-    currentSceneKey                                                            = 'preload'
+    currentSceneKey                                                                                    = 'preload'
     currentScene: MultiplayerScene
-    worldChange                                                                = new EventEmitter()
-    eventBus                                                                   = new EventBus(this)
-    mapChannels: { [map: string]: { channel: number, playerCount: number }[] } = {}
-    private destroyed                                                          = new EventEmitter()
+    worldChange                                                                                        = new EventEmitter()
+    eventBus                                                                                           = new EventBus(this)
+    mapChannels: { [map: string]: { channel: number, playerCount: number, playerCapacity: number }[] } = {}
+    private destroyed                                                                                  = new EventEmitter()
 
     constructor(
         private location: Location,
