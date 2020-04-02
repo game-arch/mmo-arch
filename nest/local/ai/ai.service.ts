@@ -14,7 +14,6 @@ export class AiService {
 
     mobs: { [mobIndex: number]: NpcAI } = {}
 
-    onDistanceChange   = new Subject<any>()
     onPlayerChangedMap = new Subject<PlayerChangedMap>()
 
     constructor(private map: MapClient) {

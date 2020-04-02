@@ -1,15 +1,15 @@
-import { MapConfig }               from '../interfaces/map-config'
-import { loadCollisions }          from './collisions'
-import { Mob }                     from './mob'
-import { Directions }              from './directions'
-import { MapCollisionLayer }       from './map-collision.layer'
-import { MobSprite }               from './mob-sprite'
-import { from, interval, Subject } from 'rxjs'
-import { takeUntil }               from 'rxjs/operators'
-import { NpcConfig }               from '../interfaces/npc-config'
-import { NpcSprite }               from './npc.sprite'
-import { isServer }                from '../constants/environment-constants'
-import { PlayerSprite }            from './player.sprite'
+import { MapConfig }         from '../interfaces/map-config'
+import { loadCollisions }    from './collisions'
+import { Mob }               from './mob'
+import { Directions }        from './directions'
+import { MapCollisionLayer } from './map-collision.layer'
+import { MobSprite }         from './mob-sprite'
+import { interval, Subject } from 'rxjs'
+import { takeUntil }         from 'rxjs/operators'
+import { NpcConfig }         from '../interfaces/npc-config'
+import { NpcSprite }         from './npc.sprite'
+import { isServer }          from '../constants/environment-constants'
+import { PlayerSprite }      from './player.sprite'
 import Scene = Phaser.Scene
 
 export class BaseScene extends Scene implements Scene {
@@ -108,8 +108,8 @@ export class BaseScene extends Scene implements Scene {
         }
         if (isServer) {
             if (this.playerCount === 0) {
-                console.log('stop!')
-                this.game.scene.pause(this.config.constant)
+                // console.log('stop!')
+                // this.game.scene.pause(this.config.constant)
             }
         }
     }
@@ -119,8 +119,7 @@ export class BaseScene extends Scene implements Scene {
             this.playerCount++
             if (isServer) {
                 if (!this.game.scene.isActive(this.config.constant)) {
-                    console.log('start!')
-                    this.game.scene.resume(this.config.constant)
+                    // this.game.scene.resume(this.config.constant)
                 }
             }
         }

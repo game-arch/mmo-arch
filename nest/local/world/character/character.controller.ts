@@ -1,9 +1,9 @@
-import { Controller, Logger }                                      from '@nestjs/common'
-import { EventPattern }                                            from '@nestjs/microservices'
-import { CharacterDetails, CharacterLoggedIn, CharacterLoggedOut } from '../../../../shared/events/character.events'
-import { CharacterGateway }                                        from './character.gateway'
-import { MapOnline }        from '../../../../shared/events/map.events'
-import { WORLD_PREFIX }     from '../world.prefix'
+import { Controller, Logger }                    from '@nestjs/common'
+import { EventPattern }                          from '@nestjs/microservices'
+import { CharacterLoggedIn, CharacterLoggedOut } from '../../../../shared/events/character.events'
+import { CharacterGateway }                      from './character.gateway'
+import { MapOnline }  from '../../../../shared/events/map.events'
+import { WorldEvent } from '../event.types'
 
 @Controller()
 export class CharacterController {
@@ -16,23 +16,19 @@ export class CharacterController {
 
     }
 
-    @EventPattern(WORLD_PREFIX + MapOnline.event)
-    async onMapOnline(data:MapOnline) {
+    @EventPattern(new WorldEvent(MapOnline.event))
+    async onMapOnline(data: MapOnline) {
         await this.gateway.sendCharacters(data)
     }
 
-    @EventPattern(WORLD_PREFIX + CharacterDetails.event)
-    onCharacterDetails(data: CharacterDetails) {
-        this.gateway.server.emit(CharacterDetails.event, data)
-    }
 
-    @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
+    @EventPattern(new WorldEvent(CharacterLoggedIn.event))
     onCharacterJoin(data: CharacterLoggedIn) {
         this.logger.log(data.name + ' is online.')
         this.gateway.server.emit(CharacterLoggedIn.event, data)
     }
 
-    @EventPattern(WORLD_PREFIX + CharacterLoggedOut.event)
+    @EventPattern(new WorldEvent(CharacterLoggedOut.event))
     onCharacterLeave(data: CharacterLoggedOut) {
         this.logger.log(data.name + ' is offline.')
         this.gateway.server.emit(CharacterLoggedOut.event, data)

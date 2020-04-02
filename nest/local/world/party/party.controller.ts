@@ -1,9 +1,9 @@
 import { Controller }      from '@nestjs/common'
 import { PartyGateway }    from './party.gateway'
 import { EventPattern }    from '@nestjs/microservices'
-import { WORLD_PREFIX }    from '../world.prefix'
 import { MadePartyLeader } from '../../../../shared/events/party.events'
-import { PartyClient }     from '../../party/client/party-client.service'
+import { PartyClient } from '../../party/client/party-client.service'
+import { WorldEvent }  from '../event.types'
 
 @Controller()
 export class PartyController {
@@ -15,7 +15,7 @@ export class PartyController {
 
     }
 
-    @EventPattern(WORLD_PREFIX + MadePartyLeader.event)
+    @EventPattern(new WorldEvent(MadePartyLeader.event))
     async onMadePartyLeader(data: MadePartyLeader) {
         const party = await this.client.getPartyByLeader(data.characterId)
         if (party) {

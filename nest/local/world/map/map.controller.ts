@@ -7,8 +7,8 @@ import {
     PlayerLeftMap,
     PlayerUpdate
 }                       from '../../../../shared/events/map.events'
-import { MapGateway }   from './map.gateway'
-import { WORLD_PREFIX } from '../world.prefix'
+import { MapGateway } from './map.gateway'
+import { WorldEvent } from '../event.types'
 
 @Controller()
 export class MapController {
@@ -19,27 +19,27 @@ export class MapController {
     ) {
     }
 
-    @EventPattern(WORLD_PREFIX + PlayerEnteredMap.event)
+    @EventPattern(new WorldEvent(PlayerEnteredMap.event))
     async onMapJoined(data: PlayerEnteredMap) {
         await this.gateway.playerJoin(data)
     }
 
-    @EventPattern(WORLD_PREFIX + PlayerLeftMap.event)
+    @EventPattern(new WorldEvent(PlayerLeftMap.event))
     async onMapLeft(data: PlayerLeftMap) {
         await this.gateway.playerLeave(data)
     }
 
-    @EventPattern(WORLD_PREFIX + ChangedMapChannel.event)
+    @EventPattern(new WorldEvent(ChangedMapChannel.event))
     async onChangedChannel(data: ChangedMapChannel) {
         await this.gateway.changedChannel(data)
     }
 
-    @EventPattern(WORLD_PREFIX + PlayerUpdate.event)
+    @EventPattern(new WorldEvent(PlayerUpdate.event))
     playerUpdate(data: PlayerUpdate) {
         this.gateway.server.to('map.' + data.map + '.' + data.channel).emit(PlayerUpdate.event, data)
     }
 
-    @EventPattern(WORLD_PREFIX + NpcUpdate.event)
+    @EventPattern(new WorldEvent(NpcUpdate.event))
     npcUpdate(data: NpcUpdate) {
         this.gateway.server.to('map.' + data.map + '.' + data.channel).emit(NpcUpdate.event, data)
     }

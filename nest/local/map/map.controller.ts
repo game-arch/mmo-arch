@@ -19,13 +19,13 @@ import {
 import { Request, Response }                                                                from 'express'
 import { MapEmitter }                                                                       from './map.emitter'
 import { MapConstants }                                                                     from './constants'
-import { WORLD_PREFIX }                                                                     from '../world/world.prefix'
 import { InjectRepository }                                                                 from '@nestjs/typeorm'
 import { Player }                                                                           from './entities/player'
 import { getConnection, Repository }                                                        from 'typeorm'
 import { from }                                                                             from 'rxjs'
 import { map, tap, toArray }                                                                from 'rxjs/operators'
 import { Channel }                                                                          from './entities/channel'
+import { MapEvent, WorldEvent }                                                             from '../world/event.types'
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -45,61 +45,61 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         return this.service.map.getAllPlayers()
     }
 
-    @MessagePattern(WORLD_PREFIX + GetAllPlayers.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
+    @MessagePattern(new MapEvent(GetAllPlayers.event))
     getAllPlayers(data: GetAllPlayers) {
         return this.service.map.getAllPlayers()
     }
 
-    @MessagePattern(WORLD_PREFIX + GetAllNpcs.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
+    @MessagePattern(new MapEvent(GetAllNpcs.event))
     getAllNpcs(data: GetAllNpcs) {
         return this.service.map.getAllNpcs()
     }
 
-    @EventPattern(WORLD_PREFIX + PlayerChangedMap.event)
+    @EventPattern(new WorldEvent(PlayerChangedMap.event))
     async changedMap(data: PlayerChangedMap) {
         // this.logger.log(PlayerChangedMap.event)
         await this.service.changedMaps(data)
     }
 
-    @MessagePattern(WORLD_PREFIX + PlayerAttemptedTransition.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
+    @MessagePattern(new MapEvent(PlayerAttemptedTransition.event))
     async attemptedTransition(data: PlayerAttemptedTransition) {
         // this.logger.log(PlayerAttemptedTransition.event)
         return await this.service.attemptTransition(data.characterId, data.channel)
     }
 
-    @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
+    @EventPattern(new WorldEvent(CharacterLoggedIn.event))
     async characterLoggedIn(data: CharacterLoggedIn) {
         await this.service.loggedIn(data.characterId, data.name, data.channel)
     }
 
-    @EventPattern(WORLD_PREFIX + ChangeMapChannel.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
+    @EventPattern(new MapEvent(ChangeMapChannel.event))
     async changeInstance(data: ChangeMapChannel) {
         // this.logger.log(ChangeMapChannel.event)
         await this.service.changeInstance(data)
     }
 
-    @EventPattern(WORLD_PREFIX + CharacterLoggedOut.event)
+    @EventPattern(new WorldEvent(CharacterLoggedOut.event))
     async characterLoggedOut(data: CharacterLoggedOut) {
         this.logger.log(CharacterLoggedOut.event)
         await this.service.loggedOut(data.characterId)
     }
 
-    @EventPattern(WORLD_PREFIX + PlayerDirectionalInput.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
+    @EventPattern(new MapEvent(PlayerDirectionalInput.event))
     async playerMoved(data: PlayerDirectionalInput) {
         this.service.map.moveEntity('player', data.id, data.directions)
     }
 
-    @MessagePattern(WORLD_PREFIX + GetPlayerPosition.event + '.' + MapConstants.MAP + '.' + MapConstants.CHANNEL)
+    @MessagePattern(new MapEvent(GetPlayerPosition.event))
     getPlayer(data: GetPlayerPosition) {
         return this.service.getPlayerPosition(data.id)
     }
 
-    @MessagePattern(WORLD_PREFIX + FindPlayer.event)
+    @MessagePattern(new WorldEvent(FindPlayer.event))
     async findPlayer(data: FindPlayer) {
         return await this.service.findPlayer(data.id)
     }
 
-    @MessagePattern(WORLD_PREFIX + GetMapChannels.event + '.' + MapConstants.MAP )
+    @MessagePattern(new WorldEvent(GetMapChannels.event, MapConstants.MAP))
     async getChannels() {
         // this.logger.log(GetMapChannels.event)
         return await this.service.getChannels(MapConstants.MAP)

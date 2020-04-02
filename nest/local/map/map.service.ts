@@ -175,7 +175,6 @@ export class MapService {
 
     async loggedOut(characterId: number) {
         let player = await this.players.findOne(characterId)
-        console.log(player.map, player.channel, MapConstants.MAP, MapConstants.CHANNEL)
         if (player && player.map === this.map.constant && player.channel === MapConstants.CHANNEL) {
             if (this.map.players[player.id]) {
                 player        = this.map.players[player.id] as Player

@@ -21,7 +21,6 @@ import { PartyClientModule }     from '../party/client/party-client.module'
 import { ClientModule }          from '../../client/client.module'
 import { DB_CONFIG }             from '../../lib/config/db.config'
 import { ConnectionOptions }     from 'typeorm'
-import { DistanceController }    from './distance/distance.controller'
 import { ItemClientModule }      from '../item/client/item-client.module'
 
 @Module({
@@ -45,8 +44,7 @@ import { ItemClientModule }      from '../item/client/item-client.module'
         MapController,
         CharacterController,
         ChatController,
-        PartyController,
-        DistanceController
+        PartyController
     ],
     providers  : [
         WorldService,

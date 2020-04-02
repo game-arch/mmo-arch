@@ -63,6 +63,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         let player       = replace ? this.createPlayer(data) : (this.players[data.instanceId] || this.createPlayer(data))
         let playerSprite = this.playerSprites[player.instanceId]
         playerSprite.setPosition(data.x, data.y)
+        playerSprite.preUpdate()
         if (data.moving) {
             playerSprite.directions = data.moving
         }
@@ -72,6 +73,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         let npc       = replace ? this.createNpc(data) : (this.npcs[data.instanceId] || this.createNpc(data))
         let npcSprite = this.npcSprites[npc.instanceId]
         npcSprite.setPosition(data.x, data.y)
+        npcSprite.preUpdate()
         if (data.moving) {
             npcSprite.directions = data.moving
         }
@@ -113,7 +115,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
             }
         }
         for (let npc of npcs) {
-            this.addOrUpdateNpc(npc, true)
+            this.addOrUpdateNpc(npc)
         }
     }
 
@@ -125,7 +127,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
             }
         }
         for (let player of players) {
-            this.addOrUpdatePlayer(player, true)
+            this.addOrUpdatePlayer(player)
         }
     }
 

@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { ClientProxy }        from '@nestjs/microservices'
+import { Inject, Injectable }   from '@nestjs/common'
+import { ClientProxy }          from '@nestjs/microservices'
 import {
     ChangeMapChannel,
     FindPlayer,
@@ -9,12 +9,12 @@ import {
     GetPlayerPosition,
     PlayerAttemptedTransition,
     PlayerDirectionalInput
-}                             from '../../../../shared/events/map.events'
-import { first, takeUntil }   from 'rxjs/operators'
-import { WORLD_PREFIX }       from '../../world/world.prefix'
-import { LOCAL_CLIENT }       from '../../../client/client.module'
-import { Subject }            from 'rxjs'
-import { Mob }                from '../../../../shared/phaser/mob'
+}                               from '../../../../shared/events/map.events'
+import { first, takeUntil }     from 'rxjs/operators'
+import { LOCAL_CLIENT }         from '../../../client/client.module'
+import { Subject }              from 'rxjs'
+import { Mob }                  from '../../../../shared/phaser/mob'
+import { MapEvent, WorldEvent } from '../../world/event.types'
 
 
 @Injectable()
@@ -26,7 +26,7 @@ export class MapClient {
     getAllPlayers(map: string, channel: number): Promise<Mob[]> {
         return new Promise(resolve => {
             let stop = new Subject()
-            this.client.send(WORLD_PREFIX + GetAllPlayers.event + '.' + map + '.' + channel, new GetAllPlayers())
+            this.client.send(new MapEvent(GetAllPlayers.event, map, channel), new GetAllPlayers())
                 .pipe(takeUntil(stop))
                 .subscribe(data => {
                     stop.next()
@@ -38,7 +38,7 @@ export class MapClient {
     async getAllNpcs(map: string, channel: number): Promise<Mob[]> {
         return new Promise(resolve => {
             let stop = new Subject()
-            this.client.send(WORLD_PREFIX + GetAllNpcs.event + '.' + map + '.' + channel, new GetAllNpcs())
+            this.client.send(new MapEvent(GetAllNpcs.event, map, channel), new GetAllNpcs())
                 .pipe(takeUntil(stop))
                 .subscribe(data => {
                     stop.next()
@@ -48,21 +48,30 @@ export class MapClient {
     }
 
     async getPlayer(characterId: number, map: string, channel: number): Promise<{ x: number, y: number }> {
-        return await this.client.send(WORLD_PREFIX + GetPlayerPosition.event + '.' + map + '.' + channel, new GetPlayerPosition(characterId)).pipe(first()).toPromise()
+        return await this.client.send(
+            new MapEvent(GetPlayerPosition.event, map, channel),
+            new GetPlayerPosition(characterId)).pipe(first()
+        ).toPromise()
     }
 
     playerDirectionalInput(characterId: number, map: string, channel: number, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
-        this.client.emit(WORLD_PREFIX + PlayerDirectionalInput.event + '.' + map + '.' + channel, new PlayerDirectionalInput(characterId, directions))
+        this.client.emit(
+            new MapEvent(PlayerDirectionalInput.event, map, channel),
+            new PlayerDirectionalInput(characterId, directions)
+        )
     }
 
     async playerAttemptedTransition(characterId: number, map: string, currentChannel: number, channel: number) {
-        return await this.client.send(WORLD_PREFIX + PlayerAttemptedTransition.event + '.' + map + '.' + currentChannel, new PlayerAttemptedTransition(characterId, channel)).pipe(first()).toPromise()
+        return await this.client.send(
+            new MapEvent(PlayerAttemptedTransition.event, map, currentChannel),
+            new PlayerAttemptedTransition(characterId, channel)
+        ).pipe(first()).toPromise()
     }
 
     getChannels(map: string, channel: number) {
         return new Promise(resolve => {
             let stop = new Subject()
-            this.client.send(WORLD_PREFIX + GetMapChannels.event + '.' + map, {})
+            this.client.send(new WorldEvent(GetMapChannels.event, map), {})
                 .pipe(takeUntil(stop))
                 .subscribe(channels => {
                     stop.next()
@@ -74,7 +83,7 @@ export class MapClient {
     findPlayer(id: number) {
         return new Promise(resolve => {
             let stop = new Subject()
-            this.client.send(WORLD_PREFIX + FindPlayer.event, new FindPlayer(id))
+            this.client.send(new WorldEvent(FindPlayer.event), new FindPlayer(id))
                 .pipe(takeUntil(stop))
                 .subscribe(position => {
                     stop.next()
@@ -84,6 +93,6 @@ export class MapClient {
     }
 
     changeChannel(characterId: number, map: string, currentChannel: number, channel: number) {
-        this.client.emit(WORLD_PREFIX + ChangeMapChannel.event + '.' + map + '.' + currentChannel, new ChangeMapChannel(characterId, channel))
+        this.client.emit(new MapEvent(ChangeMapChannel.event, map, currentChannel), new ChangeMapChannel(characterId, channel))
     }
 }
