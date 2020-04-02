@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding }                        from '@angular/core'
+import { Component, EventEmitter, HostBinding, OnDestroy, OnInit }     from '@angular/core'
 import { GameEngineService }                                           from '../game-engine/game-engine.service'
 import { ConnectionManager }                                           from '../connection/connection-manager'
 import { ChangeMapChannel, GetMapChannels, PlayerAttemptedTransition } from '../../../../../shared/events/map.events'
@@ -11,10 +11,10 @@ import { MultiplayerScene }                                            from '../
     inputs     : ['map', 'character', 'forCharacterSelection'],
     outputs    : ['selected', 'close']
 })
-export class ChannelMenuComponent {
+export class ChannelMenuComponent implements OnInit, OnDestroy {
     @HostBinding('class.shown')
     shown                 = true
-    map: string           = ''
+    map                   = ''
     character: number     = null
     forCharacterSelection = false
     destroy               = new EventEmitter()
