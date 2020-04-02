@@ -60,9 +60,10 @@ export class MultiplayerScene extends BaseScene implements Scene {
 
 
     addOrUpdatePlayer(data: Mob, replace: boolean = false) {
-        let player              = replace ? this.createPlayer(data) : (this.players[data.instanceId] || this.createPlayer(data))
-        let playerSprite        = this.playerSprites[player.instanceId]
-        playerSprite.directions = data.moving || new Directions()
+        let player                     = replace ? this.createPlayer(data) : (this.players[data.instanceId] || this.createPlayer(data))
+        let playerSprite               = this.playerSprites[player.instanceId]
+        playerSprite.shouldInterpolate = true
+        playerSprite.directions        = data.moving || new Directions()
         playerSprite.interpolate(data.x, data.y)
         return playerSprite
     }

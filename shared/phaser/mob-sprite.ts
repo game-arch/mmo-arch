@@ -38,24 +38,22 @@ export class MobSprite extends Sprite {
         scene.physics.add.existing(this)
         this.body.collideWorldBounds = true
 
-
+        this.interpolation = this.scene.tweens.add({
+            targets : this,
+            duration: 300,
+            x       : this.x,
+            y       : this.y
+        })
     }
 
-    destX = 0
-    destY = 0
+    destX             = 0
+    destY             = 0
     interpolation: Tween
+    shouldInterpolate = false
 
     interpolate(x, y) {
         this.destX = x
         this.destY = y
-        if (!this.interpolation) {
-            this.interpolation = this.scene.tweens.add({
-                targets : this,
-                duration: 300,
-                x       : this.x,
-                y       : this.y
-            })
-        }
         this.interpolation.updateTo('x', this.destX, true)
         this.interpolation.updateTo('y', this.destY, true)
         if (!this.interpolation.isPlaying()) {
@@ -78,11 +76,12 @@ export class MobSprite extends Sprite {
                 this.walking = true
             }
         }
+        this.setPosition(Math.round(this.x), Math.round(this.y))
         let velocity = Physics.getVelocity(this.directions, this.speed)
         this.body.setVelocity(velocity.x, velocity.y)
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone()
-            if (this.interpolation) {
+            if (this.shouldInterpolate) {
                 this.setPosition(this.destX, this.destY)
             }
             this.onVelocityChange()
