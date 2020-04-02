@@ -62,7 +62,6 @@ export class MultiplayerScene extends BaseScene implements Scene {
     addOrUpdatePlayer(data: Mob, replace: boolean = false) {
         let player       = replace ? this.createPlayer(data) : (this.players[data.instanceId] || this.createPlayer(data))
         let playerSprite = this.playerSprites[player.instanceId]
-        // playerSprite.setPosition(data.x, data.y)
         playerSprite.directions = data.moving || new Directions()
         playerSprite.interpolate(data.x, data.y)
         return playerSprite
@@ -71,9 +70,8 @@ export class MultiplayerScene extends BaseScene implements Scene {
     addOrUpdateNpc(data: Mob, replace: boolean = false) {
         let npc       = replace ? this.createNpc(data) : (this.npcs[data.instanceId] || this.createNpc(data))
         let npcSprite = this.npcSprites[npc.instanceId]
-        // npcSprite.setPosition(data.x, data.y)
+        npcSprite.setPosition(data.x, data.y)
         npcSprite.directions = data.moving || new Directions()
-        npcSprite.interpolate(data.x, data.y)
         return npcSprite
     }
 

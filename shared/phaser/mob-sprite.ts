@@ -51,19 +51,21 @@ export class MobSprite extends Sprite {
         if (this.interpolation) {
             this.interpolation.remove()
         }
-        this.interpolation = this.scene.tweens.add({
-            targets: this,
-            props  : {
-                x: {
-                    duration: 200,
-                    value   : () => this.destX
-                },
-                y: {
-                    duration: 200,
-                    value   : () => this.destY
+        if (!this.interpolation) {
+            this.interpolation = this.scene.tweens.add({
+                targets: this,
+                props  : {
+                    x: {
+                        duration: 300,
+                        value   : () => this.destX
+                    },
+                    y: {
+                        duration: 300,
+                        value   : () => this.destY
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
     preUpdate(...args: any[]) {
