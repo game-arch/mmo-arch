@@ -48,26 +48,19 @@ export class MobSprite extends Sprite {
     interpolate(x, y) {
         this.destX = x
         this.destY = y
-        if (this.interpolation) {
-            this.interpolation.remove()
-        }
         if (!this.interpolation) {
             this.interpolation = this.scene.tweens.add({
-                targets: this,
-                props  : {
-                    x: {
-                        duration: 300,
-                        value   : () => this.destX
-                    },
-                    y: {
-                        duration: 300,
-                        value   : () => this.destY
-                    }
-                }
+                targets : this,
+                duration: 300,
+                x       : this.x,
+                y       : this.y
             })
         }
         this.interpolation.updateTo('x', this.destX, true)
         this.interpolation.updateTo('y', this.destY, true)
+        if (!this.interpolation.isPlaying()) {
+            this.interpolation.play()
+        }
     }
 
     preUpdate(...args: any[]) {
@@ -87,15 +80,11 @@ export class MobSprite extends Sprite {
         }
         let velocity = Physics.getVelocity(this.directions, this.speed)
         this.body.setVelocity(velocity.x, velocity.y)
-        if (velocity.x === 0 && velocity.y === 0) {
-            if (this.x !== this.destX || this.y !== this.destY) {
-                if (this.interpolation) {
-                    this.setPosition(this.destX, this.destY)
-                }
-            }
-        }
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone()
+            if (this.interpolation) {
+                this.setPosition(this.destX, this.destY)
+            }
             this.onVelocityChange()
         }
     }
