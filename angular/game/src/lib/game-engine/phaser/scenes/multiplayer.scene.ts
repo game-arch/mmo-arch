@@ -71,8 +71,9 @@ export class MultiplayerScene extends BaseScene implements Scene {
     addOrUpdateNpc(data: Mob, replace: boolean = false) {
         let npc       = replace ? this.createNpc(data) : (this.npcs[data.instanceId] || this.createNpc(data))
         let npcSprite = this.npcSprites[npc.instanceId]
-        npcSprite.setPosition(data.x, data.y)
+        // npcSprite.setPosition(data.x, data.y)
         npcSprite.directions = data.moving || new Directions()
+        npcSprite.interpolate(data.x, data.y)
         return npcSprite
     }
 
