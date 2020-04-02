@@ -3,6 +3,7 @@ import Vector2 = Phaser.Math.Vector2
 import Body = Phaser.Physics.Arcade.Body
 import Sprite = Phaser.GameObjects.Sprite
 import Group = Phaser.GameObjects.Group
+import Tween = Phaser.Tweens.Tween
 import { Physics }    from './physics'
 import { Directions } from './directions'
 import { isServer }   from '../constants/environment-constants'
@@ -36,6 +37,33 @@ export class MobSprite extends Sprite {
         group.add(this)
         scene.physics.add.existing(this)
         this.body.collideWorldBounds = true
+
+
+    }
+
+    destX = 0
+    destY = 0
+    interpolation: Tween
+
+    interpolate(x, y) {
+        this.destX = x
+        this.destY = y
+        if (this.interpolation) {
+            this.interpolation.remove()
+        }
+        this.interpolation = this.scene.tweens.add({
+            targets: this,
+            props  : {
+                x: {
+                    duration: 200,
+                    value   : () => this.destX
+                },
+                y: {
+                    duration: 200,
+                    value   : () => this.destY
+                }
+            }
+        })
     }
 
     preUpdate(...args: any[]) {
@@ -53,7 +81,7 @@ export class MobSprite extends Sprite {
                 this.walking = true
             }
         }
-        let velocity = Physics.getVelocity(this.directions, this.speed * this.latencyModifier)
+        let velocity = Physics.getVelocity(this.directions, this.speed)
         this.body.setVelocity(velocity.x, velocity.y)
         if (!velocity.equals(this.lastVelocity)) {
             this.lastVelocity = this.body.velocity.clone()
