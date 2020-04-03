@@ -2,11 +2,16 @@ import { Directions } from './directions'
 import Vector2 = Phaser.Math.Vector2
 
 export class Physics {
-    static readonly SPEED_BASE     = 10
+    static readonly SPEED_BASE = 10
     static readonly SPEED_MODIFIER = 16
 
-    static getVelocity(value: Directions = { up: false, down: false, left: false, right: false }, modifier:number = 1) {
-        return new Vector2(value.left || value.right ? this.getXVelocity(value) * modifier : 0, value.up || value.down ? this.getYVelocity(value)  * modifier: 0)
+    static getVelocity(value: Directions = {
+        up   : false,
+        down : false,
+        left : false,
+        right: false
+    }, modifier: number                  = 1) {
+        return new Vector2(Math.round(value.left || value.right ? this.getXVelocity(value) * modifier : 0), Math.round(value.up || value.down ? this.getYVelocity(value) * modifier : 0))
     }
 
     static getYVelocity(value: Directions) {

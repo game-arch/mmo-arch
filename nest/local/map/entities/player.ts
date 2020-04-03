@@ -1,11 +1,13 @@
 import { Column, Entity, Index, PrimaryColumn, Unique } from 'typeorm'
+import { Mob }                                          from '../../../../shared/phaser/mob'
 
 @Entity()
 @Index('playerMap', ['map'])
 @Index('playerLocation', ['map', 'x', 'y'])
 @Unique('playerCharacter', ['id'])
-export class Player {
-
+export class Player implements Mob {
+    velX            = 0
+    velY            = 0
     @PrimaryColumn()
     id: number
     @Column()

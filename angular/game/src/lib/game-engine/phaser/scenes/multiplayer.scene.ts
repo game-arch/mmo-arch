@@ -3,7 +3,7 @@ import { Mob }                                               from '../../../../.
 import { MapConfig }                                         from '../../../../../../../shared/interfaces/map-config'
 import { PlayerAttemptedTransition, PlayerDirectionalInput } from '../../../../../../../shared/events/map.events'
 import { ConnectionManager }                                 from '../../../connection/connection-manager'
-import { Directions }                                        from '../../../../../../../shared/phaser/directions'
+import { MobSprite }                                         from '../../../../../../../shared/phaser/mob-sprite'
 import Scene = Phaser.Scene
 
 export class MultiplayerScene extends BaseScene implements Scene {
@@ -63,16 +63,20 @@ export class MultiplayerScene extends BaseScene implements Scene {
         let player                     = replace ? this.createPlayer(data) : (this.players[data.instanceId] || this.createPlayer(data))
         let playerSprite               = this.playerSprites[player.instanceId]
         playerSprite.shouldInterpolate = true
-        playerSprite.directions        = data.moving || new Directions()
-        playerSprite.interpolate(data.x, data.y)
+        this.moveMobTo(playerSprite, data.x, data.y, data.velX, data.velY)
         return playerSprite
     }
 
+    moveMobTo(mob: MobSprite, x: number, y: number, velX: number, velY: number) {
+        mob.setPosition(x, y)
+        mob.body.setVelocity(velX, velY)
+    }
+
     addOrUpdateNpc(data: Mob, replace: boolean = false) {
-        let npc       = replace ? this.createNpc(data) : (this.npcs[data.instanceId] || this.createNpc(data))
-        let npcSprite = this.npcSprites[npc.instanceId]
-        npcSprite.setPosition(data.x, data.y)
-        npcSprite.directions = data.moving || new Directions()
+        let npc                     = replace ? this.createNpc(data) : (this.npcs[data.instanceId] || this.createNpc(data))
+        let npcSprite               = this.npcSprites[npc.instanceId]
+        npcSprite.shouldInterpolate = true
+        this.moveMobTo(npcSprite, data.x, data.y, data.velX, data.velY)
         return npcSprite
     }
 
@@ -82,7 +86,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.x          = npc.x
         mob.y          = npc.y
         this.addNpc(mob)
-        this.npcSprites[npc.instanceId].directions = npc.moving || this.playerSprites[npc.instanceId].directions
+        this.npcSprites[npc.instanceId].body.setVelocity(npc.velX, npc.velY)
         return mob
     }
 
@@ -92,7 +96,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.x          = player.x
         mob.y          = player.y
         this.addPlayer(mob)
-        this.playerSprites[player.instanceId].directions = player.moving || this.playerSprites[player.instanceId].directions
+        this.playerSprites[player.instanceId].body.setVelocity(player.velX, player.velY)
         if (this.connection.selectedCharacter.id === player.instanceId) {
             this.setSelf(mob)
         }
@@ -107,7 +111,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
     reloadNpcs(npcs: Mob[]) {
         let ids = npcs.map(npc => npc.instanceId)
         for (let npc of npcs) {
-            let mob = this.addOrUpdateNpc(npc)
+            this.addOrUpdateNpc(npc)
         }
         for (let id of Object.keys(this.npcs)) {
             if (!ids.includes(Number(id))) {

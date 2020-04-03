@@ -12,8 +12,16 @@ export class PlayerEnteredMap implements Mob {
     static readonly event = 'map.player_entered'
     public mobId: number
     public instanceId: number
+    public velX           = 0
+    public velY           = 0
 
-    constructor(public id: number, public name: string, public map: string, public channel: number, public x: number, public y: number) {
+    constructor(public id: number,
+                public name: string,
+                public map: string,
+                public channel: number,
+                public x: number,
+                public y: number
+    ) {
         this.mobId      = id
         this.instanceId = id
     }
@@ -66,7 +74,7 @@ export class GetPlayerPosition {
 export class FindPlayer {
     static readonly event = 'map.find_player'
 
-    constructor(public id:number) {
+    constructor(public id: number) {
     }
 }
 
@@ -103,6 +111,8 @@ export class AllNpcs {
 
 export class NpcAdded implements Mob {
     static readonly event = 'map.npc_added'
+    public velX           = 0
+    public velY           = 0
 
     constructor(public mobId: number, public instanceId: number, public name: string, public map: string, public x: number, public y: number) {
 
@@ -129,7 +139,7 @@ export class NpcRemoved {
 export class GetMapChannels {
     static readonly event = 'map.get_channels'
 
-    constructor(public map: string, public characterId?:number) {
+    constructor(public map: string, public characterId?: number) {
     }
 }
 

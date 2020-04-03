@@ -17,10 +17,7 @@ export class MobSprite extends Sprite {
     directions: Directions = new Directions()
     body: Body
     npcConfig?: NpcConfig
-
-    latencyModifier = 1
-
-    speed = 1
+    speed                  = 1
 
     onVelocityChange = () => {
     }
@@ -28,6 +25,8 @@ export class MobSprite extends Sprite {
     }
     onStartMoving    = () => {
     }
+
+    interpolation: Tween
 
     constructor(public name: string = '', scene: Scene, group: Group, public x: number, public y: number, key: string = !isServer ? 'Template' : '') {
         super(scene, x, y, key, !isServer ? 'template.png' : '')
@@ -37,31 +36,13 @@ export class MobSprite extends Sprite {
         group.add(this)
         scene.physics.add.existing(this)
         this.body.collideWorldBounds = true
-
-        this.interpolation = this.scene.tweens.add({
-            targets : this,
-            duration: 300,
-            x       : this.x,
-            y       : this.y
-        })
     }
 
-    destX             = 0
-    destY             = 0
-    interpolation: Tween
     shouldInterpolate = false
-
-    interpolate(x, y) {
-        this.destX = x
-        this.destY = y
-        this.interpolation.updateTo('x', this.destX, true)
-        this.interpolation.updateTo('y', this.destY, true)
-        if (!this.interpolation.isPlaying()) {
-            this.interpolation.play()
-        }
-    }
+    tick              = 0
 
     preUpdate(...args: any[]) {
+        this.tick++
         if (!this.directions) {
             return
         }
@@ -76,15 +57,18 @@ export class MobSprite extends Sprite {
                 this.walking = true
             }
         }
-        this.setPosition(Math.round(this.x), Math.round(this.y))
-        let velocity = Physics.getVelocity(this.directions, this.speed)
-        this.body.setVelocity(velocity.x, velocity.y)
-        if (!velocity.equals(this.lastVelocity)) {
-            this.lastVelocity = this.body.velocity.clone()
-            if (this.shouldInterpolate) {
-                this.setPosition(this.destX, this.destY)
+        if (isServer) {
+            let velocity = Physics.getVelocity(this.directions, this.speed)
+            this.body.setVelocity(velocity.x, velocity.y)
+            if (!velocity.equals(this.lastVelocity)) {
+                this.lastVelocity = this.body.velocity.clone()
+                this.onVelocityChange()
+            } else {
+                if (this.walking && this.tick % 20 === 0) {
+                    this.onVelocityChange()
+                    this.tick = 0
+                }
             }
-            this.onVelocityChange()
         }
     }
 
@@ -94,11 +78,12 @@ export class MobSprite extends Sprite {
             id        : this.id,
             instanceId: this.id,
             mobId     : this.id,
+            velX      : this.body.velocity.x,
+            velY      : this.body.velocity.y,
             map,
             name      : this.name,
             x         : Math.round(this.x),
-            y         : Math.round(this.y),
-            moving    : this.directions
+            y         : Math.round(this.y)
         } as Mob
     }
 }

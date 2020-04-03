@@ -36,9 +36,6 @@ export class NpcSprite extends MobSprite {
             if (this.walkTick === Math.floor(this.moveInterval * 1.2)) {
                 this.moveInARandomDirection()
             }
-            if (this.walkTick > this.moveInterval && this.walkTick % 100 === 0) {
-                this.onVelocityChange()
-            }
         }
     }
 
