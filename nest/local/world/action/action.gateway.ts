@@ -8,6 +8,7 @@ import { Logger }                                              from '@nestjs/com
 import { WorldService }                                        from '../world.service'
 import { ActionClient }                                        from '../../action/client/action.client'
 import { AttemptAction }                                       from '../../../../shared/events/action.events'
+import * as parser                                             from 'socket.io-msgpack-parser'
 
 @WebSocketGateway({
     namespace   : 'world',
