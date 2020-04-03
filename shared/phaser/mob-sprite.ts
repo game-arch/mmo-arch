@@ -26,8 +26,6 @@ export class MobSprite extends Sprite {
     onStartMoving    = () => {
     }
 
-    interpolation: Tween
-
     constructor(public name: string = '', scene: Scene, group: Group, public x: number, public y: number, key: string = !isServer ? 'Template' : '') {
         super(scene, x, y, key, !isServer ? 'template.png' : '')
         this.setSize(64, 64)
