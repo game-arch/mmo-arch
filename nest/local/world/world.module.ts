@@ -11,17 +11,18 @@ import { MapGateway }            from './map/map.gateway'
 import { CharacterGateway }      from './character/character.gateway'
 import { CharacterController }   from './character/character.controller'
 import { ChatController }        from './chat/chat.controller'
-import { ChatGateway }           from './chat/chat.gateway'
-import { TypeOrmModule }         from '@nestjs/typeorm'
-import { Player }                from './entities/player'
-import { WorldConstants }        from '../../lib/constants/world.constants'
-import { PartyController }       from './party/party.controller'
-import { PartyGateway }          from './party/party.gateway'
-import { PartyClientModule }     from '../party/client/party-client.module'
-import { ClientModule }          from '../../client/client.module'
-import { DB_CONFIG }             from '../../lib/config/db.config'
-import { ConnectionOptions }     from 'typeorm'
-import { ItemClientModule }      from '../item/client/item-client.module'
+import { ChatGateway }        from './chat/chat.gateway'
+import { TypeOrmModule }      from '@nestjs/typeorm'
+import { Player }             from './entities/player'
+import { WorldConstants }     from '../../lib/constants/world.constants'
+import { PartyController }    from './party/party.controller'
+import { PartyGateway }       from './party/party.gateway'
+import { PartyClientModule }  from '../party/client/party-client.module'
+import { ClientModule }       from '../../client/client.module'
+import { DB_CONFIG }          from '../../lib/config/db.config'
+import { ConnectionOptions }  from 'typeorm'
+import { ItemClientModule }   from '../item/client/item-client.module'
+import { ActionClientModule } from '../action/client/action-client.module'
 
 @Module({
     imports    : [
@@ -37,7 +38,8 @@ import { ItemClientModule }      from '../item/client/item-client.module'
         PresenceClientModule,
         MapClientModule,
         PartyClientModule,
-        ItemClientModule
+        ItemClientModule,
+        ActionClientModule
     ],
     controllers: [
         WorldController,

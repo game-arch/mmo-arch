@@ -12,8 +12,8 @@ import { DB_CONFIG }             from '../../lib/config/db.config'
 import { ConnectionOptions }     from 'typeorm'
 import { Channel }               from './entities/channel'
 import { MapConstants }          from './constants'
-import { LOGGER }                from '../../lib/functions/create-microservice'
 import { MapClientModule }       from './client/map-client.module'
+import { MapActionController }   from './map-action.controller'
 
 @Module({
     imports    : [
@@ -27,12 +27,9 @@ import { MapClientModule }       from './client/map-client.module'
             entities: [__dirname + '/entities/*{.ts,.js}']
         })
     ],
-    controllers: [MapController],
+    controllers: [MapController, MapActionController],
     providers  : [
-        {
-            provide   : Logger,
-            useFactory: () => LOGGER.logger
-        },
+        Logger,
         MapService,
         MapEmitter,
         {

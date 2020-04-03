@@ -1,5 +1,6 @@
 import { WorldConstants } from '../../lib/constants/world.constants'
 import { MapConstants }   from '../map/constants'
+import { PerformAction }  from '../../../shared/events/action.events'
 
 export class WorldEvent {
     world = WorldConstants.CONSTANT
@@ -16,5 +17,13 @@ export class MapEvent {
     constructor(public event: string, map?: string, channel?: number) {
         this.map     = map || this.map
         this.channel = channel || this.channel
+    }
+}
+
+export class ActionEvent {
+    world = WorldConstants.CONSTANT
+    event = PerformAction.event
+
+    constructor(public action: string) {
     }
 }
