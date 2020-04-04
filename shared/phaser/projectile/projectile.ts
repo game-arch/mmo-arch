@@ -26,11 +26,14 @@ export class Projectile extends Sprite {
 
     destroy() {
         super.destroy(true)
-        this.targets.map(mob => {
-            if (mob.pushed === this) {
-                mob.body.setVelocity(0, 0)
-                mob.pushed = null
-            }
-        })
+        if (isServer) {
+            this.targets.map(mob => {
+                if (mob.pushed === this) {
+                    mob.body.setVelocity(0, 0)
+                    mob.pushed = null
+                }
+            })
+            this.targets = []
+        }
     }
 }
