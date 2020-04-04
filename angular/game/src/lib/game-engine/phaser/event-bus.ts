@@ -8,18 +8,20 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                           from '../../../../../../shared/events/map.events'
-import { MultiplayerScene } from './scenes/multiplayer.scene'
-import { first }            from 'rxjs/operators'
-import { Directions }       from '../../../../../../shared/phaser/directions'
-import { AttemptCommand }   from '../../../../../../shared/events/command.events'
-import { Push }             from '../../../../../../shared/events/actions/movement.actions'
-import { PushSprite }       from '../../../../../../shared/phaser/projectile/push.sprite'
-import { MobSprite }        from '../../../../../../shared/phaser/mob-sprite'
-import { Projectile }       from '../../../../../../shared/phaser/projectile/projectile'
+}                            from '../../../../../../shared/events/map.events'
+import { MultiplayerScene }  from './scenes/multiplayer.scene'
+import { first }             from 'rxjs/operators'
+import { Directions }        from '../../../../../../shared/phaser/directions'
+import { Push }              from '../../../../../../shared/events/actions/movement.actions'
+import { PushCommand }       from '../../commands/push.command'
+import { ConnectionManager } from '../../connection/connection-manager'
 
 export class EventBus {
-    constructor(private engine: GameEngineService) {
+    get world() {
+        return this.connection.world.socket
+    }
+
+    constructor(private engine: GameEngineService, private connection: ConnectionManager) {
     }
 
     listen() {
@@ -28,6 +30,7 @@ export class EventBus {
         this.playerPresenceEvents()
         this.playerUpdateEvents()
         this.joystickEvents()
+        this.commandEvents()
         this.engine.game.events.on('load.progress', (progress: number) => {
             this.engine.loading = progress * 100
         })
@@ -162,26 +165,16 @@ export class EventBus {
             })
             scene.input.keyboard.on('keyup', (event: KeyboardEvent) => {
                 scene.toggleDirection(event, false)
-                // console.log(event.key)
                 if (event.key === ' ') {
                     this.engine.currentScene.transitionToNewMap()
                 }
                 if (event.key === 'f') {
                     let characterId = this.engine.currentScene.self.instanceId
                     let sprite      = this.engine.currentScene.playerSprites[characterId]
-                    let actionArgs  = {
+                    PushCommand.request(this.world, new Push(characterId, {
                         x: sprite.x + (sprite.facing.x * 100),
                         y: sprite.y + (sprite.facing.y * 100)
-                    }
-                    console.log(sprite.x, sprite.y, actionArgs, sprite.facing)
-                    this.engine.connection.world.socket.emit(AttemptCommand.event, new Push(characterId, actionArgs))
-                    let projectile = new PushSprite(
-                        this.engine.currentScene,
-                        sprite.x,
-                        sprite.y,
-                        actionArgs.x,
-                        actionArgs.y
-                    )
+                    }))
                 }
 
             })
@@ -202,5 +195,9 @@ export class EventBus {
                 this.engine.currentScene.sendDirectionalInput()
             }
         })
+    }
+
+    private commandEvents() {
+        PushCommand.handle(this.engine)
     }
 }

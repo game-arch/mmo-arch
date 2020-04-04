@@ -5,6 +5,8 @@ import { Logger }         from '@nestjs/common'
 import { WorldConstants } from '../../lib/constants/world.constants'
 import { createDatabase } from '../../lib/config/db.config'
 
+require('events').EventEmitter.defaultMaxListeners = 15
+
 const logger = new Logger(WorldConstants.NAME + ' Server')
 
 async function bootstrap() {

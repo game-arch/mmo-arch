@@ -12,8 +12,8 @@ import { DB_CONFIG }             from '../../lib/config/db.config'
 import { ConnectionOptions }     from 'typeorm'
 import { Channel }               from './entities/channel'
 import { MapConstants }          from './constants'
-import { MapClientModule }       from './client/map-client.module'
-import { ActionsController }     from './actions.controller'
+import { MapClientModule }   from './client/map-client.module'
+import { CommandController } from './command.controller'
 
 @Module({
     imports    : [
@@ -27,7 +27,7 @@ import { ActionsController }     from './actions.controller'
             entities: [__dirname + '/entities/*{.ts,.js}']
         })
     ],
-    controllers: [MapController, ActionsController],
+    controllers: [MapController, CommandController],
     providers  : [
         Logger,
         MapService,

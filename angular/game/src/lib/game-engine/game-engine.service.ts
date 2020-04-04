@@ -34,9 +34,10 @@ export class GameEngineService {
     currentSceneKey                                                                                    = 'preload'
     currentScene: MultiplayerScene
     worldChange                                                                                        = new EventEmitter()
-    eventBus                                                                                           = new EventBus(this)
+    eventBus                                                                                           = new EventBus(this, this.connection)
     mapChannels: { [map: string]: { channel: number, playerCount: number, playerCapacity: number }[] } = {}
     private destroyed                                                                                  = new EventEmitter()
+
 
     constructor(
         private location: Location,

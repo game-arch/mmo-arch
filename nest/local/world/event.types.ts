@@ -20,9 +20,10 @@ export class MapEvent {
     }
 }
 
-export class ActionEvent {
-    world = WorldConstants.CONSTANT
-    event = PerformCommand.event
+export class CommandEvent {
+    world  = WorldConstants.CONSTANT
+    event  = PerformCommand.event
+    status = 'performed'
 
     constructor(public action: string) {
     }
