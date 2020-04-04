@@ -11,6 +11,7 @@ import { NpcSprite }         from './npc.sprite'
 import { isServer }          from '../constants/environment-constants'
 import { PlayerSprite }      from './player.sprite'
 import Scene = Phaser.Scene
+import Group = Phaser.Physics.Arcade.Group
 
 export class BaseScene extends Scene implements Scene {
     onCreate = new Subject()
@@ -22,6 +23,9 @@ export class BaseScene extends Scene implements Scene {
     npcSprites: { [mobId: number]: MobSprite }          = {}
     playerSprites: { [characterId: number]: MobSprite } = {}
     layers: { [id: string]: MapCollisionLayer }         = {}
+
+    playerProjectiles: Group
+    npcProjectiles: Group
 
     protected stop$ = new Subject()
 
@@ -57,16 +61,22 @@ export class BaseScene extends Scene implements Scene {
             mobs: new MapCollisionLayer({
                 players: this.physics.add.group([], {
                     visible       : true,
-                    runChildUpdate: true,
-                    frameQuantity : 30
+                    runChildUpdate: true
                 }),
                 npcs   : this.physics.add.group([], {
                     visible       : true,
-                    runChildUpdate: true,
-                    frameQuantity : 30
+                    runChildUpdate: true
                 })
             })
         }
+        this.playerProjectiles       = this.physics.add.group([], {
+            visible       : true,
+            runChildUpdate: true
+        })
+        this.npcProjectiles          = this.physics.add.group([], {
+            visible       : true,
+            runChildUpdate: true
+        })
         if (this.config) {
             this.layers = loadCollisions(this.layers, this.config, this)
             for (let layer of Object.keys(this.config.layers)) {
@@ -108,7 +118,6 @@ export class BaseScene extends Scene implements Scene {
         }
         if (isServer) {
             if (this.playerCount === 0) {
-                // console.log('stop!')
                 this.game.scene.pause(this.config.constant)
             }
         }

@@ -13,7 +13,7 @@ import { ConnectionOptions }     from 'typeorm'
 import { Channel }               from './entities/channel'
 import { MapConstants }          from './constants'
 import { MapClientModule }       from './client/map-client.module'
-import { MapActionController }   from './map-action.controller'
+import { ActionsController }     from './actions.controller'
 
 @Module({
     imports    : [
@@ -27,7 +27,7 @@ import { MapActionController }   from './map-action.controller'
             entities: [__dirname + '/entities/*{.ts,.js}']
         })
     ],
-    controllers: [MapController, MapActionController],
+    controllers: [MapController, ActionsController],
     providers  : [
         Logger,
         MapService,

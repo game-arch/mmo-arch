@@ -105,6 +105,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         return await this.service.getChannels(MapConstants.MAP)
     }
 
+
     async onApplicationBootstrap() {
         this.service.init()
         let connection = await getConnection()

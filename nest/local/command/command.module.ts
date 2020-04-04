@@ -5,8 +5,8 @@ import { CharacterClientModule } from '../character/client/character-client.modu
 import { ClientModule }          from '../../client/client.module'
 import { DB_CONFIG }             from '../../lib/config/db.config'
 import { ConnectionOptions }     from 'typeorm'
-import { MapClientModule }       from '../map/client/map-client.module'
-import { ActionController }      from './action.controller'
+import { MapClientModule }   from '../map/client/map-client.module'
+import { CommandController } from './command.controller'
 
 @Module({
     imports    : [
@@ -16,12 +16,12 @@ import { ActionController }      from './action.controller'
         TypeOrmModule.forFeature([]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
-            database: WorldConstants.DB_NAME + '_action',
+            database: WorldConstants.DB_NAME + '_command',
             entities: [__dirname + '/entities/*{.ts,.js}']
         })
     ],
-    controllers: [ActionController],
+    controllers: [CommandController],
     providers  : []
 })
-export class ActionModule {
+export class CommandModule {
 }

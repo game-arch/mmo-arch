@@ -3,15 +3,16 @@ import Vector2 = Phaser.Math.Vector2
 import Body = Phaser.Physics.Arcade.Body
 import Sprite = Phaser.GameObjects.Sprite
 import Group = Phaser.GameObjects.Group
-import Tween = Phaser.Tweens.Tween
 import { Physics }    from './physics'
 import { Directions } from './directions'
 import { isServer }   from '../constants/environment-constants'
 import { Mob }        from './mob'
 import { NpcConfig }  from '../interfaces/npc-config'
+import { Projectile } from './projectile/projectile'
 
 export class MobSprite extends Sprite {
     id: number
+    stoppedVector          = new Vector2(0, 0)
     lastVelocity           = new Vector2(0, 0)
     walking                = true
     directions: Directions = new Directions()
@@ -19,11 +20,17 @@ export class MobSprite extends Sprite {
     npcConfig?: NpcConfig
     speed                  = 1
 
-    onVelocityChange = () => {
+    onVelocityChange   = () => {
     }
-    onStopMoving     = () => {
+    onStopMoving       = () => {
     }
-    onStartMoving    = () => {
+    onStartMoving      = () => {
+    }
+    pushed: Projectile = null
+
+    facing = {
+        x: 0,
+        y: 0
     }
 
     constructor(public name: string = '', scene: Scene, group: Group, public x: number, public y: number, key: string = !isServer ? 'Template' : '') {
@@ -34,6 +41,7 @@ export class MobSprite extends Sprite {
         group.add(this)
         scene.physics.add.existing(this)
         this.body.collideWorldBounds = true
+        this.body.immovable          = false
     }
 
     shouldInterpolate = false
@@ -44,32 +52,49 @@ export class MobSprite extends Sprite {
         if (!this.directions) {
             return
         }
-        if (this.body.velocity.equals(new Vector2(0, 0))) {
+        if (this.body.velocity.equals(this.stoppedVector)) {
             if (this.walking) {
                 this.onStopMoving()
                 this.walking = false
+                this.updateFacing(this.lastVelocity)
             }
         } else {
             if (!this.walking) {
                 this.onStartMoving()
                 this.walking = true
             }
-        }
-        if (isServer) {
-            let velocity = Physics.getVelocity(this.directions, this.speed)
-            this.body.setVelocity(velocity.x, velocity.y)
-            if (!velocity.equals(this.lastVelocity)) {
-                this.lastVelocity = this.body.velocity.clone()
-                this.onVelocityChange()
-            } else {
-                if (this.walking && this.tick % 20 === 0) {
+
+            if (isServer) {
+                if (this.tick % 20 === 0) {
                     this.onVelocityChange()
                     this.tick = 0
                 }
             }
         }
+        if (isServer) {
+            if (!this.pushed) {
+                let velocity = Physics.getVelocity(this.directions, this.speed)
+                this.body.setVelocity(velocity.x, velocity.y)
+            }
+        }
+        if (!this.body.velocity.equals(this.lastVelocity)) {
+            if (!this.body.velocity.equals(this.stoppedVector) && !this.pushed) {
+                this.updateFacing(this.body.velocity)
+            }
+            if (isServer) {
+                this.onVelocityChange()
+            }
+        }
+        this.lastVelocity = this.body.velocity.clone()
     }
 
+
+    private updateFacing(velocity: Vector2) {
+        this.facing = {
+            x: velocity.x > 0 ? 1 : velocity.x < 0 ? -1 : 0,
+            y: velocity.y > 0 ? 1 : velocity.y < 0 ? -1 : 0
+        }
+    }
 
     asPayload(map: string): Mob {
         return {
