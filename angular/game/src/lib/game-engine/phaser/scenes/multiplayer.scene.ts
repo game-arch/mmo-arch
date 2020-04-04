@@ -55,7 +55,9 @@ export class MultiplayerScene extends BaseScene implements Scene {
                     this.game.events.emit('transition_failed', result)
                 }
             })
+            return true
         }
+        return false
     }
 
 

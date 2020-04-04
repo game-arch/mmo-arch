@@ -15,8 +15,11 @@ import { Directions }        from '../../../../../../shared/phaser/directions'
 import { Push }              from '../../../../../../shared/events/actions/movement.actions'
 import { PushCommand }       from '../../commands/push.command'
 import { ConnectionManager } from '../../connection/connection-manager'
+import { Subject }           from 'rxjs'
 
 export class EventBus {
+    stop = new Subject()
+
     get world() {
         return this.connection.world.socket
     }
@@ -25,6 +28,7 @@ export class EventBus {
     }
 
     listen() {
+        this.stop.next()
         this.npcEvents()
         this.sceneChangeEvents()
         this.playerPresenceEvents()
@@ -166,20 +170,18 @@ export class EventBus {
             scene.input.keyboard.on('keyup', (event: KeyboardEvent) => {
                 scene.toggleDirection(event, false)
                 if (event.key === ' ') {
-                    this.engine.currentScene.transitionToNewMap()
+                    if (!this.engine.currentScene.transitionToNewMap()) {
+                        let characterId = this.engine.currentScene.self.instanceId
+                        PushCommand.request(this.world, new Push(characterId))
+                    }
                 }
-                if (event.key === 'f') {
+                if (event.key === '1') {
                     let characterId = this.engine.currentScene.self.instanceId
                     let sprite      = this.engine.currentScene.playerSprites[characterId]
                     PushCommand.request(this.world, new Push(characterId, {
                         x: sprite.x + (sprite.facing.x * 100),
                         y: sprite.y + (sprite.facing.y * 100)
                     }))
-                }
-                if (event.key === 'e') {
-                    let characterId = this.engine.currentScene.self.instanceId
-                    let sprite      = this.engine.currentScene.playerSprites[characterId]
-                    PushCommand.request(this.world, new Push(characterId))
                 }
 
             })
