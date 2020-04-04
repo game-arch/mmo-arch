@@ -16,16 +16,17 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                                   from '../../../../../shared/events/map.events'
-import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
-import { WorldConnection }          from '../connection/world-connection'
-import { EventBus }                 from './phaser/event-bus'
-import { TUTORIAL_CONFIG }          from '../../../../../shared/maps/tutorial'
-import { TUTORIAL_2_CONFIG }        from '../../../../../shared/maps/tutorial-2'
-import { PreloadScene }             from './phaser/scenes/preload/preload.scene'
-import { Location }                 from '@angular/common'
-import { TitleScene }               from './phaser/scenes/title/title.scene'
+}                            from '../../../../../shared/events/map.events'
+import { MultiplayerScene }  from './phaser/scenes/multiplayer.scene'
+import { WorldConnection }   from '../connection/world-connection'
+import { EventBus }          from './phaser/event-bus'
+import { TUTORIAL_CONFIG }   from '../../../../../shared/maps/tutorial'
+import { TUTORIAL_2_CONFIG } from '../../../../../shared/maps/tutorial-2'
+import { PreloadScene }      from './phaser/scenes/preload/preload.scene'
+import { Location }          from '@angular/common'
+import { TitleScene }        from './phaser/scenes/title/title.scene'
 import Game = Phaser.Game
+import { Push }              from '../../../../../shared/events/actions/movement.actions'
 
 @Injectable()
 export class GameEngineService {
@@ -37,6 +38,17 @@ export class GameEngineService {
     eventBus                                                                                           = new EventBus(this, this.connection)
     mapChannels: { [map: string]: { channel: number, playerCount: number, playerCapacity: number }[] } = {}
     private destroyed                                                                                  = new EventEmitter()
+
+    static EVENTS = [
+        PlayerEnteredMap.event,
+        PlayerLeftMap.event,
+        AllPlayers.event,
+        PlayerUpdate.event,
+        NpcUpdate.event,
+        NpcAdded.event,
+        AllNpcs.event,
+        Push.event
+    ]
 
 
     constructor(
@@ -61,15 +73,7 @@ export class GameEngineService {
                     .subscribe((channels: MapChannels) => {
                         this.mapChannels[channels.map] = channels.channels
                     })
-                this.convertEvents(world, [
-                    PlayerEnteredMap.event,
-                    PlayerLeftMap.event,
-                    AllPlayers.event,
-                    PlayerUpdate.event,
-                    NpcUpdate.event,
-                    NpcAdded.event,
-                    AllNpcs.event
-                ])
+                this.convertEvents(world, GameEngineService.EVENTS)
             })
         fromEvent(window, 'resize')
             .pipe(takeUntil(this.destroyed))

@@ -12,22 +12,18 @@ export class PushCommand {
     }
 
     static handle(engine: GameEngineService) {
-        engine.connection.worldChange.subscribe((world) => {
-            if (world.socket) {
-                world.socket.on(Push.event, (event: Push) => {
-                    if (engine.currentScene instanceof MultiplayerScene) {
-                        let player = engine.currentScene.playerSprites[event.characterId]
-                        if (player) {
-                            new PushSprite(
-                                engine.currentScene,
-                                player.x,
-                                player.y,
-                                event.actionArgs.x,
-                                event.actionArgs.y
-                            )
-                        }
-                    }
-                })
+        engine.game.events.on(Push.event, (event: Push) => {
+            if (engine.currentScene instanceof MultiplayerScene) {
+                let player = engine.currentScene.playerSprites[event.characterId]
+                if (player) {
+                    new PushSprite(
+                        engine.currentScene,
+                        player.x,
+                        player.y,
+                        event.actionArgs.x,
+                        event.actionArgs.y
+                    )
+                }
             }
         })
     }
