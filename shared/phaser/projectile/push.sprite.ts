@@ -9,26 +9,60 @@ export class PushSprite extends Projectile {
     body: Body
 
     constructor(scene: Scene, x, y, destinationX, destinationY) {
-        super(scene, x, y, destinationX, destinationY)
+        super(scene, x, y, destinationX, destinationY, 'rain')
         let movement = scene.tweens.add({
             targets : this,
             duration: 1000,
             props   : {
-                scale: 4
+                scale: 6
             }
         })
         movement.on('complete', () => {
             this.destroy()
         })
-        let diffX    = Math.round(destinationX - x)
-        let diffY    = Math.round(destinationY - y)
-        let velocity = Physics.getVelocity({
+        let diffX      = Math.round(destinationX - x)
+        let diffY      = Math.round(destinationY - y)
+        let directions = {
             right: diffX > 0,
             left : diffX < 0,
             up   : diffY < 0,
             down : diffY > 0
-        })
+        }
+        let velocity   = Physics.getVelocity(directions)
+        // this.setOrigin(0,0)
+        this.angle     = this.angleFromVelocity(velocity.x, velocity.y)
         this.body.setVelocity(velocity.x * 2, velocity.y * 2)
+    }
+
+    angleFromVelocity(x, y) {
+        let angle = 0
+        if (x > 0) {
+            angle = 360 - 90
+            if (y > 0) {
+                angle = 360 - 45
+            }
+            if (y < 0) {
+                angle = 360 - 135
+            }
+            return angle
+        }
+        if (x < 0) {
+            angle = 90
+            if (y > 0) {
+                angle = 45
+            }
+            if (y < 0) {
+                angle = 135
+            }
+            return angle
+        }
+        if (y < 0) {
+            angle = 180
+        }
+        if (y > 0) {
+            angle = 0
+        }
+        return angle
     }
 
     protected preUpdate(time: number, delta: number): void {
