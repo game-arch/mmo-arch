@@ -9,7 +9,7 @@ export class PerformCommand {
 export class CommandAction {
     action: string
 
-    constructor(public characterId: number, public actionArgs: { [key: string]: any }) {
+    constructor(public characterId: number, public actionArgs?: { [key: string]: any }) {
     }
 }
 

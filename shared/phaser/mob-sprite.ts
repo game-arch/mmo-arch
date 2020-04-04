@@ -11,7 +11,6 @@ import { NpcConfig }  from '../interfaces/npc-config'
 import { Projectile } from './projectile/projectile'
 
 export class MobSprite extends Sprite {
-    id: number
     stoppedVector          = new Vector2(0, 0)
     lastVelocity           = new Vector2(0, 0)
     walking                = true
@@ -33,7 +32,7 @@ export class MobSprite extends Sprite {
         y: 0
     }
 
-    constructor(public name: string = '', scene: Scene, group: Group, public x: number, public y: number, key: string = !isServer ? 'Template' : '') {
+    constructor(public id: number, scene: Scene, group: Group, public x: number, public y: number, key: string = !isServer ? 'Template' : '') {
         super(scene, x, y, key, !isServer ? 'template.png' : '')
         this.setSize(64, 64)
         this.setOrigin(0.5, 0.5)
@@ -73,7 +72,7 @@ export class MobSprite extends Sprite {
         }
         if (isServer) {
             if (!this.pushed) {
-                let velocity = Physics.getVelocity(this.directions, this.speed)
+                let velocity = Physics.velocityFromDirections(this.directions, this.speed)
                 this.body.setVelocity(velocity.x, velocity.y)
             }
         }

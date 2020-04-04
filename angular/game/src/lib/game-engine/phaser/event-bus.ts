@@ -176,6 +176,11 @@ export class EventBus {
                         y: sprite.y + (sprite.facing.y * 100)
                     }))
                 }
+                if (event.key === 'e') {
+                    let characterId = this.engine.currentScene.self.instanceId
+                    let sprite      = this.engine.currentScene.playerSprites[characterId]
+                    PushCommand.request(this.world, new Push(characterId))
+                }
 
             })
             this.engine.game.events.on(PlayerAttemptedTransition.event, () => {

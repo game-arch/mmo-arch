@@ -16,7 +16,7 @@ export class NpcSprite extends MobSprite {
     moveInterval            = Math.floor(Math.random() * 300) + 100
 
     constructor(scene: Scene, group: Group, public config: NpcConfig) {
-        super(config.name, scene, group, config.position[0], config.position[1], !isServer ? config.key || '' : '')
+        super(config.instanceId, scene, group, config.position[0], config.position[1], !isServer ? config.key || '' : '')
     }
 
     preUpdate(...args) {

@@ -5,7 +5,7 @@ import Group = Phaser.GameObjects.Group
 
 export class PlayerSprite extends MobSprite {
 
-    constructor(public name: string = '', scene: Scene, group: Group, public x: number, public y: number, key: string = !isServer ? 'Template' : '') {
-        super(name, scene, group, x, y, key)
+    constructor(public id: number, scene: Scene, group: Group, public x: number, public y: number, key: string = !isServer ? 'Template' : '') {
+        super(id, scene, group, x, y, key)
     }
 }
