@@ -129,12 +129,12 @@ export class WorldService {
         }
     }
 
-    async playerAttemptedTransition(client: Socket, channel?: number) {
+    async playerAttemptedTransition(client: Socket) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             let map      = this.getMapOf(client)
             if (player && player.characterId !== null && map) {
-                return await this.map.playerAttemptedTransition(player.characterId, map, player.channel, channel || player.channel)
+                return await this.map.playerAttemptedTransition(player.characterId, map, player.channel)
             }
         }
         return { status: false, map: null, reason: 'shutting_down_server' }

@@ -62,7 +62,8 @@ export class ConnectionState {
     @Action(ConnectToWorld)
     onConnectToWorld(context: StateContext<ConnectionModel>, action: ConnectToWorld) {
         let state = context.getState()
-        let world = io.connect('http://' + action.world.host + ':' + action.world.port + '?token=' + state.token, {
+        console.log(action.world)
+        let world = io.connect('http://' + action.world.host + ':' + action.world.port + '/world' + '?token=' + state.token, {
             transports  : ['websocket'],
             reconnection: true,
             parser

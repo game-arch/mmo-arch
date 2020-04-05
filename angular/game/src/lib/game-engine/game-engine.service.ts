@@ -7,6 +7,8 @@ import {
     AllPlayers,
     NpcAdded,
     NpcUpdate,
+    PlayerAttemptedTransition,
+    PlayerDirections,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
@@ -18,9 +20,10 @@ import { PreloadScene }             from './phaser/scenes/preload/preload.scene'
 import { Location }                 from '@angular/common'
 import { TitleScene }               from './phaser/scenes/title/title.scene'
 import { Push }                     from '../../../../../shared/actions/movement.actions'
-import { Select }                   from '@ngxs/store'
+import { Select, Store }            from '@ngxs/store'
 import { WorldModel }               from '../../state/world/world.model'
 import { WorldState }               from '../../state/world/world.state'
+import { Directions }               from '../../../../../shared/phaser/directions'
 import Game = Phaser.Game
 
 @Injectable()
@@ -46,8 +49,23 @@ export class GameEngineService {
     @Select(WorldState)
     world$: Observable<WorldModel>
 
+    onAttemptTransition = () => {
+        let world = this.store.selectSnapshot(WorldState)
+        world.socket.emit(PlayerAttemptedTransition.type, {})
+    }
+
+    onDirectionChange    = (directions: Directions) => {
+        let world = this.store.selectSnapshot(WorldState)
+        world.socket.emit(PlayerDirections.type, new PlayerDirections(world.character, directions))
+    }
+    getSelectedCharacter = () => {
+        let world = this.store.selectSnapshot(WorldState)
+        return world.character
+    }
+
 
     constructor(
+        private store: Store,
         private location: Location
     ) {
     }
@@ -89,11 +107,14 @@ export class GameEngineService {
     createScenes() {
         this.game.scene.add('preload', new PreloadScene(this.location))
         this.game.scene.add('title', new TitleScene())
-        let tutorial                   = new MultiplayerScene(TUTORIAL_CONFIG)
-        let tutorial2                  = new MultiplayerScene(TUTORIAL_2_CONFIG)
-        tutorial.onAttemptedTransition = () => {
-
-        }
+        let tutorial                     = new MultiplayerScene(TUTORIAL_CONFIG)
+        let tutorial2                    = new MultiplayerScene(TUTORIAL_2_CONFIG)
+        tutorial.onAttemptedTransition   = this.onAttemptTransition
+        tutorial.onDirectionChange       = this.onDirectionChange
+        tutorial.getSelectedCharacterId  = this.getSelectedCharacter
+        tutorial2.onAttemptedTransition  = this.onAttemptTransition
+        tutorial2.onDirectionChange      = this.onDirectionChange
+        tutorial2.getSelectedCharacterId = this.getSelectedCharacter
         this.game.scene.add('tutorial', tutorial)
         this.game.scene.add('tutorial-2', tutorial2)
     }
@@ -102,9 +123,6 @@ export class GameEngineService {
         fromEvent(world.socket, eventName)
             .pipe(takeUntil(this.worldChange))
             .subscribe(event => {
-                if (eventName.indexOf('_update') === -1) {
-                    console.log(eventName, event)
-                }
                 this.game.events.emit(eventName, event)
             })
     }

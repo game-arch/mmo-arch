@@ -46,7 +46,7 @@ export class PlayerLeftMap {
 export class PlayerAttemptedTransition {
     static readonly type = '[Map] Attempt Transition'
 
-    constructor(public characterId: number, public channel: number) {
+    constructor(public characterId: number) {
     }
 }
 

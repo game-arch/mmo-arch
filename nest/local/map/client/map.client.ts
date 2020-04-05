@@ -1,5 +1,5 @@
 import { Inject, Injectable }   from '@nestjs/common'
-import { ClientProxy }      from '@nestjs/microservices'
+import { ClientProxy }          from '@nestjs/microservices'
 import {
     ChangeMapChannel,
     FindPlayer,
@@ -9,8 +9,8 @@ import {
     GetPlayerById,
     PlayerAttemptedTransition,
     PlayerDirections
-}                           from '../../../../shared/actions/map.actions'
-import { first, takeUntil } from 'rxjs/operators'
+}                               from '../../../../shared/actions/map.actions'
+import { first, takeUntil }     from 'rxjs/operators'
 import { LOCAL_CLIENT }         from '../../../client/client.module'
 import { Subject }              from 'rxjs'
 import { Mob }                  from '../../../../shared/phaser/mob'
@@ -61,10 +61,10 @@ export class MapClient {
         )
     }
 
-    async playerAttemptedTransition(characterId: number, map: string, currentChannel: number, channel: number) {
+    async playerAttemptedTransition(characterId: number, map: string, currentChannel: number) {
         return await this.client.send(
             new MapEvent(PlayerAttemptedTransition.type, map, currentChannel),
-            new PlayerAttemptedTransition(characterId, channel)
+            new PlayerAttemptedTransition(characterId)
         ).pipe(first()).toPromise()
     }
 

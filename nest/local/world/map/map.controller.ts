@@ -1,8 +1,8 @@
 import { Controller }                                               from '@nestjs/common'
 import { EventPattern }                                             from '@nestjs/microservices'
 import { NpcUpdate, PlayerEnteredMap, PlayerLeftMap, PlayerUpdate } from '../../../../shared/actions/map.actions'
-import { MapGateway } from './map.gateway'
-import { WorldEvent } from '../../../lib/event.types'
+import { MapGateway }                                               from './map.gateway'
+import { WorldEvent }                                               from '../../../lib/event.types'
 
 @Controller()
 export class MapController {

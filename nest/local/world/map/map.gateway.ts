@@ -74,8 +74,8 @@ export class MapGateway {
     }
 
     @SubscribeMessage(PlayerAttemptedTransition.type)
-    async playerAttemptedTransition(client: Socket, channel: number) {
-        return await this.service.playerAttemptedTransition(client, channel)
+    async playerAttemptedTransition(client: Socket) {
+        return await this.service.playerAttemptedTransition(client)
     }
 
     @SubscribeMessage(ChangeMapChannel.type)

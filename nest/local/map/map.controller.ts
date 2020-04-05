@@ -64,7 +64,7 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
     @MessagePattern(new MapEvent(PlayerAttemptedTransition.type))
     async attemptedTransition(data: PlayerAttemptedTransition) {
         // this.logger.log(PlayerAttemptedTransition.event)
-        return await this.service.attemptTransition(data.characterId, data.channel)
+        return await this.service.attemptTransition(data.characterId)
     }
 
     @EventPattern(new WorldEvent(CharacterLoggedIn.type))

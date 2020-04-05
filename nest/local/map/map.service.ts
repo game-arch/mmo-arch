@@ -69,17 +69,17 @@ export class MapService {
         this.phaser.scene.stop(this.map.constant)
     }
 
-    async attemptTransition(characterId: number, channel?: number) {
+    async attemptTransition(characterId: number) {
         if (this.map.canTransition[characterId]) {
             let { mob, landingMap, landingId } = this.map.canTransition[characterId]
             let player                         = await this.players.findOne(characterId)
             let count                          = await this.players.count({
-                channel: channel || player.channel,
+                channel: player.channel,
                 online : true,
                 map    : landingMap
             })
             if (count < MapConstants.CAPACITY) {
-                this.emitter.changedMap(landingMap, mob.id, mob.x, mob.y, channel || player.channel, landingId)
+                this.emitter.changedMap(landingMap, mob.id, mob.x, mob.y, player.channel, landingId)
                 return { status: true, map: landingMap, reason: '' }
             } else {
                 let freeChannel = await this.getFreeChannel(landingMap)
@@ -156,6 +156,7 @@ export class MapService {
     async loggedIn(characterId: number, name: string) {
         let player      = await this.players.findOne({ id: characterId })
         let freeChannel = await this.getFreeChannel(MapConstants.MAP)
+        console.log(freeChannel, MapConstants.CHANNEL)
         if (this.map.constant === 'tutorial' && MapConstants.CHANNEL === freeChannel) {
             if (!player) {
                 player = this.players.create({
@@ -171,6 +172,7 @@ export class MapService {
             player.online  = true
             player.channel = freeChannel
             await this.players.save(player)
+            console.log('player joined map')
             this.playerJoinedMap(player)
         }
     }

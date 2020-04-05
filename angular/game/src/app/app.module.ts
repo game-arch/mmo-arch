@@ -6,6 +6,7 @@ import { HttpClientModule }         from '@angular/common/http'
 import { AuthenticationModule }     from '../lib/authentication/authentication.module'
 import { NgxsModule }               from '@ngxs/store'
 import { NgxsStoragePluginModule }  from '@ngxs/storage-plugin'
+import { NgxsLoggerPluginModule }   from '@ngxs/logger-plugin'
 import { ServerSelectionModule }    from '../lib/server-selection/server-selection.module'
 import { CharacterSelectionModule } from '../lib/character-selection/character-selection.module'
 import { MatButtonModule }          from '@angular/material/button'
@@ -30,6 +31,7 @@ import { GameStateModule }          from '../state/game-state.module'
         CharacterSelectionModule,
         GameModule,
         NgxsModule.forRoot([]),
+        NgxsLoggerPluginModule.forRoot(),
         NgxsStoragePluginModule.forRoot({
             key: ['auth']
         }),

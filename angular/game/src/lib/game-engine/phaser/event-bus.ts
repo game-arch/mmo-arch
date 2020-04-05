@@ -101,7 +101,6 @@ export class EventBus {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 console.log('Player Joined', data)
-                let scene = this.engine.getScene(data.map)
                 if (scene instanceof MultiplayerScene) {
                     if (!this.engine.game.scene.isActive(data.map)) {
                         let world: WorldModel = this.store.selectSnapshot(WorldState)
@@ -109,6 +108,7 @@ export class EventBus {
                             this.engine.game.events.emit('game.scene', data.map)
                         }
                     }
+                    console.log(data)
                     if (!scene.physics.world || !scene.layers.mobs) {
                         scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(data))
                         return

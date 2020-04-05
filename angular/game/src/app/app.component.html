@@ -5,7 +5,7 @@
         <ng-container *ngIf="!!connection.token">
             <server-selection *ngIf="!connection.world"></server-selection>
             <ng-container *ngIf="world$ | async as world">
-                <character-selection *ngIf="world.socket && world.character === null"></character-selection>
+                <character-selection *ngIf="world.socket && !world.character"></character-selection>
             </ng-container>
             <button (click)="logout()" mat-raised-button style="position:fixed; bottom:16px;right:16px;">Logout</button>
         </ng-container>

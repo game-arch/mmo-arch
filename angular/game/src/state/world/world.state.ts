@@ -17,6 +17,7 @@ export class WorldState {
         let state    = new WorldModel()
         state.name   = action.name
         state.socket = action.socket
+        state.socket.on(ReceivedCharacters.type, (data: ReceivedCharacters) => context.dispatch(new ReceivedCharacters(data.characters)))
         state.socket.on(MapChannels.type, (data: MapChannels) => context.dispatch(new MapChannels(data.characterId, data.map, data.channels)))
 
         context.setState(state)
