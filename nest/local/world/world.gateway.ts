@@ -52,7 +52,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
 
     async handleConnection(client: Socket, ...args: any[]) {
         try {
-            console.log('connection!')
             if ((await this.players.count()) >= 100) {
                 throw new Error('Server Limit Reached')
             }
@@ -62,7 +61,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
                 throw new ConflictException('User already logged in!')
             }
             await this.service.storeUser(client, user.id)
-            console.log('retrieve characters')
             client.emit(ReceivedCharacters.type, new ReceivedCharacters(await this.service.getCharacters(user.id)))
         } catch (e) {
             console.log(e)

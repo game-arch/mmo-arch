@@ -156,7 +156,6 @@ export class MapService {
     async loggedIn(characterId: number, name: string) {
         let player      = await this.players.findOne({ id: characterId })
         let freeChannel = await this.getFreeChannel(MapConstants.MAP)
-        console.log(freeChannel, MapConstants.CHANNEL)
         if (this.map.constant === 'tutorial' && MapConstants.CHANNEL === freeChannel) {
             if (!player) {
                 player = this.players.create({
@@ -172,7 +171,6 @@ export class MapService {
             player.online  = true
             player.channel = freeChannel
             await this.players.save(player)
-            console.log('player joined map')
             this.playerJoinedMap(player)
         }
     }
