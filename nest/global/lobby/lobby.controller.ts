@@ -40,10 +40,10 @@ export class LobbyController {
     }
 
     @EventPattern(new GlobalEvent(GetWorlds.type + '.response'))
-    serverList(worlds: GameWorld[]) {
+    serverList(data:GetWorlds) {
         try {
-            this.gateway.servers = worlds
-            this.gateway.server.emit(GetWorlds.type, new GetWorlds(worlds))
+            this.gateway.servers = data.worlds
+            this.gateway.server.emit(GetWorlds.type, new GetWorlds(data.worlds))
             this.logger.log('Server list updated.')
         } catch (e) {
             console.error(e)

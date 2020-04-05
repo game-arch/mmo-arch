@@ -1,9 +1,25 @@
-import { Action, State, StateContext }         from '@ngxs/store'
-import { WorldModel }                          from './world.model'
-import { WorldConnected, WorldDisconnected }   from '../../../../../shared/actions/connection.actions'
-import { CharacterOnline, ReceivedCharacters } from '../../../../../shared/actions/character.actions'
-import { MapChannels }                         from '../../../../../shared/actions/map.actions'
-import { Injectable }                          from '@angular/core'
+import { Action, State, StateContext } from '@ngxs/store'
+import { WorldModel }                  from './world.model'
+import {
+    WorldConnected,
+    WorldDisconnected
+}                                      from '../../../../../shared/actions/connection.actions'
+import {
+    CharacterOnline,
+    ReceivedCharacters
+}                                      from '../../../../../shared/actions/character.actions'
+import {
+    AllNpcs,
+    AllPlayers,
+    MapChannels,
+    NpcAdded,
+    NpcUpdate,
+    PlayerEnteredMap,
+    PlayerLeftMap,
+    PlayerUpdate
+}                                      from '../../../../../shared/actions/map.actions'
+import { Injectable }                  from '@angular/core'
+import { Push }                        from '../../../../../shared/actions/movement.actions'
 
 @State<WorldModel>({
     name    : 'world',
@@ -18,8 +34,7 @@ export class WorldState {
         state.name   = action.name
         state.socket = action.socket
         state.socket.on(ReceivedCharacters.type, (data: ReceivedCharacters) => context.dispatch(new ReceivedCharacters(data.characters)))
-        state.socket.on(MapChannels.type, (data: MapChannels) => context.dispatch(new MapChannels(data.characterId, data.map, data.channels)))
-
+        state.socket.on(Push.type, (data: Push) => context.dispatch(new Push(data.characterId, data.actionArgs)))
         context.setState(state)
     }
 

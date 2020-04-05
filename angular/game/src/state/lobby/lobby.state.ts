@@ -25,6 +25,7 @@ export class LobbyState {
 
     @Action(GetWorlds)
     onGetWorlds(context: StateContext<LobbyModel>, action: GetWorlds) {
+        console.log(action)
         context.patchState({
             worlds: action.worlds
         })

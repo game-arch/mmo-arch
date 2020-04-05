@@ -1,30 +1,32 @@
-<div class="top-row" fxLayout="row">
-    <div class="status" fxLayout="column">
-        <div class="row" fxLayout="row">
-            <div fxLayout="column">
-                <avatar></avatar>
-            </div>
-            <div class="bars">
-                <div fxLayout="row">
-                    <div class="name">{{ engine.currentScene?.self?.name }}</div>
-                    <div style="flex:1"></div>
-                    <div class="level">LVL 99</div>
+<ng-container *ngIf="engine.currentScene?.self as player">
+    <div class="top-row" fxLayout="row">
+        <div class="status" fxLayout="column">
+            <div class="row" fxLayout="row">
+                <div fxLayout="column">
+                    <avatar></avatar>
                 </div>
-                <bar class="hp-bar" color="#ff5035" label="99/100" percent="99"></bar>
-                <bar class="mp-bar" color="#00adff" label="25/100" percent="50"></bar>
+                <div class="bars">
+                    <div fxLayout="row">
+                        <div class="name">{{ player | json}}</div>
+                        <div style="flex:1"></div>
+                        <div class="level">LVL 99</div>
+                    </div>
+                    <bar class="hp-bar" color="#ff5035" label="99/100" percent="99"></bar>
+                    <bar class="mp-bar" color="#00adff" label="25/100" percent="50"></bar>
+                </div>
             </div>
+            <bar class="xp-bar" color="#5fd06e" label="25/100" percent="25"></bar>
         </div>
-        <bar class="xp-bar" color="#5fd06e" label="25/100" percent="25"></bar>
     </div>
-</div>
-<div fxFlex fxLayout="row" style="flex:1;">
-</div>
-<div fxLayout="row">
-    <joystick
-        [enabled]="true"
-        [style.opacity]="engine.currentScene?.self?.id ? 1 : 0"
-        [style.pointer-events]="engine.currentScene?.self?.id ? 'all' : 'none'"
-    ></joystick>
-    <div style="flex:1;pointer-events:none"></div>
-    <action-bar style="z-index:1000;"></action-bar>
-</div>
+    <div fxFlex fxLayout="row" style="flex:1;">
+    </div>
+    <div fxLayout="row">
+        <joystick
+                  [enabled]="true"
+                  [style.opacity]="player?.instanceId ? 1 : 0"
+                  [style.pointer-events]="player?.instanceId ? 'all' : 'none'"
+        ></joystick>
+        <div style="flex:1;pointer-events:none"></div>
+        <action-bar style="z-index:1000;"></action-bar>
+    </div>
+</ng-container>

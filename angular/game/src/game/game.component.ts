@@ -7,6 +7,7 @@ import { Select, Store }                                                        
 import { WorldModel }                                                               from '../state/world/world.model'
 import { WorldState }                                                               from '../state/world/world.state'
 import { EventBus }                                                                 from '../lib/game-engine/phaser/event-bus'
+import { ChangeScene }                                                              from '../state/scene/scene.actions'
 
 @Component({
     selector   : 'game',
@@ -54,7 +55,7 @@ export class GameComponent implements AfterViewInit, OnDestroy {
     }
 
     signOut(character: number) {
-        this.engine.game.events.emit('game.scene', 'title')
+        this.store.dispatch(new ChangeScene('title'))
         this.store.dispatch(new CharacterOffline(character))
     }
 }

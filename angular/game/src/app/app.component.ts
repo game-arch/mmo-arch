@@ -9,6 +9,7 @@ import { ConnectionModel }   from '../state/connection/connection.model'
 import { ConnectionState }   from '../state/connection/connection.state'
 import { WorldModel }        from '../state/world/world.model'
 import { WorldState }        from '../state/world/world.state'
+import { ChangeScene }       from '../state/scene/scene.actions'
 
 @Component({
     selector   : 'app-root',
@@ -34,6 +35,6 @@ export class AppComponent {
 
     logout() {
         this.store.dispatch(new SetToken())
-        this.engine.game.events.emit('game.scene', 'title')
+        this.store.dispatch(new ChangeScene('title'))
     }
 }

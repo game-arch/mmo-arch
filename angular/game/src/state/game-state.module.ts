@@ -1,24 +1,30 @@
 import { NgModule }              from '@angular/core'
-import { MapStateModule }        from './map/map-state.module'
+import { SceneStateModule }      from './scene/scene-state.module'
 import { ConnectionStateModule } from './connection/connection-state.module'
 import { LobbyStateModule }      from './lobby/lobby-state.module'
 import { WorldStateModule }      from './world/world-state.module'
 import { AuthStateModule }       from './auth/auth-state.module'
+import { InputStateModule }      from './input/input-state.module'
+import { CommandStateModule }    from './command/command-state.module'
 
 @NgModule({
     imports: [
         AuthStateModule,
-        MapStateModule,
+        SceneStateModule,
         ConnectionStateModule,
         LobbyStateModule,
-        WorldStateModule
+        WorldStateModule,
+        InputStateModule,
+        CommandStateModule
     ],
     exports: [
         AuthStateModule,
-        MapStateModule,
+        SceneStateModule,
         ConnectionStateModule,
         LobbyStateModule,
-        WorldStateModule
+        WorldStateModule,
+        InputStateModule,
+        CommandStateModule
     ]
 })
 export class GameStateModule {

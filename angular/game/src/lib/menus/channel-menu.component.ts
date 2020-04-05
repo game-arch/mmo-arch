@@ -50,6 +50,7 @@ export class ChannelMenuComponent implements OnInit, OnDestroy {
                 if (!result.status) {
                     world.socket.emit(GetMapChannels.type, new GetMapChannels(result.map, this.character), (channels) => {
                         this.game.mapChannels[result.map] = channels
+                        this.store.dispatch(new MapChannels(this.character, result.map, channels))
                     })
                 } else {
                     this.selected.emit()

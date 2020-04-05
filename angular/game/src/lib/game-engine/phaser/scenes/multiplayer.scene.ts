@@ -2,55 +2,31 @@ import { BaseScene }  from '../../../../../../../shared/phaser/base.scene'
 import { Mob }        from '../../../../../../../shared/phaser/mob'
 import { MapConfig }  from '../../../../../../../shared/interfaces/map-config'
 import { MobSprite }  from '../../../../../../../shared/phaser/mob-sprite'
-import { Directions } from '../../../../../../../shared/phaser/directions'
+import { Store }      from '@ngxs/store'
+import { WorldState } from '../../../../state/world/world.state'
 import Scene = Phaser.Scene
 
 export class MultiplayerScene extends BaseScene implements Scene {
     self: Mob
-    directionMap                                  = {
-        s: 'down',
-        w: 'up',
-        a: 'left',
-        d: 'right'
-    }
-    directions                                    = {
+    directions = {
         up   : false,
         down : false,
         right: false,
         left : false
     }
-    onDirectionChange: (data: Directions) => void = (data: Directions) => null
-    onAttemptedTransition: () => void             = () => {
+
+    getSelectedCharacter() {
+        let world = this.store.selectSnapshot(WorldState)
+        return world.character
     }
-    getSelectedCharacterId: () => number          = () => null
 
-
-    constructor(config: MapConfig) {
+    constructor(public store: Store, config: MapConfig) {
         super(config)
     }
 
 
-    toggleDirection(event: KeyboardEvent, status: boolean) {
-        if (this.directionMap.hasOwnProperty(event.key)) {
-            event.stopImmediatePropagation()
-            const direction = this.directionMap[event.key]
-            if (this.directions[direction] !== status) {
-                this.directions[direction] = status
-                this.sendDirectionalInput()
-            }
-        }
-    }
-
-    sendDirectionalInput() {
-        this.onDirectionChange(this.directions)
-    }
-
-    transitionToNewMap() {
-        if (this.canTransition[this.self.instanceId]) {
-            this.onAttemptedTransition()
-            return true
-        }
-        return false
+    toggleDirection(direction: string, status: boolean) {
+        this.directions[direction] = status
     }
 
 
@@ -92,7 +68,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.y          = player.y
         this.addPlayer(mob)
         this.playerSprites[player.instanceId].body.setVelocity(player.velX, player.velY)
-        if (this.getSelectedCharacterId() === player.instanceId) {
+        if (this.getSelectedCharacter() === player.instanceId) {
             this.setSelf(mob)
         }
         return mob

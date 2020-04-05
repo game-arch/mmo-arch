@@ -49,6 +49,12 @@ export class PlayerAttemptedTransition {
     constructor(public characterId: number) {
     }
 }
+export class PlayerTransitionFailed {
+    static readonly type = '[Map] Transition Failed'
+
+    constructor(public reason:string) {
+    }
+}
 
 export class AllPlayers {
     static readonly type = '[Map] All Players'
@@ -89,7 +95,7 @@ export class PlayerUpdate {
 export class PlayerDirections {
     static readonly type = '[Map] Player Directions'
 
-    constructor(public id: number, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
+    constructor(public id?: number, public directions?: { up: boolean, down: boolean, left: boolean, right: boolean }) {
 
     }
 }

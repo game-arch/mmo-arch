@@ -1,6 +1,5 @@
 <action-button [type]="skill" class="top" matRipple></action-button>
 <action-button [type]="skill" class="middle" matRipple></action-button>
 <action-button [type]="skill" class="left" matRipple></action-button>
-<action-button sizeClass="large" type="skill-sword" matRipple *ngIf="!canTransition"></action-button>
-<action-button sizeClass="large" type="teleport" matRipple *ngIf="canTransition"
-               (click)="transition()"></action-button>
+<action-button sizeClass="large" [type]="(overloaded$ | async).action" (click)="performOverloadedAction()"
+               matRipple></action-button>

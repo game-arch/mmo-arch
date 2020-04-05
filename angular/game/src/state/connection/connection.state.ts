@@ -28,7 +28,6 @@ export class ConnectionState {
     onSetToken(context: StateContext<ConnectionModel>, action: SetToken) {
         let state    = context.getState()
         let newState = new ConnectionModel()
-        console.log('http://' + environment.host + ':' + environment.port + '?token=' + action.token)
         if (!!action.token) {
             newState.token = action.token
             newState.lobby = io.connect('http://' + environment.host + ':' + environment.port + '?token=' + action.token, {
@@ -47,13 +46,11 @@ export class ConnectionState {
 
         } else {
             if (state.lobby) {
-                state.lobby.close()
-                state.lobby.removeAllListeners()
+                context.dispatch(new LobbyDisconnected())
             }
         }
         if (state.world) {
-            state.world.close()
-            state.lobby.removeAllListeners()
+            context.dispatch(new WorldDisconnected())
         }
         context.setState(newState)
     }
@@ -62,7 +59,6 @@ export class ConnectionState {
     @Action(ConnectToWorld)
     onConnectToWorld(context: StateContext<ConnectionModel>, action: ConnectToWorld) {
         let state = context.getState()
-        console.log(action.world)
         let world = io.connect('http://' + action.world.host + ':' + action.world.port + '/world' + '?token=' + state.token, {
             transports  : ['websocket'],
             reconnection: true,
@@ -94,11 +90,15 @@ export class ConnectionState {
     @Action(WorldConnected)
     onWorldConnected(context: StateContext<ConnectionModel>, action: WorldConnected) {
         context.getState().lobby.close()
+        context.getState().lobby.removeAllListeners()
     }
 
     @Action(WorldDisconnected)
     onWorldDisconnected(context: StateContext<ConnectionModel>, action: WorldDisconnected) {
         context.getState().lobby.connect()
+        if (context.getState().world) {
+            context.getState().world.removeAllListeners()
+        }
     }
 
     @Action(LobbyConnected)

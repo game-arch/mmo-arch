@@ -33,7 +33,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect, O
     async handleConnection(client: Socket) {
         try {
             this.accounts[client.id] = await this.service.getAccount(client)
-            client.emit(GetWorlds.type, this.servers)
+            client.emit(GetWorlds.type, new GetWorlds(this.servers))
             this.logger.log(this.accounts[client.id].email + ' connected.')
         } catch (e) {
             this.logger.log(client.id + ' was not authorized, disconnecting socket.')
