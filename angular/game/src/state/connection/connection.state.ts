@@ -93,14 +93,12 @@ export class ConnectionState {
 
     @Action(WorldConnected)
     onWorldConnected(context: StateContext<ConnectionModel>, action: WorldConnected) {
-        let newState = { ...context.getState() }
-        newState.lobby.close()
+        context.getState().lobby.close()
     }
 
     @Action(WorldDisconnected)
     onWorldDisconnected(context: StateContext<ConnectionModel>, action: WorldDisconnected) {
-        let newState = { ...context.getState() }
-        newState.lobby.connect()
+        context.getState().lobby.connect()
     }
 
     @Action(LobbyConnected)
