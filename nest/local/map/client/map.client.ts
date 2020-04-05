@@ -68,7 +68,7 @@ export class MapClient {
         ).pipe(first()).toPromise()
     }
 
-    getChannels(map: string, channel: number) {
+    getChannels(map: string) {
         return new Promise(resolve => {
             let stop = new Subject()
             this.client.send(new WorldEvent(GetMapChannels.type, map), {})

@@ -5,7 +5,8 @@ import { Logger }         from '@nestjs/common'
 import { WorldConstants } from '../../lib/constants/world.constants'
 import { createDatabase } from '../../lib/config/db.config'
 
-const logger = new Logger(WorldConstants.NAME + ' Server')
+require('events').EventEmitter.defaultMaxListeners = 1000
+const logger                                       = new Logger(WorldConstants.NAME + ' Server')
 
 async function bootstrap() {
     await createDatabase(WorldConstants.DB_NAME, true)
@@ -15,7 +16,7 @@ async function bootstrap() {
         options  : {
             ...environment.microservice.global,
             name : WorldConstants.NAME + ' Server',
-            queue: 'world.' + WorldConstants.CONSTANT + "." + process.env.NODE_APP_INSTANCE
+            queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
         }
     })
     app.connectMicroservice({
@@ -23,7 +24,7 @@ async function bootstrap() {
         options  : {
             ...environment.microservice.local,
             name : WorldConstants.NAME + ' Server',
-            queue: WorldConstants.CONSTANT + "." + process.env.NODE_APP_INSTANCE
+            queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
         }
     })
     app.enableCors({

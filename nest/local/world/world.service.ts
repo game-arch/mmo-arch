@@ -156,7 +156,7 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             if (player) {
                 let position: any = await this.map.findPlayer(data.characterId || player.characterId)
-                return await this.map.getChannels(data.map || position.map, position.channel)
+                return await this.map.getChannels(data.map || position.map)
             }
         }
         return []

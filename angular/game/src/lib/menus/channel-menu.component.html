@@ -10,8 +10,8 @@
                     <mat-icon>close</mat-icon>
                 </button>
             </mat-card-title>
-            <mat-card-content>
-                <ng-container *ngFor="let channel of channels">
+            <mat-card-content *ngIf="world$ | async as world">
+                <ng-container *ngFor="let channel of world.channels">
                     <button mat-raised-button [disabled]="channel.playerCount >= channel.playerCapacity"
                             (click)="selectChannel(channel.channel)">
                         <div class="capacity"
