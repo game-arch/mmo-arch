@@ -9,9 +9,11 @@ import { WorldState }                         from '../../world/world.state'
 import { WorldModel }                         from '../../world/world.model'
 import { AttemptCommand }                     from '../../../../../../shared/actions/command.actions'
 import { Injectable }                         from '@angular/core'
+import { PushModel }                          from '../push.model'
 
-@State<any>({
-    name: 'pushAction'
+@State<PushModel>({
+    name    : 'pushAction',
+    defaults: new PushModel()
 })
 @Injectable()
 export class PushActionState {
@@ -20,7 +22,7 @@ export class PushActionState {
     }
 
     @Action(Push)
-    onPushed(context: StateContext<any>, action: Push) {
+    onPushed(context: StateContext<PushModel>, action: Push) {
         let scene = this.getCurrentScene()
         if (scene instanceof MultiplayerScene) {
             let player = scene.playerSprites[action.characterId]
@@ -38,14 +40,15 @@ export class PushActionState {
         }
     }
 
-    pushed = false
 
     @Action(PushMobs)
-    onPush(context: StateContext<any>, action: PushMobs) {
-        let world: WorldModel = this.store.selectSnapshot(WorldState)
-        let scene             = this.getCurrentScene()
-        if (scene instanceof MultiplayerScene) {
-            if (!this.pushed) {
+    onPush(context: StateContext<PushModel>, action: PushMobs) {
+        let state = context.getState()
+        if (!state.isPushingSelf && action.status) {
+            let world: WorldModel = this.store.selectSnapshot(WorldState)
+            let scene             = this.getCurrentScene()
+            if (scene instanceof MultiplayerScene) {
+                context.patchState({ isPushingSelf: true })
                 let sprite = scene.playerSprites[world.character]
                 let push   = new Push(world.character, {
                     x: sprite.x + (sprite.facing.x * 100),
@@ -53,22 +56,24 @@ export class PushActionState {
                 })
                 world.socket.emit(AttemptCommand.type, push)
                 setTimeout(() => {
-                    this.pushed = false
+                    context.patchState({ isPushingSelf: false })
                 }, 1000)
             }
         }
     }
 
     @Action(PushAreaMobs)
-    onPushArea(context: StateContext<any>, action: PushAreaMobs) {
-        let world: WorldModel = this.store.selectSnapshot(WorldState)
-        let scene             = this.getCurrentScene()
-        if (scene instanceof MultiplayerScene) {
-            let push = new Push(world.character)
-            if (!this.pushed) {
+    onPushArea(context: StateContext<PushModel>, action: PushAreaMobs) {
+        let state = context.getState()
+        if (!state.isPushingOthers && action.status) {
+            let world: WorldModel = this.store.selectSnapshot(WorldState)
+            let scene             = this.getCurrentScene()
+            if (scene instanceof MultiplayerScene) {
+                context.patchState({ isPushingOthers: true })
+                let push = new Push(world.character)
                 world.socket.emit(AttemptCommand.type, push)
                 setTimeout(() => {
-                    this.pushed = false
+                    context.patchState({ isPushingOthers: false })
                 }, 1000)
             }
         }

@@ -29,14 +29,14 @@ export class OverloadedActionState {
     }
 
     @Action(OverloadedAction)
-    onKeyUp(context: StateContext<OverloadedModel>, action: OverloadedAction) {
+    onAction(context: StateContext<OverloadedModel>, action: OverloadedAction) {
         let scene = this.getCurrentScene()
         if (scene instanceof MultiplayerScene) {
             if (scene.canTransition[scene.self.instanceId]) {
                 context.dispatch(new PlayerAttemptedTransition(scene.self.instanceId))
                 return
             }
-            context.dispatch(new PushAreaMobs(true))
+            context.dispatch(new PushAreaMobs(action.status))
             return
         }
     }

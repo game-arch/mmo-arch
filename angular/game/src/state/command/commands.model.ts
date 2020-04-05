@@ -7,7 +7,7 @@ export class CommandsModel {
         s  : MoveDown,
         d  : MoveRight,
         a  : MoveLeft,
-        1  : PushMobs,
+        '1'  : PushMobs,
         ' ': OverloadedAction
     }
 }

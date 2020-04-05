@@ -65,8 +65,8 @@ export class SceneState {
         action.socket.on(PlayerLeftMap.type, (data) => context.dispatch(new PlayerLeftMap(data.id, data.name, data.map, data.channel)))
         action.socket.on(AllPlayers.type, (data) => context.dispatch(new AllPlayers(data.map, data.players)))
         action.socket.on(AllNpcs.type, (data) => context.dispatch(new AllNpcs(data.map, data.npcs)))
-        action.socket.on(PlayerUpdate.type, (data) => context.dispatch(new PlayerUpdate(data.map, data.channel, data.player)))
-        action.socket.on(NpcUpdate.type, (data) => context.dispatch(new NpcUpdate(data.map, data.channel, data.npc)))
+        action.socket.on(PlayerUpdate.type, (data) => this.onPlayerUpdate(context, new PlayerUpdate(data.map, data.channel, data.player)))
+        action.socket.on(NpcUpdate.type, (data) => this.onNpcUpdate(context, new NpcUpdate(data.map, data.channel, data.npc)))
         action.socket.on(NpcAdded.type, (data: NpcAdded) => context.dispatch(new NpcAdded(data.mobId, data.instanceId, data.name, data.map, data.x, data.y)))
     }
 
@@ -119,7 +119,6 @@ export class SceneState {
         }
     }
 
-    @Action(PlayerUpdate)
     onPlayerUpdate(context: StateContext<ScenesModel>, action: PlayerUpdate) {
         let scene = this.engine.getScene(action.map)
         if (scene instanceof MultiplayerScene) {
@@ -131,7 +130,6 @@ export class SceneState {
         }
     }
 
-    @Action(NpcUpdate)
     onNpcUpdate(context: StateContext<ScenesModel>, action: NpcUpdate) {
         let scene = this.engine.getScene(action.map)
         if (scene instanceof MultiplayerScene) {
