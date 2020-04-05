@@ -1,6 +1,6 @@
 import { WorldConstants } from '../../lib/constants/world.constants'
 import { MapConstants }   from '../map/constants'
-import { PerformCommand } from '../../../shared/events/command.events'
+import { PerformCommand } from '../../../shared/actions/command.actions'
 
 export class WorldEvent {
     world = WorldConstants.CONSTANT
@@ -22,7 +22,7 @@ export class MapEvent {
 
 export class CommandEvent {
     world  = WorldConstants.CONSTANT
-    event  = PerformCommand.event
+    event  = PerformCommand.type
     status = 'performed'
 
     constructor(public action: string) {

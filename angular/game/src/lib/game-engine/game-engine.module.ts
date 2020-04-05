@@ -1,14 +1,13 @@
 import { NgModule }          from '@angular/core'
 import { GameEngineService } from './game-engine.service'
-import { ConnectionModule }  from '../connection/connection.module'
 import { CommonModule }      from '@angular/common'
+import { EventBus }          from './phaser/event-bus'
 
 @NgModule({
     imports     : [
-        CommonModule,
-        ConnectionModule
+        CommonModule
     ],
-    providers   : [GameEngineService],
+    providers   : [GameEngineService, EventBus],
     declarations: [],
     exports     : []
 })

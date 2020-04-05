@@ -1,6 +1,6 @@
 import { Component }                 from '@angular/core'
 import { GameEngineService }         from '../../game-engine/game-engine.service'
-import { PlayerAttemptedTransition } from '../../../../../../shared/events/map.events'
+import { PlayerAttemptedTransition } from '../../../../../../shared/actions/map.actions'
 
 @Component({
     selector   : 'action-bar',
@@ -18,6 +18,6 @@ export class ActionBarComponent {
     }
 
     transition() {
-        this.engine.game.events.emit(PlayerAttemptedTransition.event)
+        this.engine.game.events.emit(PlayerAttemptedTransition.type)
     }
 }

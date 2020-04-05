@@ -22,6 +22,6 @@ export class LobbyService {
     }
 
     getServers() {
-        this.presence.getServers()
+        this.presence.getWorlds()
     }
 }

@@ -2,9 +2,9 @@ import { ConflictException, Injectable, InternalServerErrorException } from '@ne
 import { InjectRepository }                                            from '@nestjs/typeorm'
 import { Character }                                                   from './entities/character'
 import { Repository }                                                  from 'typeorm'
-import { RpcException }                                                from '@nestjs/microservices'
-import { AllCharactersOffline, CharacterOffline, CharacterOnline }     from '../../../shared/events/character.events'
-import { CharacterEmitter }                                            from './character.emitter'
+import { RpcException }                                            from '@nestjs/microservices'
+import { AllCharactersOffline, CharacterOffline, CharacterOnline } from '../../../shared/actions/character.actions'
+import { CharacterEmitter }                                        from './character.emitter'
 
 @Injectable()
 export class CharacterService {
@@ -56,7 +56,7 @@ export class CharacterService {
             character.status   = 'online'
             character.socketId = data.socketId
             await this.repo.save(character)
-            this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name, data.channel)
+            this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name)
         }
     }
 

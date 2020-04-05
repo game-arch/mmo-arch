@@ -1,8 +1,8 @@
-import {Controller, OnApplicationBootstrap}        from '@nestjs/common'
-import {EventPattern, MessagePattern}              from '@nestjs/microservices'
-import {ServerPresence}                            from './services/server.presence'
-import {PresenceEmitter}                           from './emitter/presence.emitter'
-import {GetServers, RegisterServer, ServerOffline} from '../../../shared/events/server-presence.events'
+import { Controller, OnApplicationBootstrap }   from '@nestjs/common'
+import { EventPattern, MessagePattern }         from '@nestjs/microservices'
+import { ServerPresence }                       from './services/server.presence'
+import { PresenceEmitter }                      from './emitter/presence.emitter'
+import { GetWorlds, WorldOffline, WorldOnline } from '../../../shared/actions/server-presence.actions'
 
 @Controller()
 export class PresenceController implements OnApplicationBootstrap {
@@ -12,18 +12,19 @@ export class PresenceController implements OnApplicationBootstrap {
     ) {
     }
 
-    @EventPattern(GetServers.event)
+    @EventPattern(GetWorlds.type)
     async getServers() {
-        this.emitter.sendServers(await this.server.getServers());
+        this.emitter.sendWorlds(await this.server.getWorlds())
     }
 
-    @MessagePattern(RegisterServer.event)
-    async register({constant, name, port, instanceId, host}: RegisterServer) {
-        return await this.server.register(this.server.getHost(host), port, instanceId, constant, name)
+    @MessagePattern(WorldOnline.type)
+    register({ constant, name, port, instanceId, host }: WorldOnline) {
+        console.log('world online!')
+        return this.server.register(this.server.getHost(host), port, instanceId, constant, name)
     }
 
-    @EventPattern(ServerOffline.event)
-    async serverOffline({serverId}: ServerOffline) {
+    @EventPattern(WorldOffline.type)
+    async serverOffline({ serverId }: WorldOffline) {
         await this.server.offline(serverId)
     }
 

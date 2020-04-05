@@ -4,9 +4,9 @@ import { AuthState }  from './auth.state'
 
 @NgModule({
     imports: [
-        NgxsModule.forFeature([AuthState]),
-    ],
+        NgxsModule.forFeature([AuthState])
+    ]
 })
-export class AuthenticationStateModule {
+export class AuthStateModule {
 
 }

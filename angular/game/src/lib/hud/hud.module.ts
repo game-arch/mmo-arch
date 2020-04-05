@@ -3,7 +3,6 @@ import { JoystickComponent }     from './controls/joystick/joystick.component'
 import { ActionButtonComponent } from './controls/button/action-button.component'
 import { NgModule }              from '@angular/core'
 import { CommonModule }          from '@angular/common'
-import { ConnectionModule }      from '../connection/connection.module'
 import { HudComponent }          from './hud.component'
 import { ActionBarComponent }    from './action-bar/action-bar.component'
 import { FlexLayoutModule }      from '@angular/flex-layout'
@@ -28,7 +27,6 @@ import { MatCardModule }         from '@angular/material/card'
         SvgModule,
         MatRippleModule,
         CommonModule,
-        ConnectionModule,
         FlexLayoutModule,
         NgxJoystickModule,
         MatCardModule

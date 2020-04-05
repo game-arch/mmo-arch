@@ -7,7 +7,7 @@ import { Repository }                                          from 'typeorm'
 import { Logger }                                              from '@nestjs/common'
 import { WorldService }   from '../world.service'
 import { CommandClient }                 from '../../command/client/command.client'
-import { AttemptCommand, CommandAction } from '../../../../shared/events/command.events'
+import { AttemptCommand, CommandAction } from '../../../../shared/actions/command.actions'
 import * as parser                       from 'socket.io-msgpack-parser'
 
 @WebSocketGateway({
@@ -31,7 +31,7 @@ export class CommandGateway {
 
     }
 
-    @SubscribeMessage(AttemptCommand.event)
+    @SubscribeMessage(AttemptCommand.type)
     async onAction(client: Socket, data: CommandAction) {
         let player = await this.players.findOne({ socketId: client.id })
         if (player && player.characterId) {

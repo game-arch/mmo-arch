@@ -1,22 +1,22 @@
 import { Controller, Get, Logger, OnApplicationBootstrap, OnApplicationShutdown, Req, Res } from '@nestjs/common'
 import { MapService }                                                                       from './map.service'
-import { EventPattern, MessagePattern }                                                     from '@nestjs/microservices'
+import { EventPattern, MessagePattern } from '@nestjs/microservices'
 import {
     CharacterLoggedIn,
     CharacterLoggedOut
-}                                                                                           from '../../../shared/events/character.events'
+}                                       from '../../../shared/actions/character.actions'
 import {
     ChangeMapChannel,
     FindPlayer,
     GetAllNpcs,
     GetAllPlayers,
     GetMapChannels,
-    GetPlayerPosition,
+    GetPlayerById,
     PlayerAttemptedTransition,
     PlayerChangedMap,
-    PlayerDirectionalInput
-}                                                                                           from '../../../shared/events/map.events'
-import { Request, Response }                                                                from 'express'
+    PlayerDirections
+}                                       from '../../../shared/actions/map.actions'
+import { Request, Response }            from 'express'
 import { MapEmitter }                                                                       from './map.emitter'
 import { MapConstants }                                                                     from './constants'
 import { InjectRepository }                                                                 from '@nestjs/typeorm'
@@ -45,61 +45,61 @@ export class MapController implements OnApplicationBootstrap, OnApplicationShutd
         return this.service.map.getAllPlayers()
     }
 
-    @MessagePattern(new MapEvent(GetAllPlayers.event))
+    @MessagePattern(new MapEvent(GetAllPlayers.type))
     getAllPlayers(data: GetAllPlayers) {
         return this.service.map.getAllPlayers()
     }
 
-    @MessagePattern(new MapEvent(GetAllNpcs.event))
+    @MessagePattern(new MapEvent(GetAllNpcs.type))
     getAllNpcs(data: GetAllNpcs) {
         return this.service.map.getAllNpcs()
     }
 
-    @EventPattern(new WorldEvent(PlayerChangedMap.event))
+    @EventPattern(new WorldEvent(PlayerChangedMap.type))
     async changedMap(data: PlayerChangedMap) {
         // this.logger.log(PlayerChangedMap.event)
         await this.service.changedMaps(data)
     }
 
-    @MessagePattern(new MapEvent(PlayerAttemptedTransition.event))
+    @MessagePattern(new MapEvent(PlayerAttemptedTransition.type))
     async attemptedTransition(data: PlayerAttemptedTransition) {
         // this.logger.log(PlayerAttemptedTransition.event)
         return await this.service.attemptTransition(data.characterId, data.channel)
     }
 
-    @EventPattern(new WorldEvent(CharacterLoggedIn.event))
+    @EventPattern(new WorldEvent(CharacterLoggedIn.type))
     async characterLoggedIn(data: CharacterLoggedIn) {
-        await this.service.loggedIn(data.characterId, data.name, data.channel)
+        await this.service.loggedIn(data.characterId, data.name)
     }
 
-    @EventPattern(new MapEvent(ChangeMapChannel.event))
+    @EventPattern(new MapEvent(ChangeMapChannel.type))
     async changeInstance(data: ChangeMapChannel) {
         // this.logger.log(ChangeMapChannel.event)
         await this.service.changeInstance(data)
     }
 
-    @EventPattern(new WorldEvent(CharacterLoggedOut.event))
+    @EventPattern(new WorldEvent(CharacterLoggedOut.type))
     async characterLoggedOut(data: CharacterLoggedOut) {
-        this.logger.log(CharacterLoggedOut.event)
+        this.logger.log(CharacterLoggedOut.type)
         await this.service.loggedOut(data.characterId)
     }
 
-    @EventPattern(new MapEvent(PlayerDirectionalInput.event))
-    async playerMoved(data: PlayerDirectionalInput) {
+    @EventPattern(new MapEvent(PlayerDirections.type))
+    async playerMoved(data: PlayerDirections) {
         this.service.map.moveEntity('player', data.id, data.directions)
     }
 
-    @MessagePattern(new MapEvent(GetPlayerPosition.event))
-    getPlayer(data: GetPlayerPosition) {
-        return this.service.getPlayerPosition(data.id)
+    @MessagePattern(new MapEvent(GetPlayerById.type))
+    getPlayer(data: GetPlayerById) {
+        return this.service.getPlayer(data.id)
     }
 
-    @MessagePattern(new WorldEvent(FindPlayer.event))
+    @MessagePattern(new WorldEvent(FindPlayer.type))
     async findPlayer(data: FindPlayer) {
         return await this.service.findPlayer(data.id)
     }
 
-    @MessagePattern(new WorldEvent(GetMapChannels.event, MapConstants.MAP))
+    @MessagePattern(new WorldEvent(GetMapChannels.type, MapConstants.MAP))
     async getChannels() {
         // this.logger.log(GetMapChannels.event)
         return await this.service.getChannels(MapConstants.MAP)

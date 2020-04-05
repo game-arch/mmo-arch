@@ -1,7 +1,7 @@
 import { Mob } from '../phaser/mob'
 
 export class MapOnline {
-    static readonly event = 'map.online'
+    static readonly type = '[Map] Online'
 
     constructor(public map: string, public channel: number) {
 
@@ -9,11 +9,11 @@ export class MapOnline {
 }
 
 export class PlayerEnteredMap implements Mob {
-    static readonly event = 'map.player_entered'
+    static readonly type = '[Map] Player Entered'
     public mobId: number
     public instanceId: number
-    public velX           = 0
-    public velY           = 0
+    public velX          = 0
+    public velY          = 0
 
     constructor(public id: number,
                 public name: string,
@@ -28,7 +28,7 @@ export class PlayerEnteredMap implements Mob {
 }
 
 export class PlayerChangedMap {
-    static readonly event = 'map.player_changed_map'
+    static readonly type = '[Map] Player Changed Map'
 
     constructor(public id: number, public map: string, public newX: number, public newY: number, public channel: number, public entrance?: string) {
 
@@ -36,7 +36,7 @@ export class PlayerChangedMap {
 }
 
 export class PlayerLeftMap {
-    static readonly event = 'map.player_left'
+    static readonly type = '[Map] Player Left'
 
     constructor(public id: number, public name: string, public map: string, public channel: number) {
 
@@ -44,14 +44,14 @@ export class PlayerLeftMap {
 }
 
 export class PlayerAttemptedTransition {
-    static readonly event = 'map.attempt_transition'
+    static readonly type = '[Map] Attempt Transition'
 
     constructor(public characterId: number, public channel: number) {
     }
 }
 
 export class AllPlayers {
-    static readonly event = 'map.all_players'
+    static readonly type = '[Map] All Players'
 
     constructor(public map: string, public players: Mob[]) {
 
@@ -59,12 +59,12 @@ export class AllPlayers {
 }
 
 export class GetAllPlayers {
-    static readonly event = 'map.get_all_players'
+    static readonly type = '[Map] Get All Players'
 
 }
 
-export class GetPlayerPosition {
-    static readonly event = 'map.get_player_position'
+export class GetPlayerById {
+    static readonly type = '[Map] Get Player Position'
 
     constructor(public id: number) {
 
@@ -72,22 +72,22 @@ export class GetPlayerPosition {
 }
 
 export class FindPlayer {
-    static readonly event = 'map.find_player'
+    static readonly type = '[Map] Find Player'
 
     constructor(public id: number) {
     }
 }
 
 export class PlayerUpdate {
-    static readonly event = 'map.player_update'
+    static readonly type = '[Map] Player Update'
 
     constructor(public map: string, public channel: number, public player: Mob) {
 
     }
 }
 
-export class PlayerDirectionalInput {
-    static readonly event = 'map.player_directional_input'
+export class PlayerDirections {
+    static readonly type = '[Map] Player Directions'
 
     constructor(public id: number, public directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
 
@@ -97,12 +97,12 @@ export class PlayerDirectionalInput {
 // NPC Events
 
 export class GetAllNpcs {
-    static readonly event = 'map.get_all_npcs'
+    static readonly type = '[Map] Get All NPCs'
 
 }
 
 export class AllNpcs {
-    static readonly event = 'map.all_npcs'
+    static readonly type = '[Map] All NPCs'
 
     constructor(public map: string, public npcs: Mob[]) {
 
@@ -110,9 +110,9 @@ export class AllNpcs {
 }
 
 export class NpcAdded implements Mob {
-    static readonly event = 'map.npc_added'
-    public velX           = 0
-    public velY           = 0
+    static readonly type = '[Map] NPC Added'
+    public velX          = 0
+    public velY          = 0
 
     constructor(public mobId: number, public instanceId: number, public name: string, public map: string, public x: number, public y: number) {
 
@@ -121,44 +121,36 @@ export class NpcAdded implements Mob {
 
 
 export class NpcUpdate {
-    static readonly event = 'map.npc_update'
+    static readonly type = '[Map] NPC Update'
 
     constructor(public map: string, public channel: number, public npc: Mob) {
 
     }
 }
 
-export class NpcRemoved {
-    static readonly event = 'map.npc_removed'
-
-    constructor(public instanceId: number, public map: string, public channel: number) {
-
-    }
-}
-
 export class GetMapChannels {
-    static readonly event = 'map.get_channels'
+    static readonly type = '[Map] Get Channels'
 
     constructor(public map: string, public characterId?: number) {
     }
 }
 
 export class MapChannels {
-    static readonly event = 'map.channels'
+    static readonly type = '[Map] Channels'
 
     constructor(public characterId: number, public map: string, public channels: { channel: number, playerCount: number, playerCapacity: number }[]) {
     }
 }
 
 export class GetLeastPopulatedChannel {
-    static readonly event = 'map.least_populated_channel'
+    static readonly type = '[Map] Least Populated Channel'
 
     constructor(public map: string) {
     }
 }
 
 export class ChangeMapChannel {
-    static readonly event = 'map.change_map_channel'
+    static readonly type = '[Map] Change Map Channel'
 
     constructor(public characterId: number, public channel: number) {
     }

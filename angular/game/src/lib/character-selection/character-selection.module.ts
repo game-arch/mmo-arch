@@ -1,6 +1,5 @@
 import { NgModule }                       from '@angular/core'
 import { CharacterSelectionComponent }    from './character-selection.component'
-import { ConnectionModule }               from '../connection/connection.module'
 import { MatCardModule }                  from '@angular/material/card'
 import { CommonModule }                   from '@angular/common'
 import { MatListModule }                  from '@angular/material/list'
@@ -20,7 +19,6 @@ import { MenusModule }                    from '../menus/menus.module'
 @NgModule({
     declarations   : [CharacterSelectionComponent, CharacterFormComponent],
     imports        : [
-        ConnectionModule,
         MatCardModule,
         CommonModule,
         MatListModule,

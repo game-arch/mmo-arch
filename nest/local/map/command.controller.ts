@@ -4,9 +4,9 @@ import { MapService }                 from './map.service'
 import { InjectRepository }           from '@nestjs/typeorm'
 import { Player }                     from './entities/player'
 import { Repository }                 from 'typeorm'
-import { Channel }                    from './entities/channel'
-import { Push }                       from '../../../shared/events/actions/movement.actions'
-import { ClientProxy, EventPattern }  from '@nestjs/microservices'
+import { Channel }                   from './entities/channel'
+import { Push }                      from '../../../shared/actions/movement.actions'
+import { ClientProxy, EventPattern } from '@nestjs/microservices'
 import { CommandEvent }               from '../world/event.types'
 import { PushSprite }                 from '../../../shared/phaser/projectile/push.sprite'
 import { LOCAL_CLIENT }               from '../../client/client.module'
@@ -24,7 +24,7 @@ export class CommandController {
     ) {
     }
 
-    @EventPattern(new CommandEvent(Push.event))
+    @EventPattern(new CommandEvent(Push.type))
     onPush(data: Push) {
         if (this.service.map.playerSprites[data.characterId]) {
             let player     = this.service.map.playerSprites[data.characterId]

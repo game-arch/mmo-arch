@@ -1,16 +1,16 @@
 import { Inject, Injectable }   from '@nestjs/common'
-import { ClientProxy }          from '@nestjs/microservices'
+import { ClientProxy }      from '@nestjs/microservices'
 import {
     ChangeMapChannel,
     FindPlayer,
     GetAllNpcs,
     GetAllPlayers,
     GetMapChannels,
-    GetPlayerPosition,
+    GetPlayerById,
     PlayerAttemptedTransition,
-    PlayerDirectionalInput
-}                               from '../../../../shared/events/map.events'
-import { first, takeUntil }     from 'rxjs/operators'
+    PlayerDirections
+}                           from '../../../../shared/actions/map.actions'
+import { first, takeUntil } from 'rxjs/operators'
 import { LOCAL_CLIENT }         from '../../../client/client.module'
 import { Subject }              from 'rxjs'
 import { Mob }                  from '../../../../shared/phaser/mob'
@@ -26,7 +26,7 @@ export class MapClient {
     getAllPlayers(map: string, channel: number): Promise<Mob[]> {
         return new Promise(resolve => {
             let stop = new Subject()
-            this.client.send(new MapEvent(GetAllPlayers.event, map, channel), new GetAllPlayers())
+            this.client.send(new MapEvent(GetAllPlayers.type, map, channel), new GetAllPlayers())
                 .pipe(takeUntil(stop))
                 .subscribe(data => {
                     stop.next()
@@ -38,7 +38,7 @@ export class MapClient {
     async getAllNpcs(map: string, channel: number): Promise<Mob[]> {
         return new Promise(resolve => {
             let stop = new Subject()
-            this.client.send(new MapEvent(GetAllNpcs.event, map, channel), new GetAllNpcs())
+            this.client.send(new MapEvent(GetAllNpcs.type, map, channel), new GetAllNpcs())
                 .pipe(takeUntil(stop))
                 .subscribe(data => {
                     stop.next()
@@ -49,21 +49,21 @@ export class MapClient {
 
     async getPlayer(characterId: number, map: string, channel: number): Promise<{ x: number, y: number }> {
         return await this.client.send(
-            new MapEvent(GetPlayerPosition.event, map, channel),
-            new GetPlayerPosition(characterId)).pipe(first()
+            new MapEvent(GetPlayerById.type, map, channel),
+            new GetPlayerById(characterId)).pipe(first()
         ).toPromise()
     }
 
     playerDirectionalInput(characterId: number, map: string, channel: number, directions: { up: boolean, down: boolean, left: boolean, right: boolean }) {
         this.client.emit(
-            new MapEvent(PlayerDirectionalInput.event, map, channel),
-            new PlayerDirectionalInput(characterId, directions)
+            new MapEvent(PlayerDirections.type, map, channel),
+            new PlayerDirections(characterId, directions)
         )
     }
 
     async playerAttemptedTransition(characterId: number, map: string, currentChannel: number, channel: number) {
         return await this.client.send(
-            new MapEvent(PlayerAttemptedTransition.event, map, currentChannel),
+            new MapEvent(PlayerAttemptedTransition.type, map, currentChannel),
             new PlayerAttemptedTransition(characterId, channel)
         ).pipe(first()).toPromise()
     }
@@ -71,7 +71,7 @@ export class MapClient {
     getChannels(map: string, channel: number) {
         return new Promise(resolve => {
             let stop = new Subject()
-            this.client.send(new WorldEvent(GetMapChannels.event, map), {})
+            this.client.send(new WorldEvent(GetMapChannels.type, map), {})
                 .pipe(takeUntil(stop))
                 .subscribe(channels => {
                     stop.next()
@@ -83,7 +83,7 @@ export class MapClient {
     findPlayer(id: number) {
         return new Promise(resolve => {
             let stop = new Subject()
-            this.client.send(new WorldEvent(FindPlayer.event), new FindPlayer(id))
+            this.client.send(new WorldEvent(FindPlayer.type), new FindPlayer(id))
                 .pipe(takeUntil(stop))
                 .subscribe(position => {
                     stop.next()
@@ -93,6 +93,6 @@ export class MapClient {
     }
 
     changeChannel(characterId: number, map: string, currentChannel: number, channel: number) {
-        this.client.emit(new MapEvent(ChangeMapChannel.event, map, currentChannel), new ChangeMapChannel(characterId, channel))
+        this.client.emit(new MapEvent(ChangeMapChannel.type, map, currentChannel), new ChangeMapChannel(characterId, channel))
     }
 }

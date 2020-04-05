@@ -1,11 +1,11 @@
-import {Controller, Logger, Post, Req, Res} from '@nestjs/common'
-import {LobbyService}                       from './lobby.service'
-import {AccountClient}                      from '../account/client/account.client'
-import {Request, Response}                  from 'express'
-import {EventPattern}                       from '@nestjs/microservices'
-import {GameWorld}                          from '../../../shared/interfaces/game-world'
-import {LobbyGateway} from './lobby.gateway'
-import {GetServers}   from '../../../shared/events/server-presence.events'
+import { Controller, Logger, Post, Req, Res } from '@nestjs/common'
+import { LobbyService }                       from './lobby.service'
+import { AccountClient }                      from '../account/client/account.client'
+import { Request, Response }                  from 'express'
+import { EventPattern }                       from '@nestjs/microservices'
+import { GameWorld }                          from '../../../shared/interfaces/game-world'
+import { LobbyGateway }                       from './lobby.gateway'
+import { GetWorlds }                          from '../../../shared/actions/server-presence.actions'
 
 @Controller()
 export class LobbyController {
@@ -21,7 +21,7 @@ export class LobbyController {
     async register(@Req() request: Request, @Res() response: Response) {
         try {
             const token = await this.account.register(request.body.email, request.body.password)
-            response.send({token})
+            response.send({ token })
         } catch (e) {
             this.handleError(e, response)
         }
@@ -32,17 +32,17 @@ export class LobbyController {
         try {
             const token = await this.account.login(request.body.email, request.body.password)
             response.status(200)
-            response.send({token})
+            response.send({ token })
         } catch (e) {
             this.handleError(e, response)
         }
     }
 
-    @EventPattern(GetServers.event + '.response')
-    serverList(servers: GameWorld[]) {
+    @EventPattern(GetWorlds.type + '.response')
+    serverList(worlds: GameWorld[]) {
         try {
-            this.gateway.servers = servers
-            this.gateway.server.emit(GetServers.event, servers)
+            this.gateway.servers = worlds
+            this.gateway.server.emit(GetWorlds.type, new GetWorlds(worlds))
             this.logger.log('Server list updated.')
         } catch (e) {
             console.error(e)

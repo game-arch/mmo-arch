@@ -1,32 +1,27 @@
 import { EventEmitter, Injectable } from '@angular/core'
-import { ConnectionManager }        from '../connection/connection-manager'
 import { GAME_CONFIG }              from './phaser/config'
-import { fromEvent }                from 'rxjs'
-import {
-    filter,
-    takeUntil,
-    tap
-}                                   from 'rxjs/operators'
+import { fromEvent, Observable }    from 'rxjs'
+import { filter, takeUntil }        from 'rxjs/operators'
 import {
     AllNpcs,
     AllPlayers,
-    MapChannels,
     NpcAdded,
     NpcUpdate,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                            from '../../../../../shared/events/map.events'
-import { MultiplayerScene }  from './phaser/scenes/multiplayer.scene'
-import { WorldConnection }   from '../connection/world-connection'
-import { EventBus }          from './phaser/event-bus'
-import { TUTORIAL_CONFIG }   from '../../../../../shared/maps/tutorial'
-import { TUTORIAL_2_CONFIG } from '../../../../../shared/maps/tutorial-2'
-import { PreloadScene }      from './phaser/scenes/preload/preload.scene'
-import { Location }          from '@angular/common'
-import { TitleScene }        from './phaser/scenes/title/title.scene'
+}                                   from '../../../../../shared/actions/map.actions'
+import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
+import { TUTORIAL_CONFIG }          from '../../../../../shared/maps/tutorial'
+import { TUTORIAL_2_CONFIG }        from '../../../../../shared/maps/tutorial-2'
+import { PreloadScene }             from './phaser/scenes/preload/preload.scene'
+import { Location }                 from '@angular/common'
+import { TitleScene }               from './phaser/scenes/title/title.scene'
+import { Push }                     from '../../../../../shared/actions/movement.actions'
+import { Select }                   from '@ngxs/store'
+import { WorldModel }               from '../../state/world/world.model'
+import { WorldState }               from '../../state/world/world.state'
 import Game = Phaser.Game
-import { Push }              from '../../../../../shared/events/actions/movement.actions'
 
 @Injectable()
 export class GameEngineService {
@@ -35,44 +30,35 @@ export class GameEngineService {
     currentSceneKey                                                                                    = 'preload'
     currentScene: MultiplayerScene
     worldChange                                                                                        = new EventEmitter()
-    eventBus                                                                                           = new EventBus(this, this.connection)
     mapChannels: { [map: string]: { channel: number, playerCount: number, playerCapacity: number }[] } = {}
     private destroyed                                                                                  = new EventEmitter()
 
     static EVENTS = [
-        PlayerEnteredMap.event,
-        PlayerLeftMap.event,
-        AllPlayers.event,
-        PlayerUpdate.event,
-        NpcUpdate.event,
-        NpcAdded.event,
-        AllNpcs.event,
-        Push.event
+        PlayerEnteredMap.type,
+        PlayerLeftMap.type,
+        AllPlayers.type,
+        PlayerUpdate.type,
+        NpcUpdate.type,
+        NpcAdded.type,
+        AllNpcs.type,
+        Push.type
     ]
+    @Select(WorldState)
+    world$: Observable<WorldModel>
 
 
     constructor(
-        private location: Location,
-        public connection: ConnectionManager
+        private location: Location
     ) {
     }
 
     init(canvas: HTMLCanvasElement) {
         this.game = new Game({ ...GAME_CONFIG, canvas })
         this.createScenes()
-        this.eventBus.listen()
-
-        this.connection.worldChange
-            .pipe(takeUntil(this.destroyed))
+        this.world$.pipe(takeUntil(this.destroyed))
             .pipe(filter(world => !!world.socket))
-            .pipe(tap(world => (this.connection.world = world)))
             .subscribe(world => {
                 this.worldChange.emit()
-                fromEvent(world.socket, MapChannels.event)
-                    .pipe(takeUntil(this.worldChange))
-                    .subscribe((channels: MapChannels) => {
-                        this.mapChannels[channels.map] = channels.channels
-                    })
                 this.convertEvents(world, GameEngineService.EVENTS)
             })
         fromEvent(window, 'resize')
@@ -103,11 +89,16 @@ export class GameEngineService {
     createScenes() {
         this.game.scene.add('preload', new PreloadScene(this.location))
         this.game.scene.add('title', new TitleScene())
-        this.game.scene.add('tutorial', new MultiplayerScene(this.connection, TUTORIAL_CONFIG))
-        this.game.scene.add('tutorial-2', new MultiplayerScene(this.connection, TUTORIAL_2_CONFIG))
+        let tutorial                   = new MultiplayerScene(TUTORIAL_CONFIG)
+        let tutorial2                  = new MultiplayerScene(TUTORIAL_2_CONFIG)
+        tutorial.onAttemptedTransition = () => {
+
+        }
+        this.game.scene.add('tutorial', tutorial)
+        this.game.scene.add('tutorial-2', tutorial2)
     }
 
-    convertEvent(world: WorldConnection, eventName: string) {
+    convertEvent(world: WorldModel, eventName: string) {
         fromEvent(world.socket, eventName)
             .pipe(takeUntil(this.worldChange))
             .subscribe(event => {
@@ -118,7 +109,7 @@ export class GameEngineService {
             })
     }
 
-    convertEvents(world: WorldConnection, eventNames: string[]) {
+    convertEvents(world: WorldModel, eventNames: string[]) {
         for (const eventName of eventNames) {
             this.convertEvent(world, eventName)
         }

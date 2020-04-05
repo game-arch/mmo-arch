@@ -4,7 +4,7 @@ import { RpcException }                                                from '@ne
 import { Party }                                                       from './entities/party'
 import { Repository }                                                  from 'typeorm'
 import { PartyEmitter }      from './party.emitter'
-import { PartyLeaderOnline } from '../../../shared/events/party.events'
+import { PartyLeaderOnline } from '../../../shared/actions/party.actions'
 import { CharacterClient }   from '../character/client/character.client'
 
 @Injectable()

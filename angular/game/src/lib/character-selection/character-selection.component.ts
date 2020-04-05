@@ -1,9 +1,13 @@
 import { Component, OnInit }      from '@angular/core'
-import { ConnectionManager }      from '../connection/connection-manager'
 import { GameCharacter }          from '../../../../../shared/interfaces/game-character'
 import { MatDialog }              from '@angular/material/dialog'
 import { CharacterFormComponent } from './character-form.component'
-import { GameEngineService }      from '../game-engine/game-engine.service'
+import { Select, Store }          from '@ngxs/store'
+import { DisconnectFromWorld }    from '../../../../../shared/actions/connection.actions'
+import { CharacterOnline }        from '../../../../../shared/actions/character.actions'
+import { Observable }             from 'rxjs'
+import { WorldModel }             from '../../state/world/world.model'
+import { WorldState }             from '../../state/world/world.state'
 
 @Component({
     selector   : 'character-selection',
@@ -12,13 +16,12 @@ import { GameEngineService }      from '../game-engine/game-engine.service'
 })
 export class CharacterSelectionComponent implements OnInit {
     selected: GameCharacter = null
-    channel = null
-    showChannels = false
+    @Select(WorldState)
+    world$: Observable<WorldModel>
 
     constructor(
-        private engine: GameEngineService,
-        public connection: ConnectionManager,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private store: Store
     ) {
     }
 
@@ -26,31 +29,15 @@ export class CharacterSelectionComponent implements OnInit {
     }
 
     disconnect() {
-        if (this.connection.world) {
-            this.connection.disconnect(this.connection.world.world.name)
-        }
+        this.store.dispatch(new DisconnectFromWorld())
     }
 
     create() {
         this.dialog.open(CharacterFormComponent)
     }
 
-    async selectChannel(channel:number) {
-        this.channel = channel
-        await this.join()
-    }
 
     async join() {
-        try {
-            if (this.connection.world) {
-                await this.connection.world.selectCharacter(
-                    this.selected.name,
-                    this.selected.id,
-                    this.channel
-                )
-            }
-        } catch (e) {
-            console.log(e)
-        }
+        this.store.dispatch(new CharacterOnline(this.selected.id))
     }
 }

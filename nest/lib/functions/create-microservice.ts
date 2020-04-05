@@ -3,8 +3,8 @@ import { NestFactory }    from '@nestjs/core'
 import { environment }    from '../config/environment'
 import { createDatabase } from '../config/db.config'
 
-require('events').EventEmitter.defaultMaxListeners = 15
-export const LOGGER                                = {
+
+export const LOGGER = {
     logger: null
 }
 

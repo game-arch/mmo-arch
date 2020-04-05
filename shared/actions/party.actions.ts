@@ -1,19 +1,19 @@
 export class CreateParty {
-    static readonly event = 'party.create'
+    static readonly type = '[Party] Create'
 
     constructor(public partyName: string, public characterId: number) {
     }
 }
 
 export class PartyCreated {
-    static readonly event = 'party.created'
+    static readonly type = '[Party] Created'
 
     constructor(public partyId: number, public characterId: number) {
     }
 }
 
 export class PartyNotCreated {
-    static readonly event = 'party.not_created'
+    static readonly type = '[Party] Not Created'
 
     constructor(
         public error: {
@@ -24,53 +24,53 @@ export class PartyNotCreated {
 }
 
 export class GetParty {
-    static readonly event = 'party.get_party'
+    static readonly type = '[Party] Get Party'
 
     constructor(public leaderId: number) {
     }
 }
 
 export class GetPartyMembers {
-    static readonly event = 'party.get_all_members'
+    static readonly type = '[Party] Get All Members'
 
     constructor(public leaderId: number) {
     }
 }
 
 export class MakePartyLeader {
-    static readonly event = 'party.make_leader'
+    static readonly type = '[Party] Make Leader'
 
     constructor(public leaderId: number, public characterId: number) {
     }
 }
 
 export class MadePartyLeader {
-    static readonly event = 'party.made_party_leader'
+    static readonly type = '[Party] Made Leader'
 
     constructor(public partyId: number, public characterId: number) {
     }
 }
 
 export class PartyLeaderNotChanged {
-    static readonly event = 'party.leader_not_changed'
+    static readonly type = '[Party] Leader Not Changed'
 }
 
 export class GetPartyLeader {
-    static readonly event = 'party.get_leader'
+    static readonly type = '[Party] Get Leader'
 
     constructor(public partyId: number) {
     }
 }
 
 export class PartyLeaderOnline {
-    static readonly event = 'party.online_leader'
+    static readonly type = '[Party] Leader Came Online'
 
     constructor(public leaderId: number, public partyName: string) {
     }
 }
 
 export class PartyMemberJoined {
-    static readonly event = 'party.member_joined'
+    static readonly type = '[Party] Member Joined'
 
     constructor(
         public characterId: number,
@@ -81,21 +81,21 @@ export class PartyMemberJoined {
 }
 
 export class InviteToParty {
-    static readonly event = 'party.invite_to_party'
+    static readonly type = '[Party] Invite'
 
     constructor(public leaderId: number, public characterId: number) {
     }
 }
 
 export class InvitedToParty {
-    static readonly event = 'party.invited_to_party'
+    static readonly type = '[Party] Invited'
 
     constructor(public partyId: number, public leaderId: number, public characterId: number) {
     }
 }
 
 export class PartyMemberLeft {
-    static readonly event = 'party.member_left'
+    static readonly type = '[Party] Member Left'
 
     constructor(
         public characterId: number,
@@ -105,22 +105,8 @@ export class PartyMemberLeft {
     }
 }
 
-export class PartyMemberOnline {
-    static readonly event = 'party.member_online'
-
-    constructor(public partyId: number, public characterId: number) {
-    }
-}
-
-export class PartyMemberOffline {
-    static readonly event = 'party.member_offline'
-
-    constructor(public partyId: number, public characterId: number) {
-    }
-}
-
 export class PartyMemberKicked {
-    static readonly event = 'party.member_kicked'
+    static readonly type = '[Party] Member Kicked'
 
     constructor(public partyId: number, public characterId: number) {
     }

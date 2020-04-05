@@ -22,8 +22,8 @@
 <div fxLayout="row">
     <joystick
         [enabled]="true"
-        [style.opacity]="world.selectedCharacter ? 1 : 0"
-        [style.pointer-events]="world.selectedCharacter ? 'all' : 'none'"
+        [style.opacity]="engine.currentScene?.self?.id ? 1 : 0"
+        [style.pointer-events]="engine.currentScene?.self?.id ? 'all' : 'none'"
     ></joystick>
     <div style="flex:1;pointer-events:none"></div>
     <action-bar style="z-index:1000;"></action-bar>

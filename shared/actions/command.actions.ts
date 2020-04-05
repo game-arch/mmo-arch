@@ -1,9 +1,9 @@
 export class AttemptCommand {
-    static readonly event = 'command.attempt'
+    static readonly type = '[Command] Attempt'
 }
 
 export class PerformCommand {
-    static readonly event = 'command.perform'
+    static readonly type = '[Command] Perform'
 }
 
 export class CommandAction {
@@ -17,7 +17,8 @@ export interface TargetArgs {
     targetId: number
     targetType: 'player' | 'npc'
 }
+
 export interface PositionArgs {
-    x:number
-    y:number
+    x: number
+    y: number
 }

@@ -1,8 +1,8 @@
 import { Inject, Injectable }         from '@nestjs/common'
 import { ClientProxy }                from '@nestjs/microservices'
-import { GameWorld }                        from '../../../../shared/interfaces/game-world'
-import { GetServers, ServerPresenceOnline } from '../../../../shared/events/server-presence.events'
-import { GLOBAL_CLIENT }                    from '../../../client/client.module'
+import { GameWorld }                       from '../../../../shared/interfaces/game-world'
+import { GetWorlds, ServerPresenceOnline } from '../../../../shared/actions/server-presence.actions'
+import { GLOBAL_CLIENT }                   from '../../../client/client.module'
 
 @Injectable()
 export class PresenceEmitter {
@@ -11,11 +11,12 @@ export class PresenceEmitter {
 
     }
 
-    sendServers(servers: GameWorld[]) {
-        this.client.emit(GetServers.event + '.response', servers)
+    sendWorlds(worlds: GameWorld[]) {
+        this.client.emit(GetWorlds.type + '.response', new GetWorlds(worlds))
     }
 
     nowOnline() {
-        this.client.emit(ServerPresenceOnline.event, {})
+        console.log('NOW ONLINE')
+        this.client.emit(ServerPresenceOnline.type, {})
     }
 }

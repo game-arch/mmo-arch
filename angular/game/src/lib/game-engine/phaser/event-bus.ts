@@ -1,4 +1,4 @@
-import { GameEngineService } from '../game-engine.service'
+import { GameEngineService }   from '../game-engine.service'
 import {
     AllNpcs,
     AllPlayers,
@@ -8,23 +8,26 @@ import {
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                            from '../../../../../../shared/events/map.events'
-import { MultiplayerScene }  from './scenes/multiplayer.scene'
-import { first }             from 'rxjs/operators'
-import { Directions }        from '../../../../../../shared/phaser/directions'
-import { Push }              from '../../../../../../shared/events/actions/movement.actions'
-import { PushCommand }       from '../../commands/push.command'
-import { ConnectionManager } from '../../connection/connection-manager'
-import { Subject }           from 'rxjs'
+}                              from '../../../../../../shared/actions/map.actions'
+import { MultiplayerScene }    from './scenes/multiplayer.scene'
+import { first }               from 'rxjs/operators'
+import { Directions }          from '../../../../../../shared/phaser/directions'
+import { Push }                from '../../../../../../shared/actions/movement.actions'
+import { PushCommand }         from '../../commands/push.command'
+import { Observable, Subject } from 'rxjs'
+import { Injectable }          from '@angular/core'
+import { WorldModel }          from '../../../state/world/world.model'
+import { Select, Store }       from '@ngxs/store'
+import { WorldState }          from '../../../state/world/world.state'
 
+@Injectable()
 export class EventBus {
     stop = new Subject()
 
-    get world() {
-        return this.connection.world.socket
-    }
+    @Select(WorldState)
+    world$: Observable<WorldModel>
 
-    constructor(private engine: GameEngineService, private connection: ConnectionManager) {
+    constructor(private store: Store, private engine: GameEngineService) {
     }
 
     listen() {
@@ -71,7 +74,7 @@ export class EventBus {
     }
 
     private playerUpdateEvents() {
-        this.engine.game.events.on(AllPlayers.event, (data: AllPlayers) => {
+        this.engine.game.events.on(AllPlayers.type, (data: AllPlayers) => {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 if (!scene.physics.world || !scene.layers.mobs) {
@@ -81,7 +84,7 @@ export class EventBus {
                 scene.reloadPlayers(data.players)
             }
         })
-        this.engine.game.events.on(PlayerUpdate.event, (data: PlayerUpdate) => {
+        this.engine.game.events.on(PlayerUpdate.type, (data: PlayerUpdate) => {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 if (!scene.physics.world || !scene.layers.mobs) {
@@ -94,14 +97,15 @@ export class EventBus {
     }
 
     private playerPresenceEvents() {
-        this.engine.game.events.on(PlayerEnteredMap.event, (data: PlayerEnteredMap) => {
+        this.engine.game.events.on(PlayerEnteredMap.type, (data: PlayerEnteredMap) => {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 console.log('Player Joined', data)
                 let scene = this.engine.getScene(data.map)
                 if (scene instanceof MultiplayerScene) {
                     if (!this.engine.game.scene.isActive(data.map)) {
-                        if (data.instanceId === this.engine.connection.world.selectedCharacter.id) {
+                        let world: WorldModel = this.store.selectSnapshot(WorldState)
+                        if (data.instanceId === world.character) {
                             this.engine.game.events.emit('game.scene', data.map)
                         }
                     }
@@ -113,7 +117,7 @@ export class EventBus {
                 }
             }
         })
-        this.engine.game.events.on(PlayerLeftMap.event, (data: PlayerLeftMap) => {
+        this.engine.game.events.on(PlayerLeftMap.type, (data: PlayerLeftMap) => {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 if (scene.self.instanceId !== data.id) {
@@ -125,7 +129,7 @@ export class EventBus {
     }
 
     private npcEvents() {
-        this.engine.game.events.on(AllNpcs.event, (data: AllNpcs) => {
+        this.engine.game.events.on(AllNpcs.type, (data: AllNpcs) => {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 if (!scene.physics.world || !scene.layers.mobs) {
@@ -136,7 +140,7 @@ export class EventBus {
             }
         })
 
-        this.engine.game.events.on(NpcUpdate.event, (data: NpcUpdate) => {
+        this.engine.game.events.on(NpcUpdate.type, (data: NpcUpdate) => {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 if (!scene.physics.world || !scene.layers.mobs) {
@@ -146,7 +150,7 @@ export class EventBus {
                 this.engine.getScene(data.map).addOrUpdateNpc(data.npc)
             }
         })
-        this.engine.game.events.on(NpcAdded.event, (data: NpcAdded) => {
+        this.engine.game.events.on(NpcAdded.type, (data: NpcAdded) => {
             let scene = this.engine.getScene(data.map)
             if (scene instanceof MultiplayerScene) {
                 console.log('Npc Added', data)
@@ -171,21 +175,23 @@ export class EventBus {
                 scene.toggleDirection(event, false)
                 if (event.key === ' ') {
                     if (!this.engine.currentScene.transitionToNewMap()) {
-                        let characterId = this.engine.currentScene.self.instanceId
-                        PushCommand.request(this.world, new Push(characterId))
+                        let characterId       = this.engine.currentScene.self.instanceId
+                        let world: WorldModel = this.store.selectSnapshot(WorldState)
+                        PushCommand.request(world.socket, new Push(characterId))
                     }
                 }
                 if (event.key === '1') {
-                    let characterId = this.engine.currentScene.self.instanceId
-                    let sprite      = this.engine.currentScene.playerSprites[characterId]
-                    PushCommand.request(this.world, new Push(characterId, {
+                    let characterId       = this.engine.currentScene.self.instanceId
+                    let sprite            = this.engine.currentScene.playerSprites[characterId]
+                    let world: WorldModel = this.store.selectSnapshot(WorldState)
+                    PushCommand.request(world.socket, new Push(characterId, {
                         x: sprite.x + (sprite.facing.x * 100),
                         y: sprite.y + (sprite.facing.y * 100)
                     }))
                 }
 
             })
-            this.engine.game.events.on(PlayerAttemptedTransition.event, () => {
+            this.engine.game.events.on(PlayerAttemptedTransition.type, () => {
                 this.engine.currentScene.transitionToNewMap()
             })
         }
