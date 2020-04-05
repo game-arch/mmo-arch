@@ -1,10 +1,15 @@
-import { Component, EventEmitter, HostBinding, OnDestroy, OnInit }     from '@angular/core'
-import { GameEngineService }                                           from '../game-engine/game-engine.service'
-import { ChangeMapChannel, GetMapChannels, PlayerAttemptedTransition } from '../../../../../shared/actions/map.actions'
-import { Observable }                                                  from 'rxjs'
-import { WorldModel }                                                  from '../../state/world/world.model'
-import { Select, Store }                                               from '@ngxs/store'
-import { WorldState }                                                  from '../../state/world/world.state'
+import { Component, EventEmitter, HostBinding, OnDestroy, OnInit } from '@angular/core'
+import { GameEngineService }                                       from '../game-engine/game-engine.service'
+import {
+    ChangeMapChannel,
+    GetMapChannels,
+    MapChannels,
+    PlayerAttemptedTransition
+}                                                                  from '../../../../../shared/actions/map.actions'
+import { Observable }                                              from 'rxjs'
+import { WorldModel }                                              from '../../state/world/world.model'
+import { Select, Store }                                           from '@ngxs/store'
+import { WorldState }                                              from '../../state/world/world.state'
 
 @Component({
     selector   : 'channel-menu',
@@ -28,13 +33,13 @@ export class ChannelMenuComponent implements OnInit, OnDestroy {
     constructor(private game: GameEngineService, private store: Store) {
     }
 
-    get channels() {
-        return this.game.mapChannels[this.game.currentSceneKey] || []
-    }
-
 
     ngOnInit() {
-        this.shown = true
+        this.shown            = true
+        let world: WorldModel = this.store.selectSnapshot(WorldState)
+        world.socket.emit(GetMapChannels.type, new GetMapChannels(this.game.currentSceneKey), (channels) => {
+            this.store.dispatch(new MapChannels(world.character, this.game.currentSceneKey, channels))
+        })
     }
 
     selectChannel(channel: number) {

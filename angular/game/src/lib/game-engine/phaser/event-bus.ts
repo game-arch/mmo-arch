@@ -108,7 +108,6 @@ export class EventBus {
                             this.engine.game.events.emit('game.scene', data.map)
                         }
                     }
-                    console.log(data)
                     if (!scene.physics.world || !scene.layers.mobs) {
                         scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(data))
                         return

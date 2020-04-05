@@ -101,7 +101,6 @@ export class MapService {
     async getChannels(map: string) {
         let instances                                                                = await this.channels.find({ map: map })
         let list: { channel: number, playerCount: number, playerCapacity: number }[] = []
-        console.log(instances)
         for (let row of instances) {
             let instance = {
                 channel       : row.channel,
