@@ -22,8 +22,8 @@ import {
     Socket
 }                                                              from 'socket.io'
 import * as parser                                             from 'socket.io-msgpack-parser'
-import { LOCAL_CLIENT }                                        from '../../../client/client.module'
-import { WorldEvent }                                          from '../event.types'
+import { LOCAL_CLIENT } from '../../../client/client.module'
+import { WorldEvent }   from '../../../lib/event.types'
 
 @WebSocketGateway({
     namespace   : 'world',

@@ -12,7 +12,7 @@ import {
     GetCharacters
 }                       from '../../../../shared/actions/character.actions'
 import { LOCAL_CLIENT } from '../../../client/client.module'
-import { WorldEvent }   from '../../world/event.types'
+import { WorldEvent }   from '../../../lib/event.types'
 
 @Injectable()
 export class CharacterClient {

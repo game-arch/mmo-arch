@@ -6,6 +6,7 @@ import { EventPattern }                       from '@nestjs/microservices'
 import { GameWorld }                          from '../../../shared/interfaces/game-world'
 import { LobbyGateway }                       from './lobby.gateway'
 import { GetWorlds }                          from '../../../shared/actions/server-presence.actions'
+import { GlobalEvent }                        from '../../lib/event.types'
 
 @Controller()
 export class LobbyController {
@@ -38,7 +39,7 @@ export class LobbyController {
         }
     }
 
-    @EventPattern(GetWorlds.type + '.response')
+    @EventPattern(new GlobalEvent(GetWorlds.type + '.response'))
     serverList(worlds: GameWorld[]) {
         try {
             this.gateway.servers = worlds
@@ -56,4 +57,5 @@ export class LobbyController {
         }
         response.status(500).send(e.message || 'Internal Server Error')
     }
+
 }

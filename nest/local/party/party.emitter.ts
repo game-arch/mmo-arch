@@ -1,8 +1,8 @@
 import { ClientProxy }        from '@nestjs/microservices'
 import { Inject, Injectable } from '@nestjs/common'
 import { MadePartyLeader }    from '../../../shared/actions/party.actions'
-import { LOCAL_CLIENT }       from '../../client/client.module'
-import { WorldEvent }   from '../world/event.types'
+import { LOCAL_CLIENT } from '../../client/client.module'
+import { WorldEvent }   from '../../lib/event.types'
 
 @Injectable()
 export class PartyEmitter {

@@ -56,8 +56,8 @@ build-client:
 	docker-compose build
 
 nats:
-	nats-server -p 4222 &
-	nats-server -p 4223 &
+	nats-server -p 4222 -m 8222 &
+	nats-server -p 4223 -m 8223 &
 
 docker-client:
 	docker-compose -f docker-compose.client.yml up

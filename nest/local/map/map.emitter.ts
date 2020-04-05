@@ -12,8 +12,8 @@ import {
 }                       from '../../../shared/actions/map.actions'
 import { LOCAL_CLIENT } from '../../client/client.module'
 import { Mob }                from '../../../shared/phaser/mob'
-import { MapConstants }       from './constants'
-import { WorldEvent }         from '../world/event.types'
+import { MapConstants } from './constants'
+import { WorldEvent }   from '../../lib/event.types'
 
 @Injectable()
 export class MapEmitter {

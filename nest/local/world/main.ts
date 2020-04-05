@@ -15,7 +15,7 @@ async function bootstrap() {
         options  : {
             ...environment.microservice.global,
             name : WorldConstants.NAME + ' Server',
-            queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
+            queue: 'world.' + WorldConstants.CONSTANT + "." + process.env.NODE_APP_INSTANCE
         }
     })
     app.connectMicroservice({
@@ -23,7 +23,7 @@ async function bootstrap() {
         options  : {
             ...environment.microservice.local,
             name : WorldConstants.NAME + ' Server',
-            queue: WorldConstants.CONSTANT + '.' + process.env.NODE_APP_INSTANCE
+            queue: WorldConstants.CONSTANT + "." + process.env.NODE_APP_INSTANCE
         }
     })
     app.enableCors({

@@ -7,8 +7,8 @@ import { Repository }                 from 'typeorm'
 import { Channel }                   from './entities/channel'
 import { Push }                      from '../../../shared/actions/movement.actions'
 import { ClientProxy, EventPattern } from '@nestjs/microservices'
-import { CommandEvent }               from '../world/event.types'
-import { PushSprite }                 from '../../../shared/phaser/projectile/push.sprite'
+import { CommandEvent }              from '../../lib/event.types'
+import { PushSprite }                from '../../../shared/phaser/projectile/push.sprite'
 import { LOCAL_CLIENT }               from '../../client/client.module'
 
 @Controller()

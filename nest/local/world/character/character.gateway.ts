@@ -3,7 +3,7 @@ import { Namespace, Socket }                                   from 'socket.io'
 import { WorldService }                                        from '../world.service'
 import { Logger }                                              from '@nestjs/common'
 import { WorldConstants }                                      from '../../../lib/constants/world.constants'
-import { CharacterClient }                from '../../character/client/character.client'
+import { CharacterClient }                                     from '../../character/client/character.client'
 import {
     CharacterCreated,
     CharacterNotCreated,
@@ -11,15 +11,15 @@ import {
     CharacterOnline,
     CreateCharacter,
     GetCharacter,
-    GetCharacters, ReceivedCharacters
-} from '../../../../shared/actions/character.actions'
-import { Character }                      from '../../character/entities/character'
+    ReceivedCharacters
+}                                                              from '../../../../shared/actions/character.actions'
+import { Character }                                           from '../../character/entities/character'
 import { InjectRepository }                                    from '@nestjs/typeorm'
 import { Player }                                              from '../entities/player'
 import { Repository }                                          from 'typeorm'
-import * as parser                        from 'socket.io-msgpack-parser'
-import { AllNpcs, AllPlayers, MapOnline } from '../../../../shared/actions/map.actions'
-import { MapClient }                      from '../../map/client/map.client'
+import * as parser                                             from 'socket.io-msgpack-parser'
+import { AllNpcs, AllPlayers, MapOnline }                      from '../../../../shared/actions/map.actions'
+import { MapClient }                                           from '../../map/client/map.client'
 
 @WebSocketGateway({
     namespace   : 'world',

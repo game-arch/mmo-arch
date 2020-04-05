@@ -1,15 +1,15 @@
-import { HttpService, Injectable, Logger, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
-import { InjectRepository }                                                               from '@nestjs/typeorm'
-import { World }                                                                          from '../entities/world'
-import { Repository }                                                                     from 'typeorm'
-import { PresenceEmitter }                                                                from '../emitter/presence.emitter'
-import { Subject }                                                                        from 'rxjs'
-import { mergeMap, throttleTime }                                                         from 'rxjs/operators'
-import { async }                                                                          from 'rxjs/internal/scheduler/async'
-import { fromPromise }                                                                    from 'rxjs/internal-compatibility'
-import * as fs                                                                            from 'fs'
-import * as path                                                                          from 'path'
-import { environment }                                                                    from '../../../lib/config/environment'
+import { Injectable, Logger, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
+import { InjectRepository }                                                  from '@nestjs/typeorm'
+import { World }                                                             from '../entities/world'
+import { Repository }                                                        from 'typeorm'
+import { PresenceEmitter }                                                   from '../emitter/presence.emitter'
+import { Subject }                                                           from 'rxjs'
+import { mergeMap, throttleTime }                                            from 'rxjs/operators'
+import { async }                                                             from 'rxjs/internal/scheduler/async'
+import { fromPromise }                                                       from 'rxjs/internal-compatibility'
+import * as fs                                                               from 'fs'
+import * as path                                                             from 'path'
+import { environment }                                                       from '../../../lib/config/environment'
 
 @Injectable()
 export class ServerPresence implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -17,7 +17,6 @@ export class ServerPresence implements OnApplicationBootstrap, OnApplicationShut
     sendServers = new Subject()
 
     constructor(
-        private http: HttpService,
         @InjectRepository(World)
         private repo: Repository<World>,
         private logger: Logger,

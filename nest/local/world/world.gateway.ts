@@ -41,8 +41,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
     }
 
     async afterInit(server: Namespace) {
-        console.log('send info')
-
         this.serverId = await this.presence.register(
             environment.servers.world.host,
             environment.servers.world.port,

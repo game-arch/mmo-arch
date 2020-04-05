@@ -14,7 +14,7 @@ import { first, takeUntil } from 'rxjs/operators'
 import { LOCAL_CLIENT }         from '../../../client/client.module'
 import { Subject }              from 'rxjs'
 import { Mob }                  from '../../../../shared/phaser/mob'
-import { MapEvent, WorldEvent } from '../../world/event.types'
+import { MapEvent, WorldEvent } from '../../../lib/event.types'
 
 
 @Injectable()

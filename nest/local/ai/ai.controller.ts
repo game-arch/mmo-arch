@@ -1,8 +1,8 @@
 import { Controller, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
 import { AiService }        from './ai.service'
 import { PlayerChangedMap } from '../../../shared/actions/map.actions'
-import { EventPattern }     from '@nestjs/microservices'
-import { WorldEvent }   from '../world/event.types'
+import { EventPattern } from '@nestjs/microservices'
+import { WorldEvent }   from '../../lib/event.types'
 
 @Controller()
 export class AiController implements OnApplicationBootstrap, OnApplicationShutdown {

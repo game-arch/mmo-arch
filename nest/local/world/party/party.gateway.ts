@@ -4,10 +4,15 @@ import { Repository }                                          from 'typeorm'
 import { Player }                                              from '../entities/player'
 import { InjectRepository }                                    from '@nestjs/typeorm'
 import { Namespace, Socket }                                   from 'socket.io'
-import * as parser
-                                                                                              from 'socket.io-msgpack-parser'
-import { CreateParty, MakePartyLeader, PartyCreated, PartyLeaderNotChanged, PartyNotCreated } from '../../../../shared/actions/party.actions'
-import { PartyClient }                                                                        from '../../party/client/party-client.service'
+import * as parser                                             from 'socket.io-msgpack-parser'
+import {
+    CreateParty,
+    MakePartyLeader,
+    PartyCreated,
+    PartyLeaderNotChanged,
+    PartyNotCreated
+}                                                              from '../../../../shared/actions/party.actions'
+import { PartyClient }                                         from '../../party/client/party-client.service'
 
 @WebSocketGateway({
     namespace   : 'world',

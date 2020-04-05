@@ -1,7 +1,7 @@
 import { GameWorld } from '../interfaces/game-world'
 
 export class ServerPresenceOnline {
-    static readonly type = '[Presence] Is Online'
+    static readonly type = 'presence.online'
 }
 
 export class GetWorlds {
@@ -12,7 +12,7 @@ export class GetWorlds {
 }
 
 export class WorldOnline {
-    static readonly type = '[Presence] World Online'
+    static readonly type = 'presence.world_online'
 
     constructor(
         public host: string,

@@ -9,8 +9,8 @@ import {
     GetCharacter,
     GetCharacterName,
     GetCharacters
-}                         from '../../../shared/actions/character.actions'
-import { WorldEvent }     from '../world/event.types'
+}                     from '../../../shared/actions/character.actions'
+import { WorldEvent } from '../../lib/event.types'
 
 @Controller()
 export class CharacterController {

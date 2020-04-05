@@ -1,9 +1,9 @@
-import { Inject, Injectable }      from '@nestjs/common'
-import { ClientProxy }             from '@nestjs/microservices'
+import { Inject, Injectable }            from '@nestjs/common'
+import { ClientProxy }                   from '@nestjs/microservices'
 import { LOCAL_CLIENT }                  from '../../../client/client.module'
 import { AttemptCommand, CommandAction } from '../../../../shared/actions/command.actions'
-import { WorldEvent }                    from '../../world/event.types'
-import { first }                   from 'rxjs/operators'
+import { WorldEvent }                    from '../../../lib/event.types'
+import { first }                         from 'rxjs/operators'
 
 
 @Injectable()

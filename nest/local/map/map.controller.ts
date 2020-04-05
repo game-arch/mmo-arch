@@ -24,8 +24,8 @@ import { Player }                                                               
 import { getConnection, Repository }                                                        from 'typeorm'
 import { from }                                                                             from 'rxjs'
 import { map, tap, toArray }                                                                from 'rxjs/operators'
-import { Channel }                                                                          from './entities/channel'
-import { MapEvent, WorldEvent }                                                             from '../world/event.types'
+import { Channel }              from './entities/channel'
+import { MapEvent, WorldEvent } from '../../lib/event.types'
 
 @Controller()
 export class MapController implements OnApplicationBootstrap, OnApplicationShutdown {

@@ -3,7 +3,7 @@ import { ClientProxy }                                           from '@nestjs/m
 import { CreateParty, GetParty, InviteToParty, MakePartyLeader } from '../../../../shared/actions/party.actions'
 import { first }                                                 from 'rxjs/operators'
 import { Party }      from '../entities/party'
-import { WorldEvent } from '../../world/event.types'
+import { WorldEvent } from '../../../lib/event.types'
 
 @Injectable()
 export class PartyClient {
