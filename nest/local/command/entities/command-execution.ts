@@ -9,5 +9,11 @@ export class CommandExecution {
     @Column()
     action: string
     @Column()
+    count: number
+    @Column()
+    delay: number
+    @Column()
+    available: number
+    @Column()
     lastPerformed: Date
 }

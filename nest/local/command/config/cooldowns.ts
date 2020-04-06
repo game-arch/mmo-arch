@@ -1,3 +1,6 @@
 export const COOLDOWNS = {
-    push: 1000
+    push: {
+        count: 3,
+        delay: 1000
+    }
 }
