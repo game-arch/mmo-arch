@@ -8,6 +8,7 @@ import { ConnectionOptions }     from 'typeorm'
 import { MapClientModule }       from '../map/client/map-client.module'
 import { CommandController }     from './command.controller'
 import { CommandExecution }      from './entities/command-execution'
+import { CoolDownService }       from './cool-down.service'
 
 @Module({
     imports    : [
@@ -22,7 +23,7 @@ import { CommandExecution }      from './entities/command-execution'
         })
     ],
     controllers: [CommandController],
-    providers  : []
+    providers  : [CoolDownService]
 })
 export class CommandModule {
 }
