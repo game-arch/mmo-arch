@@ -35,17 +35,15 @@ export class ProjectileSprite extends Sprite {
     constructor(public config: ProjectileConfig) {
         super(config.scene, config.position[0], config.position[1], config.key, config.frame)
         config.scene.add.existing(this)
-        config.scene.physics.add.existing(this)
         this.setSize(this.config.width || 32, this.config.height || 32)
-        this.setOrigin(0.5, 0.5)
-        this.body.setOffset(-(this.width / 4), -(this.height / 4))
+        config.scene.physics.add.existing(this)
         this.body.immovable = true
         if (this.config.type !== 'pillar') {
             this.body.isCircle = true
         }
 
         this.tween({
-            scale: this.config.growTo || 1
+            scale: (this.config.growTo || 1) * this.scale
         }, this.config.duration)
         this.project()
     }

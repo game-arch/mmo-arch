@@ -15,7 +15,7 @@ export class PushSprite extends ProjectileSprite {
             originatorType: originatorType,
             originator    : originator,
             scene,
-            duration      : destinationX === x && destinationY === y ? 1000 : 500,
+            duration      : 500,
             speed         : 3,
             position      : [x, y],
             growTo        : destinationX === x && destinationY === y ? 10 : 5,

@@ -14,7 +14,7 @@ export class ArrowSprite extends ProjectileSprite {
             duration      : 1000,
             speed         : 5,
             position      : [x, y],
-            growTo        : 10,
+            growTo        : 1.1,
             type          : 'bullet',
             key           : 'rain',
             destination   : [destinationX, destinationY]
