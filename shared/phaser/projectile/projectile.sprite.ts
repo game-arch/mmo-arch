@@ -20,7 +20,9 @@ export interface ProjectileConfig {
     height?: number,
     type: 'cone' | 'central' | 'pillar' | 'remote' | 'bullet',
     position: [number, number],
-    destination: [number, number]
+    destination: [number, number],
+    destroyOnTarget?: boolean,
+    destroyOnSelf?:boolean
 }
 
 export class ProjectileSprite extends Sprite {
@@ -74,7 +76,12 @@ export class ProjectileSprite extends Sprite {
     }
 
 
-    onHit = (other: MobSprite) => {
+    onHit(target: MobSprite) {
+        if (this.hasHitSelf(target)) {
+            this.onSelfHit(target)
+            return
+        }
+        this.onTargetHit(target)
     }
 
     protected preUpdate(time: number, delta: number): void {
@@ -90,6 +97,24 @@ export class ProjectileSprite extends Sprite {
         target.tick               = 0
         target.walking            = false
         target.movementDisabledBy = this
+    }
+
+    onSelfHit(target: MobSprite) {
+        if (!this.targets.includes(target)) {
+            this.targets.push(target)
+        }
+        if (this.config.destroyOnSelf) {
+            this.destroy()
+        }
+    }
+
+    onTargetHit(target: MobSprite) {
+        if (!this.targets.includes(target)) {
+            this.targets.push(target)
+        }
+        if (this.config.destroyOnTarget) {
+            this.destroy()
+        }
     }
 
     destroy() {

@@ -1,7 +1,6 @@
 import Body = Phaser.Physics.Arcade.Body
 import Scene = Phaser.Scene
-import { ProjectileSprite, ProjectileConfig } from './projectile.sprite'
-import { MobSprite }                          from '../mob-sprite'
+import { ProjectileConfig, ProjectileSprite } from './projectile.sprite'
 
 export class ArrowSprite extends ProjectileSprite {
     body: Body
@@ -17,26 +16,8 @@ export class ArrowSprite extends ProjectileSprite {
             growTo        : 1.1,
             type          : 'bullet',
             key           : 'rain',
-            destination   : [destinationX, destinationY]
+            destination   : [destinationX, destinationY],
+            destroyOnTarget: true
         })
-    }
-
-    onHit = (target: MobSprite) => {
-        if (this.hasHitSelf(target)) {
-            return
-        }
-        this.onTargetHit(target)
-    }
-
-    private onTargetHit(target: MobSprite) {
-        if (!this.targets.includes(target)) {
-            this.targets.push(target)
-        }
-        this.destroy()
-    }
-
-
-    protected preUpdate(time: number, delta: number): void {
-        super.preUpdate(time, delta)
     }
 }
