@@ -10,15 +10,15 @@ import { isServer }                     from '../../constants/environment-consta
 export class PushSprite extends Projectile {
     body: Body
 
-    constructor(originatorType: 'player' | 'npc', public instanceId: number, scene: Scene, x, y, destinationX, destinationY) {
+    constructor(originatorType: 'player' | 'npc', originator: number, scene: Scene, x, y, destinationX, destinationY) {
         super(<ProjectileConfig>{
             originatorType: originatorType,
-            originator    : instanceId,
+            originator    : originator,
             scene,
-            duration      : 500,
+            duration      : destinationX === x && destinationY === y ? 1000 : 500,
             speed         : 3,
             position      : [x, y],
-            growTo        : 10,
+            growTo        : destinationX === x && destinationY === y ? 10 : 5,
             type          : destinationX === x && destinationY === y ? 'central' : 'cone',
             key           : 'rain',
             destination   : [destinationX, destinationY]
