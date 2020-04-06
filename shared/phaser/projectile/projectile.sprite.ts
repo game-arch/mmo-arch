@@ -23,7 +23,7 @@ export interface ProjectileConfig {
     destination: [number, number]
 }
 
-export class Projectile extends Sprite {
+export class ProjectileSprite extends Sprite {
     body: Body
 
     targets: MobSprite[] = []

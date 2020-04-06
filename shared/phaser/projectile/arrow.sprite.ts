@@ -1,9 +1,9 @@
 import Body = Phaser.Physics.Arcade.Body
 import Scene = Phaser.Scene
-import { Projectile, ProjectileConfig } from './projectile'
-import { MobSprite }                    from '../mob-sprite'
+import { ProjectileSprite, ProjectileConfig } from './projectile.sprite'
+import { MobSprite }                          from '../mob-sprite'
 
-export class ArrowSprite extends Projectile {
+export class ArrowSprite extends ProjectileSprite {
     body: Body
 
     constructor(public originatorType: 'player' | 'npc', public instanceId: number, scene: Scene, x, y, destinationX, destinationY) {
