@@ -8,7 +8,6 @@ import { Directions } from './directions'
 import { isServer }   from '../constants/environment-constants'
 import { Mob }        from './mob'
 import { NpcConfig }  from '../interfaces/npc-config'
-import { Projectile } from './projectile/projectile'
 
 export class MobSprite extends Sprite {
     stoppedVector          = new Vector2(0, 0)
@@ -19,13 +18,13 @@ export class MobSprite extends Sprite {
     npcConfig?: NpcConfig
     speed                  = 1
 
-    onVelocityChange   = () => {
+    onVelocityChange        = () => {
     }
-    onStopMoving       = () => {
+    onStopMoving            = () => {
     }
-    onStartMoving      = () => {
+    onStartMoving           = () => {
     }
-    pushed: Projectile = null
+    movementDisabledBy: any = null
 
     facing = {
         x: 0,
@@ -71,13 +70,13 @@ export class MobSprite extends Sprite {
             }
         }
         if (isServer) {
-            if (!this.pushed) {
+            if (!this.movementDisabledBy) {
                 let velocity = Physics.velocityFromDirections(this.directions, this.speed)
                 this.body.setVelocity(velocity.x, velocity.y)
             }
         }
         if (!this.body.velocity.equals(this.lastVelocity)) {
-            if (!this.body.velocity.equals(this.stoppedVector) && !this.pushed) {
+            if (!this.body.velocity.equals(this.stoppedVector) && !this.movementDisabledBy) {
                 this.updateFacing(this.body.velocity)
             }
             if (isServer) {

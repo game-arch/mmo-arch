@@ -5,10 +5,10 @@ import { InjectRepository }                                    from '@nestjs/typ
 import { Player }                                              from '../entities/player'
 import { Repository }                                          from 'typeorm'
 import { Logger }                                              from '@nestjs/common'
-import { WorldService }   from '../world.service'
-import { CommandClient }                 from '../../command/client/command.client'
-import { AttemptCommand, CommandAction } from '../../../../shared/actions/command.actions'
-import * as parser                       from 'socket.io-msgpack-parser'
+import { WorldService }                                        from '../world.service'
+import { CommandClient }                                       from '../../command/client/command.client'
+import { AttemptCommand, CommandAction }                       from '../../../../shared/actions/command.actions'
+import * as parser                                             from 'socket.io-msgpack-parser'
 
 @WebSocketGateway({
     namespace   : 'world',

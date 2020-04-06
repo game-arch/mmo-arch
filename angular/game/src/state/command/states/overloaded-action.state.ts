@@ -1,6 +1,6 @@
-import { Action, State, StateContext, Store }      from '@ngxs/store'
-import { OverloadedAction, PushAreaMobs }          from '../command.actions'
-import { SceneState }                              from '../../scene/scene.state'
+import { Action, State, StateContext, Store } from '@ngxs/store'
+import { OverloadedAction, PushAreaCommand }  from '../command.actions'
+import { SceneState }                         from '../../scene/scene.state'
 import { GameEngineService }                       from '../../../lib/game-engine/game-engine.service'
 import { MultiplayerScene }                        from '../../../lib/game-engine/phaser/scenes/multiplayer.scene'
 import { PlayerAttemptedTransition, PlayerUpdate } from '../../../../../../shared/actions/map.actions'
@@ -36,7 +36,7 @@ export class OverloadedActionState {
                 context.dispatch(new PlayerAttemptedTransition(scene.self.instanceId))
                 return
             }
-            context.dispatch(new PushAreaMobs(action.status))
+            context.dispatch(new PushAreaCommand(action.status))
             return
         }
     }

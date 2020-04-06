@@ -2,7 +2,6 @@ import { Controller, Inject, OnApplicationBootstrap } from '@nestjs/common'
 import { ClientProxy, MessagePattern }                from '@nestjs/microservices'
 import { CommandEvent, WorldEvent }                   from '../../lib/event.types'
 import { AttemptCommand, CommandAction }              from '../../../shared/actions/command.actions'
-import { Push }                                       from '../../../shared/actions/movement.actions'
 import { LOCAL_CLIENT }                               from '../../client/client.module'
 import { CoolDownService }                            from './cool-down.service'
 
@@ -18,7 +17,7 @@ export class CommandController implements OnApplicationBootstrap {
     @MessagePattern(new WorldEvent(AttemptCommand.type))
     async onAction(data: CommandAction) {
         if (!await this.coolDown.coolingDown(data.characterId, data.action)) {
-            this.client.emit(new CommandEvent(Push.type), data)
+            this.client.emit(new CommandEvent(data.action), data)
         }
     }
 

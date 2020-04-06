@@ -1,10 +1,11 @@
 import Sprite = Phaser.GameObjects.Sprite
 import Body = Phaser.Physics.Arcade.Body
 import Scene = Phaser.Scene
-import { MobSprite } from '../mob-sprite'
-import { BaseScene } from '../base.scene'
-import { isServer }  from '../../constants/environment-constants'
-import { Physics }   from '../physics'
+import { MobSprite }    from '../mob-sprite'
+import { BaseScene }    from '../base.scene'
+import { Physics }      from '../physics'
+import { PlayerSprite } from '../player.sprite'
+import { NpcSprite }    from '../npc.sprite'
 
 export class Projectile extends Sprite {
     body: Body
@@ -15,7 +16,7 @@ export class Projectile extends Sprite {
         return this.scene as BaseScene
     }
 
-    constructor(scene: Scene, x, y, public speed: number, public destinationX, public destinationY) {
+    constructor(public originator: 'player' | 'npc' | 'all', scene: Scene, x, y, public speed: number, public destinationX, public destinationY) {
         super(<any>scene, x, y, '', null)
         scene.add.existing(this)
         scene.physics.add.existing(this)
@@ -49,12 +50,16 @@ export class Projectile extends Sprite {
 
     protected preUpdate(time: number, delta: number): void {
         super.preUpdate(time, delta)
-        if (isServer) {
-            this.scene.physics.world.overlap(
-                this,
-                this.getScene().allMobSprites,
-                (obj1: any, obj2: any) => this.onHit(obj1 instanceof MobSprite ? obj1 : obj2)
-            )
-        }
+        this.scene.physics.world.overlap(
+            this,
+            this.getScene().allMobSprites,
+            (obj1: any, obj2: any) => this.onHit(obj1 instanceof MobSprite ? obj1 : obj2)
+        )
+    }
+
+    disableMovement(target: PlayerSprite | NpcSprite) {
+        target.tick               = 0
+        target.walking            = false
+        target.movementDisabledBy = this
     }
 }
