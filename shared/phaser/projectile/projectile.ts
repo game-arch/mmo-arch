@@ -57,13 +57,4 @@ export class Projectile extends Sprite {
             )
         }
     }
-
-    destroy() {
-        super.destroy(true)
-        this.targets.map(mob => {
-            mob.body.setVelocity(0, 0)
-            mob.pushed = null
-            mob.onVelocityChange()
-        })
-    }
 }

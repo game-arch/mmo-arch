@@ -7,7 +7,7 @@
                 </div>
                 <div class="bars">
                     <div fxLayout="row">
-                        <div class="name">{{ player | json}}</div>
+                        <div class="name">{{ player.name}}</div>
                         <div style="flex:1"></div>
                         <div class="level">LVL 99</div>
                     </div>
@@ -22,9 +22,9 @@
     </div>
     <div fxLayout="row">
         <joystick
-                  [enabled]="true"
-                  [style.opacity]="player?.instanceId ? 1 : 0"
-                  [style.pointer-events]="player?.instanceId ? 'all' : 'none'"
+            [enabled]="true"
+            [style.opacity]="player?.instanceId ? 1 : 0"
+            [style.pointer-events]="player?.instanceId ? 'all' : 'none'"
         ></joystick>
         <div style="flex:1;pointer-events:none"></div>
         <action-bar style="z-index:1000;"></action-bar>

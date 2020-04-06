@@ -130,6 +130,7 @@ export class BaseScene extends Scene implements Scene {
         this.players[player.instanceId]                        = player
         this.playerSprites[player.instanceId]                  = new PlayerSprite(player.instanceId, this, this.layers.mobs.players, player.x, player.y)
         this.playerSprites[player.instanceId].id               = player.instanceId
+        this.playerSprites[player.instanceId].name             = player.name
         this.playerSprites[player.instanceId].onVelocityChange = () => this.emitPlayer(this.playerSprites[player.instanceId])
         this.playerSprites[player.instanceId].onStopMoving     = () => this.savePlayer(this.playerSprites[player.instanceId])
         this.allMobSprites.add(this.playerSprites[player.instanceId])
@@ -145,6 +146,7 @@ export class BaseScene extends Scene implements Scene {
         this.npcSprites[mob.instanceId]                  = new NpcSprite(this, this.layers.mobs.npcs, npcConfig)
         this.npcSprites[mob.instanceId].npcConfig        = npcConfig
         this.npcSprites[mob.instanceId].id               = mob.instanceId
+        this.npcSprites[mob.instanceId].name             = mob.name
         this.npcSprites[mob.instanceId].onVelocityChange = () => this.emitMob(this.npcSprites[mob.instanceId])
         this.allMobSprites.add(this.npcSprites[mob.instanceId])
     }

@@ -27,55 +27,74 @@ export class PushSprite extends Projectile {
         }
     }
 
-    onHit = (other: MobSprite) => {
+    onHit = (target: MobSprite) => {
         if (
-            (this.type == 'player' && other instanceof PlayerSprite)
-            || (this.type == 'npc' && other instanceof NpcSprite)
+            (this.type == 'player' && target instanceof PlayerSprite)
+            || (this.type == 'npc' && target instanceof NpcSprite)
         ) {
-            if (this.mobId === other.id) {
+            if (this.mobId === target.id) {
                 if (this.still) {
-                    if (!this.targets.includes(other)) {
-                        this.targets.push(other)
+                    if (!this.targets.includes(target)) {
+                        this.targets.push(target)
                     }
-
-                    let velocity = Physics.velocityFromDirections({
-                        up   : other.body.velocity.y < 0,
-                        down : other.body.velocity.y > 0,
-                        right: other.body.velocity.x > 0,
-                        left : other.body.velocity.x < 0
-                    })
-                    velocity.x   = velocity.x * 3
-                    velocity.y   = velocity.y * 3
-                    if (!other.lastVelocity.equals(velocity)) {
-                        other.body.setVelocity(velocity.x, velocity.y)
-                        other.onVelocityChange()
-                    }
-                    other.tick    = 0
-                    other.walking = false
-                    other.pushed  = this
+                    this.propelSelf(target)
                 }
                 return
             }
         }
-        other.pushed  = this
-        other.walking = false
-        if (this.still) {
-            let velocity = Physics.velocityFromDifference(this.x, this.y, other.x, other.y)
-            other.body.setVelocity(velocity.x * this.speed, velocity.y * this.speed)
-            other.onVelocityChange()
-            other.tick = 0
-        } else {
-            other.body.setVelocity(this.body.velocity.x, this.body.velocity.y)
-            other.onVelocityChange()
-            other.tick = 0
-        }
-        if (!this.targets.includes(other)) {
-            this.targets.push(other)
+        this.pushAway(target)
+        if (!this.targets.includes(target)) {
+            this.targets.push(target)
         }
     }
 
 
+    private pushAway(target: MobSprite) {
+        target.pushed  = this
+        target.walking = false
+        if (this.still) {
+            let velocity = Physics.velocityFromDifference(this.x, this.y, target.x, target.y)
+            target.body.setVelocity(velocity.x * this.speed, velocity.y * this.speed)
+            target.onVelocityChange()
+            target.tick = 0
+        } else {
+            target.body.setVelocity(this.body.velocity.x, this.body.velocity.y)
+            target.onVelocityChange()
+            target.tick = 0
+        }
+    }
+
+    private propelSelf(target: PlayerSprite | NpcSprite) {
+        let velocity = Physics.velocityFromDirections({
+            up   : target.body.velocity.y < 0,
+            down : target.body.velocity.y > 0,
+            right: target.body.velocity.x > 0,
+            left : target.body.velocity.x < 0
+        })
+        velocity.x   = velocity.x * 3
+        velocity.y   = velocity.y * 3
+        if (!target.lastVelocity.equals(velocity)) {
+            target.body.setVelocity(velocity.x, velocity.y)
+            target.lastVelocity = velocity
+            target.onVelocityChange()
+        }
+        target.tick    = 0
+        target.walking = false
+        target.pushed  = this
+    }
+
     protected preUpdate(time: number, delta: number): void {
         super.preUpdate(time, delta)
+    }
+
+    destroy() {
+        super.destroy(true)
+        this.targets.map(mob => {
+            if (mob.pushed === this) {
+                mob.body.setVelocity(0, 0)
+                mob.pushed = null
+                mob.onVelocityChange()
+            }
+        })
     }
 }

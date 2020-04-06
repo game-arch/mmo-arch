@@ -61,7 +61,9 @@ export class SceneState {
     @Action(WorldConnected)
     onWorldConnected(context: StateContext<ScenesModel>, action: WorldConnected) {
         action.socket.on(MapChannels.type, (data: MapChannels) => context.dispatch(new MapChannels(data.characterId, data.map, data.channels)))
-        action.socket.on(PlayerEnteredMap.type, (data) => context.dispatch(new PlayerEnteredMap(data.id, data.name, data.map, data.channel, data.x, data.y)))
+        action.socket.on(PlayerEnteredMap.type, (data) => {
+            context.dispatch(new PlayerEnteredMap(data.id, data.name, data.map, data.channel, data.x, data.y))
+        })
         action.socket.on(PlayerLeftMap.type, (data) => context.dispatch(new PlayerLeftMap(data.id, data.name, data.map, data.channel)))
         action.socket.on(AllPlayers.type, (data) => context.dispatch(new AllPlayers(data.map, data.players)))
         action.socket.on(AllNpcs.type, (data) => context.dispatch(new AllNpcs(data.map, data.npcs)))
@@ -101,6 +103,9 @@ export class SceneState {
     onAllPlayers(context: StateContext<ScenesModel>, action: AllPlayers) {
         let scene = this.engine.getScene(action.map)
         if (scene instanceof MultiplayerScene) {
+            if (!this.engine.game.scene.isActive(action.map)) {
+                this.store.dispatch(new ChangeScene(action.map))
+            }
             if (!scene.physics.world || !scene.layers.mobs) {
                 scene.onCreate.pipe(first()).subscribe(() => scene.reloadPlayers(action.players))
                 return
@@ -159,19 +164,12 @@ export class SceneState {
     onPlayerEntered(context: StateContext<ScenesModel>, action: PlayerEnteredMap) {
         let scene = this.engine.getScene(action.map)
         if (scene instanceof MultiplayerScene) {
-            if (scene instanceof MultiplayerScene) {
-                if (!this.engine.game.scene.isActive(action.map)) {
-                    let world: WorldModel = this.store.selectSnapshot(WorldState)
-                    if (action.instanceId === world.character) {
-                        context.dispatch(new ChangeScene(action.map))
-                    }
-                }
-                if (!scene.physics.world || !scene.layers.mobs) {
-                    scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(action))
-                    return
-                }
-                scene.addOrUpdatePlayer(action)
+            let world: WorldModel = this.store.selectSnapshot(WorldState)
+            if (!scene.physics.world || !scene.layers.mobs) {
+                scene.onCreate.pipe(first()).subscribe(() => scene.addOrUpdatePlayer(action))
+                return
             }
+            scene.addOrUpdatePlayer(action)
         }
     }
 

@@ -40,16 +40,18 @@ export class MapGateway {
     async playerJoin(data: PlayerEnteredMap) {
         if (!this.service.shuttingDown) {
             const player = await this.players.findOne({ characterId: data.instanceId })
-            if (player && this.server.sockets[player.socketId]) {
-                player.channel = data.channel
-                player.map     = data.map
-                this.server.sockets[player.socketId].join('map.' + data.map + '.' + player.channel)
-                let npcs = await this.map.getAllNpcs(data.map, player.channel)
-                this.server.sockets[player.socketId].emit(AllPlayers.type, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, player.channel)))
-                this.server.sockets[player.socketId].emit(AllNpcs.type, new AllNpcs(data.map, npcs))
-                await this.players.save(player)
+            if (player) {
+                if (this.server.sockets[player.socketId]) {
+                    player.channel = data.channel
+                    player.map     = data.map
+                    this.server.sockets[player.socketId].join('map.' + data.map + '.' + player.channel)
+                    let npcs = await this.map.getAllNpcs(data.map, player.channel)
+                    this.server.sockets[player.socketId].emit(AllPlayers.type, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, player.channel)))
+                    this.server.sockets[player.socketId].emit(AllNpcs.type, new AllNpcs(data.map, npcs))
+                    await this.players.save(player)
+                }
+                this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerEnteredMap.type, data)
             }
-            this.server.to('map.' + data.map + '.' + data.channel).emit(PlayerEnteredMap.type, data)
         }
     }
 
