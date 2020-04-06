@@ -7,6 +7,22 @@ import { Physics }      from '../physics'
 import { PlayerSprite } from '../player.sprite'
 import { NpcSprite }    from '../npc.sprite'
 
+export interface ProjectileConfig {
+    originator: number,
+    originatorType: 'player' | 'npc',
+    key?: string,
+    frame?: string,
+    growTo?: number,
+    duration: number,
+    scene: Scene,
+    speed: number,
+    width?: number,
+    height?: number,
+    type: 'cone' | 'central' | 'pillar' | 'remote' | 'bullet',
+    position: [number, number],
+    destination: [number, number]
+}
+
 export class Projectile extends Sprite {
     body: Body
 
@@ -16,15 +32,22 @@ export class Projectile extends Sprite {
         return this.scene as BaseScene
     }
 
-    constructor(public originator: 'player' | 'npc' | 'all', scene: Scene, x, y, public speed: number, public destinationX, public destinationY) {
-        super(<any>scene, x, y, '', null)
-        scene.add.existing(this)
-        scene.physics.add.existing(this)
-        this.setSize(32, 32)
+    constructor(public config: ProjectileConfig) {
+        super(config.scene, config.position[0], config.position[1], config.key, config.frame)
+        config.scene.add.existing(this)
+        config.scene.physics.add.existing(this)
+        this.setSize(this.config.width || 32, this.config.height || 32)
         this.setOrigin(0.5, 0.5)
-        this.body.setOffset(-8, -8)
+        this.body.setOffset(-(this.width / 4), -(this.height / 4))
         this.body.immovable = true
-        this.body.isCircle  = true
+        if (this.config.type !== 'pillar') {
+            this.body.isCircle = true
+        }
+
+        this.tween({
+            scale: this.config.growTo || 1
+        }, this.config.duration)
+        this.project()
     }
 
     protected tween(props: { [key: string]: any }, duration = 300) {
@@ -39,9 +62,17 @@ export class Projectile extends Sprite {
     }
 
     protected project() {
-        let velocity = Physics.velocityFromDifference(this.x, this.y, this.destinationX, this.destinationY)
-        this.angle   = Physics.angleFromVelocity(velocity.x, velocity.y)
-        this.body.setVelocity(velocity.x * this.speed, velocity.y * this.speed)
+        if (this.x !== this.config.destination[0] || this.y !== this.config.destination[1]) {
+            let velocity = Physics.velocityFromDifference(this.x, this.y, this.config.destination[0], this.config.destination[1])
+            this.angle   = Physics.angleFromVelocity(velocity.x, velocity.y)
+            this.body.setVelocity(velocity.x * this.config.speed, velocity.y * this.config.speed)
+        }
+    }
+
+    protected hasHitSelf(target: MobSprite) {
+        return ((this.config.originatorType == 'player' && target instanceof PlayerSprite)
+            || (this.config.originatorType == 'npc' && target instanceof NpcSprite))
+            && this.config.originator === target.id
     }
 
 
@@ -61,5 +92,17 @@ export class Projectile extends Sprite {
         target.tick               = 0
         target.walking            = false
         target.movementDisabledBy = this
+    }
+
+    destroy() {
+        super.destroy(true)
+        this.targets.map(mob => {
+            if (mob.movementDisabledBy === this) {
+                mob.body.setVelocity(0, 0)
+                mob.movementDisabledBy = null
+                mob.onVelocityChange()
+            }
+        })
+        this.targets = []
     }
 }
