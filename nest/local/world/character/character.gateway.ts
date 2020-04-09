@@ -18,8 +18,7 @@ import { InjectRepository }                                    from '@nestjs/typ
 import { Player }                                              from '../entities/player'
 import { Repository }                                          from 'typeorm'
 import * as parser                                             from 'socket.io-msgpack-parser'
-import { AllNpcs, AllPlayers, MapOnline }                      from '../../../../shared/actions/map.actions'
-import { MapClient }                                           from '../../map/client/map.client'
+import { MapOnline }                                           from '../../../../shared/actions/map.actions'
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -35,7 +34,6 @@ export class CharacterGateway {
         @InjectRepository(Player)
         private players: Repository<Player>,
         private logger: Logger,
-        private map: MapClient,
         private service: WorldService,
         private character: CharacterClient
     ) {
@@ -53,8 +51,6 @@ export class CharacterGateway {
                 await this.character.characterOnline(player.characterId, player.socketId)
             }
         }
-        this.server.to('map.' + data.map + '.' + data.channel).emit(AllPlayers.type, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, data.channel)))
-        this.server.to('map.' + data.map + '.' + data.channel).emit(AllNpcs.type, new AllNpcs(data.map, await this.map.getAllNpcs(data.map, data.channel)))
     }
 
     @SubscribeMessage(CreateCharacter.type)

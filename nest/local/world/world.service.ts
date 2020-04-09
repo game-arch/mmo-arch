@@ -3,7 +3,6 @@ import { AccountClient }    from '../../global/account/client/account.client'
 import { Socket }           from 'socket.io'
 import { CharacterClient }  from '../character/client/character.client'
 import { WorldConstants }   from '../../lib/constants/world.constants'
-import { MapClient }        from '../map/client/map.client'
 import { Repository }       from 'typeorm'
 import { Player }           from './entities/player'
 import { InjectRepository } from '@nestjs/typeorm'
@@ -20,7 +19,6 @@ export class WorldService {
         private players: Repository<Player>,
         private account: AccountClient,
         private character: CharacterClient,
-        private map: MapClient
     ) {
     }
 
@@ -124,7 +122,7 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && player.characterId !== null) {
                 const map = this.getMapOf(client)
-                this.map.playerDirectionalInput(player.characterId, map, player.channel, data.directions)
+                // this.map.playerDirectionalInput(player.characterId, map, player.channel, data.directions)
             }
         }
     }
@@ -134,7 +132,7 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             let map      = this.getMapOf(client)
             if (player && player.characterId !== null && map) {
-                return await this.map.playerAttemptedTransition(player.characterId, map, player.channel)
+                // return await this.map.playerAttemptedTransition(player.characterId, map, player.channel)
             }
         }
         return { status: false, map: null, reason: 'shutting_down_server' }
@@ -145,8 +143,8 @@ export class WorldService {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && player.characterId !== null) {
-                let position: any = await this.map.findPlayer(player.characterId)
-                this.map.changeChannel(player.characterId, position.map, position.channel, channel)
+                // let position: any = await this.map.findPlayer(player.characterId)
+                // this.map.changeChannel(player.characterId, position.map, position.channel, channel)
             }
         }
     }
@@ -155,8 +153,8 @@ export class WorldService {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             if (player) {
-                let position: any = await this.map.findPlayer(data.characterId || player.characterId)
-                return await this.map.getChannels(data.map || position.map)
+                // let position: any = await this.map.findPlayer(data.characterId || player.characterId)
+                // return await this.map.getChannels(data.map || position.map)
             }
         }
         return []

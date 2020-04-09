@@ -5,13 +5,8 @@ import { WorldGateway }          from './world.gateway'
 import { AccountClientModule }   from '../../global/account/client/account-client.module'
 import { CharacterClientModule } from '../character/client/character-client.module'
 import { PresenceClientModule }  from '../../global/presence/client/presence-client.module'
-import { MapClientModule }       from '../map/client/map-client.module'
-import { MapController }         from './map/map.controller'
-import { MapGateway }            from './map/map.gateway'
 import { CharacterGateway }      from './character/character.gateway'
 import { CharacterController }   from './character/character.controller'
-import { ChatController }        from './chat/chat.controller'
-import { ChatGateway }           from './chat/chat.gateway'
 import { TypeOrmModule }         from '@nestjs/typeorm'
 import { Player }                from './entities/player'
 import { WorldConstants }        from '../../lib/constants/world.constants'
@@ -38,25 +33,20 @@ import { CommandController }     from './command/command.controller'
         AccountClientModule,
         CharacterClientModule,
         PresenceClientModule,
-        MapClientModule,
         PartyClientModule,
         ItemClientModule,
         CommandClientModule
     ],
     controllers: [
         WorldController,
-        MapController,
         CharacterController,
-        ChatController,
         PartyController,
         CommandController
     ],
     providers  : [
         WorldService,
         WorldGateway,
-        MapGateway,
         CharacterGateway,
-        ChatGateway,
         Logger,
         PartyGateway,
         CommandGateway

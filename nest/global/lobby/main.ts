@@ -18,6 +18,7 @@ async function bootstrap() {
     })
     await app.startAllMicroservices()
     await app.listen(PORTS.LOBBY)
+    console.log('Listening on ' + PORTS.LOBBY)
 }
 
 bootstrap().catch(e => console.error(e))

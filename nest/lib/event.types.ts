@@ -1,5 +1,4 @@
 import { WorldConstants } from './constants/world.constants'
-import { MapConstants }   from '../local/map/constants'
 import { PerformCommand } from '../../shared/actions/command.actions'
 
 export class GlobalEvent {
@@ -14,18 +13,6 @@ export class WorldEvent {
 
     constructor(public event: string, public map?: string) {
         this.event = this.event.replace(/[\[\]]/g, '').replace(/\s/g, '_')
-    }
-}
-
-export class MapEvent {
-    world   = WorldConstants.CONSTANT
-    map     = MapConstants.MAP
-    channel = MapConstants.CHANNEL
-
-    constructor(public event: string, map?: string, channel?: number) {
-        this.event   = this.event.replace(/[\[\]]/g, '').replace(/\s/g, '_')
-        this.map     = map || this.map
-        this.channel = channel || this.channel
     }
 }
 

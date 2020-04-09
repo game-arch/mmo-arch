@@ -1,5 +1,6 @@
-import { Mob } from '../phaser/mob'
+export interface Mob {
 
+}
 export class MapOnline {
     static readonly type = '[Map] Online'
 
