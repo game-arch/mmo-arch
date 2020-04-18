@@ -19,7 +19,7 @@ export class ActionBarComponent {
     }
 
     performOverloadedAction() {
-        this.store.dispatch(new OverloadedAction(false))
+        this.store.dispatch(new OverloadedAction(true))
     }
 
 }

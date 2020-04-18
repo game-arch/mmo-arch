@@ -1,11 +1,11 @@
-import { Action, State, StateContext, Store } from '@ngxs/store'
-import { OverloadedAction, PushAreaCommand }  from '../command.actions'
-import { SceneState }                         from '../../scene/scene.state'
-import { GameEngineService }                       from '../../../lib/game-engine/game-engine.service'
-import { MultiplayerScene }                        from '../../../lib/game-engine/phaser/scenes/multiplayer.scene'
-import { PlayerAttemptedTransition, PlayerUpdate } from '../../../../../../shared/actions/map.actions'
-import { Injectable }                              from '@angular/core'
-import { OverloadedModel }                         from '../overloaded.model'
+import { Action, State, StateContext, Store }                   from '@ngxs/store'
+import { OverloadedAction, PushAreaCommand, PushOthersCommand } from '../command.actions'
+import { SceneState }                                           from '../../scene/scene.state'
+import { GameEngineService }                                    from '../../../lib/game-engine/game-engine.service'
+import { MultiplayerScene }                                     from '../../../lib/game-engine/phaser/scenes/multiplayer.scene'
+import { PlayerAttemptedTransition, PlayerUpdate }              from '../../../../../../shared/actions/map.actions'
+import { Injectable }                                           from '@angular/core'
+import { OverloadedModel }                                      from '../overloaded.model'
 
 @State<OverloadedModel>({
     name    : 'overloadedAction',
@@ -31,12 +31,12 @@ export class OverloadedActionState {
     @Action(OverloadedAction)
     onAction(context: StateContext<OverloadedModel>, action: OverloadedAction) {
         let scene = this.getCurrentScene()
-        if (scene instanceof MultiplayerScene) {
+        if (scene instanceof MultiplayerScene && action.status) {
             if (scene.canTransition[scene.self.instanceId]) {
                 context.dispatch(new PlayerAttemptedTransition(scene.self.instanceId))
                 return
             }
-            context.dispatch(new PushAreaCommand(action.status))
+            context.dispatch(new PushOthersCommand(action.status))
             return
         }
     }
