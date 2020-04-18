@@ -3,13 +3,14 @@ import { Push }                               from '../../../../../../shared/act
 import { GameEngineService }                  from '../../../lib/game-engine/game-engine.service'
 import { SceneState }                         from '../../scene/scene.state'
 import { MultiplayerScene }                   from '../../../lib/game-engine/phaser/scenes/multiplayer.scene'
-import { PushSprite }                         from '../../../../../../shared/phaser/projectile/push.sprite'
 import { PushAreaCommand, PushOthersCommand } from '../command.actions'
 import { WorldState }                         from '../../world/world.state'
 import { WorldModel }                         from '../../world/world.model'
 import { AttemptCommand }                     from '../../../../../../shared/actions/command.actions'
 import { Injectable }                         from '@angular/core'
 import { PushModel }                          from '../push.model'
+import { ProjectileConfig, ProjectileSprite } from '../../../../../../shared/phaser/projectile/projectile.sprite'
+import { COMMANDS }                           from '../../../../../../shared/commands/command.config'
 
 @State<PushModel>({
     name    : 'pushAction',
@@ -27,15 +28,15 @@ export class PushActionState {
         if (scene instanceof MultiplayerScene) {
             let player = scene.playerSprites[action.characterId]
             if (player) {
-                new PushSprite(
-                    'player',
-                    action.characterId,
-                    scene,
-                    player.x,
-                    player.y,
-                    action.actionArgs ? action.actionArgs.x || player.x : player.x,
-                    action.actionArgs ? action.actionArgs.y || player.y : player.y
-                )
+                new ProjectileSprite(<ProjectileConfig>{
+                    ...COMMANDS.push.projectile,
+                    originatorType: 'player',
+                    originator    : action.characterId,
+                    scene         : scene,
+                    position      : [player.x, player.y],
+                    destination   : [action.actionArgs ? action.actionArgs.x || player.x : player.x,
+                                     action.actionArgs ? action.actionArgs.y || player.y : player.y]
+                })
             }
         }
     }

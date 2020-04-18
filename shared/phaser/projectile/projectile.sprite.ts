@@ -18,11 +18,13 @@ export interface ProjectileConfig {
     speed: number,
     width?: number,
     height?: number,
-    type: 'cone' | 'central' | 'pillar' | 'remote' | 'bullet',
+    type: 'cone' | 'central' | 'pillar' | 'remote' | 'bullet' | string,
     position: [number, number],
     destination: [number, number],
     destroyOnTarget?: boolean,
-    destroyOnSelf?:boolean
+    destroyOnSelf?: boolean,
+    onTargetHit?: (projectile:ProjectileSprite, target: MobSprite) => void,
+    onSelfHit?: (projectile: ProjectileSprite, target: MobSprite) => void
 }
 
 export class ProjectileSprite extends Sprite {
@@ -103,6 +105,9 @@ export class ProjectileSprite extends Sprite {
         if (!this.targets.includes(target)) {
             this.targets.push(target)
         }
+        if (this.config.onSelfHit) {
+            this.config.onSelfHit(this, target)
+        }
         if (this.config.destroyOnSelf) {
             this.destroy()
         }
@@ -111,6 +116,9 @@ export class ProjectileSprite extends Sprite {
     onTargetHit(target: MobSprite) {
         if (!this.targets.includes(target)) {
             this.targets.push(target)
+        }
+        if (this.config.onTargetHit) {
+            this.config.onTargetHit(this, target)
         }
         if (this.config.destroyOnTarget) {
             this.destroy()

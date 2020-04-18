@@ -1,7 +1,6 @@
 import { Action, State, StateContext, Store } from '@ngxs/store'
 import { MultiplayerScene }                   from '../../../lib/game-engine/phaser/scenes/multiplayer.scene'
 import { ShootArrow }                         from '../../../../../../shared/actions/battle.actions'
-import { ArrowSprite }                        from '../../../../../../shared/phaser/projectile/arrow.sprite'
 import { SceneState }                         from '../../scene/scene.state'
 import { GameEngineService }                  from '../../../lib/game-engine/game-engine.service'
 import { ShootArrowCommand }                  from '../command.actions'
@@ -9,6 +8,8 @@ import { WorldModel }                         from '../../world/world.model'
 import { WorldState }                         from '../../world/world.state'
 import { AttemptCommand }                     from '../../../../../../shared/actions/command.actions'
 import { Injectable }                         from '@angular/core'
+import { ProjectileConfig, ProjectileSprite } from '../../../../../../shared/phaser/projectile/projectile.sprite'
+import { COMMANDS }                           from '../../../../../../shared/commands/command.config'
 
 @State({
     name: 'archery'
@@ -25,15 +26,15 @@ export class ArcheryActionState {
         if (scene instanceof MultiplayerScene) {
             let player = scene.playerSprites[action.characterId]
             if (player) {
-                new ArrowSprite(
-                    'player',
-                    action.characterId,
+                new ProjectileSprite(<ProjectileConfig>{
+                    ...COMMANDS.shootArrow.projectile,
+                    originatorType: 'player',
+                    originator    : action.characterId,
                     scene,
-                    player.x,
-                    player.y,
-                    action.actionArgs ? action.actionArgs.x || player.x : player.x,
-                    action.actionArgs ? action.actionArgs.y || player.y : player.y
-                )
+                    position      : [player.x, player.y],
+                    destination   : [action.actionArgs ? action.actionArgs.x || player.x : player.x,
+                                     action.actionArgs ? action.actionArgs.y || player.y : player.y]
+                })
             }
         }
     }

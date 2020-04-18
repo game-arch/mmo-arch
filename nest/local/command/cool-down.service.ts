@@ -3,8 +3,8 @@ import { CommandExecution }  from './entities/command-execution'
 import { Repository }        from 'typeorm'
 import { interval, Subject } from 'rxjs'
 import { takeUntil }         from 'rxjs/operators'
-import { COOL_DOWNS }        from '../../../shared/commands/cooldown.config'
 import { Injectable }        from '@nestjs/common'
+import { COMMANDS }          from '../../../shared/commands/command.config'
 
 @Injectable()
 export class CoolDownService {
@@ -25,7 +25,7 @@ export class CoolDownService {
         if (this.validate(characterId, action)) {
             this.executions[characterId][action] = execution
             execution.lastPerformed              = new Date()
-            if (COOL_DOWNS[action]) {
+            if (COMMANDS[action]) {
                 execution.available--
                 if (execution.available < 0) {
                     execution.available = 0
@@ -41,8 +41,8 @@ export class CoolDownService {
     validate(characterId, action) {
         let execution = this.executions[characterId][action]
         if (execution) {
-            if (COOL_DOWNS[action]) {
-                if (execution.available <= 0 && new Date().valueOf() - execution.lastPerformed.valueOf() < COOL_DOWNS[action].delay) {
+            if (COMMANDS[action]) {
+                if (execution.available <= 0 && new Date().valueOf() - execution.lastPerformed.valueOf() < COMMANDS[action].delay) {
                     return false
                 }
             }
@@ -63,9 +63,9 @@ export class CoolDownService {
         let execution         = new CommandExecution()
         execution.characterId = characterId
         execution.action      = action
-        execution.available   = COOL_DOWNS[action] ? COOL_DOWNS[action].count : 1
-        execution.delay       = COOL_DOWNS[action] ? COOL_DOWNS[action].delay : 1000
-        execution.count       = COOL_DOWNS[action] ? COOL_DOWNS[action].count : 1
+        execution.available   = COMMANDS[action] ? COMMANDS[action].count : 1
+        execution.delay       = COMMANDS[action] ? COMMANDS[action].delay : 1000
+        execution.count       = COMMANDS[action] ? COMMANDS[action].count : 1
         return execution
     }
 

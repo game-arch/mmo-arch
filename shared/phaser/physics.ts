@@ -1,5 +1,9 @@
 import { Directions } from './directions'
-import Vector2 = Phaser.Math.Vector2
+
+export class Vector {
+    constructor(public x: number, public y: number) {
+    }
+}
 
 export class Physics {
     static readonly SPEED_BASE     = 10
@@ -11,14 +15,15 @@ export class Physics {
         left : false,
         right: false
     }, modifier: number                             = 1) {
-        return new Vector2(
+        return new Vector(
             Math.round(value.left || value.right ? this.getXVelocity(value) * modifier : 0),
             Math.round(value.up || value.down ? this.getYVelocity(value) * modifier : 0)
         )
     }
-    static velocityFromDifference(x,y, destinationX, destinationY) {
-        let diffX    = Math.round(destinationX - x)
-        let diffY    = Math.round(destinationY - y)
+
+    static velocityFromDifference(x, y, destinationX, destinationY) {
+        let diffX = Math.round(destinationX - x)
+        let diffY = Math.round(destinationY - y)
         return Physics.velocityFromDirections({
             right: diffX > 0,
             left : diffX < 0,
