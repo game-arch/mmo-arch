@@ -1,15 +1,15 @@
-import { HttpService, Injectable, Logger, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
-import { InjectRepository }                                                               from '@nestjs/typeorm'
-import { World }                                                                          from '../entities/world'
-import { Repository }                                                                     from 'typeorm'
-import { PresenceEmitter }                                                                from '../emitter/presence.emitter'
-import { Subject }                                                                        from 'rxjs'
-import { mergeMap, throttleTime }                                                         from 'rxjs/operators'
-import { async }       from 'rxjs/internal/scheduler/async'
-import { fromPromise } from 'rxjs/internal-compatibility'
-import * as fs         from 'fs'
-import * as path       from 'path'
-import { environment } from '../../../lib/config/environment'
+import { Injectable, Logger, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common'
+import { InjectRepository }                                                  from '@nestjs/typeorm'
+import { World }                                                             from '../entities/world'
+import { Repository }                                                        from 'typeorm'
+import { PresenceEmitter }                                                   from '../emitter/presence.emitter'
+import { Subject }                                                           from 'rxjs'
+import { mergeMap, throttleTime }                                            from 'rxjs/operators'
+import { async }                                                             from 'rxjs/internal/scheduler/async'
+import { fromPromise }                                                       from 'rxjs/internal-compatibility'
+import * as fs                                                               from 'fs'
+import * as path                                                             from 'path'
+import { environment }                                                       from '../../../lib/config/environment'
 
 @Injectable()
 export class ServerPresence implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -17,7 +17,6 @@ export class ServerPresence implements OnApplicationBootstrap, OnApplicationShut
     sendServers = new Subject()
 
     constructor(
-        private http: HttpService,
         @InjectRepository(World)
         private repo: Repository<World>,
         private logger: Logger,
@@ -33,7 +32,7 @@ export class ServerPresence implements OnApplicationBootstrap, OnApplicationShut
                     server        = await this.repo.findOne({ host, constant, port, instanceId: instanceId + 1 })
                     server.status = 'online'
                 } catch (e) {
-                    const count    = await this.repo.query('select distinct host, port, name from world where name = ? and NOT (host = ? AND port = ?)', [name, host, port])
+                    const count  = await this.repo.query('select distinct host, port, name from world where name = ? and NOT (host = ? AND port = ?)', [name, host, port])
                     server       = this.repo.create(new World(host, port, instanceId + 1, constant, name))
                     server.index = count.length + 1
                 }
@@ -61,19 +60,19 @@ export class ServerPresence implements OnApplicationBootstrap, OnApplicationShut
         await this.repo.clear()
     }
 
-    async getServers() {
+    async getWorlds() {
         const builder = this.repo.createQueryBuilder('world')
-                          .select('world.name, world.index, MAX(world.host) host, MAX(world.port) port, MAX(world.status) status')
-                          .groupBy('world.name, world.index')
-                          .orderBy('5', 'DESC')
+                            .select('world.name, world.index, MAX(world.host) host, MAX(world.port) port, MAX(world.status) status')
+                            .groupBy('world.name, world.index')
+                            .orderBy('5', 'DESC')
         return await builder.getRawMany()
     }
 
     async onApplicationBootstrap() {
         this.sendServers.pipe(throttleTime(1000, async, { trailing: true }))
-            .pipe(mergeMap(() => fromPromise(this.getServers())))
+            .pipe(mergeMap(() => fromPromise(this.getWorlds())))
             .subscribe((servers) => {
-                this.emitter.sendServers(servers)
+                this.emitter.sendWorlds(servers)
             })
     }
 

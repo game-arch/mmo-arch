@@ -1,22 +1,27 @@
-import { Controller, Inject }            from '@nestjs/common'
-import { ClientProxy, MessagePattern }   from '@nestjs/microservices'
-import { CommandEvent, WorldEvent }      from '../world/event.types'
-import { AttemptCommand, CommandAction } from '../../../shared/events/command.events'
-import { Push }                          from '../../../shared/events/actions/movement.actions'
-import { LOCAL_CLIENT }                  from '../../client/client.module'
+import { Controller, Inject, OnApplicationBootstrap } from '@nestjs/common'
+import { ClientProxy, MessagePattern }                from '@nestjs/microservices'
+import { CommandEvent, WorldEvent }                   from '../../lib/event.types'
+import { AttemptCommand, CommandAction }              from '../../../shared/actions/command.actions'
+import { LOCAL_CLIENT }                               from '../../client/client.module'
+import { CoolDownService }                            from './cool-down.service'
 
 @Controller()
-export class CommandController {
+export class CommandController implements OnApplicationBootstrap {
 
-    constructor(@Inject(LOCAL_CLIENT) public client: ClientProxy) {
+    constructor(
+        @Inject(LOCAL_CLIENT) public client: ClientProxy,
+        private coolDown: CoolDownService
+    ) {
     }
 
-    @MessagePattern(new WorldEvent(AttemptCommand.event))
-    onAction(data: CommandAction) {
-        if (data.action === 'push') {
-            this.client.emit(new CommandEvent(Push.event), data)
-            return true
+    @MessagePattern(new WorldEvent(AttemptCommand.type))
+    async onAction(data: CommandAction) {
+        if (!await this.coolDown.coolingDown(data.characterId, data.action)) {
+            this.client.emit(new CommandEvent(data.action), data)
         }
-        return false
+    }
+
+    async onApplicationBootstrap() {
+        await this.coolDown.clear()
     }
 }

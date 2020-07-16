@@ -3,8 +3,8 @@ import { interval, Subject } from 'rxjs'
 import { MapClient }         from '../map/client/map.client'
 import { NPC_DATA }          from '../map/npc/npc.data'
 import { NpcAI }             from './npc-ai'
-import { takeUntil }         from 'rxjs/operators'
-import { PlayerChangedMap }  from '../../../shared/events/map.events'
+import { takeUntil }        from 'rxjs/operators'
+import { PlayerChangedMap } from '../../../shared/actions/map.actions'
 
 @Injectable()
 export class AiService {

@@ -1,8 +1,15 @@
-import { Component, EventEmitter, HostBinding, OnDestroy, OnInit }     from '@angular/core'
-import { GameEngineService }                                           from '../game-engine/game-engine.service'
-import { ConnectionManager }                                           from '../connection/connection-manager'
-import { ChangeMapChannel, GetMapChannels, PlayerAttemptedTransition } from '../../../../../shared/events/map.events'
-import { MultiplayerScene }                                            from '../game-engine/phaser/scenes/multiplayer.scene'
+import { Component, EventEmitter, HostBinding, OnDestroy, OnInit } from '@angular/core'
+import { GameEngineService }                                       from '../game-engine/game-engine.service'
+import {
+    ChangeMapChannel,
+    GetMapChannels,
+    MapChannels,
+    PlayerAttemptedTransition
+}                                                                  from '../../../../../shared/actions/map.actions'
+import { Observable }                                              from 'rxjs'
+import { WorldModel }                                              from '../../state/world/world.model'
+import { Select, Store }                                           from '@ngxs/store'
+import { WorldState }                                              from '../../state/world/world.state'
 
 @Component({
     selector   : 'channel-menu',
@@ -12,6 +19,8 @@ import { MultiplayerScene }                                            from '../
     outputs    : ['selected', 'close']
 })
 export class ChannelMenuComponent implements OnInit, OnDestroy {
+    @Select(WorldState)
+    world$: Observable<WorldModel>
     @HostBinding('class.shown')
     shown                 = true
     map                   = ''
@@ -21,29 +30,27 @@ export class ChannelMenuComponent implements OnInit, OnDestroy {
     selected              = new EventEmitter()
     close                 = new EventEmitter()
 
-    constructor(private game: GameEngineService, private connection: ConnectionManager) {
-    }
-
-    get channels() {
-        return this.game.mapChannels[this.game.currentSceneKey] || []
+    constructor(private game: GameEngineService, private store: Store) {
     }
 
 
     ngOnInit() {
-        this.shown = true
-        let scene  = this.game.currentScene instanceof MultiplayerScene ? this.game.currentScene.config.constant : null
-        this.connection.world.socket.emit(GetMapChannels.event, new GetMapChannels(scene, this.character), (channels) => {
-            this.game.mapChannels[this.game.currentSceneKey] = channels
+        this.shown            = true
+        let world: WorldModel = this.store.selectSnapshot(WorldState)
+        world.socket.emit(GetMapChannels.type, new GetMapChannels(this.game.currentSceneKey), (channels) => {
+            this.store.dispatch(new MapChannels(world.character, this.game.currentSceneKey, channels))
         })
     }
 
     selectChannel(channel: number) {
         this.selected.emit()
+        let world: WorldModel = this.store.selectSnapshot(WorldState)
         if (this.map !== '') {
-            this.connection.world.socket.emit(PlayerAttemptedTransition.event, channel, (result) => {
+            world.socket.emit(PlayerAttemptedTransition.type, channel, (result) => {
                 if (!result.status) {
-                    this.connection.world.socket.emit(GetMapChannels.event, new GetMapChannels(result.map, this.character), (channels) => {
+                    world.socket.emit(GetMapChannels.type, new GetMapChannels(result.map, this.character), (channels) => {
                         this.game.mapChannels[result.map] = channels
+                        this.store.dispatch(new MapChannels(this.character, result.map, channels))
                     })
                 } else {
                     this.selected.emit()
@@ -52,7 +59,7 @@ export class ChannelMenuComponent implements OnInit, OnDestroy {
             return
         }
         if (!this.forCharacterSelection) {
-            this.connection.world.socket.emit(ChangeMapChannel.event, channel)
+            world.socket.emit(ChangeMapChannel.type, channel)
             this.selected.emit()
             return
         }

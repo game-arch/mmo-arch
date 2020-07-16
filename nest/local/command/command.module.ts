@@ -5,15 +5,17 @@ import { CharacterClientModule } from '../character/client/character-client.modu
 import { ClientModule }          from '../../client/client.module'
 import { DB_CONFIG }             from '../../lib/config/db.config'
 import { ConnectionOptions }     from 'typeorm'
-import { MapClientModule }   from '../map/client/map-client.module'
-import { CommandController } from './command.controller'
+import { MapClientModule }       from '../map/client/map-client.module'
+import { CommandController }     from './command.controller'
+import { CommandExecution }      from './entities/command-execution'
+import { CoolDownService }       from './cool-down.service'
 
 @Module({
     imports    : [
         ClientModule,
         CharacterClientModule,
         MapClientModule,
-        TypeOrmModule.forFeature([]),
+        TypeOrmModule.forFeature([CommandExecution]),
         TypeOrmModule.forRoot(<ConnectionOptions>{
             ...DB_CONFIG,
             database: WorldConstants.DB_NAME + '_command',
@@ -21,7 +23,7 @@ import { CommandController } from './command.controller'
         })
     ],
     controllers: [CommandController],
-    providers  : []
+    providers  : [CoolDownService]
 })
 export class CommandModule {
 }

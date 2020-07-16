@@ -1,6 +1,9 @@
 import { Component }         from '@angular/core'
-import { ConnectionManager } from '../connection/connection-manager'
 import { GameEngineService } from '../game-engine/game-engine.service'
+import { Select }            from '@ngxs/store'
+import { WorldState }        from '../../state/world/world.state'
+import { Observable }        from 'rxjs'
+import { WorldModel }        from '../../state/world/world.model'
 
 @Component({
     selector   : 'hud',
@@ -8,10 +11,9 @@ import { GameEngineService } from '../game-engine/game-engine.service'
     styleUrls  : ['hud.component.scss']
 })
 export class HudComponent {
-    constructor(public connection: ConnectionManager, public engine: GameEngineService) {
-    }
+    @Select(WorldState)
+    world$: Observable<WorldModel>
 
-    get world() {
-        return this.connection.world
+    constructor(public engine: GameEngineService) {
     }
 }

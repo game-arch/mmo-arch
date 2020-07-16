@@ -10,7 +10,7 @@ import {
     ZoneMessage
 }                       from './actions'
 import { ChatGateway } from './chat.gateway'
-import { WorldEvent }  from '../event.types'
+import { WorldEvent }  from '../../../lib/event.types'
 
 @Controller()
 export class ChatController {

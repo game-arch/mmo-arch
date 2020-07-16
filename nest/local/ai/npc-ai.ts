@@ -1,8 +1,8 @@
 import { NpcConfig }           from '../../../shared/interfaces/npc-config'
 import { Observable, Subject } from 'rxjs'
-import { takeUntil }           from 'rxjs/operators'
-import { PlayerChangedMap }    from '../../../shared/events/map.events'
-import { MapClient }           from '../map/client/map.client'
+import { takeUntil }        from 'rxjs/operators'
+import { PlayerChangedMap } from '../../../shared/actions/map.actions'
+import { MapClient }        from '../map/client/map.client'
 
 export class NpcAI {
     stop = new Subject()

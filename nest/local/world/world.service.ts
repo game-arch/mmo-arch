@@ -7,8 +7,8 @@ import { MapClient }        from '../map/client/map.client'
 import { Repository }       from 'typeorm'
 import { Player }           from './entities/player'
 import { InjectRepository } from '@nestjs/typeorm'
-import { GetMapChannels }   from '../../../shared/events/map.events'
-import { CharacterOnline }  from '../../../shared/events/character.events'
+import { GetMapChannels }   from '../../../shared/actions/map.actions'
+import { CharacterOnline }  from '../../../shared/actions/character.actions'
 
 
 @Injectable()
@@ -51,10 +51,9 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             if (player && character.characterId) {
                 await this.validateCharacterLogin(player, character.characterId)
-                await this.character.characterOnline(character.characterId, client.id, character.channel || player.channel)
+                await this.character.characterOnline(character.characterId, client.id)
                 player.characterId   = character.characterId
                 player.characterName = await this.character.getCharacterName(character.characterId)
-                player.channel       = character.channel || player.channel || 1
                 await this.players.save(player)
                 client.join('character-id.' + player.characterId)
                 client.join('character-name.' + player.characterName)
@@ -130,12 +129,12 @@ export class WorldService {
         }
     }
 
-    async playerAttemptedTransition(client: Socket, channel?: number) {
+    async playerAttemptedTransition(client: Socket) {
         if (!this.shuttingDown) {
             const player = await this.players.findOne({ socketId: client.id })
             let map      = this.getMapOf(client)
             if (player && player.characterId !== null && map) {
-                return await this.map.playerAttemptedTransition(player.characterId, map, player.channel, channel || player.channel)
+                return await this.map.playerAttemptedTransition(player.characterId, map, player.channel)
             }
         }
         return { status: false, map: null, reason: 'shutting_down_server' }
@@ -157,7 +156,7 @@ export class WorldService {
             const player = await this.players.findOne({ socketId: client.id })
             if (player) {
                 let position: any = await this.map.findPlayer(data.characterId || player.characterId)
-                return await this.map.getChannels(data.map || position.map, position.channel)
+                return await this.map.getChannels(data.map || position.map)
             }
         }
         return []

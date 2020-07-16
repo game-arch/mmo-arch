@@ -5,7 +5,7 @@
         <mat-icon [style.color]="server.status === 'online' ? '#22ff88' : 'gray'" matListIcon>
             {{server.status === 'online' ? 'wifi' : 'wifi_off'}}
         </mat-icon>
-        <div [style.font-weight]="manager.isConnected(server.name) ? 'bold' : 'inherited'" [style.min-width.px]="200"
+        <div [style.min-width.px]="200"
              [style.padding-right.px]="16"
              matLine>
             {{server.name}}

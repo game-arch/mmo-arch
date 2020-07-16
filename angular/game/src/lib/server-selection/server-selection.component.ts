@@ -1,20 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 
 @Component({
     selector   : 'server-selection',
     templateUrl: 'server-selection.component.html',
-    styles     : [],
+    styles     : []
 })
-export class ServerSelectionComponent implements OnInit {
-
-    constructor() {
-    }
-
-    ngOnInit() {
-    }
-
-    onConnection(name: string) {
-        console.log('connected!', name)
-    }
-
+export class ServerSelectionComponent {
 }

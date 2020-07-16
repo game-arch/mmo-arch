@@ -1,63 +1,32 @@
-import { BaseScene }                                         from '../../../../../../../shared/phaser/base.scene'
-import { Mob }                                               from '../../../../../../../shared/phaser/mob'
-import { MapConfig }                                         from '../../../../../../../shared/interfaces/map-config'
-import { PlayerAttemptedTransition, PlayerDirectionalInput } from '../../../../../../../shared/events/map.events'
-import { ConnectionManager }                                 from '../../../connection/connection-manager'
-import { MobSprite }                                         from '../../../../../../../shared/phaser/mob-sprite'
+import { BaseScene }  from '../../../../../../../shared/phaser/base.scene'
+import { Mob }        from '../../../../../../../shared/phaser/mob'
+import { MapConfig }  from '../../../../../../../shared/interfaces/map-config'
+import { MobSprite }  from '../../../../../../../shared/phaser/mob-sprite'
+import { Store }      from '@ngxs/store'
+import { WorldState } from '../../../../state/world/world.state'
 import Scene = Phaser.Scene
 
 export class MultiplayerScene extends BaseScene implements Scene {
     self: Mob
-    directionMap = {
-        s: 'down',
-        w: 'up',
-        a: 'left',
-        d: 'right'
-    }
-    directions   = {
+    directions = {
         up   : false,
         down : false,
         right: false,
         left : false
     }
 
+    getSelectedCharacter() {
+        let world = this.store.selectSnapshot(WorldState)
+        return world.character
+    }
 
-    constructor(protected manager: ConnectionManager, config: MapConfig) {
+    constructor(public store: Store, config: MapConfig) {
         super(config)
     }
 
 
-    get connection() {
-        return this.manager.world
-    }
-
-    toggleDirection(event: KeyboardEvent, status: boolean) {
-        if (this.directionMap.hasOwnProperty(event.key)) {
-            event.stopImmediatePropagation()
-            const direction = this.directionMap[event.key]
-            if (this.directions[direction] !== status) {
-                this.directions[direction] = status
-                this.sendDirectionalInput()
-            }
-        }
-    }
-
-    sendDirectionalInput() {
-        this.connection.socket.emit(PlayerDirectionalInput.event, {
-            directions: this.directions
-        })
-    }
-
-    transitionToNewMap() {
-        if (this.canTransition[this.self.instanceId]) {
-            this.connection.socket.emit(PlayerAttemptedTransition.event, null, (result) => {
-                if (!result.status) {
-                    this.game.events.emit('transition_failed', result)
-                }
-            })
-            return true
-        }
-        return false
+    toggleDirection(direction: string, status: boolean) {
+        this.directions[direction] = status
     }
 
 
@@ -99,7 +68,7 @@ export class MultiplayerScene extends BaseScene implements Scene {
         mob.y          = player.y
         this.addPlayer(mob)
         this.playerSprites[player.instanceId].body.setVelocity(player.velX, player.velY)
-        if (this.connection.selectedCharacter.id === player.instanceId) {
+        if (this.getSelectedCharacter() === player.instanceId) {
             this.setSelf(mob)
         }
         return mob

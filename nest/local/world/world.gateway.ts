@@ -11,7 +11,7 @@ import { PresenceClient }                                   from '../../global/p
 import { environment }                                      from '../../lib/config/environment'
 import { WorldConstants }                                   from '../../lib/constants/world.constants'
 import { CharacterClient }                                  from '../character/client/character.client'
-import { CharacterOffline, GetCharacters }                  from '../../../shared/events/character.events'
+import { CharacterOffline, ReceivedCharacters }             from '../../../shared/actions/character.actions'
 import { InjectRepository }                                 from '@nestjs/typeorm'
 import { Player }                                           from './entities/player'
 import { getConnection, Repository }                        from 'typeorm'
@@ -61,7 +61,7 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
                 throw new ConflictException('User already logged in!')
             }
             await this.service.storeUser(client, user.id)
-            client.emit(GetCharacters.event, await this.service.getCharacters(user.id))
+            client.emit(ReceivedCharacters.type, new ReceivedCharacters(await this.service.getCharacters(user.id)))
         } catch (e) {
             console.log(e)
             client.emit('connect-error', e.message)
@@ -84,6 +84,6 @@ export class WorldGateway implements OnGatewayInit, OnGatewayDisconnect, OnGatew
         await this.character.allCharactersOffline(sockets.map(player => (new CharacterOffline(player.socketId))))
         await connection.query('DELETE FROM player where  instance = ?', [process.env.NODE_APP_INSTANCE])
         await connection.close()
-        this.presence.serverOffline(this.serverId)
+        this.presence.worldOffline(this.serverId)
     }
 }

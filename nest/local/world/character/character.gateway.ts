@@ -11,14 +11,14 @@ import {
     CharacterOnline,
     CreateCharacter,
     GetCharacter,
-    GetCharacters
-}                                                              from '../../../../shared/events/character.events'
+    ReceivedCharacters
+}                                                              from '../../../../shared/actions/character.actions'
 import { Character }                                           from '../../character/entities/character'
 import { InjectRepository }                                    from '@nestjs/typeorm'
 import { Player }                                              from '../entities/player'
 import { Repository }                                          from 'typeorm'
 import * as parser                                             from 'socket.io-msgpack-parser'
-import { AllNpcs, AllPlayers, MapOnline }                      from '../../../../shared/events/map.events'
+import { AllNpcs, AllPlayers, MapOnline }                      from '../../../../shared/actions/map.actions'
 import { MapClient }                                           from '../../map/client/map.client'
 
 @WebSocketGateway({
@@ -53,31 +53,31 @@ export class CharacterGateway {
                 await this.character.characterOnline(player.characterId, player.socketId)
             }
         }
-        this.server.to('map.' + data.map + '.' + data.channel).emit(AllPlayers.event, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, data.channel)))
-        this.server.to('map.' + data.map + '.' + data.channel).emit(AllNpcs.event, new AllNpcs(data.map, await this.map.getAllNpcs(data.map, data.channel)))
+        this.server.to('map.' + data.map + '.' + data.channel).emit(AllPlayers.type, new AllPlayers(data.map, await this.map.getAllPlayers(data.map, data.channel)))
+        this.server.to('map.' + data.map + '.' + data.channel).emit(AllNpcs.type, new AllNpcs(data.map, await this.map.getAllNpcs(data.map, data.channel)))
     }
 
-    @SubscribeMessage(CreateCharacter.event)
+    @SubscribeMessage(CreateCharacter.type)
     async createCharacter(client: Socket, data: { name: string, gender: 'male' | 'female' }) {
         try {
             const player = await this.players.findOne({ socketId: client.id })
             if (player) {
                 const character: Character = await this.service.createCharacter(player.accountId, data.name, data.gender)
                 if (character) {
-                    client.emit(GetCharacters.event, await this.service.getCharacters(player.accountId))
-                    client.emit(CharacterCreated.event, new CharacterCreated(character.world, character.id))
+                    client.emit(ReceivedCharacters.type, new ReceivedCharacters(await this.service.getCharacters(player.accountId)))
+                    client.emit(CharacterCreated.type, new CharacterCreated(character.world, character.id))
                     return character
                 }
             }
-            client.emit(CharacterNotCreated.event)
+            client.emit(CharacterNotCreated.type)
             return null
         } catch (e) {
-            client.emit(CharacterNotCreated.event, new CharacterNotCreated(e.response))
+            client.emit(CharacterNotCreated.type, new CharacterNotCreated(e.response))
             return null
         }
     }
 
-    @SubscribeMessage(CharacterOnline.event)
+    @SubscribeMessage(CharacterOnline.type)
     async characterJoined(client: Socket, character: CharacterOnline) {
         try {
             await this.service.storeCharacter(client, character)
@@ -88,7 +88,7 @@ export class CharacterGateway {
         }
     }
 
-    @SubscribeMessage(GetCharacter.event)
+    @SubscribeMessage(GetCharacter.type)
     async getCharacter(client: Socket, characterId: number) {
         try {
             return await this.character.getCharacter(characterId)
@@ -98,7 +98,7 @@ export class CharacterGateway {
         }
     }
 
-    @SubscribeMessage(CharacterOffline.event)
+    @SubscribeMessage(CharacterOffline.type)
     async characterLeft(client: Socket) {
         try {
             await this.service.removeCharacter(client)
