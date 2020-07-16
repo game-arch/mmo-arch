@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core'
 import { Store }             from '@ngxs/store'
-import { SetToken }          from './state/auth.actions'
+import { SetToken }          from '../../state/auth/auth.actions'
 
 @Component({
     selector   : 'authentication',
     templateUrl: 'authentication.component.html',
-    styles     : [],
+    styles     : []
 })
 export class AuthenticationComponent implements OnInit {
 
@@ -18,7 +18,6 @@ export class AuthenticationComponent implements OnInit {
     }
 
     onLoggedIn({ token }: { token: string }) {
-        console.log('Logged in!', token)
         this.store.dispatch(new SetToken(token))
     }
 }

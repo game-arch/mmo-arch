@@ -1,6 +1,6 @@
 import { Controller }       from '@nestjs/common'
 import { CharacterService } from './character.service'
-import { MessagePattern }   from '@nestjs/microservices'
+import { MessagePattern } from '@nestjs/microservices'
 import {
     AllCharactersOffline,
     CharacterOffline,
@@ -9,8 +9,8 @@ import {
     GetCharacter,
     GetCharacterName,
     GetCharacters
-}                           from './actions'
-import { WORLD_PREFIX }     from '../world/world.prefix'
+}                     from '../../../shared/actions/character.actions'
+import { WorldEvent } from '../../lib/event.types'
 
 @Controller()
 export class CharacterController {
@@ -19,37 +19,37 @@ export class CharacterController {
 
     }
 
-    @MessagePattern(WORLD_PREFIX + GetCharacters.event)
+    @MessagePattern(new WorldEvent(GetCharacters.type))
     getCharacters(data: GetCharacters) {
         return this.service.getCharactersFor(data.accountId, data.world)
     }
 
-    @MessagePattern(WORLD_PREFIX + GetCharacter.event)
+    @MessagePattern(new WorldEvent(GetCharacter.type))
     getCharacter(data: GetCharacter) {
         return this.service.getCharacter(data.characterId)
     }
 
-    @MessagePattern(WORLD_PREFIX + CreateCharacter.event)
+    @MessagePattern(new WorldEvent(CreateCharacter.type))
     createCharacter(data: CreateCharacter) {
         return this.service.createCharacterFor(data.accountId, data.world, data.name, data.gender)
     }
 
-    @MessagePattern(WORLD_PREFIX + CharacterOnline.event)
+    @MessagePattern(new WorldEvent(CharacterOnline.type))
     characterOnline(data: CharacterOnline) {
         return this.service.characterOnline(data)
     }
 
-    @MessagePattern(WORLD_PREFIX + CharacterOffline.event)
+    @MessagePattern(new WorldEvent(CharacterOffline.type))
     characterOffline(data: CharacterOffline) {
         return this.service.characterOffline(data)
     }
 
-    @MessagePattern(WORLD_PREFIX + AllCharactersOffline.event)
+    @MessagePattern(new WorldEvent(AllCharactersOffline.type))
     allCharactersOffline(data: AllCharactersOffline) {
         return this.service.allCharactersOffline(data)
     }
 
-    @MessagePattern(WORLD_PREFIX + GetCharacterName.event)
+    @MessagePattern(new WorldEvent(GetCharacterName.type))
     getCharacterName(data: GetCharacterName) {
         return this.service.getCharacterName(data.characterId)
     }

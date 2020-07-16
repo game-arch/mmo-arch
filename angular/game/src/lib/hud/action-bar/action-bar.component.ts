@@ -1,6 +1,9 @@
-import { Component }                 from '@angular/core'
-import { GameEngineService }         from '../../game-engine/game-engine.service'
-import { PlayerAttemptedTransition } from '../../../../../../nest/local/map/actions'
+import { Component }             from '@angular/core'
+import { Observable }            from 'rxjs'
+import { OverloadedModel }       from '../../../state/command/overloaded.model'
+import { OverloadedActionState } from '../../../state/command/states/overloaded-action.state'
+import { Select, Store }         from '@ngxs/store'
+import { OverloadedAction }      from '../../../state/command/command.actions'
 
 @Component({
     selector   : 'action-bar',
@@ -8,16 +11,15 @@ import { PlayerAttemptedTransition } from '../../../../../../nest/local/map/acti
     styleUrls  : ['action-bar.component.scss']
 })
 export class ActionBarComponent {
+    @Select(OverloadedActionState)
+    overloaded$: Observable<OverloadedModel>
     skill = 'skill'
 
-    constructor(private engine: GameEngineService) {
+    constructor(private store: Store) {
     }
 
-    get canTransition() {
-        return this.engine.currentScene && this.engine.currentScene.self && this.engine.currentScene.canTransition[this.engine.currentScene.self.instanceId]
+    performOverloadedAction() {
+        this.store.dispatch(new OverloadedAction(false))
     }
 
-    transition() {
-        this.engine.game.events.emit(PlayerAttemptedTransition.event)
-    }
 }

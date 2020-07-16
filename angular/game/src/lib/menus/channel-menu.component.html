@@ -1,0 +1,30 @@
+<div style="display:flex;height:100%;flex-direction:column;">
+    <div style="flex:1"></div>
+    <div style="display:flex">
+        <div style="flex:1"></div>
+        <mat-card>
+            <mat-card-title style="display:flex">
+                Channel Selection
+                <div style="flex:1"></div>
+                <button mat-icon-button (click)="close.emit()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-card-title>
+            <mat-card-content *ngIf="world$ | async as world">
+                <ng-container *ngFor="let channel of world.channels">
+                    <button mat-raised-button [disabled]="channel.playerCount >= channel.playerCapacity"
+                            (click)="selectChannel(channel.channel)">
+                        <div class="capacity"
+                             [class.medium-capacity]="channel.playerCount / channel.playerCapacity > 0.4"
+                             [class.high-capacity]="channel.playerCount / channel.playerCapacity > 0.75"
+                             [class.full-capacity]="channel.playerCount >= channel.playerCapacity"
+                             [style.width.%]="channel.playerCount / channel.playerCapacity * 100"></div>
+                        <div>CH {{channel.channel}}</div>
+                    </button>
+                </ng-container>
+            </mat-card-content>
+        </mat-card>
+        <div style="flex:1"></div>
+    </div>
+    <div style="flex:1"></div>
+</div>

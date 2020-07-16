@@ -1,6 +1,5 @@
 import { NgModule }                       from '@angular/core'
 import { CharacterSelectionComponent }    from './character-selection.component'
-import { ConnectionModule }               from '../connection/connection.module'
 import { MatCardModule }                  from '@angular/material/card'
 import { CommonModule }                   from '@angular/common'
 import { MatListModule }                  from '@angular/material/list'
@@ -14,12 +13,12 @@ import { MatFormFieldModule }             from '@angular/material/form-field'
 import { MatInputModule }                 from '@angular/material/input'
 import { MatButtonToggleModule }          from '@angular/material/button-toggle'
 import { GameEngineModule }               from '../game-engine/game-engine.module'
+import { MenusModule }                    from '../menus/menus.module'
 
 
 @NgModule({
     declarations   : [CharacterSelectionComponent, CharacterFormComponent],
     imports        : [
-        ConnectionModule,
         MatCardModule,
         CommonModule,
         MatListModule,
@@ -31,9 +30,10 @@ import { GameEngineModule }               from '../game-engine/game-engine.modul
         MatInputModule,
         MatButtonToggleModule,
         GameEngineModule,
+        MenusModule
     ],
     exports        : [CharacterSelectionComponent],
-    entryComponents: [CharacterFormComponent],
+    entryComponents: [CharacterFormComponent]
 })
 export class CharacterSelectionModule {
 

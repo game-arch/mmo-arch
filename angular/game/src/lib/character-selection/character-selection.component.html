@@ -2,16 +2,16 @@
     <div style="flex:1"></div>
     <div style="display:flex">
         <div style="flex:1"></div>
-        <mat-card style="min-width:600px">
+        <mat-card style="min-width:600px" *ngIf="world$ | async as world">
             <mat-card-title>
                 Character Selection
             </mat-card-title>
             <mat-card-subtitle>
-                World: {{connection.world.world.name}}
+                World: {{world.name}}
             </mat-card-subtitle>
             <mat-card-content>
                 <mat-nav-list>
-                    <a (click)="selected = character" *ngFor="let character of connection.world.characters"
+                    <a (click)="selected = character" *ngFor="let character of world.characters"
                        [class.active]="selected?.id === character.id"
                        mat-list-item>
                         <mat-icon [svgIcon]="character.gender" matListIcon></mat-icon>
@@ -28,7 +28,7 @@
                 </button>
                 <div style="flex:1"></div>
                 <button (click)="join()" *ngIf="selected !== null" mat-raised-button>
-                    Enter Game
+                    Continue
                 </button>
             </mat-card-actions>
         </mat-card>

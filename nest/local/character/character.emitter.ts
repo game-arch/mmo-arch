@@ -1,9 +1,8 @@
-import {ClientProxy}                                             from '@nestjs/microservices'
-import {Inject, Injectable}                                      from '@nestjs/common'
-import {CharacterDetails, CharacterLoggedIn, CharacterLoggedOut} from './actions'
-import {WORLD_PREFIX}                                            from '../world/world.prefix'
-import {Character}                                               from './entities/character'
-import {LOCAL_CLIENT}                                            from '../../client/client.module'
+import { ClientProxy }                           from '@nestjs/microservices'
+import { Inject, Injectable }                    from '@nestjs/common'
+import { CharacterLoggedIn, CharacterLoggedOut } from '../../../shared/actions/character.actions'
+import { LOCAL_CLIENT } from '../../client/client.module'
+import { WorldEvent }   from '../../lib/event.types'
 
 @Injectable()
 export class CharacterEmitter {
@@ -19,21 +18,14 @@ export class CharacterEmitter {
         name: string
     ) {
         this.client.emit(
-            WORLD_PREFIX + CharacterLoggedIn.event,
+            new WorldEvent(CharacterLoggedIn.type),
             new CharacterLoggedIn(id, name, world, gender)
-        )
-    }
-
-    characterDetails(character: Character) {
-        this.client.emit(
-            WORLD_PREFIX + CharacterDetails.event,
-            new CharacterDetails(character)
         )
     }
 
     characterLoggedOut(id: number, name: string, world: string) {
         this.client.emit(
-            WORLD_PREFIX + CharacterLoggedOut.event,
+            new WorldEvent(CharacterLoggedOut.type),
             new CharacterLoggedOut(id, name, world)
         )
     }

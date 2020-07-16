@@ -1,9 +1,9 @@
-import { Controller, Logger }                                      from '@nestjs/common'
-import { EventPattern }                                            from '@nestjs/microservices'
-import { CharacterDetails, CharacterLoggedIn, CharacterLoggedOut } from '../../character/actions'
-import { CharacterGateway }                                        from './character.gateway'
-import { MapOnline }                                               from '../../map/actions'
-import { WORLD_PREFIX }                                            from '../world.prefix'
+import { Controller, Logger }                    from '@nestjs/common'
+import { EventPattern }                          from '@nestjs/microservices'
+import { CharacterLoggedIn, CharacterLoggedOut } from '../../../../shared/actions/character.actions'
+import { CharacterGateway }                      from './character.gateway'
+import { MapOnline }  from '../../../../shared/actions/map.actions'
+import { WorldEvent } from '../../../lib/event.types'
 
 @Controller()
 export class CharacterController {
@@ -16,25 +16,21 @@ export class CharacterController {
 
     }
 
-    @EventPattern(WORLD_PREFIX + MapOnline.event)
-    async onMapOnline() {
-        await this.gateway.sendCharacters()
+    @EventPattern(new WorldEvent(MapOnline.type))
+    async onMapOnline(data: MapOnline) {
+        await this.gateway.sendCharacters(data)
     }
 
-    @EventPattern(WORLD_PREFIX + CharacterDetails.event)
-    onCharacterDetails(data: CharacterDetails) {
-        this.gateway.server.emit(CharacterDetails.event, data)
-    }
 
-    @EventPattern(WORLD_PREFIX + CharacterLoggedIn.event)
+    @EventPattern(new WorldEvent(CharacterLoggedIn.type))
     onCharacterJoin(data: CharacterLoggedIn) {
         this.logger.log(data.name + ' is online.')
-        this.gateway.server.emit(CharacterLoggedIn.event, data)
+        this.gateway.server.emit(CharacterLoggedIn.type, data)
     }
 
-    @EventPattern(WORLD_PREFIX + CharacterLoggedOut.event)
+    @EventPattern(new WorldEvent(CharacterLoggedOut.type))
     onCharacterLeave(data: CharacterLoggedOut) {
         this.logger.log(data.name + ' is offline.')
-        this.gateway.server.emit(CharacterLoggedOut.event, data)
+        this.gateway.server.emit(CharacterLoggedOut.type, data)
     }
 }

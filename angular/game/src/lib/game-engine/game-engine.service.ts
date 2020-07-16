@@ -1,68 +1,42 @@
 import { EventEmitter, Injectable } from '@angular/core'
-import { ConnectionManager }        from '../connection/connection-manager'
 import { GAME_CONFIG }              from './phaser/config'
-import { fromEvent }                from 'rxjs'
-import {
-    filter,
-    takeUntil,
-    tap
-}                                   from 'rxjs/operators'
-import {
-    AllNpcs,
-    AllPlayers,
-    NpcAdded,
-    NpcRemoved, NpcUpdate,
-    PlayerEnteredMap,
-    PlayerLeftMap,
-    PlayerUpdate
-} from '../../../../../nest/local/map/actions'
-import { MultiplayerScene }         from './phaser/scenes/multiplayer.scene'
-import { WorldConnection }          from '../connection/world-connection'
-import { EventBus }                 from './phaser/event-bus'
-import { TUTORIAL_CONFIG }          from '../../../../../shared/maps/tutorial'
-import { TUTORIAL_2_CONFIG }        from '../../../../../shared/maps/tutorial-2'
-import { PreloadScene }             from './phaser/scenes/preload/preload.scene'
-import { Location }                 from '@angular/common'
-import { TitleScene }               from './phaser/scenes/title/title.scene'
+import { fromEvent, Observable }    from 'rxjs'
+import { takeUntil }                from 'rxjs/operators'
+import { MultiplayerScene }  from './phaser/scenes/multiplayer.scene'
+import { TUTORIAL_CONFIG }   from '../../../../../shared/maps/tutorial'
+import { TUTORIAL_2_CONFIG } from '../../../../../shared/maps/tutorial-2'
+import { PreloadScene }      from './phaser/scenes/preload/preload.scene'
+import { Location }          from '@angular/common'
+import { TitleScene }        from './phaser/scenes/title/title.scene'
+import { Select, Store }     from '@ngxs/store'
+import { WorldModel }        from '../../state/world/world.model'
+import { WorldState }        from '../../state/world/world.state'
+import { ChangeScene }       from '../../state/scene/scene.actions'
 import Game = Phaser.Game
+import { PlayerDirections }  from '../../../../../shared/actions/map.actions'
 
 @Injectable()
 export class GameEngineService {
-    loading           = 0
+    loading                                                                                            = 0
     game: Game
-    currentSceneKey   = 'preload'
+    currentSceneKey                                                                                    = 'preload'
     currentScene: MultiplayerScene
-    worldChange       = new EventEmitter()
-    eventBus          = new EventBus(this)
-    private destroyed = new EventEmitter()
+    mapChannels: { [map: string]: { channel: number, playerCount: number, playerCapacity: number }[] } = {}
+    private destroyed                                                                                  = new EventEmitter()
+
+    @Select(WorldState)
+    world$: Observable<WorldModel>
+
 
     constructor(
-        private location: Location,
-        public connection: ConnectionManager
+        private store: Store,
+        private location: Location
     ) {
     }
 
     init(canvas: HTMLCanvasElement) {
         this.game = new Game({ ...GAME_CONFIG, canvas })
-        this.connection.worldChange
-            .pipe(takeUntil(this.destroyed))
-            .pipe(filter(world => !!world.socket))
-            .pipe(tap(world => (this.connection.world = world)))
-            .subscribe(world => {
-                this.worldChange.emit()
-                this.convertEvents(world, [
-                    PlayerEnteredMap.event,
-                    PlayerLeftMap.event,
-                    AllPlayers.event,
-                    PlayerUpdate.event,
-                    NpcUpdate.event,
-                    NpcAdded.event,
-                    NpcRemoved.event,
-                    AllNpcs.event
-                ])
-            })
         this.createScenes()
-        this.eventBus.listen()
         fromEvent(window, 'resize')
             .pipe(takeUntil(this.destroyed))
             .subscribe(() =>
@@ -83,31 +57,24 @@ export class GameEngineService {
                         right: false,
                         left : false
                     }
-                    this.currentScene.sendDirectionalInput()
+                    this.store.dispatch(new PlayerDirections())
                 }
             })
+
+        this.game.events.on('load.progress', (progress: number) => {
+            this.loading = progress * 100
+        })
+        this.game.events.on('load.complete', () => {
+            this.loading = 100
+            this.store.dispatch(new ChangeScene('title'))
+        })
     }
 
     createScenes() {
         this.game.scene.add('preload', new PreloadScene(this.location))
         this.game.scene.add('title', new TitleScene())
-        this.game.scene.add('tutorial', new MultiplayerScene(this.connection, TUTORIAL_CONFIG))
-        this.game.scene.add('tutorial-2', new MultiplayerScene(this.connection, TUTORIAL_2_CONFIG))
-    }
-
-    convertEvent(world: WorldConnection, eventName: string) {
-        fromEvent(world.socket, eventName)
-            .pipe(takeUntil(this.worldChange))
-            .subscribe(event => {
-                console.log(eventName, event)
-                this.game.events.emit(eventName, event)
-            })
-    }
-
-    convertEvents(world: WorldConnection, eventNames: string[]) {
-        for (const eventName of eventNames) {
-            this.convertEvent(world, eventName)
-        }
+        this.game.scene.add('tutorial', new MultiplayerScene(this.store, TUTORIAL_CONFIG))
+        this.game.scene.add('tutorial-2', new MultiplayerScene(this.store, TUTORIAL_2_CONFIG))
     }
 
     destroy() {

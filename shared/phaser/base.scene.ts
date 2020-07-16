@@ -7,7 +7,11 @@ import { MobSprite }         from './mob-sprite'
 import { interval, Subject } from 'rxjs'
 import { takeUntil }         from 'rxjs/operators'
 import { NpcConfig }         from '../interfaces/npc-config'
+import { NpcSprite }         from './npc.sprite'
+import { isServer }          from '../constants/environment-constants'
+import { PlayerSprite }      from './player.sprite'
 import Scene = Phaser.Scene
+import Group = Phaser.Physics.Arcade.Group
 
 export class BaseScene extends Scene implements Scene {
     onCreate = new Subject()
@@ -20,7 +24,9 @@ export class BaseScene extends Scene implements Scene {
     playerSprites: { [characterId: number]: MobSprite } = {}
     layers: { [id: string]: MapCollisionLayer }         = {}
 
-    protected stop = new Subject()
+    allMobSprites: Group
+
+    protected stop$ = new Subject()
 
     savePlayer = (player: MobSprite) => {
     }
@@ -47,21 +53,25 @@ export class BaseScene extends Scene implements Scene {
     }
 
     create() {
-        this.stop.next()
+        this.stop$.next()
         this.canTransition           = {}
         this.physics.world.TILE_BIAS = 40
         this.layers                  = {
             mobs: new MapCollisionLayer({
                 players: this.physics.add.group([], {
-                    visible      : true,
-                    frameQuantity: 30
+                    visible       : true,
+                    runChildUpdate: true
                 }),
                 npcs   : this.physics.add.group([], {
-                    visible      : true,
-                    frameQuantity: 30
+                    visible       : true,
+                    runChildUpdate: true
                 })
             })
         }
+        this.allMobSprites           = this.physics.add.group([], {
+            visible       : true,
+            runChildUpdate: true
+        })
         if (this.config) {
             this.layers = loadCollisions(this.layers, this.config, this)
             for (let layer of Object.keys(this.config.layers)) {
@@ -79,7 +89,7 @@ export class BaseScene extends Scene implements Scene {
                                 }
                                 interval(300)
                                     .pipe(takeUntil(stop))
-                                    .pipe(takeUntil(this.stop))
+                                    .pipe(takeUntil(this.stop$))
                                     .subscribe(() => {
                                         if (!this.physics.world.overlap(obj1, obj2)) {
                                             delete this.canTransition[obj2.id]
@@ -95,25 +105,62 @@ export class BaseScene extends Scene implements Scene {
         this.onCreate.next()
     }
 
+    playerCount = 0
+
+    update(time: number, delta: number): void {
+        super.update(time, delta)
+        if (!isServer) {
+        }
+        if (isServer) {
+            if (this.playerCount === 0) {
+                this.game.scene.pause(this.config.constant)
+            }
+        }
+    }
+
     addPlayer(player: Mob) {
+        if (!this.players[player.instanceId]) {
+            this.playerCount++
+            if (isServer) {
+                if (!this.game.scene.isActive(this.config.constant)) {
+                    this.game.scene.resume(this.config.constant)
+                }
+            }
+        }
         this.players[player.instanceId]                        = player
-        this.playerSprites[player.instanceId]                  = new MobSprite(player.name, this, this.layers.mobs.players, player.x, player.y)
+        this.playerSprites[player.instanceId]                  = new PlayerSprite(player.instanceId, this, this.layers.mobs.players, player.x, player.y)
         this.playerSprites[player.instanceId].id               = player.instanceId
+        this.playerSprites[player.instanceId].name             = player.name
         this.playerSprites[player.instanceId].onVelocityChange = () => this.emitPlayer(this.playerSprites[player.instanceId])
         this.playerSprites[player.instanceId].onStopMoving     = () => this.savePlayer(this.playerSprites[player.instanceId])
+        this.allMobSprites.add(this.playerSprites[player.instanceId])
     }
 
     addNpc(mob: Mob, npcConfig?: NpcConfig) {
+        npcConfig                                        = npcConfig || <NpcConfig>{
+            ...mob,
+            key     : 'Template',
+            position: [mob.x, mob.y]
+        }
         this.npcs[mob.instanceId]                        = mob
-        this.npcSprites[mob.instanceId]                  = new MobSprite(mob.name, this, this.layers.mobs.npcs, mob.x, mob.y)
+        this.npcSprites[mob.instanceId]                  = new NpcSprite(this, this.layers.mobs.npcs, npcConfig)
         this.npcSprites[mob.instanceId].npcConfig        = npcConfig
         this.npcSprites[mob.instanceId].id               = mob.instanceId
+        this.npcSprites[mob.instanceId].name             = mob.name
         this.npcSprites[mob.instanceId].onVelocityChange = () => this.emitMob(this.npcSprites[mob.instanceId])
+        this.allMobSprites.add(this.npcSprites[mob.instanceId])
     }
 
     removePlayer(id: number) {
+        if (this.players[id]) {
+            this.playerCount--
+            if (this.playerCount < 0) {
+                this.playerCount = 0
+            }
+        }
         if (this.containsPlayer(id)) {
-            this.layers.mobs.players.remove(this.playerSprites[id], true, true)
+            this.layers.mobs.players.remove(this.playerSprites[id])
+            this.allMobSprites.remove(this.playerSprites[id], true, true)
         }
         delete this.players[id]
         delete this.playerSprites[id]
@@ -125,7 +172,8 @@ export class BaseScene extends Scene implements Scene {
 
     removeNpc(id: number) {
         if (this.layers.mobs.npcs.children && this.layers.mobs.npcs.contains(this.npcSprites[id])) {
-            this.layers.mobs.npcs.remove(this.npcSprites[id], true, true)
+            this.layers.mobs.npcs.remove(this.npcSprites[id])
+            this.allMobSprites.remove(this.npcSprites[id], true, true)
         }
         delete this.npcs[id]
         delete this.npcSprites[id]
@@ -133,19 +181,23 @@ export class BaseScene extends Scene implements Scene {
 
     moveEntity(type: 'player' | 'mob', id: number, directions: Directions) {
         if (type === 'player') {
-            this.playerSprites[id].moving = {
+            if (this.playerSprites[id]) {
+                this.playerSprites[id].directions = {
+                    up   : !!directions.up,
+                    down : !!directions.down,
+                    left : !!directions.left,
+                    right: !!directions.right
+                }
+            }
+            return
+        }
+        if (this.npcSprites[id]) {
+            this.npcSprites[id].directions = {
                 up   : !!directions.up,
                 down : !!directions.down,
                 left : !!directions.left,
                 right: !!directions.right
             }
-            return
-        }
-        this.npcSprites[id].moving = {
-            up   : !!directions.up,
-            down : !!directions.down,
-            left : !!directions.left,
-            right: !!directions.right
         }
     }
 

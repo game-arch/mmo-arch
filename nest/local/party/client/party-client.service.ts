@@ -1,9 +1,9 @@
 import { Inject, Injectable }                                    from '@nestjs/common'
 import { ClientProxy }                                           from '@nestjs/microservices'
-import { WORLD_PREFIX }                                          from '../../world/world.prefix'
-import { CreateParty, GetParty, InviteToParty, MakePartyLeader } from '../actions'
+import { CreateParty, GetParty, InviteToParty, MakePartyLeader } from '../../../../shared/actions/party.actions'
 import { first }                                                 from 'rxjs/operators'
-import { Party }                                                 from '../entities/party'
+import { Party }      from '../entities/party'
+import { WorldEvent } from '../../../lib/event.types'
 
 @Injectable()
 export class PartyClient {
@@ -16,28 +16,28 @@ export class PartyClient {
 
     async getPartyByLeader(leaderId: number): Promise<Party> {
         return await this.client.send(
-            WORLD_PREFIX + GetParty.event,
+            new WorldEvent(GetParty.type),
             new GetParty(leaderId)
         ).pipe(first()).toPromise()
     }
 
     async createParty(partyName: string, characterId: number): Promise<Party> {
         return await this.client.send(
-            WORLD_PREFIX + CreateParty.event,
+            new WorldEvent(CreateParty.type),
             new CreateParty(partyName, characterId)
         ).pipe(first()).toPromise()
     }
 
     async makeLeader(leaderId: number, characterId: number): Promise<boolean> {
         return await this.client.send(
-            WORLD_PREFIX + MakePartyLeader.event,
+            new WorldEvent(MakePartyLeader.type),
             new MakePartyLeader(leaderId, characterId)
         ).pipe(first()).toPromise()
     }
 
     async inviteToParty(leaderId: number, characterId: number): Promise<boolean> {
         return await this.client.send(
-            WORLD_PREFIX + InviteToParty.event,
+            new WorldEvent(InviteToParty.type),
             new InviteToParty(leaderId, characterId)
         ).pipe(first()).toPromise()
     }

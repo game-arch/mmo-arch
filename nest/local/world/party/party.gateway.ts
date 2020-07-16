@@ -4,10 +4,15 @@ import { Repository }                                          from 'typeorm'
 import { Player }                                              from '../entities/player'
 import { InjectRepository }                                    from '@nestjs/typeorm'
 import { Namespace, Socket }                                   from 'socket.io'
-import * as parser
-                                                               from 'socket.io-msgpack-parser'
-import { CreateParty, MakePartyLeader, PartyCreated, PartyLeaderNotChanged, PartyNotCreated } from '../../party/actions'
-import { PartyClient }                                                                        from '../../party/client/party-client.service'
+import * as parser                                             from 'socket.io-msgpack-parser'
+import {
+    CreateParty,
+    MakePartyLeader,
+    PartyCreated,
+    PartyLeaderNotChanged,
+    PartyNotCreated
+}                                                              from '../../../../shared/actions/party.actions'
+import { PartyClient }                                         from '../../party/client/party-client.service'
 
 @WebSocketGateway({
     namespace   : 'world',
@@ -27,20 +32,20 @@ export class PartyGateway {
 
     }
 
-    @SubscribeMessage(CreateParty.event)
+    @SubscribeMessage(CreateParty.type)
     async createParty(client: Socket, data: CreateParty) {
         try {
             const party = await this.client.createParty(data.partyName, data.characterId)
             if (party) {
-                client.emit(PartyCreated.event, new PartyCreated(party.id, data.characterId))
+                client.emit(PartyCreated.type, new PartyCreated(party.id, data.characterId))
                 client.join('party.' + data.partyName)
             }
         } catch (e) {
-            client.emit(PartyNotCreated.event, new PartyNotCreated({ statusCode: 409 }))
+            client.emit(PartyNotCreated.type, new PartyNotCreated({ statusCode: 409 }))
         }
     }
 
-    @SubscribeMessage(MakePartyLeader.event)
+    @SubscribeMessage(MakePartyLeader.type)
     async makeLeader(client: Socket, data: MakePartyLeader) {
         try {
             const party = await this.client.getPartyByLeader(data.leaderId)
@@ -48,9 +53,9 @@ export class PartyGateway {
                 await this.client.makeLeader(data.leaderId, data.characterId)
                 return
             }
-            client.emit(PartyLeaderNotChanged.event)
+            client.emit(PartyLeaderNotChanged.type)
         } catch (e) {
-            client.emit(PartyLeaderNotChanged.event)
+            client.emit(PartyLeaderNotChanged.type)
         }
     }
 }

@@ -1,8 +1,9 @@
-import { Inject, Injectable }                        from '@nestjs/common'
-import { ClientProxy }                               from '@nestjs/microservices'
-import { first }                                     from 'rxjs/operators'
-import { GetServers, RegisterServer, ServerOffline } from '../actions'
-import { GLOBAL_CLIENT }                             from '../../../client/client.module'
+import { Inject, Injectable }                   from '@nestjs/common'
+import { ClientProxy }                          from '@nestjs/microservices'
+import { first }                                from 'rxjs/operators'
+import { GetWorlds, WorldOffline, WorldOnline } from '../../../../shared/actions/server-presence.actions'
+import { GLOBAL_CLIENT }                        from '../../../client/client.module'
+import { GlobalEvent }                          from '../../../lib/event.types'
 
 @Injectable()
 export class PresenceClient {
@@ -12,7 +13,7 @@ export class PresenceClient {
     }
 
     async register(host: string, port: number, constant: string, name: string, instanceId: number): Promise<string> {
-        return await this.client.send(RegisterServer.event, new RegisterServer(
+        return await this.client.send(new GlobalEvent(WorldOnline.type), new WorldOnline(
             host,
             port,
             constant,
@@ -21,11 +22,11 @@ export class PresenceClient {
         )).pipe(first()).toPromise()
     }
 
-     getServers() {
-        this.client.emit(GetServers.event, {})
+    getWorlds() {
+        this.client.emit(new GlobalEvent(GetWorlds.type), {})
     }
 
-    serverOffline(serverId: number) {
-        this.client.emit(ServerOffline.event, new ServerOffline(serverId))
+    worldOffline(serverId: number) {
+        this.client.emit(new GlobalEvent(WorldOffline.type), new WorldOffline(serverId))
     }
 }

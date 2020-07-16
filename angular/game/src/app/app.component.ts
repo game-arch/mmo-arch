@@ -1,11 +1,15 @@
 import { Component }         from '@angular/core'
 import { Observable }        from 'rxjs'
-import { AuthModel }         from '../lib/authentication/state/auth.model'
+import { AuthModel }         from '../state/auth/auth.model'
 import { Select, Store }     from '@ngxs/store'
-import { AuthState }         from '../lib/authentication/state/auth.state'
-import { ConnectionManager } from '../lib/connection/connection-manager'
-import { SetToken }          from '../lib/authentication/state/auth.actions'
+import { AuthState }         from '../state/auth/auth.state'
+import { SetToken }          from '../state/auth/auth.actions'
 import { GameEngineService } from '../lib/game-engine/game-engine.service'
+import { ConnectionModel }   from '../state/connection/connection.model'
+import { ConnectionState }   from '../state/connection/connection.state'
+import { WorldModel }        from '../state/world/world.model'
+import { WorldState }        from '../state/world/world.state'
+import { ChangeScene }       from '../state/scene/scene.actions'
 
 @Component({
     selector   : 'app-root',
@@ -15,12 +19,15 @@ import { GameEngineService } from '../lib/game-engine/game-engine.service'
 export class AppComponent {
     @Select(AuthState)
     auth$: Observable<AuthModel>
+    @Select(ConnectionState)
+    connection$: Observable<ConnectionModel>
+    @Select(WorldState)
+    world$: Observable<WorldModel>
 
     title = 'game'
 
     constructor(
         private store: Store,
-        public connection: ConnectionManager,
         public engine: GameEngineService
     ) {
 
@@ -28,7 +35,6 @@ export class AppComponent {
 
     logout() {
         this.store.dispatch(new SetToken())
-        this.engine.game.events.emit('game.scene', 'title')
-        this.connection.world.socket.disconnect();
+        this.store.dispatch(new ChangeScene('title'))
     }
 }

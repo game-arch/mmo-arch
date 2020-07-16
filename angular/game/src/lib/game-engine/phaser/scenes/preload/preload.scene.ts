@@ -1,5 +1,4 @@
-import { Location }         from '@angular/common'
-import { MultiplayerScene } from '../multiplayer.scene'
+import { Location } from '@angular/common'
 import Scene = Phaser.Scene
 
 export class PreloadScene extends Scene {
@@ -32,6 +31,14 @@ export class PreloadScene extends Scene {
             this.load.image(
                 'background',
                 this.asset('/assets/backgrounds/login.png')
+            )
+            this.load.spritesheet(
+                'rain',
+                this.asset('/assets/sprites/rain.png'),
+                {
+                    frameWidth : 17,
+                    frameHeight: 17
+                }
             )
             this.loadSpritesheets()
             this.preloaded = true

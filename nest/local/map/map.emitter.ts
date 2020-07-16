@@ -1,20 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { ClientProxy }        from '@nestjs/microservices'
+import { ClientProxy }  from '@nestjs/microservices'
 import {
-    AllNpcs,
-    AllPlayers,
+    MapChannels,
     MapOnline,
     NpcAdded,
-    NpcRemoved,
     NpcUpdate,
     PlayerChangedMap,
     PlayerEnteredMap,
     PlayerLeftMap,
     PlayerUpdate
-}                             from './actions'
-import { WORLD_PREFIX }       from '../world/world.prefix'
-import { LOCAL_CLIENT }       from '../../client/client.module'
+}                       from '../../../shared/actions/map.actions'
+import { LOCAL_CLIENT } from '../../client/client.module'
 import { Mob }                from '../../../shared/phaser/mob'
+import { MapConstants } from './constants'
+import { WorldEvent }   from '../../lib/event.types'
 
 @Injectable()
 export class MapEmitter {
@@ -23,43 +22,35 @@ export class MapEmitter {
 
     }
 
-    playerJoinedMap(map: string, characterId: number, name: string, x: number, y: number) {
-        this.client.emit(WORLD_PREFIX + PlayerEnteredMap.event, new PlayerEnteredMap(characterId, name, map, x, y))
+    playerJoinedMap(map: string, channel: number, characterId: number, name: string, x: number, y: number) {
+        this.client.emit(new WorldEvent(PlayerEnteredMap.type), new PlayerEnteredMap(characterId, name, map, channel, x, y))
     }
 
-    playerLeftMap(map: string, characterId: number, name: string) {
-        this.client.emit(WORLD_PREFIX + PlayerLeftMap.event, new PlayerLeftMap(characterId, name, map))
+    playerLeftMap(map: string, channel: number, characterId: number, name: string) {
+        this.client.emit(new WorldEvent(PlayerLeftMap.type), new PlayerLeftMap(characterId, name, map, channel))
     }
 
     addedNpc(map: string, instanceId: number, mobId: number, name: string, x: number, y: number) {
-        this.client.emit(WORLD_PREFIX + NpcAdded.event + '.broadcast', new NpcAdded(mobId, instanceId, name, map, x, y))
+        this.client.emit(new WorldEvent(NpcAdded.type + '.broadcast'), new NpcAdded(mobId, instanceId, name, map, x, y))
     }
 
-    removedNpc(map: string, instanceId: number) {
-        this.client.emit(WORLD_PREFIX + NpcRemoved.event + '.broadcast', new NpcRemoved(instanceId, map))
+    playerUpdate(map: string, channel: number, player: Mob) {
+        this.client.emit(new WorldEvent(PlayerUpdate.type), new PlayerUpdate(map, channel, player))
     }
 
-    allNpcs(map: string, npcs: Mob[]) {
-        this.client.emit(WORLD_PREFIX + AllNpcs.event, new AllNpcs(map, npcs))
-    }
-
-    allPlayers(map: string, players: Mob[]) {
-        this.client.emit(WORLD_PREFIX + AllPlayers.event, new AllPlayers(map, players))
-    }
-
-    playerUpdate(map: string, player: Mob) {
-        this.client.emit(WORLD_PREFIX + PlayerUpdate.event, new PlayerUpdate(map, player))
-    }
-
-    npcUpdate(map: string, npc: Mob) {
-        this.client.emit(WORLD_PREFIX + NpcUpdate.event, new NpcUpdate(map, npc))
+    npcUpdate(map: string, channel: number, npc: Mob) {
+        this.client.emit(new WorldEvent(NpcUpdate.type), new NpcUpdate(map, channel, npc))
     }
 
     nowOnline(map: string) {
-        this.client.emit(WORLD_PREFIX + MapOnline.event, new MapOnline(map))
+        this.client.emit(new WorldEvent(MapOnline.type), new MapOnline(map, MapConstants.CHANNEL))
     }
 
-    changedMap(toMap: string, characterId: number, newX: number, newY: number, entrance?: string) {
-        this.client.emit(WORLD_PREFIX + PlayerChangedMap.event, new PlayerChangedMap(characterId, toMap, newX, newY, entrance))
+    changedMap(toMap: string, characterId: number, newX: number, newY: number, channel: number, entrance?: string) {
+        this.client.emit(new WorldEvent(PlayerChangedMap.type), new PlayerChangedMap(characterId, toMap, newX, newY, channel, entrance))
+    }
+
+    channels(characterId: number, map: string, channels: { channel: number, playerCount: number, playerCapacity: number }[]) {
+        this.client.emit(new WorldEvent(MapChannels.type), new MapChannels(characterId, map, channels))
     }
 }

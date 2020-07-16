@@ -21,8 +21,10 @@ import { PartyClientModule }     from '../party/client/party-client.module'
 import { ClientModule }          from '../../client/client.module'
 import { DB_CONFIG }             from '../../lib/config/db.config'
 import { ConnectionOptions }     from 'typeorm'
-import { DistanceController }    from './distance/distance.controller'
 import { ItemClientModule }      from '../item/client/item-client.module'
+import { CommandClientModule }   from '../command/client/command-client.module'
+import { CommandGateway }        from './command/command.gateway'
+import { CommandController }     from './command/command.controller'
 
 @Module({
     imports    : [
@@ -38,7 +40,8 @@ import { ItemClientModule }      from '../item/client/item-client.module'
         PresenceClientModule,
         MapClientModule,
         PartyClientModule,
-        ItemClientModule
+        ItemClientModule,
+        CommandClientModule
     ],
     controllers: [
         WorldController,
@@ -46,7 +49,7 @@ import { ItemClientModule }      from '../item/client/item-client.module'
         CharacterController,
         ChatController,
         PartyController,
-        DistanceController
+        CommandController
     ],
     providers  : [
         WorldService,
@@ -55,7 +58,8 @@ import { ItemClientModule }      from '../item/client/item-client.module'
         CharacterGateway,
         ChatGateway,
         Logger,
-        PartyGateway
+        PartyGateway,
+        CommandGateway
     ]
 })
 export class WorldModule {

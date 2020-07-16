@@ -1,10 +1,10 @@
-import {ConflictException, Injectable, InternalServerErrorException} from '@nestjs/common'
-import {InjectRepository}                                            from '@nestjs/typeorm'
-import {Character}                                                   from './entities/character'
-import {Repository}                                                  from 'typeorm'
-import {RpcException}                                                from '@nestjs/microservices'
-import {AllCharactersOffline, CharacterOffline, CharacterOnline}     from './actions'
-import {CharacterEmitter}                                            from './character.emitter'
+import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common'
+import { InjectRepository }                                            from '@nestjs/typeorm'
+import { Character }                                                   from './entities/character'
+import { Repository }                                                  from 'typeorm'
+import { RpcException }                                            from '@nestjs/microservices'
+import { AllCharactersOffline, CharacterOffline, CharacterOnline } from '../../../shared/actions/character.actions'
+import { CharacterEmitter }                                        from './character.emitter'
 
 @Injectable()
 export class CharacterService {
@@ -16,7 +16,7 @@ export class CharacterService {
     }
 
     async getCharactersFor(accountId: number, world: string) {
-        return (await this.repo.find({accountId, world}))
+        return (await this.repo.find({ accountId, world }))
     }
 
     async getCharacter(characterId: number) {
@@ -28,7 +28,7 @@ export class CharacterService {
     }
 
     async createCharacterFor(accountId: number, world: string, name: string, gender: 'male' | 'female') {
-        let character = await this.repo.findOne({name, world})
+        let character = await this.repo.findOne({ name, world })
         if (character) {
             throw new RpcException(new ConflictException('Character Name Already Taken'))
         }
@@ -57,7 +57,6 @@ export class CharacterService {
             character.socketId = data.socketId
             await this.repo.save(character)
             this.emitter.characterLoggedIn(character.id, character.gender, character.world, character.name)
-            this.emitter.characterDetails(character)
         }
     }
 
